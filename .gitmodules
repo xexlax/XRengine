@@ -4,3 +4,9 @@
 [submodule ".\\XRengine\\3rdparty\\glfw"]
 	path = .\\XRengine\\3rdparty\\glfw
 	url = https://github.com/TheCherno/glfw.git
+[submodule ".\\XRengine\\3rdparty\\ImGui"]
+	path = .\\XRengine\\3rdparty\\ImGui
+	url = https://github.com/TheCherno/imgui.git
+[submodule ".\\XRengine\\3rdparty\\glm"]
+	path = .\\XRengine\\3rdparty\\glm
+	url = https://github.com/g-truc/glm.git
