@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "xre/core.h"
+#include "xre/Macros.h"
 
 
 namespace XRE {

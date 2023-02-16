@@ -1,9 +1,8 @@
 #pragma once
-#include "Core.h"
+#include "xre/Macros.h"
 #include "Event\AppEvent.h"
 #include "LayerStack.h"
 #include "ImGui\ImGuiLayer.h"
-
 #include "Window.h"
 
 namespace XRE {
@@ -27,6 +26,7 @@ namespace XRE {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
+
 	};
 
 	// To be defined in CLIENT

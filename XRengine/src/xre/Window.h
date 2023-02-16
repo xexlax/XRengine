@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-#include "Core.h"
+#include "xre/Macros.h"
 #include "Event/Event.h"
 
 namespace XRE {

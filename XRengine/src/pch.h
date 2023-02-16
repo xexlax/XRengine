@@ -12,4 +12,3 @@
 #include <unordered_set>
 
 #include "xre\log.h"
-//#include "xre\core.h"

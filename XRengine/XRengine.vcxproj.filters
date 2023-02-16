@@ -1302,7 +1302,7 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Core.h">
+    <ClInclude Include="src\xre\Macros.h">
       <Filter>src\xre</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Event\AppEvent.h">
@@ -1346,6 +1346,16 @@
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\GraphicContext.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\xre\Renderer\Shader.h" />
+    <ClInclude Include="src\xre\Renderer\Buffers.h" />
+    <ClInclude Include="src\xre\Renderer\Renderer.h" />
+    <ClInclude Include="src\Platforms\OpenGL\OpenGLBuffers.h" />
+    <ClInclude Include="src\xre\Renderer\VertexArrays.h" />
+    <ClInclude Include="src\Platforms\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\xre\Renderer\RendererAPI.h" />
+    <ClInclude Include="src\Platforms\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\xre\Renderer\RenderCommand.h" />
+    <ClInclude Include="src\xre\Renderer\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platforms\Windows\WindowsInput.cpp">
@@ -1376,5 +1386,15 @@
       <Filter>src\xre</Filter>
     </ClCompile>
     <ClCompile Include="src\Platforms\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\xre\Renderer\Shader.cpp" />
+    <ClCompile Include="src\xre\Renderer\Buffers.cpp" />
+    <ClCompile Include="src\xre\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Platforms\OpenGL\OpenGLBuffers.cpp" />
+    <ClCompile Include="src\xre\Renderer\VertexArrays.cpp" />
+    <ClCompile Include="src\Platforms\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\xre\Renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\Platforms\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\xre\Renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\xre\Renderer\Camera.cpp" />
   </ItemGroup>
 </Project>

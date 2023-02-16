@@ -1,21 +1,23 @@
 #include "pch.h"
 #include "application.h"
 #include "Event\AppEvent.h"
-#include "glad\glad.h"
 
 #include  "Input.h"
 
-
+//Todo : 实现所有的RendererAPI，避免对glad在/platform外的引用 
 namespace XRE {
 	Application* Application::s_Instance = nullptr;
-
+	
 	Application::Application() {
+	
+
 		XRE_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
+
 	}
 
 	Application::~Application() {
@@ -45,8 +47,7 @@ namespace XRE {
 		while (m_running)
 		{
 			
-			glClearColor(1, 0, 0, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+
 
 			//layers 自下而上更新
 			for (Layer* layer : m_layerStack)
