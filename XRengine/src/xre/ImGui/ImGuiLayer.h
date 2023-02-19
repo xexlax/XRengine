@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "xre\Layer.h"
+#include "xre\Core\Layer.h"
 
 #include "xre/Event/AppEvent.h"
 #include "xre/Event/KeyEvent.h"

@@ -1,22 +1,28 @@
 #include <XRE.h>
+#include <xre/Core/entryPoint.h>
 #include "ImGui\imgui.h"
+
+#include "Platforms\OpenGL\OpenGLShader.h"
+#include <glm\gtc\type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "Sandbox2D.h"
 using namespace XRE;
 
 //Experiment Layer
 class expLayer : public XRE::Layer {
 public:
-	expLayer() :Layer("example") {
-		m_Camera.reset<OrthographicCamera>(new OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f));
-
+	expLayer() 
+		: Layer("Example"), m_CameraController(1280.0f / 720.0f){
+		
 		//Renderable Object Setup Sample
 		//1.Data and Structure
-		float vertices[4 * 7] = {
-			-0.5f, 0.0f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			 0.5f, 0.0f, 0.0f, 0.8f, 0.4f, 0.6f, 1.0f,
-			 0.0f,  0.75f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f,
-			 0.0f,  -0.75f, 0.0f, 0.8f, 0.2f, 0.2f, 1.0f,
+		float vertices[3 * 7] = {
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
-		uint32_t indices[3 * 2] = { 0, 1, 2 ,0, 3, 1 };
+		uint32_t indices[3] = { 0, 1, 2 };
 
 		BufferLayout layout = {
 				{ ShaderDataType::Float3, "a_Position" },
@@ -24,90 +30,124 @@ public:
 		};
 
 		//2.setup VAO
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray=VertexArray::Create();
 
 		//2.1 setup VBO
-		std::shared_ptr<VertexBuffer> vertexBuffer;
+		Ref<VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		//2.2 setup IBO
-		std::shared_ptr<IndexBuffer> indexBuffer;
+		Ref<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		//end
 
 
-		float squareVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 
 
-		m_SquareVA.reset(VertexArray::Create());
-		std::shared_ptr<VertexBuffer> squareVB;
+		m_SquareVA=VertexArray::Create();
+		Ref<VertexBuffer> squareVB;
 		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
-			{ ShaderDataType::Float3, "a_Position" }
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float2, "a_TexCoord" }
 			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 
-		std::shared_ptr<IndexBuffer> squareIB;
+		Ref<IndexBuffer> squareIB;
 		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 
 		//Init Shaders
-		m_Shader.reset(new Shader("./shaders/default.vs", "./shaders/default.fs"));
-		m_BlueShader.reset(new Shader("./shaders/blue.vs", "./shaders/blue.fs"));
+		
+		m_Shader = Shader::Create("assets/shaders/default.glsl");
+		m_FlatColorShader = Shader::Create("assets/shaders/flatColor.glsl");
+		auto textureShader= m_ShaderLibrary.Load("assets/shaders/texture.glsl");
+
+		m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
+		m_alpha_Texture = Texture2D::Create("assets/textures/ChernoLogo.png");
+
+		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->setInt("u_Texture", 0);
+
 	}
 
-	void OnUpdate() override
+	void OnUpdate(XRE::TimeStep ts) override
 	{
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		RenderCommand::Clear();
+		m_CameraController.OnUpdate(ts);
 
-		m_Camera->SetPosition({ 0.5f, 0.5f, 0.0f });
+		XRE::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		XRE::RenderCommand::Clear();
 
-		m_Camera->SetRotation(45.0f);
-		Renderer::BeginScene(m_Camera);
+		
+		Renderer::BeginScene(m_CameraController.GetCamera());
 
 
-		Renderer::Submit(m_BlueShader, m_SquareVA);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		Renderer::Submit(m_Shader, m_VertexArray);
+		std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->setFloat3("u_Color", m_SquareColor);
+
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				XRE::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+			}
+		}
+		XRE::Renderer::Submit(m_Shader, m_VertexArray);
+
+		auto textureShader = m_ShaderLibrary.Get("texture");
+		//glActiveTexture(GL_TEXTURE0);
+		m_Texture->Bind();
+		Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_alpha_Texture->Bind();
+		Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		XRE::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override {
-		
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
-	void OnEvent(XRE::Event& event) override
+	void OnEvent(XRE::Event& e) override
 	{
-		if (event.GetEventType() == XRE::EventType::KeyPressed)
-		{
-			XRE::KeyPressedEvent& e = (XRE::KeyPressedEvent&)event;
-			if (e.GetKeyCode() == XRE_KEY_TAB)
-				XRE_TRACE("Tab key is pressed (event)!");
-			XRE_TRACE("{0}", (char)e.GetKeyCode());
-		}
+		m_CameraController.OnEvent(e);
 	}
 private:
 
-	std::shared_ptr<Camera> m_Camera;
+	
 
-	std::shared_ptr<Shader> m_Shader;
-	std::shared_ptr<VertexArray> m_VertexArray;
+	Ref<Shader> m_Shader;
+
+	ShaderLibrary m_ShaderLibrary;
+	Ref<VertexArray> m_VertexArray;
 
 
-	std::shared_ptr<Shader> m_BlueShader;
-	std::shared_ptr<VertexArray> m_SquareVA;
+	Ref<Shader> m_FlatColorShader;
+	Ref<Texture2D> m_Texture,m_alpha_Texture;
+	Ref<VertexArray> m_SquareVA;
+	OrthographicCameraController m_CameraController;
+
+
+	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 class SandBox: public XRE::Application
 {
@@ -122,7 +162,9 @@ private:
 SandBox::SandBox()
 {
 	
-	PushLayer(new expLayer());
+	//PushLayer(new expLayer());
+
+	PushLayer(new Sandbox2D());
 	
 }
 

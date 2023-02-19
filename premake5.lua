@@ -18,7 +18,8 @@ IncludeDir["GLFW"] = "XRengine/3rdparty/GLFW/include"
 IncludeDir["Glad"] = "XRengine/3rdparty/Glad/include"
 IncludeDir["ImGui"] = "XRengine/3rdparty/ImGui"
 IncludeDir["glm"] = "XRengine/3rdparty/glm"
-
+IncludeDir["stb_img"] = "XRengine/3rdparty/stb_img"
+IncludeDir["tinyobjloader"] = "XRengine/3rdparty/tinyobjloader"
 
 include "XRengine/3rdparty/GLFW"
 include "XRengine/3rdparty/Glad"
@@ -45,6 +46,10 @@ project "XRengine"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/3rdparty/glm/glm/**.hpp",
 		"%{prj.name}/3rdparty/glm/glm/**.inl",
+		"%{prj.name}/3rdparty/stb_img/**.h",
+		"%{prj.name}/3rdparty/stb_img/**.cpp",
+		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h",
+		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.cc"
 	}
 
 	includedirs
@@ -54,7 +59,9 @@ project "XRengine"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_img}",
+		"%{IncludeDir.tinyobjloader}"
 	}
 
 	links 

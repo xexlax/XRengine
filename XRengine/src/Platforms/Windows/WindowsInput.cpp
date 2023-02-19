@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "WindowsInput.h"
 
-#include "xre\application.h"
+#include "xre\Core\application.h"
 #include "GLFW\glfw3.h"
 
 #define XRE_GET_GLFW_WINDOW static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow())

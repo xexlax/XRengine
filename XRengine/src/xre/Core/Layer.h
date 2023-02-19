@@ -1,8 +1,8 @@
 #pragma once
 #include "pch.h"
-#include "xre/Macros.h"
-#include "Event/Event.h"
-
+#include "xre/Core/Macros.h"
+#include "xre/Event/Event.h"
+#include "xre\Core\TimeStep.h"
 namespace XRE {
 
 	class Layer
@@ -13,7 +13,7 @@ namespace XRE {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(TimeStep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

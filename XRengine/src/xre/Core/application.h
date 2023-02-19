@@ -1,8 +1,8 @@
 #pragma once
-#include "xre/Macros.h"
-#include "Event\AppEvent.h"
+#include "xre\Core\Macros.h"
+#include "xre\Event\AppEvent.h"
 #include "LayerStack.h"
-#include "ImGui\ImGuiLayer.h"
+#include "xre\ImGui\ImGuiLayer.h"
 #include "Window.h"
 
 namespace XRE {
@@ -17,16 +17,19 @@ namespace XRE {
 		void PushOverlay(Layer* layer);
 
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 		inline Window& GetWindow() { return *m_Window; }
 		static Application& GetApplication();
 	private:
 		//Singleton
 		static Application* s_Instance;
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_running = true;
+		
+		bool m_Minimized = false;
 		LayerStack m_layerStack;
-
+		float m_LastFrameTime = 0.0f;
 	};
 
 	// To be defined in CLIENT

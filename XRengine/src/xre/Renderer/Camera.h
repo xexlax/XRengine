@@ -27,6 +27,7 @@ namespace XRE {
 		OrthographicCamera(float left, float right, float bottom, float top);
 		float GetRotation() const { return m_Rotation;}
 		void SetRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
+		void SetProjection(float left, float right, float bottom, float top);
 	protected:
 		virtual void RecalculateViewMatrix();
 		//1d rotation

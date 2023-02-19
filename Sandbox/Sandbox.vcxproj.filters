@@ -12,5 +12,16 @@
     <ClCompile Include="src\sandboxApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sandbox2D.cpp" />
+    <ClCompile Include="src\Sandbox3D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\texture.glsl" />
+    <None Include="assets\shaders\flatColor.glsl" />
+    <None Include="assets\shaders\default.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Sandbox2D.h" />
+    <ClInclude Include="src\Sandbox3D.h" />
   </ItemGroup>
 </Project>

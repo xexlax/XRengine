@@ -1,5 +1,5 @@
 #pragma once
-#include "xre/Input.h"
+#include "xre/Core/Input.h"
 
 namespace XRE{
 

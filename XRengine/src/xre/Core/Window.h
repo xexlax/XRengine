@@ -2,8 +2,8 @@
 
 #include "pch.h"
 
-#include "xre/Macros.h"
-#include "Event/Event.h"
+#include "xre/Core/Macros.h"
+#include "xre/Event/Event.h"
 
 namespace XRE {
 

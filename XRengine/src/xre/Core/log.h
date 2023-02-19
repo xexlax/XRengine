@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "xre/Macros.h"
+#include "Macros.h"
 #include "spdlog\spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/fmt/ostr.h"
@@ -23,12 +23,12 @@ namespace XRE {
 	public:
 		
 		static void Init();
-		inline static std::shared_ptr<spdlog::logger> getCoreLogger() { return s_coreLogger; }
-		inline static std::shared_ptr<spdlog::logger> getClientLogger() { return s_clientLogger; }
+		inline static Ref<spdlog::logger> getCoreLogger() { return s_coreLogger; }
+		inline static Ref<spdlog::logger> getClientLogger() { return s_clientLogger; }
 
 	private:
-		static std::shared_ptr<spdlog::logger> s_coreLogger;
-		static std::shared_ptr<spdlog::logger> s_clientLogger;
+		static Ref<spdlog::logger> s_coreLogger;
+		static Ref<spdlog::logger> s_clientLogger;
 	};
 
 }

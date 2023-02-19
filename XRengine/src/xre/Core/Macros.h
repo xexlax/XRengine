@@ -22,3 +22,12 @@
 #define BIT(x) ( 1 << x )
 //包装成员函数为 std::function的类型
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
+#include <memory>
+namespace XRE{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

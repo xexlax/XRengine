@@ -3,120 +3,70 @@
 #include <glad\glad.h>
 #include "Shader.h"
 #include <glm\gtc\type_ptr.hpp>
-
+#include "xre\Renderer\Renderer.h"
+#include "Platforms\OpenGL\OpenGLShader.h"
 namespace XRE {
-	Shader::Shader(const std::string vertexPath, const std::string fragmentPath):
-        m_VertexPath(vertexPath), m_FragmentPath(fragmentPath)
-	{
-        // 1. retrieve the vertex/fragment source code from filePath
-        std::string vertexCode;
-        std::string fragmentCode;
-        std::ifstream vShaderFile;
-        std::ifstream fShaderFile;
-        // ensure ifstream objects can throw exceptions:
-        vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-        fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-        try
-        {
-            // open files
-            vShaderFile.open(vertexPath);
-            fShaderFile.open(fragmentPath);
-            std::stringstream vShaderStream, fShaderStream;
-            // read file's buffer contents into streams
-            vShaderStream << vShaderFile.rdbuf();
-            fShaderStream << fShaderFile.rdbuf();
-            // close file handlers
-            vShaderFile.close();
-            fShaderFile.close();
-            // convert stream into string
-            vertexCode = vShaderStream.str();
-            fragmentCode = fShaderStream.str();
-        }
-        catch (std::ifstream::failure& e)
-        {
-            XRE_CORE_ERROR("SHADER_FILE_NOT_SUCCESSFULLY_READ:{0}", e.what());
-        }
-        const char* vShaderCode = vertexCode.c_str();
-        const char* fShaderCode = fragmentCode.c_str();
-        // 2. compile shaders
-        unsigned int vertex, fragment;
-        // vertex shader
-        vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex, 1, &vShaderCode, NULL);
-        glCompileShader(vertex);
-        checkCompileErrors(vertex, "VERTEX");
-        // fragment Shader
-        fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, 1, &fShaderCode, NULL);
-        glCompileShader(fragment);
-        checkCompileErrors(fragment, "FRAGMENT");
-        // shader Program
-        m_RendererID = glCreateProgram();
-        glAttachShader(m_RendererID, vertex);
-        glAttachShader(m_RendererID, fragment);
-        glLinkProgram(m_RendererID);
-        checkCompileErrors(m_RendererID, "PROGRAM");
-        // delete the shaders as they're linked into our program now and no longer necessary
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
-	}
-    Shader::~Shader()
+	
+    Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
     {
-        glDeleteProgram(m_RendererID);
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:    XRE_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+		}
+
+		XRE_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
     }
-	void Shader::Bind() const
+
+	Ref<Shader> Shader::Create(const std::string& src)
 	{
-        glUseProgram(m_RendererID);
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:    XRE_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:  return std::make_shared<OpenGLShader>(src);
+		}
+
+		XRE_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
 	}
-	void Shader::UnBind() const
+	
+	
+	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-        glUseProgram(0);
+		XRE_CORE_ASSERT(!Exists(name), "Shader already exists!");
+		m_Shaders[name] = shader;
 	}
-	void Shader::setBool(const std::string& name, bool value) const
+
+	void ShaderLibrary::Add(const Ref<Shader>& shader)
 	{
-        glUniform1i(glGetUniformLocation(m_RendererID, name.c_str()), (int)value);
+		auto& name = shader->GetName();
+		Add(name, shader);
 	}
-	void Shader::setInt(const std::string& name, int value) const
+
+	Ref<Shader> ShaderLibrary::Load(const std::string& filepath)
 	{
-        glUniform1i(glGetUniformLocation(m_RendererID, name.c_str()), value);
+		auto shader = Shader::Create(filepath);
+		Add(shader);
+		return shader;
 	}
-	void Shader::setFloat(const std::string& name, float value) const
+
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
 	{
-        glUniform1f(glGetUniformLocation(m_RendererID, name.c_str()), value);
+		auto shader = Shader::Create(filepath);
+		Add(name, shader);
+		return shader;
 	}
-    void Shader::setMat4(const std::string& name, const glm::mat4& matrix)
-    {
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
-        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-    }
-	void Shader::checkCompileErrors(unsigned int shader, std::string type)
+
+	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-        int success;
-        char infoLog[1024];
-        if (type != "PROGRAM")
-        {
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-            if (!success)
-            {
-                glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-                std::string errFile;
-                if (type == "VERTEX") errFile = m_VertexPath;
-                else if (type == "FRAGMENT") errFile = m_FragmentPath;
-                XRE_CORE_ERROR("SHADER_COMPILATION_ERROR of {0} in {1}", type, errFile);
-                
-                XRE_CORE_ERROR("{0}", infoLog);
-            }
-        }
-        else
-        {
-            glGetProgramiv(shader, GL_LINK_STATUS, &success);
-            if (!success)
-            {
-                glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-                XRE_CORE_ERROR("PROGRAM_LINKING_ERROR of type:{0}", type);
-                XRE_CORE_ERROR("{0}", infoLog);
-                
-            }
-        }
+		XRE_CORE_ASSERT(Exists(name), "Shader not found!");
+		return m_Shaders[name];
 	}
+
+	bool ShaderLibrary::Exists(const std::string& name) const
+	{
+		return m_Shaders.find(name) != m_Shaders.end();
+	}
+
 }
