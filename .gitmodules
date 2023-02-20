@@ -13,3 +13,4 @@
 [submodule ".\\XRengine\\3rdparty\\tinyobjloader"]
 	path = .\\XRengine\\3rdparty\\tinyobjloader
 	url = https://github.com/tinyobjloader/tinyobjloader.git
+

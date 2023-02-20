@@ -7,7 +7,7 @@ namespace XRE {
 		
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const glm::vec3& position) { m_Position = position; RecalculateViewMatrix(); }
-		virtual void SetRotation(float rotation)=0;
+		
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
@@ -19,7 +19,7 @@ namespace XRE {
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
 		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 front = { 0.0f, 0.0f, 1.0f };
+		glm::vec3 m_Front = { 0.0f, 0.0f, 1.0f };
 	};
 
 	class OrthographicCamera : public Camera {
@@ -27,7 +27,7 @@ namespace XRE {
 		OrthographicCamera(float left, float right, float bottom, float top);
 		float GetRotation() const { return m_Rotation;}
 		void SetRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix(); }
-		void SetProjection(float left, float right, float bottom, float top);
+		void SetProjection(float fovy, float aspect, float zNear, float zFar);
 	protected:
 		virtual void RecalculateViewMatrix();
 		//1d rotation
@@ -35,14 +35,30 @@ namespace XRE {
 	};
 
 	class PerspectiveCamera : public Camera {
-		PerspectiveCamera();
-		glm::vec4 GetRotation() const { return m_Quaternion; }
 
+		
+	public:
+		PerspectiveCamera(
+			float fovy, float aspect, float zNear, float zFar,
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
+			glm::vec3 up =       glm::vec3(0.0f, 1.0f, 0.0f), 
+			glm::vec3 euler =    glm::vec3(-90.0f,0.0f,0.0f) );
+
+		void SetRotation(glm::vec3 euler) { m_EulerAngles = euler; RecalculateViewMatrix(); }
+
+		glm::vec4 GetRotation() const { return m_Quaternion; }
+		glm::vec3 GetEuler() const { return m_EulerAngles; }
+
+		void SetProjection(float fovy, float aspect, float znear, float zfar);
+		void updateCameraVectors();
 	protected:
 		virtual void RecalculateViewMatrix();
-		//旋转四元数
+		
+		
 		glm::vec4 m_Quaternion;
 		glm::vec3 m_EulerAngles;
+		glm::vec3 m_Position;
+		glm::vec3 m_WorldUp,m_Front,m_Up,m_Right;
 		
 	};
 }

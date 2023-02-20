@@ -48,8 +48,8 @@ project "XRengine"
 		"%{prj.name}/3rdparty/glm/glm/**.inl",
 		"%{prj.name}/3rdparty/stb_img/**.h",
 		"%{prj.name}/3rdparty/stb_img/**.cpp",
-		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h",
-		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.cc"
+		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h"
+		
 	}
 
 	includedirs
@@ -70,6 +70,7 @@ project "XRengine"
 		"Glad",
 		"ImGui",
 		"opengl32.lib",
+		"assimp-vc142-mtd.dll"
 	}
 
 	filter "system:windows"

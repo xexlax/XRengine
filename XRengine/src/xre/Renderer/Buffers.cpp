@@ -2,6 +2,7 @@
 #include "Buffers.h"
 #include "Renderer.h"
 #include "Platforms\OpenGL\OpenGLBuffers.h"
+#include "xre\Resource\Mesh.h"
 namespace XRE {
 
 	void VertexBuffer::Unbind() const

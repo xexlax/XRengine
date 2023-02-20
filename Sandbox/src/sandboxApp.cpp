@@ -6,7 +6,8 @@
 #include <glm\gtc\type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Sandbox2D.h"
+#include "Sandbox3D.h"
+//#include "Sandbox2D.h"
 using namespace XRE;
 
 //Experiment Layer
@@ -164,7 +165,9 @@ SandBox::SandBox()
 	
 	//PushLayer(new expLayer());
 
-	PushLayer(new Sandbox2D());
+	//PushLayer(new Sandbox2D());
+
+	PushLayer(new Sandbox3D());
 	
 }
 

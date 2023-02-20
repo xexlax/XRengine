@@ -20,3 +20,6 @@
 
 #include "xre\Renderer\Camera.h"
 #include "xre\Renderer\OrthographicCameraController.h"
+#include "xre\Renderer\PerspectiveCameraController.h"
+
+#include "xre/Resource/Model.h"

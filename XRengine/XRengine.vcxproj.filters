@@ -55,6 +55,12 @@
     <Filter Include="src\xre\Renderer">
       <UniqueIdentifier>{116DD6CF-FD65-F521-2698-DAA612F0D42D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\xre\Resource">
+      <UniqueIdentifier>{820B50DC-6E04-6F2E-9736-54B3838E4E3A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\Utils">
+      <UniqueIdentifier>{ABAA1CD4-176B-980A-E0A5-E1874C25DDE6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rdparty\glm\glm\common.hpp">
@@ -1416,13 +1422,23 @@
     <ClInclude Include="src\xre\Renderer\VertexArrays.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Resource\Material.h">
+      <Filter>src\xre\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Resource\Mesh.h">
+      <Filter>src\xre\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Resource\Model.h">
+      <Filter>src\xre\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Utils\Color.h">
+      <Filter>src\xre\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\PerspectiveCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
       <Filter>3rdparty\stb_img</Filter>
-    </ClCompile>
-    <ClCompile Include="3rdparty\tinyobjloader\tiny_obj_loader.cc">
-      <Filter>3rdparty\tinyobjloader</Filter>
     </ClCompile>
     <ClCompile Include="src\Platforms\OpenGL\OpenGLBuffers.cpp">
       <Filter>src\Platforms\OpenGL</Filter>
@@ -1496,5 +1512,15 @@
     <ClCompile Include="src\xre\Renderer\VertexArrays.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\Resource\Material.cpp">
+      <Filter>src\xre\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Resource\Mesh.cpp">
+      <Filter>src\xre\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Resource\Model.cpp">
+      <Filter>src\xre\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\PerspectiveCameraController.cpp" />
   </ItemGroup>
 </Project>
