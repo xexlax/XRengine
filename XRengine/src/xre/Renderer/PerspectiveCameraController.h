@@ -24,17 +24,18 @@ namespace XRE {
 		void SetZoomLevel(float level) { m_ZoomLevel = level; }
 	private:
 		bool OnMouseMoved(MouseMovedEvent& e);
+		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 	private:
 
 		float m_AspectRatio;
 		float m_ZoomLevel = 45.0f;
 
-		float lastX, lastY;
+		float lastX=0, lastY=0;
 		bool firstMouse = true;
 		PerspectiveCamera m_Camera;
 
-		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, -3.0f };
 
 		bool m_constrainPitch = true;
 		

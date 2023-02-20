@@ -27,7 +27,7 @@ namespace XRE {
 	void Renderer::Submit(const std::shared_ptr<Shader>& shader,
 		const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
-
+		//XRE_CORE_TRACE("VP:{0}", m_SceneData->ViewProjectionMatrix[0][0]);
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->setMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->setMat4("u_Transform", transform);

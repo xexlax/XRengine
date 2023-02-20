@@ -63,7 +63,7 @@ void Sandbox3D::OnUpdate(XRE::TimeStep ts)
 	std::dynamic_pointer_cast<XRE::OpenGLShader>(m_FlatColorShader)->Bind();
 	std::dynamic_pointer_cast<XRE::OpenGLShader>(m_FlatColorShader)->setFloat4("u_Color", m_SquareColor);
 
-	XRE::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+	XRE::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(3.0f)));
 
 
 

@@ -40,14 +40,17 @@ namespace XRE {
 	public:
 		PerspectiveCamera(
 			float fovy, float aspect, float zNear, float zFar,
-			glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), 
+			glm::vec3 position = glm::vec3(0.0f, 0.0f, -3.0f), 
 			glm::vec3 up =       glm::vec3(0.0f, 1.0f, 0.0f), 
-			glm::vec3 euler =    glm::vec3(-90.0f,0.0f,0.0f) );
+			glm::vec3 euler =    glm::vec3(0.0f, 90.0f,0.0f) );
 
 		void SetRotation(glm::vec3 euler) { m_EulerAngles = euler; RecalculateViewMatrix(); }
 
 		glm::vec4 GetRotation() const { return m_Quaternion; }
 		glm::vec3 GetEuler() const { return m_EulerAngles; }
+
+		glm::vec3 GetFront() const { return m_Front; }
+		glm::vec3 GetRight() const { return m_Right; }
 
 		void SetProjection(float fovy, float aspect, float znear, float zfar);
 		void updateCameraVectors();
@@ -57,8 +60,9 @@ namespace XRE {
 		
 		glm::vec4 m_Quaternion;
 		glm::vec3 m_EulerAngles;
-		glm::vec3 m_Position;
-		glm::vec3 m_WorldUp,m_Front,m_Up,m_Right;
+		
+		glm::vec3 m_Front, m_Up, m_Right;
+		glm::vec3 m_WorldUp={ 0.0f, 0.0f, 1.0f };;
 		
 	};
 }
