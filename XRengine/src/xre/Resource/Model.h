@@ -1,20 +1,11 @@
 #pragma once
 #include "pch.h"
 #include "Mesh.h"
+#include "Material.h"
 #include "xre\Utils\Color.h"
 using namespace std;
 namespace XRE {
-	struct BaseMaterial
-	{
-		std::string name;
-		glm::vec3 ambient,diffuse,specular,transmittance,emission;
-		float shininess, ior, dissolve;
-		int illum, pad0;
-
-		Ref<Texture> ambientTex, diffuseTex, specularTex, specularHighlightTex,
-            bumpTex, displacementTex, alphaTex;
-		
-	};
+	
 
 	class Model {
     public:
@@ -27,7 +18,7 @@ namespace XRE {
     private:
         /*  模型数据  */
         vector<Mesh> m_Meshes;
-        vector<Ref<BaseMaterial>> m_Materials;
+        vector<Ref<Material>> m_Materials;
         string directory;
         /*  函数   */
         void LoadModel(string path,

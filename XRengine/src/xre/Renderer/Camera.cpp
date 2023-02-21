@@ -54,7 +54,7 @@ namespace XRE {
 
 	void PerspectiveCamera::updateCameraVectors()
 	{
-		XRE_CORE_TRACE("front:{0} {1} {2}", m_Front.x, m_Front.y, m_Front.z);
+		//XRE_CORE_TRACE("front:{0} {1} {2}", m_Front.x, m_Front.y, m_Front.z);
 		// calculate the new Front vector
 		glm::vec3 front;
 		front.x = cos(glm::radians(m_EulerAngles.y)) * cos(glm::radians(m_EulerAngles.x));

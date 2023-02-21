@@ -37,7 +37,7 @@ namespace XRE{
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
-
+		
 		XRE_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
@@ -59,6 +59,9 @@ namespace XRE{
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
+		//Hide cursor
+
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		//setup callbacks
 
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {

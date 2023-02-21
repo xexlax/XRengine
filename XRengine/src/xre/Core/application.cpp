@@ -2,6 +2,7 @@
 #include "application.h"
 #include "xre\Event\AppEvent.h"
 #include "xre\Renderer\Renderer.h"
+#include "xre\Resource\ResourceManager.h"
 #include  "Input.h"
 #include <GLFW\glfw3.h>
 
@@ -18,6 +19,7 @@ namespace XRE {
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
+		ResourceManager::Init();
 
 
 		m_ImGuiLayer = new ImGuiLayer();

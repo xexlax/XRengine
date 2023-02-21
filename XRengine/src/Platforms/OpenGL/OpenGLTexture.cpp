@@ -10,6 +10,7 @@ namespace XRE {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_Path(path)
 	{
+		m_name = path;
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
@@ -49,6 +50,7 @@ namespace XRE {
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
+		glActiveTexture(slot);
 		glBindTextureUnit(slot, m_RendererID);
 	}
 }

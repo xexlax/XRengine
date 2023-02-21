@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Model.h"
+#include "xre\Renderer\Texture.h"
 #include "xre\Core\Macros.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -50,19 +51,19 @@ namespace XRE {
 	void Model::Draw(Ref<Shader> shader, glm::mat4 transform)
 	{
 		for (auto mesh : m_Meshes) {
-			mesh.Draw(shader);
+			mesh.Draw(shader,transform);
 		}
 	}
 	void Model::LoadModel(string path,bool triangulate)
 	{
-		std::string bps;
+		std::string basepath;
 		size_t pos = path.find_last_of('/');
 		if (pos != std::string::npos) {
-				bps = path.substr(0, pos);
+			basepath = path.substr(0, pos);
 		}
 		
 		
-		XRE_CORE_TRACE("Loading Model From {0},{1}", path, bps);
+		XRE_CORE_TRACE("Loading Model From {0},{1}", path, basepath);
 		
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
@@ -72,7 +73,7 @@ namespace XRE {
 		std::string err;
 		
 		bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str(),
-			bps.c_str(), triangulate);
+			basepath.c_str(), triangulate);
 		
 		if (!warn.empty()) {
 			XRE_CORE_WARN("WARN: {0}", warn);
@@ -99,7 +100,7 @@ namespace XRE {
 		///1. 获取各种材质和纹理
 		{
 			for (int i = 0; i < materials.size(); i++) {
-				Ref<BaseMaterial> m = make_shared<BaseMaterial>();
+				Ref<Material> m = make_shared<Material>();
 				tinyobj::material_t tm = materials[i];
 				
 				string name = tm.name;
@@ -127,12 +128,24 @@ namespace XRE {
 				m->emission.b = tm.emission[2];
 
 				m->shininess = tm.shininess;
+				//XRE_CORE_INFO("shininess {0}", m->shininess );
 				m->ior = tm.ior;
 				m->dissolve = tm.dissolve;
 				m->illum = tm.illum;
 				m->pad0 = tm.pad0;
 
+				if (tm.diffuse_texname!="") {
+					std::string  diffuse_path = basepath +'/' + tm.diffuse_texname;
+					m->diffuseTex = MaterialTex(true, tm.diffuse_texname, diffuse_path);
+					//XRE_CORE_INFO("diffuse_Tex {0}", diffuse_path);
+				}
 
+				if (tm.specular_texname != "") {
+					std::string  specular_path = basepath + '/' + tm.specular_texname;
+					m->specularTex = MaterialTex(true, tm.specular_texname, specular_path);
+					//XRE_CORE_INFO("specular_Tex {0}", specular_path);
+				}
+				m->LoadAllTex();
 				m_Materials.push_back(m);
 			}
 
@@ -144,10 +157,16 @@ namespace XRE {
 
 		/// 2.顶点数据
 		{
+
+			
+			
 			// For each shape 遍历每一个部分
 			for (size_t i = 0; i < shapes.size(); i++) {
-
 				
+				std::unordered_map<tinyobj::index_t, uint32_t, hash_idx, equal_idx > uniqueVertices = {};
+				// 开辟空间
+				vector<Vertex> vertices;
+				vector<uint32_t> indices;
 				
 #ifdef MODEL_DEBUG
 
@@ -157,12 +176,7 @@ namespace XRE {
 			
 #endif // MODEL_DEBUG
 
-				std::unordered_map<tinyobj::index_t,uint32_t,hash_idx, equal_idx > uniqueVertices = {};
-				// 开辟空间
-				vector<Vertex> vertices;
-				vector<uint32_t> indices;
-				size_t index_offset = 0;
-
+				/*
 				for (const auto& index: shapes[i].mesh.indices) {
 					Vertex vertex={};
 					vertex.Position = {
@@ -190,12 +204,83 @@ namespace XRE {
 
 
 				}
+				*/
+				size_t index_offset = 0;
+				for (size_t f = 0; f < shapes[i].mesh.num_face_vertices.size(); f++) {
+					size_t fnum = shapes[i].mesh.num_face_vertices[f];
+					// 获得所索引下标
+					tinyobj::index_t index;
+					Vertex vertex[3];
+					for (size_t v = 0; v < fnum; v++) {
+						index = shapes[i].mesh.indices[index_offset + v];
+						
+						// v
+						vertex[v].Position = {
+						attrib.vertices[3 * index.vertex_index + 0],
+						attrib.vertices[3 * index.vertex_index + 1],
+						attrib.vertices[3 * index.vertex_index + 2]
+						};
 
+						vertex[v].Normal = {
+							attrib.vertices[3 * index.normal_index + 0],
+							attrib.vertices[3 * index.normal_index + 1],
+							attrib.vertices[3 * index.normal_index + 2]
+						};
+
+						vertex[v].TexCoords = {
+							attrib.texcoords[2 * index.texcoord_index + 0],
+							attrib.texcoords[2 * index.texcoord_index + 1]
+						};
+						
+
+						//indices.push_back(vertices.size());
+						//vertices.push_back(vertex);
+					}
+
+					glm::vec3 tangent{ 1, 0, 0 };
+					{
+						glm::vec3 edge1 = vertex[1].Position - vertex[0].Position;
+						glm::vec3 edge2 = vertex[2].Position - vertex[1].Position;
+						glm::vec2 deltaUV1 = vertex[1].TexCoords - vertex[0].TexCoords;
+						glm::vec2 deltaUV2 = vertex[2].TexCoords - vertex[1].TexCoords;
+
+						auto divide = deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y;
+						if (divide >= 0.0f && divide < 0.000001f)
+							divide = 0.000001f;
+						else if (divide < 0.0f && divide > -0.000001f)
+							divide = -0.000001f;
+
+						float df = 1.0f / divide;
+						tangent.x = df * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+						tangent.y = df * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+						tangent.z = df * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+						tangent = glm::normalize(tangent);
+					}
 					
+					for (size_t v = 0; v < fnum; v++) {
+						vertex[v].Tangent = tangent;
+						index = shapes[i].mesh.indices[index_offset + v];
+						if (uniqueVertices.count(index) == 0) {
+							uniqueVertices[index] = static_cast<uint32_t>(vertices.size());
+							vertices.push_back(vertex[v]);
+						}
+						indices.push_back(uniqueVertices[index]);
+					}					
+
+					// 偏移
+					index_offset += fnum;
+
+				}
+				Mesh cur_mesh(vertices, indices);
+				auto& m = shapes[i].mesh.material_ids;
+				cur_mesh.SetMaterial(m_Materials[m[0]]);
 				
-				Mesh cur_mesh(vertices,indices);
+				XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes 已加载",i, vertices.size(), indices.size());
+
 				m_Meshes.push_back(cur_mesh);
+				
 			}
+			
 
 			XRE_CORE_INFO("已完成读取模型");
 		}

@@ -1435,6 +1435,7 @@
       <Filter>src\xre\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\PerspectiveCameraController.h" />
+    <ClInclude Include="src\xre\Resource\ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
@@ -1522,5 +1523,6 @@
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\PerspectiveCameraController.cpp" />
+    <ClCompile Include="src\xre\Resource\ResourceManager.cpp" />
   </ItemGroup>
 </Project>

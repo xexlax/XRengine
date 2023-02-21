@@ -5,14 +5,14 @@
 #include "xre\Core\Macros.h"
 
 namespace XRE {
-	PerspectiveCameraController::PerspectiveCameraController(float aspectRatio)
-		:m_AspectRatio(aspectRatio) ,m_Camera(m_ZoomLevel,aspectRatio,0.1f,100.0f)
+	PerspectiveCameraController::PerspectiveCameraController(float aspectRatio , glm::vec3 position)
+		:m_AspectRatio(aspectRatio) ,m_Camera(m_ZoomLevel,aspectRatio,0.1f,100.0f),m_CameraPosition(position)
 	{
 		m_Camera.SetPosition(m_CameraPosition);
 	}
 	void PerspectiveCameraController::OnUpdate(XRE::TimeStep ts)
 	{
-		XRE_CORE_INFO("CameraPos:{0} {1} {2}", m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
+		//XRE_CORE_INFO("CameraPos:{0} {1} {2}", m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
 		//XRE_CORE_INFO("CameraAngle:{0} {1} ", m_Camera.GetEuler().x, m_Camera.GetEuler().y);
 		if (Input::IsKeyPressed(XRE_KEY_A))
 			m_CameraPosition -= m_Camera.GetRight()* (m_CameraTranslationSpeed * ts);
@@ -57,8 +57,11 @@ namespace XRE {
 		float Yaw = m_Camera.GetEuler().y;
 		float Pitch = m_Camera.GetEuler().x;
 		
-		Yaw += xoffset;
-		Pitch += yoffset;
+		if (!Input::IsKeyPressed(XRE_KEY_LEFT_ALT)) {
+			Yaw += xoffset;
+			Pitch += yoffset;
+		}
+		
 
 		lastX = curX;
 		lastY = curY;

@@ -12,7 +12,7 @@ namespace XRE {
 	class PerspectiveCameraController
 	{
 	public:
-		PerspectiveCameraController(float aspectRatio);
+		PerspectiveCameraController(float aspectRatio,glm::vec3 position=glm::vec3(0.0f,0.0f,-3.0f));
 
 		void OnUpdate(XRE::TimeStep ts);
 		void OnEvent(Event& e);
@@ -35,11 +35,11 @@ namespace XRE {
 		bool firstMouse = true;
 		PerspectiveCamera m_Camera;
 
-		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, -3.0f };
+		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 3.0f };
 
 		bool m_constrainPitch = true;
 		
-		float m_CameraTranslationSpeed = 5.0f,m_CameraSensitivity=0.1f;
+		float m_CameraTranslationSpeed = 5.0f,m_CameraSensitivity=0.2f;
 	};
 
 }

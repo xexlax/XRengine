@@ -597,6 +597,7 @@
     <ClInclude Include="src\xre\Resource\Material.h" />
     <ClInclude Include="src\xre\Resource\Mesh.h" />
     <ClInclude Include="src\xre\Resource\Model.h" />
+    <ClInclude Include="src\xre\Resource\ResourceManager.h" />
     <ClInclude Include="src\xre\Utils\Color.h" />
   </ItemGroup>
   <ItemGroup>
@@ -631,6 +632,7 @@
     <ClCompile Include="src\xre\Resource\Material.cpp" />
     <ClCompile Include="src\xre\Resource\Mesh.cpp" />
     <ClCompile Include="src\xre\Resource\Model.cpp" />
+    <ClCompile Include="src\xre\Resource\ResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="3rdparty\GLFW\GLFW.vcxproj">

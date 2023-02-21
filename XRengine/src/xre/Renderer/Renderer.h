@@ -3,7 +3,7 @@
 #include "RenderCommand.h"
 #include "Camera.h"
 #include "Shader.h"
-
+#include "Texture.h"
 namespace XRE{
 
 	
@@ -20,8 +20,7 @@ namespace XRE{
 			, const glm::mat4& transform = glm::mat4(1.0f));
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
-
-
+		
 	private:
 		struct SceneData
 		{
@@ -29,6 +28,7 @@ namespace XRE{
 		};
 
 		static SceneData* m_SceneData;
+		
 	};
 
 
