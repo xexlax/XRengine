@@ -3,7 +3,7 @@
 #include "xre/Core/Input.h"
 #include "xre/Core/KeyCodes.h"
 #include "xre\Core\Macros.h"
-
+#include "GLFW\glfw3.h"
 namespace XRE {
 	PerspectiveCameraController::PerspectiveCameraController(float aspectRatio , glm::vec3 position)
 		:m_AspectRatio(aspectRatio) ,m_Camera(m_ZoomLevel,aspectRatio,0.1f,100.0f),m_CameraPosition(position)
@@ -39,6 +39,8 @@ namespace XRE {
 		dispatcher.Dispatch<MouseMovedEvent>(BIND_EVENT_FN(PerspectiveCameraController::OnMouseMoved));
 		dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(PerspectiveCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(PerspectiveCameraController::OnWindowResized));
+		
+
 	}
 	bool PerspectiveCameraController::OnMouseMoved(MouseMovedEvent& e)
 	{
@@ -58,9 +60,11 @@ namespace XRE {
 		float Pitch = m_Camera.GetEuler().x;
 		
 		if (!Input::IsKeyPressed(XRE_KEY_LEFT_ALT)) {
+
 			Yaw += xoffset;
 			Pitch += yoffset;
 		}
+		
 		
 
 		lastX = curX;
@@ -97,6 +101,16 @@ namespace XRE {
 	{
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(m_ZoomLevel,m_AspectRatio,0.1f,100.0f);
+		return false;
+	}
+	bool PerspectiveCameraController::OnKeyPressed(KeyPressedEvent& e)
+	{
+		
+		return false;
+	}
+	bool PerspectiveCameraController::OnKeyReleased(KeyReleasedEvent& e)
+	{
+		
 		return false;
 	}
 }

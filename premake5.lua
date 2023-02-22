@@ -20,6 +20,8 @@ IncludeDir["ImGui"] = "XRengine/3rdparty/ImGui"
 IncludeDir["glm"] = "XRengine/3rdparty/glm"
 IncludeDir["stb_img"] = "XRengine/3rdparty/stb_img"
 IncludeDir["tinyobjloader"] = "XRengine/3rdparty/tinyobjloader"
+IncludeDir["json11"] = "XRengine/3rdparty/json11"
+
 
 include "XRengine/3rdparty/GLFW"
 include "XRengine/3rdparty/Glad"
@@ -48,7 +50,9 @@ project "XRengine"
 		"%{prj.name}/3rdparty/glm/glm/**.inl",
 		"%{prj.name}/3rdparty/stb_img/**.h",
 		"%{prj.name}/3rdparty/stb_img/**.cpp",
-		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h"
+		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h",
+
+		"%{prj.name}/3rdparty/json11/**.hpp"
 		
 	}
 

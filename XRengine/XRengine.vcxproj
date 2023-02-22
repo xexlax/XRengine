@@ -556,6 +556,7 @@
     <ClInclude Include="3rdparty\glm\glm\vec3.hpp" />
     <ClInclude Include="3rdparty\glm\glm\vec4.hpp" />
     <ClInclude Include="3rdparty\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="3rdparty\json11\json11.hpp" />
     <ClInclude Include="3rdparty\stb_img\stb_image.h" />
     <ClInclude Include="3rdparty\tinyobjloader\tiny_obj_loader.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLBuffers.h" />
@@ -586,6 +587,7 @@
     <ClInclude Include="src\xre\Renderer\Buffers.h" />
     <ClInclude Include="src\xre\Renderer\Camera.h" />
     <ClInclude Include="src\xre\Renderer\GraphicContext.h" />
+    <ClInclude Include="src\xre\Renderer\Light.h" />
     <ClInclude Include="src\xre\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\xre\Renderer\PerspectiveCameraController.h" />
     <ClInclude Include="src\xre\Renderer\RenderCommand.h" />
@@ -598,6 +600,7 @@
     <ClInclude Include="src\xre\Resource\Mesh.h" />
     <ClInclude Include="src\xre\Resource\Model.h" />
     <ClInclude Include="src\xre\Resource\ResourceManager.h" />
+    <ClInclude Include="src\xre\Scene\SceneManager.h" />
     <ClInclude Include="src\xre\Utils\Color.h" />
   </ItemGroup>
   <ItemGroup>
@@ -621,6 +624,7 @@
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\xre\Renderer\Buffers.cpp" />
     <ClCompile Include="src\xre\Renderer\Camera.cpp" />
+    <ClCompile Include="src\xre\Renderer\Light.cpp" />
     <ClCompile Include="src\xre\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\xre\Renderer\PerspectiveCameraController.cpp" />
     <ClCompile Include="src\xre\Renderer\RenderCommand.cpp" />

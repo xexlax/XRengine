@@ -3,6 +3,12 @@
 #include "ResourceManager.h"
 
 namespace XRE {
+	Material::Material()
+	{
+		name = "default_material";
+		shininess = 64.0f;
+		LoadAllTex();
+	}
 	void Material::LoadAllTex()
 	{
 		if (diffuseTex.m_enable) 

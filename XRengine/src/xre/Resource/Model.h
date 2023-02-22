@@ -10,7 +10,7 @@ namespace XRE {
 	class Model {
     public:
         /*  º¯Êý   */
-        Model(char* path)
+        Model(std::string path)
         {
             LoadModel(path);
         }

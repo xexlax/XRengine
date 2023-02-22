@@ -19,7 +19,8 @@ private:
 	//OrthographicCameraController m_CameraController;
 	PerspectiveCameraController m_CameraController;
 	// Temp
-	Ref<Model> m_NanosuitModel;
+	vector<Ref<Model>> m_Models;
+	Light m_Light;
 
 	XRE::Ref<XRE::VertexArray> m_SquareVA;
 	XRE::Ref<XRE::Shader> m_FlatColorShader;

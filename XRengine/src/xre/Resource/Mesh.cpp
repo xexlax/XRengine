@@ -8,7 +8,7 @@ namespace XRE {
 	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 		: m_vertices(vertices), m_indices(indices)
 	{
-
+		m_Material = std::make_shared<Material>();
 		setupMesh();
 	}
 	void Mesh::Draw(Ref<Shader> shader, glm::mat4 transform)
@@ -25,13 +25,24 @@ namespace XRE {
 
 
 		int textureID = 0;
+		//
+		openGLshader->setBool("material.enable_diffuseTex", m_Material->diffuseTex.m_enable);
 		if (m_Material->diffuseTex.m_enable) {
 			m_Material->diffuseTex.m_Tex->Bind(textureID);
+			
 			openGLshader->setInt("material.diffuseTex", textureID++);
 		}
+		//
+		openGLshader->setBool("material.enable_specularTex", m_Material->specularTex.m_enable);
 		if (m_Material->specularTex.m_enable) {
 			m_Material->specularTex.m_Tex->Bind(textureID);
 			openGLshader->setInt("material.specularTex", textureID++);
+		}
+		//
+		openGLshader->setBool("material.enable_bumpTex", m_Material->bumpTex.m_enable);
+		if (m_Material->bumpTex.m_enable) {
+			m_Material->bumpTex.m_Tex->Bind(textureID);
+			openGLshader->setInt("material.bumpTex", textureID++);
 		}
 			
 		

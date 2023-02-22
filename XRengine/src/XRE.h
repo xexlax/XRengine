@@ -18,6 +18,7 @@
 #include "xre\Renderer\Buffers.h"
 #include "xre\Renderer\VertexArrays.h"
 
+#include "xre\Renderer\Light.h"
 #include "xre\Renderer\Camera.h"
 #include "xre\Renderer\OrthographicCameraController.h"
 #include "xre\Renderer\PerspectiveCameraController.h"

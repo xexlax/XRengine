@@ -20,7 +20,9 @@ namespace XRE {
 
 	void Texture2DLibrary::Add(const std::string& name, const Ref<Texture2D>& texture)
 	{
-		XRE_CORE_ASSERT(!Exists(name), "Texture already exists!");
+		//XRE_CORE_ASSERT(!Exists(name), "Texture already exists!");
+
+		if(!Exists(name))
 		m_Textures[name] = texture;
 	}
 

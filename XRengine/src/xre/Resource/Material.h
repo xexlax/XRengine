@@ -11,7 +11,7 @@ namespace XRE{
 	{
 	public:
 		//Todo 包含Shader 和变量
-		Material() {};
+		Material();
 		~Material() {};
 
 		std::string name;

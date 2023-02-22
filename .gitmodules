@@ -14,3 +14,6 @@
 	path = .\\XRengine\\3rdparty\\tinyobjloader
 	url = https://github.com/tinyobjloader/tinyobjloader.git
 
+[submodule ".\\XRengine\\3rdparty\\json11"]
+	path = .\\XRengine\\3rdparty\\json11
+	url = https://github.com/dropbox/json11.git

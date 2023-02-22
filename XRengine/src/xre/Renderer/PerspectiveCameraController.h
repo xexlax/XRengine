@@ -6,6 +6,7 @@
 
 #include "xre/Event/AppEvent.h"
 #include "xre/Event/MouseEvent.h"
+#include "xre\Event\KeyEvent.h"
 
 namespace XRE {
 
@@ -23,9 +24,12 @@ namespace XRE {
 		float GetZoomLevel() const { return m_ZoomLevel; }
 		void SetZoomLevel(float level) { m_ZoomLevel = level; }
 	private:
+		//Events Processors
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnKeyReleased(KeyReleasedEvent& e);
 	private:
 
 		float m_AspectRatio;

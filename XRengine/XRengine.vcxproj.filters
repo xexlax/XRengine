@@ -22,6 +22,9 @@
     <Filter Include="3rdparty\glm\glm\gtx">
       <UniqueIdentifier>{BE58BB54-AAE7-441E-5306-59193F7455C4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdparty\json11">
+      <UniqueIdentifier>{09207CD8-75AB-E99C-7EBC-6C91EAC6459D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="3rdparty\stb_img">
       <UniqueIdentifier>{B2EA2E9E-9EE3-4DF0-C715-3375B36D2DFC}</UniqueIdentifier>
     </Filter>
@@ -57,6 +60,9 @@
     </Filter>
     <Filter Include="src\xre\Resource">
       <UniqueIdentifier>{820B50DC-6E04-6F2E-9736-54B3838E4E3A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\Scene">
+      <UniqueIdentifier>{6816EFD3-D4D6-6A0A-9D11-B4870991AFE6}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\xre\Utils">
       <UniqueIdentifier>{ABAA1CD4-176B-980A-E0A5-E1874C25DDE6}</UniqueIdentifier>
@@ -1311,6 +1317,9 @@
     <ClInclude Include="3rdparty\glm\glm\vector_relational.hpp">
       <Filter>3rdparty\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="3rdparty\json11\json11.hpp">
+      <Filter>3rdparty\json11</Filter>
+    </ClInclude>
     <ClInclude Include="3rdparty\stb_img\stb_image.h">
       <Filter>3rdparty\stb_img</Filter>
     </ClInclude>
@@ -1401,7 +1410,13 @@
     <ClInclude Include="src\xre\Renderer\GraphicContext.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Light.h">
+      <Filter>src\xre\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Renderer\OrthographicCameraController.h">
+      <Filter>src\xre\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\PerspectiveCameraController.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\RenderCommand.h">
@@ -1431,11 +1446,15 @@
     <ClInclude Include="src\xre\Resource\Model.h">
       <Filter>src\xre\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Resource\ResourceManager.h">
+      <Filter>src\xre\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Scene\SceneManager.h">
+      <Filter>src\xre\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Utils\Color.h">
       <Filter>src\xre\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\PerspectiveCameraController.h" />
-    <ClInclude Include="src\xre\Resource\ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
@@ -1492,7 +1511,13 @@
     <ClCompile Include="src\xre\Renderer\Camera.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Light.cpp">
+      <Filter>src\xre\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\xre\Renderer\OrthographicCameraController.cpp">
+      <Filter>src\xre\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\PerspectiveCameraController.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\RenderCommand.cpp">
@@ -1522,7 +1547,8 @@
     <ClCompile Include="src\xre\Resource\Model.cpp">
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\PerspectiveCameraController.cpp" />
-    <ClCompile Include="src\xre\Resource\ResourceManager.cpp" />
+    <ClCompile Include="src\xre\Resource\ResourceManager.cpp">
+      <Filter>src\xre\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

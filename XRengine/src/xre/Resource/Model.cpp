@@ -145,6 +145,12 @@ namespace XRE {
 					m->specularTex = MaterialTex(true, tm.specular_texname, specular_path);
 					//XRE_CORE_INFO("specular_Tex {0}", specular_path);
 				}
+
+				if (tm.bump_texname != "") {
+					std::string  bump_path = basepath + '/' + tm.bump_texname;
+					m->bumpTex = MaterialTex(true, tm.bump_texname, bump_path);
+					//XRE_CORE_INFO("specular_Tex {0}", specular_path);
+				}
 				m->LoadAllTex();
 				m_Materials.push_back(m);
 			}
@@ -215,18 +221,19 @@ namespace XRE {
 						index = shapes[i].mesh.indices[index_offset + v];
 						
 						// v
+						if(index.vertex_index>=0)
 						vertex[v].Position = {
-						attrib.vertices[3 * index.vertex_index + 0],
-						attrib.vertices[3 * index.vertex_index + 1],
-						attrib.vertices[3 * index.vertex_index + 2]
+							attrib.vertices[3 * index.vertex_index + 0],
+							attrib.vertices[3 * index.vertex_index + 1],
+							attrib.vertices[3 * index.vertex_index + 2]
 						};
-
+						if (index.normal_index >= 0)
 						vertex[v].Normal = {
-							attrib.vertices[3 * index.normal_index + 0],
-							attrib.vertices[3 * index.normal_index + 1],
-							attrib.vertices[3 * index.normal_index + 2]
+							attrib.normals[3 * index.normal_index + 0],
+							attrib.normals[3 * index.normal_index + 1],
+							attrib.normals[3 * index.normal_index + 2]
 						};
-
+						if (index.texcoord_index >= 0)
 						vertex[v].TexCoords = {
 							attrib.texcoords[2 * index.texcoord_index + 0],
 							attrib.texcoords[2 * index.texcoord_index + 1]
@@ -273,9 +280,10 @@ namespace XRE {
 				}
 				Mesh cur_mesh(vertices, indices);
 				auto& m = shapes[i].mesh.material_ids;
+				if(m[0]>=0)
 				cur_mesh.SetMaterial(m_Materials[m[0]]);
 				
-				XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes 已加载",i, vertices.size(), indices.size());
+				//XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes 已加载",i, vertices.size(), indices.size());
 
 				m_Meshes.push_back(cur_mesh);
 				
