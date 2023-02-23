@@ -13,7 +13,7 @@ namespace XRE {
 	Application::Application() {
 	
 
-		XRE_CORE_ASSERT(!s_Instance, "Application already exists!");
+		XRE_CORE_ASSERT(!s_Instance, "已存在启动的应用实例");
 		s_Instance = this;
 		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
@@ -75,6 +75,9 @@ namespace XRE {
 
 			m_Window->OnUpdate();
 		}
+	}
+	void Application::Close() {
+		m_running = false;
 	}
 	void Application::PushLayer(Layer* layer)
 	{

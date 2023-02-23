@@ -1,9 +1,9 @@
 #pragma once
 
 #include "RenderCommand.h"
-#include "Camera.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "Camera/Camera.h"
+#include "Resources/Shader.h"
+#include "Resources/Texture.h"
 namespace XRE{
 
 	

@@ -2,8 +2,8 @@
 #include <glm\glm.hpp>
 #include "Material.h"
 
-#include <xre\Renderer\Shader.h>
-#include <xre\Renderer\VertexArrays.h>
+#include <xre\Renderer\Resources\Shader.h>
+#include <xre\Renderer\Resources\VertexArrays.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
 

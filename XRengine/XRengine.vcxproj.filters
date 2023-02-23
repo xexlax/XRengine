@@ -1332,6 +1332,9 @@
     <ClInclude Include="src\Platforms\OpenGL\OpenGLContext.h">
       <Filter>src\Platforms\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platforms\OpenGL\OpenGLFrameBuffer.h">
+      <Filter>src\Platforms\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platforms\OpenGL\OpenGLRendererAPI.h">
       <Filter>src\Platforms\OpenGL</Filter>
     </ClInclude>
@@ -1401,10 +1404,13 @@
     <ClInclude Include="src\xre\ImGui\ImGuiLayer.h">
       <Filter>src\xre\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Buffers.h">
+    <ClInclude Include="src\xre\Renderer\Resources\Buffers.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera.h">
+    <ClInclude Include="src\xre\Renderer\Camera\Camera.h">
+      <Filter>src\xre\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\FrameBuffer.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\GraphicContext.h">
@@ -1413,10 +1419,10 @@
     <ClInclude Include="src\xre\Renderer\Light.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\OrthographicCameraController.h">
+    <ClInclude Include="src\xre\Renderer\Camera\OrthographicCameraController.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\PerspectiveCameraController.h">
+    <ClInclude Include="src\xre\Renderer\Camera\PerspectiveCameraController.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\RenderCommand.h">
@@ -1428,13 +1434,13 @@
     <ClInclude Include="src\xre\Renderer\RendererAPI.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Shader.h">
+    <ClInclude Include="src\xre\Renderer\Resources\Shader.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Texture.h">
+    <ClInclude Include="src\xre\Renderer\Resources\Texture.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\VertexArrays.h">
+    <ClInclude Include="src\xre\Renderer\Resources\VertexArrays.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Resource\Material.h">
@@ -1455,6 +1461,7 @@
     <ClInclude Include="src\xre\Utils\Color.h">
       <Filter>src\xre\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Camera\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
@@ -1464,6 +1471,9 @@
       <Filter>src\Platforms\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platforms\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platforms\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platforms\OpenGL\OpenGLFrameBuffer.cpp">
       <Filter>src\Platforms\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platforms\OpenGL\OpenGLRendererAPI.cpp">
@@ -1505,19 +1515,22 @@
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp">
       <Filter>src\xre\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Buffers.cpp">
+    <ClCompile Include="src\xre\Renderer\Resources\Buffers.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Camera.cpp">
+    <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp">
+      <Filter>src\xre\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\FrameBuffer.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Light.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\OrthographicCameraController.cpp">
+    <ClCompile Include="src\xre\Renderer\Camera\OrthographicCameraController.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\PerspectiveCameraController.cpp">
+    <ClCompile Include="src\xre\Renderer\Camera\PerspectiveCameraController.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\RenderCommand.cpp">
@@ -1529,13 +1542,13 @@
     <ClCompile Include="src\xre\Renderer\RendererAPI.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Shader.cpp">
+    <ClCompile Include="src\xre\Renderer\Resources\Shader.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Texture.cpp">
+    <ClCompile Include="src\xre\Renderer\Resources\Texture.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\VertexArrays.cpp">
+    <ClCompile Include="src\xre\Renderer\Resources\VertexArrays.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Resource\Material.cpp">

@@ -1,6 +1,6 @@
 #pragma once
-#include "xre/Renderer/Texture.h"
-#include "xre/Renderer/Shader.h"
+#include "xre/Renderer/Resources/Texture.h"
+#include "xre/Renderer/Resources/Shader.h"
 #include "Model.h"
 
 namespace XRE {

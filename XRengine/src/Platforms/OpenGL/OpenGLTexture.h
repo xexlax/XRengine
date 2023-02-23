@@ -1,7 +1,7 @@
 #pragma once
 #pragma once
 
-#include "xre/Renderer/Texture.h"
+#include "xre/Renderer/Resources/Texture.h"
 
 namespace XRE {
 

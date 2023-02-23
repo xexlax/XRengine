@@ -5,6 +5,9 @@
 #include "xre/Core/Macros.h"
 #include "xre/Event/Event.h"
 
+#define WINDOW_WIDTH 1600
+#define WINDOW_HEIGHT 900
+
 namespace XRE {
 
 	struct WindowProps
@@ -14,8 +17,8 @@ namespace XRE {
 		unsigned int Height;
 
 		WindowProps(const std::string& title = "XR Engine",
-			unsigned int width = 1280,
-			unsigned int height = 720)
+			unsigned int width = WINDOW_WIDTH,
+			unsigned int height = WINDOW_HEIGHT)
 			: Title(title), Width(width), Height(height)
 		{
 		}

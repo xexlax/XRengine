@@ -159,3 +159,57 @@ project "Sandbox"
 		defines "XRE_DIST"
         runtime "Release"
 		optimize "on"
+
+
+project "XRE-Editor"
+	location "XRE-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"XRengine/3rdparty/spdlog/include",
+		"XRengine/src",
+		"%{IncludeDir.glm}",
+		"XRengine/3rdparty"
+	}
+
+	links
+	{
+		"XRengine"
+	}
+
+	filter "system:windows"
+		
+		systemversion "latest"
+
+		defines
+		{
+			"XRE_PLATFORM_WINDOWS"
+		}
+
+	filter "configurations:Debug"
+		defines "XRE_DEBUG"
+        runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "XRE_RELEASE"
+        runtime "Release"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "XRE_DIST"
+        runtime "Release"
+		optimize "on"

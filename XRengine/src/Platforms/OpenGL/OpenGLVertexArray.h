@@ -1,6 +1,6 @@
 #pragma once
 
-#include "xre/Renderer/VertexArrays.h"
+#include "xre/Renderer/Resources/VertexArrays.h"
 
 namespace XRE{
 

@@ -38,14 +38,14 @@ namespace XRE{
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 		
-		XRE_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		XRE_CORE_INFO("正在打开窗口{0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{
 			// TODO: glfwTerminate on system shutdown
 
 			int success = glfwInit();
-			XRE_CORE_ASSERT(success, "Could not intialize GLFW!");
+			XRE_CORE_ASSERT(success, "无法初始化 GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}

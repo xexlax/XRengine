@@ -32,6 +32,8 @@ namespace XRE {
 		m_Camera.SetPosition(m_CameraPosition);
 
 	}
+
+
 	void PerspectiveCameraController::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
@@ -41,6 +43,11 @@ namespace XRE {
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(PerspectiveCameraController::OnWindowResized));
 		
 
+	}
+	void PerspectiveCameraController::Resize(float width, float height)
+	{
+		m_AspectRatio = width / height;
+		m_Camera.SetProjection(m_ZoomLevel, m_AspectRatio, 0.1f, 100.0f);
 	}
 	bool PerspectiveCameraController::OnMouseMoved(MouseMovedEvent& e)
 	{
@@ -99,8 +106,11 @@ namespace XRE {
 	}
 	bool PerspectiveCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjection(m_ZoomLevel,m_AspectRatio,0.1f,100.0f);
+		////窗口最小化时需要防止除0出现NaN
+		//if (e.GetHeight() == 0)return false;
+
+		//m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
+		//m_Camera.SetProjection(m_ZoomLevel,m_AspectRatio,0.1f,100.0f);
 		return false;
 	}
 	bool PerspectiveCameraController::OnKeyPressed(KeyPressedEvent& e)

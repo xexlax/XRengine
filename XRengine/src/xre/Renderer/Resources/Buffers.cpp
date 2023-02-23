@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Buffers.h"
-#include "Renderer.h"
+#include "xre\Renderer\Renderer.h"
 #include "Platforms\OpenGL\OpenGLBuffers.h"
 #include "xre\Resource\Mesh.h"
 namespace XRE {

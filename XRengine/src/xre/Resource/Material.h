@@ -1,8 +1,8 @@
 #pragma once
 #include "xre\Core\Macros.h"
-#include "xre\Renderer\Shader.h"
-#include "xre\Renderer\Buffers.h"
-#include "xre\Renderer\Texture.h"
+#include "xre\Renderer\Resources\Shader.h"
+#include "xre\Renderer\Resources\Buffers.h"
+#include "xre\Renderer\Resources\Texture.h"
 #include "pch.h"
 
 namespace XRE{

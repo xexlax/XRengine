@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "VertexArrays.h"
 
-#include "Renderer.h"
+#include "xre\Renderer\Renderer.h"
 #include "Platforms/OpenGL/OpenGLVertexArray.h"
 
 namespace XRE {

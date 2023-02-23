@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <vector>
-#include "Shader.h"
+#include "Resources/Shader.h"
 namespace XRE {
 	struct PointLight {
 		glm::vec3 m_Position;

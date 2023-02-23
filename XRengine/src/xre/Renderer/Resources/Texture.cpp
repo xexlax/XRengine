@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 
-#include "Renderer.h"
+#include "xre\Renderer\Renderer.h"
 #include "Platforms/OpenGL/OpenGLTexture.h"
 
 namespace XRE {

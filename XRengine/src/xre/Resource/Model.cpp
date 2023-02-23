@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Model.h"
-#include "xre\Renderer\Texture.h"
+#include "xre\Renderer\Resources\Texture.h"
 #include "xre\Core\Macros.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -63,7 +63,7 @@ namespace XRE {
 		}
 		
 		
-		XRE_CORE_TRACE("Loading Model From {0},{1}", path, basepath);
+		//XRE_CORE_TRACE("正在加载模型 {0},从目录{1}", path, basepath);
 		
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
@@ -84,7 +84,7 @@ namespace XRE {
 		}
 
 		if (!ret) {
-			XRE_CORE_ERROR("Failed to load/parse .obj. ");
+			XRE_CORE_ERROR("解析失败 .obj. ");
 		}
 
 #ifdef MODEL_DEBUG
@@ -290,7 +290,7 @@ namespace XRE {
 			}
 			
 
-			XRE_CORE_INFO("已完成读取模型");
+			XRE_CORE_INFO("已完成模型 {0} 的加载",path);
 		}
 	}
 	

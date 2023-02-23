@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "xre/Renderer/Camera.h"
+#include "Camera.h"
 #include "xre/Core/Timestep.h"
 
 #include "xre/Event/AppEvent.h"
@@ -18,7 +18,7 @@ namespace XRE {
 		void OnEvent(Event& e);
 
 		Ref<OrthographicCamera> GetCamera() { return std::make_shared<OrthographicCamera>(m_Camera); }
-		const OrthographicCamera& GetCamera() const { return m_Camera; }
+		
 
 		float GetZoomLevel() const { return m_ZoomLevel; }
 		void SetZoomLevel(float level) { m_ZoomLevel = level; }

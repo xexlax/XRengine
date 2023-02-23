@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "VertexArrays.h"
+#include "Resources/VertexArrays.h"
 
 namespace XRE {
 

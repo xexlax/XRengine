@@ -18,11 +18,13 @@ public:
 private:
 	//OrthographicCameraController m_CameraController;
 	PerspectiveCameraController m_CameraController;
+
 	// Temp
 	vector<Ref<Model>> m_Models;
-	Light m_Light;
 
-	XRE::Ref<XRE::VertexArray> m_SquareVA;
-	XRE::Ref<XRE::Shader> m_FlatColorShader;
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+	Light m_Light;
+	Ref<Framebuffer> m_Framebuffer;
+	Ref<VertexArray> m_SquareVA;
+	Ref<Shader> m_FlatColorShader;
+	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f }, m_color2 = { 0.8f,0.2f,0.3f,1.0f };
 };

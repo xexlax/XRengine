@@ -15,6 +15,7 @@ Sandbox3D::Sandbox3D()
 
 void Sandbox3D::OnAttach()
 {
+	
 
 	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
 	m_Models.emplace_back(std::make_shared<Model>("./assets/models/cube.obj"));
@@ -26,8 +27,10 @@ void Sandbox3D::OnAttach()
 	auto defaultShader = ResourceManager::GetShaderLib()->Load("assets/shaders/default.glsl");
 
 	Ref<PointLight> p1= std::make_shared<PointLight>(glm::vec3(1.2f, 2.5f, 0.0f));
+	Ref<PointLight> p2 = std::make_shared<PointLight>(glm::vec3(-1.2f, 3.5f, 3.0f));
 	Ref<DirectionalLight> dl= std::make_shared<DirectionalLight>(glm::vec3(-0.2f, -1.0f, 0.3f));
 	m_Light.AddPLight(p1);
+	//m_Light.AddPLight(p2);
 	m_Light.SetDirLight(dl);
 }
 
@@ -48,7 +51,8 @@ void Sandbox3D::OnUpdate(XRE::TimeStep ts)
 
 
 	m_Light.getPointLight(0)->m_Color = m_SquareColor;
-	m_Light.getDirLight()->m_Color = m_SquareColor;
+	//m_Light.getPointLight(1)->m_Color = m_color2;
+	m_Light.getDirLight()->m_Color = m_color2;
 
 	auto defaultShader = ResourceManager::GetShaderLib()->Get("default");
 	std::dynamic_pointer_cast<XRE::OpenGLShader>(defaultShader)->Bind();
@@ -69,13 +73,20 @@ void Sandbox3D::OnUpdate(XRE::TimeStep ts)
 	transform = glm::translate(transform, glm::vec3(0.0f,-3.0f, 0.0f));
 	m_Models[0]->Draw(defaultShader, transform);
 	XRE::Renderer::EndScene();
+	
 }
 
 void Sandbox3D::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Color1", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Color2", glm::value_ptr(m_color2));
 	ImGui::End();
+
+	
+		
+	
+	
 }
 
 void Sandbox3D::OnEvent(XRE::Event& e)

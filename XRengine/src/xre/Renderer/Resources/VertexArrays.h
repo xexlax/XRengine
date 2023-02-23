@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.h"
-#include <xre\Renderer\Buffers.h>
+#include "xre\Renderer\Resources\Buffers.h"
 
 
 namespace XRE {

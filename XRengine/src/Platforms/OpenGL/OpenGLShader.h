@@ -1,5 +1,5 @@
 #pragma once
-#include "xre\Renderer\Shader.h"
+#include "xre\Renderer\Resources\Shader.h"
 namespace XRE {
 	class OpenGLShader : public Shader {
 	public:

@@ -13,15 +13,14 @@
 #include "xre\Renderer\Renderer.h"
 #include "xre\Renderer\RenderCommand.h"
 
-#include "xre\Renderer\Texture.h"
-#include "xre\Renderer\Shader.h"
-#include "xre\Renderer\Buffers.h"
-#include "xre\Renderer\VertexArrays.h"
+#include "xre\Renderer\Resources\Texture.h"
+#include "xre\Renderer\Resources\Shader.h"
+#include "xre\Renderer\FrameBuffer.h"
 
 #include "xre\Renderer\Light.h"
-#include "xre\Renderer\Camera.h"
-#include "xre\Renderer\OrthographicCameraController.h"
-#include "xre\Renderer\PerspectiveCameraController.h"
+#include "xre\Renderer\Camera\Camera.h"
+#include "xre\Renderer\Camera\OrthographicCameraController.h"
+#include "xre\Renderer\Camera\PerspectiveCameraController.h"
 
 
 #include "xre/Resource/ResourceManager.h"
