@@ -8,7 +8,7 @@ namespace XRE {
 		glm::vec3 m_Color;
 		float m_Intensity;
 
-		PointLight(glm::vec3 pos, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float intensity = 10.0f) {
+		PointLight(glm::vec3 pos, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float intensity = 4.0f) {
 			m_Position = pos;
 			m_Color = color;
 			m_Intensity = intensity;
@@ -19,11 +19,14 @@ namespace XRE {
 	struct DirectionalLight {
 		glm::vec3 m_Direction;
 		glm::vec3 m_Color;
+		float m_Intensity;
 
-		DirectionalLight(glm::vec3 dir, glm::vec3 color= glm::vec3(1.0f,1.0f,1.0f)) {
+
+		DirectionalLight(glm::vec3 dir, glm::vec3 color= glm::vec3(1.0f,1.0f,1.0f), float intensity = 2.0f) {
 
 			m_Direction = dir;
 			m_Color = color;
+			m_Intensity = intensity;
 		}
 		
 	};

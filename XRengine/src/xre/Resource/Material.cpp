@@ -7,6 +7,7 @@ namespace XRE {
 	{
 		name = "default_material";
 		shininess = 64.0f;
+		metallic = 0.5f, roughness = 0.5f;
 		LoadAllTex();
 	}
 	void Material::LoadAllTex()

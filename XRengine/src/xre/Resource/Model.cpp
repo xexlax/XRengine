@@ -47,13 +47,7 @@ namespace XRE {
 		}
 	};
 	
-	
-	void Model::Draw(Ref<Shader> shader, glm::mat4 transform)
-	{
-		for (auto mesh : m_Meshes) {
-			mesh.Draw(shader,transform);
-		}
-	}
+
 	void Model::LoadModel(string path,bool triangulate)
 	{
 		std::string basepath;
@@ -133,6 +127,7 @@ namespace XRE {
 				m->dissolve = tm.dissolve;
 				m->illum = tm.illum;
 				m->pad0 = tm.pad0;
+				
 
 				if (tm.diffuse_texname!="") {
 					std::string  diffuse_path = basepath +'/' + tm.diffuse_texname;

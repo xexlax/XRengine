@@ -11,14 +11,14 @@ namespace XRE {
 		virtual void UnBind() const override;
 		virtual const std::string& GetName() const override { return m_Name; }
 
-		void setBool(const std::string& name, bool value);
-		void setInt(const std::string& name, int value);
-		void setFloat(const std::string& name, float value);
-		void setFloat2(const std::string& name,const glm::vec2& value);
-		void setFloat3(const std::string& name,const glm::vec3& value);
-		void setFloat4(const std::string& name,const glm::vec4& value);
-		void setMat3(const std::string& name, const glm::mat3& matrix);
-		void setMat4(const std::string& name, const glm::mat4& matrix);
+		void SetBool(const std::string& name, bool value);
+		void SetInt(const std::string& name, int value);
+		void SetFloat(const std::string& name, float value);
+		void SetFloat2(const std::string& name,const glm::vec2& value);
+		void SetFloat3(const std::string& name,const glm::vec3& value);
+		void SetFloat4(const std::string& name,const glm::vec4& value);
+		void SetMat3(const std::string& name, const glm::mat3& matrix);
+		void SetMat4(const std::string& name, const glm::mat4& matrix);
 
 	private:
 		std::string ReadFile(const std::string& filepath);

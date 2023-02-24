@@ -11,6 +11,7 @@
 #include "xre\Core\TimeStep.h"
 
 #include "xre\Renderer\Renderer.h"
+#include "xre\Renderer\Renderer3D.h"
 #include "xre\Renderer\RenderCommand.h"
 
 #include "xre\Renderer\Resources\Texture.h"

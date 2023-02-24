@@ -8,7 +8,7 @@
 #pragma once
 #define PI 3.1415926f
 EditorLayer::EditorLayer()
-	: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f , glm::vec3(0.0f,2.0f,-5.0f))
+	: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f , glm::vec3(0.0f,2.0f,5.0f))
 {
 	
 }
@@ -18,68 +18,93 @@ void EditorLayer::OnAttach()
 	m_Framebuffer = Framebuffer::Create(1280, 720);
 
 	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
-	m_Models.emplace_back(std::make_shared<Model>("./assets/models/cube.obj"));
-	m_Models.emplace_back(std::make_shared<Model>("./assets/models/cylinder.obj"));
-	m_Models.emplace_back(std::make_shared<Model>("./assets/models/sphere.obj"));
-	m_Models.emplace_back(std::make_shared<Model>("./assets/models/capsule.obj"));
-	m_Models.emplace_back(std::make_shared<Model>("./assets/models/nanosuit/nanosuit.obj"));
-	
-	auto defaultShader = ResourceManager::GetShaderLib()->Load("assets/shaders/default.glsl");
+	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/cube.obj"));
+	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/cylinder.obj"));
+	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/sphere.obj"));
+	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/capsule.obj"));
+	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/nanosuit/nanosuit.obj"));
+
+	//学了三年建模系列
+	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/bocchi/bocchi.obj"));
 
 	Ref<PointLight> p1= std::make_shared<PointLight>(glm::vec3(1.2f, 2.5f, 0.0f));
-	Ref<PointLight> p2 = std::make_shared<PointLight>(glm::vec3(-1.2f, 3.5f, 3.0f));
+
+	Ref<PointLight> p2 = std::make_shared<PointLight>(glm::vec3(-1.2f, 2.5f, 3.0f));
 	Ref<DirectionalLight> dl= std::make_shared<DirectionalLight>(glm::vec3(-0.2f, -1.0f, 0.3f));
 	m_Light.AddPLight(p1);
-	//m_Light.AddPLight(p2);
+	m_Light.AddPLight(p2);
 	m_Light.SetDirLight(dl);
+
+	m_Skybox = make_shared<SkyBox>();
+
+	Renderer3D::Init();
 }
 
 void EditorLayer::OnDetach()
 {
+	Renderer3D::ShutDown();
 }
 
 void EditorLayer::OnUpdate(XRE::TimeStep ts)
 {
-	//m_Framebuffer = Framebuffer::Create(m_ViewportSize.x,m_ViewportSize.y);
-	m_CameraController.OnUpdate(ts);
+	
+	if (m_ViewportFocused)
+		m_CameraController.OnUpdate(ts);
+
 	Ref<Camera> camera = m_CameraController.GetCamera();
 	m_Framebuffer->Bind();
 	// Render
-	XRE::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-	XRE::RenderCommand::Clear();
+	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+	RenderCommand::Clear();
 
-	XRE::Renderer::BeginScene(m_CameraController.GetCamera());
-
+	Renderer3D::StartScene(m_CameraController.GetCamera());
+	Renderer3D::PBROn(m_PBR);
+	Renderer3D::activeShader->SetFloat("material.metallic", m_Metallic);
+	Renderer3D::activeShader->SetFloat("material.roughness", m_Roughness);
 
 	m_Light.getPointLight(0)->m_Color = m_SquareColor;
-	//m_Light.getPointLight(1)->m_Color = m_color2;
+	m_Light.getPointLight(1)->m_Color = m_color3;
 	m_Light.getDirLight()->m_Color = m_color2;
-
-	auto defaultShader = ResourceManager::GetShaderLib()->Get("default");
-	std::dynamic_pointer_cast<XRE::OpenGLShader>(defaultShader)->Bind();
-	std::dynamic_pointer_cast<XRE::OpenGLShader>(defaultShader)->setFloat3("viewPos", camera->GetPosition());
-
-	m_Light.Draw(defaultShader);
+	m_Light.getDirLight()->m_Intensity = m_DirLightIntensity;
+	float t = ImGui::GetTime();
 	
+	m_Light.getPointLight(0)->m_Position = glm::vec3(2 * cos(2*t), 2.5f, 2 * sin(2*t));
+	m_Light.getPointLight(1)->m_Position = glm::vec3(2 * cos(2*t+PI), 2.5f, 2 * sin(2*t+PI));
+
+	Renderer3D::DrawLight(make_shared<Light>(m_Light));
+
 	glm::mat4 transform = glm::mat4(1.0f);
+	transform = glm::rotate(transform, PI, glm::vec3(0, 1, 0));
+	transform = glm::scale(transform, glm::vec3(0.5f));
+	transform = glm::translate(transform, glm::vec3(-5.0f, 0.0f, 2.0f));
+
+	Renderer3D::DrawModel(m_Models[5],transform);
 	for (int i = 0;i < 4;i++) {
-		transform = glm::translate(transform, glm::vec3(2.0f, 0.0f, 0.0f));
-		m_Models[i]->Draw(defaultShader, transform);
-		
+		transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.3* (i+1) * cos( t/(i+1)), 0, 1.3*(i+1) * sin(t/(i+1))));
+		transform = glm::rotate(transform,t, glm::vec3(1, 1, 1));
+		Renderer3D::DrawModel(m_Models[i], transform);
+
 	}
+
+	
 	transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-	//transform = glm::rotate(transform, PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
-	m_Models[4]->Draw(defaultShader, transform);
-	transform = glm::scale(glm::mat4(1.0f), glm::vec3(20.0f,0.2f,20.0f));
-	transform = glm::translate(transform, glm::vec3(0.0f,-3.0f, 0.0f));
-	m_Models[0]->Draw(defaultShader, transform);
-	XRE::Renderer::EndScene();
+	transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -2.0f));
+	Renderer3D::DrawModel(m_Models[4], transform);
+
+	
+	transform = glm::scale(glm::mat4(1.0f), glm::vec3(20.0f, 0.2f, 20.0f));
+	transform = glm::translate(transform, glm::vec3(0.0f, -3.0f, 0.0f));
+	Renderer3D::DrawModel(m_Models[0], transform);
+
+	if(m_ShowSkybox)
+		Renderer3D::DrawSkybox(m_Skybox);
+
+	XRE::Renderer3D::EndScene();
 	m_Framebuffer->Unbind();
+
 }
 
-void EditorLayer::OnImGuiRender()
-{
-	
+void EditorLayer::OnImGuiRender(){
 	static bool dockspaceOpen = true;
 	static bool opt_fullscreen_persistant = true;
 	bool opt_fullscreen = opt_fullscreen_persistant;
@@ -131,23 +156,51 @@ void EditorLayer::OnImGuiRender()
 			// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 			// which we can't undo at the moment without finer window depth/z control.
 			//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
-
+			if (ImGui::MenuItem("Open"));
+			if (ImGui::MenuItem("Save"));
 			if (ImGui::MenuItem("Exit")) XRE::Application::GetApplication().Close();
+			
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Edit"));
+		if (ImGui::BeginMenu("Windows"));
+		if (ImGui::BeginMenu("Help"));
 		ImGui::EndMenuBar();
 	}
 
 	ImGui::Begin("Settings");
+		ImGui::Text("FPS:%d", Application::GetFPS());
+		ImGui::Separator();
 
-		ImGui::ColorEdit4("PointLight Color", glm::value_ptr(m_SquareColor));
+		ImGui::ColorEdit4("PointLight1 Color", glm::value_ptr(m_SquareColor));
+		ImGui::ColorEdit4("PointLight2 Color", glm::value_ptr(m_color3));
 		ImGui::ColorEdit4("DirLight Color", glm::value_ptr(m_color2));
+		//ImGui::InputFloat("DirLight Intensity", &m_DirLightIntensity);
+		ImGui::SliderFloat("DirLight Intensity", &m_DirLightIntensity, 0.0f, 5.0f);
+		ImGui::Separator();
+
+		ImGui::Checkbox("PBR Shading", &m_PBR);
+		if (m_PBR) {
+			ImGui::SliderFloat("Metallic", &m_Metallic, 0.0f, 1.0f);
+			ImGui::SliderFloat("Roughness", &m_Roughness, 0.0f, 1.0f);
+		}
+
+
+		
+
+
+		ImGui::Checkbox("SkyBox", &m_ShowSkybox);
 
 	ImGui::End();
 
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 	ImGui::Begin("ViewPort");
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		
+		m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::GetApplication().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
@@ -168,16 +221,32 @@ void EditorLayer::OnImGuiRender()
 	ImGui::Begin("SceneManager");
 	ImGui::End();
 
-	ImGui::Begin("AssetsManager");
+	ImGui::Begin("AssetManager");
 	ImGui::End();
+
+	//ImGui::ShowDemoWindow();
 
 	ImGui::End();
 		
 
 }
 
+
+
 void EditorLayer::OnEvent(XRE::Event& e)
 {
+	EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyReleased));
 	m_CameraController.OnEvent(e);
 	
 }
+
+bool EditorLayer::OnKeyReleased(KeyReleasedEvent& e)
+{
+	if (e.GetKeyCode() == XRE_KEY_ESCAPE) {
+		ImGui::SetWindowFocus(false);
+	}
+	return false;
+}
+
+

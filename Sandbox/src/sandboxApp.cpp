@@ -81,7 +81,7 @@ public:
 		m_alpha_Texture = Texture2D::Create("assets/textures/ChernoLogo.png");
 
 		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->setInt("u_Texture", 0);
+		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->SetInt("u_Texture", 0);
 
 	}
 
@@ -99,7 +99,7 @@ public:
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 		std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->setFloat3("u_Color", m_SquareColor);
+		std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->SetFloat3("u_Color", m_SquareColor);
 
 		for (int y = 0; y < 20; y++)
 		{
@@ -122,11 +122,6 @@ public:
 		XRE::Renderer::EndScene();
 	}
 
-	virtual void OnImGuiRender() override {
-		ImGui::Begin("Settings");
-		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
-		ImGui::End();
-	}
 
 	void OnEvent(XRE::Event& e) override
 	{

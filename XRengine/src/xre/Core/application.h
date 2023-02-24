@@ -21,11 +21,18 @@ namespace XRE {
 		bool OnWindowResize(WindowResizeEvent& e);
 		inline Window& GetWindow() { return *m_Window; }
 		static Application& GetApplication();
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; };
+
+		static int GetFPS() { return m_FPS; }
 	private:
 		//Singleton
 		static Application* s_Instance;
 		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
+
+		static int m_FPS;
+		int m_FrameCount;
+		float m_LastSecond;
 		bool m_running = true;
 		
 		bool m_Minimized = false;

@@ -4,6 +4,15 @@
     <Filter Include="3rdparty">
       <UniqueIdentifier>{3E7DA5C5-2A4A-00D1-5363-EE783F8F355F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdparty\Entt">
+      <UniqueIdentifier>{28ADB53D-946D-3174-5DA8-7AF1C9277650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\Entt\single_include">
+      <UniqueIdentifier>{9CD53FFF-8890-2FAB-3148-A8F51DE2793B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\Entt\single_include\entt">
+      <UniqueIdentifier>{667CDDA8-D2EA-3228-1BD4-ED27878128C4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="3rdparty\glm">
       <UniqueIdentifier>{8D7699EA-79D9-288F-225F-61450EA1F411}</UniqueIdentifier>
     </Filter>
@@ -58,6 +67,12 @@
     <Filter Include="src\xre\Renderer">
       <UniqueIdentifier>{116DD6CF-FD65-F521-2698-DAA612F0D42D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\xre\Renderer\Camera">
+      <UniqueIdentifier>{69846C60-D5BB-B4F7-DEC5-181B4A7CDBF0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\Renderer\Resources">
+      <UniqueIdentifier>{BBDB4B4B-A7EB-F71B-10A5-5C3AFCD3E6B4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\xre\Resource">
       <UniqueIdentifier>{820B50DC-6E04-6F2E-9736-54B3838E4E3A}</UniqueIdentifier>
     </Filter>
@@ -69,6 +84,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3rdparty\Entt\single_include\entt\entt.hpp">
+      <Filter>3rdparty\Entt\single_include\entt</Filter>
+    </ClInclude>
     <ClInclude Include="3rdparty\glm\glm\common.hpp">
       <Filter>3rdparty\glm\glm</Filter>
     </ClInclude>
@@ -1347,9 +1365,6 @@
     <ClInclude Include="src\Platforms\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platforms\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platforms\Windows\WindowsInput.h">
-      <Filter>src\Platforms\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platforms\Windows\WindowsWindow.h">
       <Filter>src\Platforms\Windows</Filter>
     </ClInclude>
@@ -1404,11 +1419,17 @@
     <ClInclude Include="src\xre\ImGui\ImGuiLayer.h">
       <Filter>src\xre\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Resources\Buffers.h">
-      <Filter>src\xre\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\xre\Renderer\Camera\Camera.h">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Camera\CameraController.h">
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Camera\OrthographicCameraController.h">
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Camera\PerspectiveCameraController.h">
+      <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\FrameBuffer.h">
       <Filter>src\xre\Renderer</Filter>
@@ -1419,29 +1440,29 @@
     <ClInclude Include="src\xre\Renderer\Light.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\OrthographicCameraController.h">
-      <Filter>src\xre\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\PerspectiveCameraController.h">
-      <Filter>src\xre\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\xre\Renderer\RenderCommand.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\Renderer.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Renderer3D.h">
+      <Filter>src\xre\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Renderer\RendererAPI.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Resources\Buffers.h">
+      <Filter>src\xre\Renderer\Resources</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Renderer\Resources\Shader.h">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\Resources\Texture.h">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\Resources\VertexArrays.h">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Resource\Material.h">
       <Filter>src\xre\Resource</Filter>
@@ -1461,7 +1482,12 @@
     <ClInclude Include="src\xre\Utils\Color.h">
       <Filter>src\xre\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\CameraController.h" />
+    <ClInclude Include="src\xre\ECS\Entity\Entity.h" />
+    <ClInclude Include="src\xre\ECS\Components\Component.h" />
+    <ClInclude Include="src\xre\Renderer\SkyBox.h" />
+    <ClInclude Include="src\xre\Editor\Console.h" />
+    <ClInclude Include="src\xre\ImGui\EditorGui\ConsoleWindow.h" />
+    <ClInclude Include="src\xre\ImGui\EditorGui\EditorWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
@@ -1515,22 +1541,19 @@
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp">
       <Filter>src\xre\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Resources\Buffers.cpp">
-      <Filter>src\xre\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Camera\OrthographicCameraController.cpp">
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Camera\PerspectiveCameraController.cpp">
+      <Filter>src\xre\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\FrameBuffer.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Light.cpp">
-      <Filter>src\xre\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Camera\OrthographicCameraController.cpp">
-      <Filter>src\xre\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Camera\PerspectiveCameraController.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\RenderCommand.cpp">
@@ -1539,17 +1562,23 @@
     <ClCompile Include="src\xre\Renderer\Renderer.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Renderer3D.cpp">
+      <Filter>src\xre\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\xre\Renderer\RendererAPI.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Resources\Buffers.cpp">
+      <Filter>src\xre\Renderer\Resources</Filter>
+    </ClCompile>
     <ClCompile Include="src\xre\Renderer\Resources\Shader.cpp">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Resources\Texture.cpp">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Resources\VertexArrays.cpp">
-      <Filter>src\xre\Renderer</Filter>
+      <Filter>src\xre\Renderer\Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Resource\Material.cpp">
       <Filter>src\xre\Resource</Filter>
@@ -1563,5 +1592,10 @@
     <ClCompile Include="src\xre\Resource\ResourceManager.cpp">
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\ECS\Entity\Entity.cpp" />
+    <ClCompile Include="src\xre\ECS\Components\Component.cpp" />
+    <ClCompile Include="src\xre\Renderer\SkyBox.cpp" />
+    <ClCompile Include="src\Platforms\OpenGL\OpenGLCubeMap.h" />
+    <ClCompile Include="src\xre\Editor\Console.cpp" />
   </ItemGroup>
 </Project>

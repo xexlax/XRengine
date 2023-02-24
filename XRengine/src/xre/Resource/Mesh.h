@@ -26,9 +26,11 @@ namespace XRE {
 		
 		~Mesh() {};
 
-		void Draw(Ref<Shader> shader,glm::mat4 transform= glm::mat4(1.0f));
 		void SetMaterial(Ref<Material> mat) { m_Material = mat; };
+		void BindMaterial(Ref<Shader> shader);
+		void UnBindMatarial(Ref<Shader> shader);
 
+		Ref<VertexArray> GetVAO()const { return m_VertexArray; }
 		
 	private:
 		
@@ -38,7 +40,7 @@ namespace XRE {
 		Ref<Material> m_Material;
 		glm::mat4 m_Transform;
 
-		void BindMaterial(Ref<Shader> shader);
+		//void BindMaterial(Ref<Shader> shader);
 		void setupMesh();
 
 	};

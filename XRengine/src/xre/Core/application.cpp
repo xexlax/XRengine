@@ -8,6 +8,7 @@
 
 //Todo : 实现所有的RendererAPI，避免对glad在/platform外的引用 
 namespace XRE {
+	int Application::m_FPS;
 	Application* Application::s_Instance = nullptr;
 	
 	Application::Application() {
@@ -24,6 +25,8 @@ namespace XRE {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
+		m_LastSecond = (float)glfwGetTime();
+		m_FPS = 0;
 
 	}
 
@@ -57,6 +60,16 @@ namespace XRE {
 			float time = (float)glfwGetTime();
 			TimeStep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
+			
+			//FPS_COUNTER
+
+			if (time - m_LastSecond >= 1) {
+				m_LastSecond = time;
+				m_FPS = m_FrameCount;
+				m_FrameCount = 0;
+			}
+			m_FrameCount++;
+
 
 			//layers 自下而上更新
 			if (!m_Minimized)

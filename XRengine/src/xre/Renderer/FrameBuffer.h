@@ -10,6 +10,7 @@ namespace XRE {
 		
 	public:
 		Framebuffer(uint32_t width, uint32_t height);
+		virtual ~Framebuffer() {};
 		
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;

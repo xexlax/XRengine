@@ -19,7 +19,7 @@ namespace XRE {
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
 		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 m_Front = { 0.0f, 0.0f, 1.0f };
+		glm::vec3 m_Front = { 0.0f, 0.0f, -1.0f };
 	};
 
 	class OrthographicCamera : public Camera {
@@ -42,7 +42,7 @@ namespace XRE {
 			float fovy, float aspect, float zNear, float zFar,
 			glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), 
 			glm::vec3 up =       glm::vec3(0.0f, 1.0f, 0.0f), 
-			glm::vec3 euler =    glm::vec3(0.0f, 90.0f,0.0f) );
+			glm::vec3 euler =    glm::vec3(0.0f, -90.0f,0.0f) );
 
 		void SetRotation(glm::vec3 euler) { m_EulerAngles = euler; RecalculateViewMatrix(); }
 

@@ -23,6 +23,10 @@ namespace XRE {
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
 
+		inline static void DrawSkyIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t cubemapTexture)
+		{
+			s_RendererAPI->DrawSkyIndexed(vertexArray,cubemapTexture);
+		}
 		inline static void Init()
 		{
 			s_RendererAPI->Init();

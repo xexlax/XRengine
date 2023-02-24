@@ -31,7 +31,7 @@ namespace XRE {
 	
 	PerspectiveCamera::PerspectiveCamera(float fovy, float aspect, float zNear, float zFar,
 		glm::vec3 position, glm::vec3 up, glm::vec3 euler)
-		:m_EulerAngles(euler), m_WorldUp(up), m_Front(glm::vec3(0.0f, 0.0f, 1.0f)),
+		:m_EulerAngles(euler), m_WorldUp(up),
 		Camera(glm::perspective(fovy, aspect, zNear, zFar), glm::mat4(1.0f))
 	{
 		m_Position = position;

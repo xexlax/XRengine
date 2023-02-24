@@ -21,6 +21,7 @@ namespace XRE{
 		glm::vec3 transmittance;
 		glm::vec3 emission;
 		float shininess, ior, dissolve, pad0;
+		float metallic, roughness;
 		int illum;
 
 		MaterialTex	ambientTex;

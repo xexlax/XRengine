@@ -1,28 +1,28 @@
 
 #include "pch.h"
-#include "WindowsInput.h"
+#include "xre\Core\Input.h"
 
 #include "xre\Core\application.h"
 #include "GLFW\glfw3.h"
 
 #define XRE_GET_GLFW_WINDOW static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow())
 namespace XRE {
-	Input* Input::s_Instance = new WindowsInput();
+	
 
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool Input::IsKeyPressed(int keycode)
 	{
 		auto window = XRE_GET_GLFW_WINDOW;
 		auto state = glfwGetKey(window, keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		auto window = XRE_GET_GLFW_WINDOW;
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 		
 	}
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		auto window = XRE_GET_GLFW_WINDOW;
 		double xpos, ypos;
@@ -30,14 +30,14 @@ namespace XRE {
 
 		return { (float)xpos, (float)ypos };
 	}
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return x;
 	}
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return y;
 	}
 }

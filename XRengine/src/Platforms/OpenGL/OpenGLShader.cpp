@@ -86,47 +86,47 @@ void XRE::OpenGLShader::UnBind() const
     glUseProgram(0);
 }
 
-void XRE::OpenGLShader::setBool(const std::string& name, bool value)
+void XRE::OpenGLShader::SetBool(const std::string& name, bool value)
 {
     glUniform1i(glGetUniformLocation(m_RendererID, name.c_str()), (int)value);
 }
 
-void XRE::OpenGLShader::setInt(const std::string& name, int value)
+void XRE::OpenGLShader::SetInt(const std::string& name, int value)
 {
     glUniform1i(glGetUniformLocation(m_RendererID, name.c_str()), value);
 }
 
-void XRE::OpenGLShader::setFloat(const std::string& name, float value)
+void XRE::OpenGLShader::SetFloat(const std::string& name, float value)
 {
     glUniform1f(glGetUniformLocation(m_RendererID, name.c_str()), value);
 }
 
-void XRE::OpenGLShader::setFloat2(const std::string& name, const glm::vec2& value)
+void XRE::OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
 {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform2f(location, value.x, value.y);
 }
 
-void XRE::OpenGLShader::setFloat3(const std::string& name, const glm::vec3& value)
+void XRE::OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform3f(location, value.x, value.y, value.z);
 }
 
-void XRE::OpenGLShader::setFloat4(const std::string& name, const glm::vec4& value)
+void XRE::OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
 
-void XRE::OpenGLShader::setMat3(const std::string& name, const glm::mat3& matrix)
+void XRE::OpenGLShader::SetMat3(const std::string& name, const glm::mat3& matrix)
 {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void XRE::OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix)
+void XRE::OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
 {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));

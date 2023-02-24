@@ -11,41 +11,40 @@ namespace XRE {
 		m_Material = std::make_shared<Material>();
 		setupMesh();
 	}
-	void Mesh::Draw(Ref<Shader> shader, glm::mat4 transform)
-	{
-		BindMaterial(shader);
-		Renderer::Submit(shader, m_VertexArray,transform);
-	}
+	
 	void Mesh::BindMaterial(Ref<Shader> shader)
 	{
 		shader->Bind();
 		auto& openGLshader = std::dynamic_pointer_cast<OpenGLShader>(shader);
 
-		openGLshader->setFloat("material.shininess", m_Material->shininess);
-
-
+		openGLshader->SetFloat("material.shininess", m_Material->shininess);
+		/*openGLshader->SetFloat("material.metallic", m_Material->metallic);
+		openGLshader->SetFloat("material.roughness", m_Material->roughness);*/
 		int textureID = 0;
 		//
-		openGLshader->setBool("material.enable_diffuseTex", m_Material->diffuseTex.m_enable);
+		openGLshader->SetBool("material.enable_diffuseTex", m_Material->diffuseTex.m_enable);
 		if (m_Material->diffuseTex.m_enable) {
 			m_Material->diffuseTex.m_Tex->Bind(textureID);
 			
-			openGLshader->setInt("material.diffuseTex", textureID++);
+			openGLshader->SetInt("material.diffuseTex", textureID++);
 		}
 		//
-		openGLshader->setBool("material.enable_specularTex", m_Material->specularTex.m_enable);
+		openGLshader->SetBool("material.enable_specularTex", m_Material->specularTex.m_enable);
 		if (m_Material->specularTex.m_enable) {
 			m_Material->specularTex.m_Tex->Bind(textureID);
-			openGLshader->setInt("material.specularTex", textureID++);
+			openGLshader->SetInt("material.specularTex", textureID++);
 		}
 		//
-		openGLshader->setBool("material.enable_bumpTex", m_Material->bumpTex.m_enable);
+		openGLshader->SetBool("material.enable_bumpTex", m_Material->bumpTex.m_enable);
 		if (m_Material->bumpTex.m_enable) {
 			m_Material->bumpTex.m_Tex->Bind(textureID);
-			openGLshader->setInt("material.bumpTex", textureID++);
+			openGLshader->SetInt("material.bumpTex", textureID++);
 		}
 			
 		
+	}
+	void Mesh::UnBindMatarial(Ref<Shader> shader)
+	{
 	}
 	void Mesh::setupMesh()
 	{

@@ -21,6 +21,7 @@ IncludeDir["glm"] = "XRengine/3rdparty/glm"
 IncludeDir["stb_img"] = "XRengine/3rdparty/stb_img"
 IncludeDir["tinyobjloader"] = "XRengine/3rdparty/tinyobjloader"
 IncludeDir["json11"] = "XRengine/3rdparty/json11"
+IncludeDir["Entt"] = "XRengine/3rdparty/Entt/single_include"
 
 
 include "XRengine/3rdparty/GLFW"
@@ -51,8 +52,8 @@ project "XRengine"
 		"%{prj.name}/3rdparty/stb_img/**.h",
 		"%{prj.name}/3rdparty/stb_img/**.cpp",
 		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h",
-
-		"%{prj.name}/3rdparty/json11/**.hpp"
+		"%{prj.name}/3rdparty/json11/**.hpp",
+		"%{prj.name}/3rdparty/Entt/single_include/**.hpp"
 		
 	}
 
@@ -65,7 +66,8 @@ project "XRengine"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_img}",
-		"%{IncludeDir.tinyobjloader}"
+		"%{IncludeDir.tinyobjloader}",
+		"%{IncludeDir.Entt}"
 	}
 
 	links 
