@@ -591,8 +591,6 @@
     <ClInclude Include="src\xre\ImGui\EditorGui\EditorWindow.h" />
     <ClInclude Include="src\xre\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\xre\Renderer\Camera\Camera.h" />
-    <ClInclude Include="src\xre\Renderer\Camera\CameraController.h" />
-    <ClInclude Include="src\xre\Renderer\Camera\OrthographicCameraController.h" />
     <ClInclude Include="src\xre\Renderer\Camera\PerspectiveCameraController.h" />
     <ClInclude Include="src\xre\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\xre\Renderer\GraphicContext.h" />
@@ -638,7 +636,6 @@
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp" />
-    <ClCompile Include="src\xre\Renderer\Camera\OrthographicCameraController.cpp" />
     <ClCompile Include="src\xre\Renderer\Camera\PerspectiveCameraController.cpp" />
     <ClCompile Include="src\xre\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\xre\Renderer\Light.cpp" />

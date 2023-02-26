@@ -42,7 +42,6 @@ namespace XRE {
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 3.0f };
 
 		bool m_constrainPitch = true;
-		
 		float m_CameraTranslationSpeed = 5.0f,m_CameraSensitivity=0.2f;
 	};
 

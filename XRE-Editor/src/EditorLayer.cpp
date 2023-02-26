@@ -3,10 +3,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "imgui/imgui.h"
-#include "Platforms/OpenGL/OpenGLShader.h"
-#include "GLFW\include\GLFW\glfw3.h"
+
+
+//temperory
+
+
 #pragma once
 #define PI 3.1415926f
+
+const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 EditorLayer::EditorLayer()
 	: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f , glm::vec3(0.0f,2.0f,5.0f))
 {
@@ -15,7 +20,7 @@ EditorLayer::EditorLayer()
 
 void EditorLayer::OnAttach()
 {
-	m_Framebuffer = Framebuffer::Create(1280, 720);
+	
 
 	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
 	m_Models.emplace_back(std::make_shared<Model>("../Assets/models/cube.obj"));
@@ -30,14 +35,15 @@ void EditorLayer::OnAttach()
 	Ref<PointLight> p1= std::make_shared<PointLight>(glm::vec3(1.2f, 2.5f, 0.0f));
 
 	Ref<PointLight> p2 = std::make_shared<PointLight>(glm::vec3(-1.2f, 2.5f, 3.0f));
-	Ref<DirectionalLight> dl= std::make_shared<DirectionalLight>(glm::vec3(-0.2f, -1.0f, 0.3f));
+	Ref<DirectionalLight> dl= std::make_shared<DirectionalLight>(glm::vec3(4.0f, -4.0f, 4.0f));
 	m_Light.AddPLight(p1);
 	m_Light.AddPLight(p2);
 	m_Light.SetDirLight(dl);
 
-	m_Skybox = make_shared<SkyBox>();
 
 	Renderer3D::Init();
+
+	
 }
 
 void EditorLayer::OnDetach()
@@ -48,60 +54,94 @@ void EditorLayer::OnDetach()
 void EditorLayer::OnUpdate(XRE::TimeStep ts)
 {
 	
-	if (m_ViewportFocused)
+	if (m_ViewportFocused) {
 		m_CameraController.OnUpdate(ts);
+		//Application::GetApplication().GetWindow().HideCursor(m_ViewportFocused);
+	}
+		
 
 	Ref<Camera> camera = m_CameraController.GetCamera();
-	m_Framebuffer->Bind();
-	// Render
-	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-	RenderCommand::Clear();
-
-	Renderer3D::StartScene(m_CameraController.GetCamera());
-	Renderer3D::PBROn(m_PBR);
-	Renderer3D::activeShader->SetFloat("material.metallic", m_Metallic);
-	Renderer3D::activeShader->SetFloat("material.roughness", m_Roughness);
 
 	m_Light.getPointLight(0)->m_Color = m_SquareColor;
 	m_Light.getPointLight(1)->m_Color = m_color3;
 	m_Light.getDirLight()->m_Color = m_color2;
 	m_Light.getDirLight()->m_Intensity = m_DirLightIntensity;
 	float t = ImGui::GetTime();
+
+	m_Light.getPointLight(0)->m_Position = glm::vec3(2 * cos(2 * t), 2.5f, 2 * sin(2 * t));
+	m_Light.getPointLight(1)->m_Position = glm::vec3(2 * cos(2 * t + PI), 2.5f, 2 * sin(2 * t + PI));
+
+
+
+
+	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+
+
+	//ShadowMap Pass
+	if (m_Show_Shadow) {
+		Renderer3D::StartShadowPass(m_Light.getDirLight());
+		DrawScene();
+		Renderer3D::EndShadowPass();
+	}
 	
-	m_Light.getPointLight(0)->m_Position = glm::vec3(2 * cos(2*t), 2.5f, 2 * sin(2*t));
-	m_Light.getPointLight(1)->m_Position = glm::vec3(2 * cos(2*t+PI), 2.5f, 2 * sin(2*t+PI));
 
-	Renderer3D::DrawLight(make_shared<Light>(m_Light));
+	// Coloring Pass
 
+	Renderer3D::m_FrameBuffer->Bind();
+	RenderCommand::Clear();
+
+	if (m_PBR) Renderer3D::activeShader = Renderer3D::defaultPBRShader;
+	else Renderer3D::activeShader = Renderer3D::defaultObjShader;
+
+	//切shader一定要在startscene前
+	Renderer3D::StartScene(camera);
+	{
+		Renderer3D::activeShader->Bind();
+		Renderer3D::activeShader->SetFloat("material.metallic", m_Metallic);
+		Renderer3D::activeShader->SetFloat("material.roughness", m_Roughness);
+		if(m_Show_Shadow)
+		Renderer3D::SetShadowMapOfActive(0);
+		Renderer3D::DrawLight(make_shared<Light>(m_Light));
+
+		DrawScene();
+		if (m_ShowSkybox)
+			Renderer3D::DrawSkybox();
+	}
+	Renderer3D::EndScene();
+	Renderer3D::m_FrameBuffer->Unbind();
+
+	//Renderer3D::PostProcessing();
+
+}
+void EditorLayer::DrawScene()
+{
+	
+	
+
+	float t = ImGui::GetTime();
 	glm::mat4 transform = glm::mat4(1.0f);
+	//Renderer3D::DrawModel(m_Models[0], transform);
 	transform = glm::rotate(transform, PI, glm::vec3(0, 1, 0));
 	transform = glm::scale(transform, glm::vec3(0.5f));
 	transform = glm::translate(transform, glm::vec3(-5.0f, 0.0f, 2.0f));
 
-	Renderer3D::DrawModel(m_Models[5],transform);
+	Renderer3D::DrawModel(m_Models[5], transform);
 	for (int i = 0;i < 4;i++) {
-		transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.3* (i+1) * cos( t/(i+1)), 0, 1.3*(i+1) * sin(t/(i+1))));
-		transform = glm::rotate(transform,t, glm::vec3(1, 1, 1));
+		transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1))));
+		transform = glm::rotate(transform, t, glm::vec3(1, 1, 1));
 		Renderer3D::DrawModel(m_Models[i], transform);
 
 	}
 
-	
+
 	transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-	transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -2.0f));
+	transform = glm::translate(transform, glm::vec3(0.0f, -2.5f, -2.0f));
 	Renderer3D::DrawModel(m_Models[4], transform);
 
-	
+
 	transform = glm::scale(glm::mat4(1.0f), glm::vec3(20.0f, 0.2f, 20.0f));
 	transform = glm::translate(transform, glm::vec3(0.0f, -3.0f, 0.0f));
 	Renderer3D::DrawModel(m_Models[0], transform);
-
-	if(m_ShowSkybox)
-		Renderer3D::DrawSkybox(m_Skybox);
-
-	XRE::Renderer3D::EndScene();
-	m_Framebuffer->Unbind();
-
 }
 
 void EditorLayer::OnImGuiRender(){
@@ -179,17 +219,26 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::SliderFloat("DirLight Intensity", &m_DirLightIntensity, 0.0f, 5.0f);
 		ImGui::Separator();
 
+		//ImGui::Checkbox("Shadow", &m_Show_Shadow );
 		ImGui::Checkbox("PBR Shading", &m_PBR);
 		if (m_PBR) {
 			ImGui::SliderFloat("Metallic", &m_Metallic, 0.0f, 1.0f);
 			ImGui::SliderFloat("Roughness", &m_Roughness, 0.0f, 1.0f);
 		}
 
+		if (ImGui::Button("ReloadShader")) {
+			Renderer3D::Init();
+		}
 
 		
 
 
 		ImGui::Checkbox("SkyBox", &m_ShowSkybox);
+		uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
+
+		ImGui::Separator();
+		ImGui::Text("DepthMap");
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 }) ;
 
 	ImGui::End();
 
@@ -206,13 +255,13 @@ void EditorLayer::OnImGuiRender(){
 		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
 		{
 			//XRE_CORE_TRACE("viewport: {0} x {1} ", viewportPanelSize.x, viewportPanelSize.y);
-			m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+			Renderer3D::m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 			m_CameraController.Resize(viewportPanelSize.x, viewportPanelSize.y);
 		}
 
-		uint32_t textureID = m_Framebuffer->GetColorAttachment();
+		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
 	ImGui::End();
@@ -248,5 +297,6 @@ bool EditorLayer::OnKeyReleased(KeyReleasedEvent& e)
 	}
 	return false;
 }
+
 
 

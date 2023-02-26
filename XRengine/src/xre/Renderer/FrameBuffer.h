@@ -21,6 +21,9 @@ namespace XRE {
 		virtual uint32_t GetWidth()const = 0;
 		virtual uint32_t GetHeight()const = 0;
 		static Ref<Framebuffer> Create(uint32_t width, uint32_t height);
+
+		virtual void ActiveDepth(int slot)=0;
+		virtual void ActiveColor(int slot) = 0;
 	protected:
 		uint32_t m_Width, m_Height;
 	};

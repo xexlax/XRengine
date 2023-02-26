@@ -20,7 +20,7 @@
 
 #include "xre\Renderer\Light.h"
 #include "xre\Renderer\Camera\Camera.h"
-#include "xre\Renderer\Camera\OrthographicCameraController.h"
+
 #include "xre\Renderer\Camera\PerspectiveCameraController.h"
 
 

@@ -20,7 +20,7 @@ namespace XRE {
 		openGLshader->SetFloat("material.shininess", m_Material->shininess);
 		/*openGLshader->SetFloat("material.metallic", m_Material->metallic);
 		openGLshader->SetFloat("material.roughness", m_Material->roughness);*/
-		int textureID = 0;
+		int textureID = 1;
 		//
 		openGLshader->SetBool("material.enable_diffuseTex", m_Material->diffuseTex.m_enable);
 		if (m_Material->diffuseTex.m_enable) {

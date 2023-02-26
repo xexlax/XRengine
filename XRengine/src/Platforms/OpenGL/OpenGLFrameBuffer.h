@@ -16,6 +16,9 @@ namespace XRE {
 		virtual uint32_t GetDepthAttachment()const { return m_DepthAttachment; };
 		virtual uint32_t GetWidth()const { return m_Width; };
 		virtual uint32_t GetHeight()const { return m_Height; };
+
+		virtual void ActiveColor(int slot);
+		virtual void ActiveDepth(int slot);
 	private:
 		uint32_t m_RendererID = 0;
 		uint32_t m_ColorAttachment = 0, m_DepthAttachment = 0;

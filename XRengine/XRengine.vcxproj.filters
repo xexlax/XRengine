@@ -1422,12 +1422,6 @@
     <ClInclude Include="src\xre\Renderer\Camera\Camera.h">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\CameraController.h">
-      <Filter>src\xre\Renderer\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\OrthographicCameraController.h">
-      <Filter>src\xre\Renderer\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="src\xre\Renderer\Camera\PerspectiveCameraController.h">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
@@ -1542,9 +1536,6 @@
       <Filter>src\xre\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp">
-      <Filter>src\xre\Renderer\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Camera\OrthographicCameraController.cpp">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Camera\PerspectiveCameraController.cpp">

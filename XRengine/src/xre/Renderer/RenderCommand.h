@@ -37,6 +37,10 @@ namespace XRE {
 			s_RendererAPI->SetViewport(x, y, width, height);
 		}
 
+		inline static void CullFace(bool b) {
+			s_RendererAPI->CullFace(b);
+		}
+
 
 	private:
 		static RendererAPI* s_RendererAPI;
