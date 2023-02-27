@@ -6,7 +6,7 @@
 using namespace std;
 namespace XRE {
 	
-
+    //一个Model由数个Mesh组成，每个Mesh拥有唯一的Material
 	class Model {
     public:
         /*  函数   */

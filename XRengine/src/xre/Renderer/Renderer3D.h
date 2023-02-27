@@ -21,7 +21,7 @@ namespace XRE {
 		static void EndScene();
 
 
-		static void StartShadowPass(Ref<DirectionalLight> dirLight);
+		static void StartShadowPass();
 		//static void StartShadowPass(Ref<PointLight> pLight);
 		static void EndShadowPass();
 		static void SetShadowMapOfActive(uint32_t slot=0);
@@ -29,7 +29,7 @@ namespace XRE {
 
 		static void CullFace(bool b);
 
-		static void DrawLight(const Ref<Light> light);
+		static void DrawLight();
 		static void DrawModel(const Ref<Model> model, glm::mat4 transform = glm::mat4(1.0f));
 		static void DrawSkybox();
 
@@ -37,6 +37,9 @@ namespace XRE {
 		static Ref<Shader> defaultPBRShader;
 		static Ref<Shader> simpleDepthShader;
 		static Ref<Shader> postShader;
+
+		static Light m_Light;
+	
 		
 		static Ref<Framebuffer> m_FrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;
 		static Ref<SkyBox> m_SkyBox;

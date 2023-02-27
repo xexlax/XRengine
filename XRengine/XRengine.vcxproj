@@ -560,10 +560,9 @@
     <ClInclude Include="3rdparty\json11\json11.hpp" />
     <ClInclude Include="3rdparty\stb_img\stb_image.h" />
     <ClInclude Include="3rdparty\tinyobjloader\tiny_obj_loader.h" />
-    <ClInclude Include="src\xre\ECS\Components\Component.h" />
-    <ClInclude Include="src\xre\ECS\Entity\Entity.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLBuffers.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platforms\OpenGL\OpenGLCubeMap.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLFrameBuffer.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platforms\OpenGL\OpenGLShader.h" />
@@ -582,6 +581,8 @@
     <ClInclude Include="src\xre\Core\application.h" />
     <ClInclude Include="src\xre\Core\entryPoint.h" />
     <ClInclude Include="src\xre\Core\log.h" />
+    <ClInclude Include="src\xre\ECS\Components.h" />
+    <ClInclude Include="src\xre\ECS\GameObject.h" />
     <ClInclude Include="src\xre\Editor\Console.h" />
     <ClInclude Include="src\xre\Event\AppEvent.h" />
     <ClInclude Include="src\xre\Event\Event.h" />
@@ -608,14 +609,12 @@
     <ClInclude Include="src\xre\Resource\Mesh.h" />
     <ClInclude Include="src\xre\Resource\Model.h" />
     <ClInclude Include="src\xre\Resource\ResourceManager.h" />
-    <ClInclude Include="src\xre\Scene\SceneManager.h" />
+    <ClInclude Include="src\xre\ECS\Scene.h" />
+    <ClInclude Include="src\xre\ECS\SceneManager.h" />
     <ClInclude Include="src\xre\Utils\Color.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp" />
-    <ClCompile Include="src\Platforms\OpenGL\OpenGLCubeMap.h" />
-    <ClCompile Include="src\xre\ECS\Components\Component.cpp" />
-    <ClCompile Include="src\xre\ECS\Entity\Entity.cpp" />
     <ClCompile Include="src\Platforms\OpenGL\OpenGLBuffers.cpp" />
     <ClCompile Include="src\Platforms\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platforms\OpenGL\OpenGLFrameBuffer.cpp" />
@@ -632,6 +631,7 @@
     <ClCompile Include="src\xre\Core\LayerStack.cpp" />
     <ClCompile Include="src\xre\Core\application.cpp" />
     <ClCompile Include="src\xre\Core\log.cpp" />
+    <ClCompile Include="src\xre\ECS\GameObject.cpp" />
     <ClCompile Include="src\xre\Editor\Console.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp" />
@@ -652,6 +652,8 @@
     <ClCompile Include="src\xre\Resource\Mesh.cpp" />
     <ClCompile Include="src\xre\Resource\Model.cpp" />
     <ClCompile Include="src\xre\Resource\ResourceManager.cpp" />
+    <ClCompile Include="src\xre\ECS\Scene.cpp" />
+    <ClCompile Include="src\xre\Utils\TransformUnpacking.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="3rdparty\GLFW\GLFW.vcxproj">

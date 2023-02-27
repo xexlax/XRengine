@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XRE_PLATFORM_WINDOWS;XRE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\XRengine\3rdparty\spdlog\include;..\XRengine\src;..\XRengine\3rdparty\glm;..\XRengine\3rdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\XRengine\3rdparty\spdlog\include;..\XRengine\src;..\XRengine\3rdparty;..\XRengine\3rdparty\glm;..\XRengine\3rdparty\Entt\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XRE_PLATFORM_WINDOWS;XRE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\XRengine\3rdparty\spdlog\include;..\XRengine\src;..\XRengine\3rdparty\glm;..\XRengine\3rdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\XRengine\3rdparty\spdlog\include;..\XRengine\src;..\XRengine\3rdparty;..\XRengine\3rdparty\glm;..\XRengine\3rdparty\Entt\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XRE_PLATFORM_WINDOWS;XRE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\XRengine\3rdparty\spdlog\include;..\XRengine\src;..\XRengine\3rdparty\glm;..\XRengine\3rdparty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\XRengine\3rdparty\spdlog\include;..\XRengine\src;..\XRengine\3rdparty;..\XRengine\3rdparty\glm;..\XRengine\3rdparty\Entt\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

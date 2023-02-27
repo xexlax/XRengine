@@ -18,6 +18,8 @@ namespace XRE {
 	Ref<Framebuffer> Renderer3D::m_PostFrameBuffer;
 	Ref<VertexArray> Renderer3D::m_Quad;
 
+	Light Renderer3D::m_Light;
+
 	glm::mat4  Renderer3D::m_VP, Renderer3D::m_LVP;
 	void Renderer3D::Init()
 	{
@@ -95,13 +97,13 @@ namespace XRE {
 
 	}
 
-	void Renderer3D::StartShadowPass(Ref<DirectionalLight> dirLight)
+	void Renderer3D::StartShadowPass()
 	{
 		m_ShadowFrameBuffer->Bind();
 
 		RenderCommand::Clear();
 		//Ref<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(-10.0f, 10.0f, -10.0f, 10.0f, m_Light.getDirLight()->m_Direction);
-		Ref<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(glm::vec3(0.0f), dirLight->m_Direction);
+		Ref<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(glm::vec3(0.0f), m_Light.getDirLight().m_Direction);
 		m_LVP = dirLight_Camera->GetViewProjectionMatrix();
 		// render scene from light's point of view
 		activeShader = simpleDepthShader;
@@ -141,9 +143,9 @@ namespace XRE {
 
 	}
 	
-	void Renderer3D::DrawLight(const Ref<Light> light)
+	void Renderer3D::DrawLight()
 	{
-		light->Draw(activeShader);
+		m_Light.Draw(activeShader);
 	}
 	void Renderer3D::DrawModel(const Ref<Model> model, glm::mat4 transform)
 	{

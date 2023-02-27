@@ -58,11 +58,26 @@
     <Filter Include="src\xre\Core">
       <UniqueIdentifier>{43508AA1-2FB3-1946-D838-52FCC47AE5C8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\xre\ECS">
+      <UniqueIdentifier>{D5CE7033-4184-E928-CA78-E3FF362DE02C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\ECS\Components">
+      <UniqueIdentifier>{CAA43D1A-B69E-666C-9F0B-FD7C8BA4CCD8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\ECS\Entity">
+      <UniqueIdentifier>{8139704C-6D1D-31A2-D67D-2BF5C2801B24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\Editor">
+      <UniqueIdentifier>{E10F3E31-CDDD-3137-B671-A25DA2DE0D9C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\xre\Event">
       <UniqueIdentifier>{9C2AFCD2-08EB-7709-D125-C1863DA5BCE5}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\xre\ImGui">
       <UniqueIdentifier>{751E3FD3-E1DE-BA09-AA19-04871699FFE5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xre\ImGui\EditorGui">
+      <UniqueIdentifier>{B06B1F15-1CA3-67AC-25AD-CBCF91638EA5}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\xre\Renderer">
       <UniqueIdentifier>{116DD6CF-FD65-F521-2698-DAA612F0D42D}</UniqueIdentifier>
@@ -1350,6 +1365,9 @@
     <ClInclude Include="src\Platforms\OpenGL\OpenGLContext.h">
       <Filter>src\Platforms\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platforms\OpenGL\OpenGLCubeMap.h">
+      <Filter>src\Platforms\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platforms\OpenGL\OpenGLFrameBuffer.h">
       <Filter>src\Platforms\OpenGL</Filter>
     </ClInclude>
@@ -1404,6 +1422,15 @@
     <ClInclude Include="src\xre\Core\log.h">
       <Filter>src\xre\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\ECS\Components.h">
+      <Filter>src\xre\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\GameObject.h">
+      <Filter>src\xre\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Editor\Console.h">
+      <Filter>src\xre\Editor</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Event\AppEvent.h">
       <Filter>src\xre\Event</Filter>
     </ClInclude>
@@ -1415,6 +1442,12 @@
     </ClInclude>
     <ClInclude Include="src\xre\Event\MouseEvent.h">
       <Filter>src\xre\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ImGui\EditorGui\ConsoleWindow.h">
+      <Filter>src\xre\ImGui\EditorGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ImGui\EditorGui\EditorWindow.h">
+      <Filter>src\xre\ImGui\EditorGui</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\ImGui\ImGuiLayer.h">
       <Filter>src\xre\ImGui</Filter>
@@ -1458,6 +1491,9 @@
     <ClInclude Include="src\xre\Renderer\Resources\VertexArrays.h">
       <Filter>src\xre\Renderer\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Renderer\SkyBox.h">
+      <Filter>src\xre\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Resource\Material.h">
       <Filter>src\xre\Resource</Filter>
     </ClInclude>
@@ -1470,18 +1506,13 @@
     <ClInclude Include="src\xre\Resource\ResourceManager.h">
       <Filter>src\xre\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Scene\SceneManager.h">
+    <ClInclude Include="src\xre\ECS\SceneManager.h">
       <Filter>src\xre\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Utils\Color.h">
       <Filter>src\xre\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\ECS\Entity\Entity.h" />
-    <ClInclude Include="src\xre\ECS\Components\Component.h" />
-    <ClInclude Include="src\xre\Renderer\SkyBox.h" />
-    <ClInclude Include="src\xre\Editor\Console.h" />
-    <ClInclude Include="src\xre\ImGui\EditorGui\ConsoleWindow.h" />
-    <ClInclude Include="src\xre\ImGui\EditorGui\EditorWindow.h" />
+    <ClInclude Include="src\xre\ECS\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
@@ -1529,6 +1560,12 @@
     <ClCompile Include="src\xre\Core\log.cpp">
       <Filter>src\xre\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\ECS\GameObject.cpp">
+      <Filter>src\xre\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Editor\Console.cpp">
+      <Filter>src\xre\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp">
       <Filter>src\xre\ImGui</Filter>
     </ClCompile>
@@ -1571,6 +1608,9 @@
     <ClCompile Include="src\xre\Renderer\Resources\VertexArrays.cpp">
       <Filter>src\xre\Renderer\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\Renderer\SkyBox.cpp">
+      <Filter>src\xre\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\xre\Resource\Material.cpp">
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
@@ -1583,10 +1623,7 @@
     <ClCompile Include="src\xre\Resource\ResourceManager.cpp">
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\ECS\Entity\Entity.cpp" />
-    <ClCompile Include="src\xre\ECS\Components\Component.cpp" />
-    <ClCompile Include="src\xre\Renderer\SkyBox.cpp" />
-    <ClCompile Include="src\Platforms\OpenGL\OpenGLCubeMap.h" />
-    <ClCompile Include="src\xre\Editor\Console.cpp" />
+    <ClCompile Include="src\xre\ECS\Scene.cpp" />
+    <ClCompile Include="src\xre\Utils\TransformUnpacking.h" />
   </ItemGroup>
 </Project>

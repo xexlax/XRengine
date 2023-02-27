@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "Resources/Shader.h"
+#include "xre\ECS\GameObject.h"
+#include "xre\ECS\Components.h"
 namespace XRE {
 	struct PointLight {
 		glm::vec3 m_Position;
@@ -46,15 +48,17 @@ namespace XRE {
 		Light();
 		~Light() {};
 		void Draw(Ref<Shader> shader);
-		void SetDirLight(Ref<DirectionalLight> d);
+		void SetDirLight(GameObject& go);
 		void ClearPLights();
-		void AddPLight(Ref<PointLight> p);
-		Ref<DirectionalLight> getDirLight() { return m_DirectionalLight; };
-		Ref<PointLight> getPointLight(int idx = 0) { return m_PointLights[idx]; };
+		void SetPLight(GameObject& go,int i);
+
+		void RemovePLight(GameObject& go);
+		DirectionalLightComponent getDirLight() { return m_DirectionalLight; };
+		PointLightComponent getPointLight(int idx = 0) { return m_PointLights[idx]; };
 	private:
 
-		Ref<DirectionalLight> m_DirectionalLight;
-		std::vector<Ref<PointLight>> m_PointLights;
+		DirectionalLightComponent m_DirectionalLight;
+		std::vector<PointLightComponent> m_PointLights;
 
 
 	};

@@ -17,26 +17,19 @@ public:
 	void OnImGuiRender() override;
 private:
 	bool OnKeyReleased(KeyReleasedEvent& e);
-	void DrawScene();
+	void InitScene();
+	void SetScene();
 private:
-	//OrthographicCameraController m_CameraController;
+	
 	PerspectiveCameraController m_CameraController;
-	
-	// Temp
-	vector<Ref<Model>> m_Models;
 
-	Light m_Light;
+	Scene m_Scene;
 	
-	Ref<VertexArray> m_SquareVA;
-	Ref<Shader> m_FlatColorShader;
+	GameObject SceneCameraGO;
+	GameObject PointLight1GO, PointLight2GO, DirLightGO;
+	GameObject CubeGO, CylinderGO, CapsuleGO, SphereGO, FloorGO, NanoGO, BocchiGO;
+
+	//IMGUI TESTING BOARD ARGS
 	bool m_ViewportFocused = false, m_ViewportHovered = false;
-	bool m_ShowSkybox = false,m_Show_Shadow = true;
-	bool m_PBR = false;
-	float m_Metallic= 0.2f, m_Roughness = 0.2f;
-	float m_DirLightIntensity = 2.0f;
 	glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.9f, 1.0f }, 
-		m_color2 = { 0.5f,0.4f,0.35f,1.0f },
-		m_color3 = { 0.8f,0.4f,0.2f,1.0f };
 };

@@ -25,5 +25,9 @@
 
 
 #include "xre/Resource/ResourceManager.h"
-
 #include "xre/Resource/Model.h"
+
+
+#include "xre\ECS\Scene.h"
+#include "xre\ECS\Components.h"
+#include "xre\ECS\GameObject.h"

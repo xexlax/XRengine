@@ -66,6 +66,7 @@ project "XRengine"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_img}",
+		"%{IncludeDir.json11}",
 		"%{IncludeDir.tinyobjloader}",
 		"%{IncludeDir.Entt}"
 	}
@@ -129,8 +130,10 @@ project "Sandbox"
 	{
 		"XRengine/3rdparty/spdlog/include",
 		"XRengine/src",
+		
+		"XRengine/3rdparty",
 		"%{IncludeDir.glm}",
-		"XRengine/3rdparty"
+		"%{IncludeDir.Entt}"
 	}
 
 	links
@@ -183,8 +186,9 @@ project "XRE-Editor"
 	{
 		"XRengine/3rdparty/spdlog/include",
 		"XRengine/src",
+		"XRengine/3rdparty",
 		"%{IncludeDir.glm}",
-		"XRengine/3rdparty"
+		"%{IncludeDir.Entt}"
 	}
 
 	links
