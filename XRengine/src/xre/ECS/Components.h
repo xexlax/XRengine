@@ -2,6 +2,7 @@
 #include "xre\Core\Macros.h"
 
 #include "xre\Resource\Model.h"
+#include "xre\Renderer\Camera\Camera.h"
 #include <string>
 namespace XRE {
 
@@ -17,22 +18,27 @@ namespace XRE {
 	class TransformComponent : public Component {
 	public:
 		std::string m_Name= "Transform";
-		glm::mat4 m_Transform{ 1.0f };
-
-	/*	glm::vec3 m_Position = glm::vec3(0.0f);
-		glm::vec3 m_Rotation = glm::vec3(0.0f);
-		glm::vec3 m_Scale = glm::vec3(1.0f);*/
+		glm::vec3 m_Translation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_Rotation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_Scale = { 1.0f, 1.0f, 1.0f };
 
 		TransformComponent* m_parent = nullptr;
 
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4& transform)
-			: m_Transform(transform) {}
+		TransformComponent(const glm::vec3& translation)
+			: m_Translation(translation) {}
 
-		operator glm::mat4& () { return m_Transform; }
-		operator const glm::mat4& () const { return m_Transform; }
+		glm::mat4 GetTransform() const
+		{
+			return glm::translate(glm::mat4(1.0f), m_Translation)
+				* glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.x), { 1, 0, 0 })
+				* glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.y), { 0, 1, 0 })
+				* glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation.z), { 0, 0, 1 })
+				* glm::scale(glm::mat4(1.0f), m_Scale);
+		}
+
 	};
 
 	class MeshRendererComponent : public Component {
@@ -51,7 +57,6 @@ namespace XRE {
 	class PointLightComponent : public Component {
 	public:
 		std::string m_Name = "Point Light";
-		glm::vec3 m_Position = glm::vec3(0.0f);
 		glm::vec3 m_Color = glm::vec3(1.0f);
 		float m_Intensity=1.0f;
 		float m_ShadowCasting = false;
@@ -71,7 +76,6 @@ namespace XRE {
 		glm::vec3 m_Color;
 		float m_Intensity;
 		float m_ShadowCasting = true;
-		glm::vec3 m_Direction = glm::vec3(1.0f, -1.0f, 1.0f);
 		DirectionalLightComponent() = default;
 		DirectionalLightComponent(const DirectionalLightComponent&) = default;
 		DirectionalLightComponent(const glm::vec3 & color = glm::vec3(1.0f), const float& intensity = 1.0f)
@@ -83,14 +87,16 @@ namespace XRE {
 	class CameraComponent: public Component {
 	public:
 		std::string m_Name = "Camera";
-		glm::mat4 m_Projection;
+		Ref<Camera> m_Camera;
 		bool m_FixedAspectRatio=false;
+		bool m_Primary = true;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(const glm::mat4& projection)
-			: m_Projection(projection) {}
-
+			:m_Camera(std::make_shared<Camera>(projection)) {}
+		CameraComponent(const CameraType& type)
+			:m_Camera(std::make_shared<Camera>(type)) {}
 	};
 
 

@@ -87,6 +87,7 @@ namespace XRE {
 		activeShader->SetFloat3("viewPos", camera->GetPosition());
 	}
 
+
 	void Renderer3D::CullFace(bool b)
 	{
 		RenderCommand::CullFace(b);
@@ -97,13 +98,23 @@ namespace XRE {
 
 	}
 
+	void Renderer3D::Clear()
+	{
+		RenderCommand::Clear();
+	}
+
+	void Renderer3D::SetClearColor(glm::vec4 color)
+	{
+		RenderCommand::SetClearColor(color);
+	}
+
 	void Renderer3D::StartShadowPass()
 	{
 		m_ShadowFrameBuffer->Bind();
 
 		RenderCommand::Clear();
 		//Ref<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(-10.0f, 10.0f, -10.0f, 10.0f, m_Light.getDirLight()->m_Direction);
-		Ref<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(glm::vec3(0.0f), m_Light.getDirLight().m_Direction);
+		Ref<Camera> dirLight_Camera = make_shared<Camera>(Orthographic, m_Light.getDirLight().m_Rotation);
 		m_LVP = dirLight_Camera->GetViewProjectionMatrix();
 		// render scene from light's point of view
 		activeShader = simpleDepthShader;

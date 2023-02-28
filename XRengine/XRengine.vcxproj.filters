@@ -1455,7 +1455,7 @@
     <ClInclude Include="src\xre\Renderer\Camera\Camera.h">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\PerspectiveCameraController.h">
+    <ClInclude Include="src\xre\Renderer\Camera\CameraController.h">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\FrameBuffer.h">
@@ -1508,9 +1508,6 @@
     </ClInclude>
     <ClInclude Include="src\xre\ECS\SceneManager.h">
       <Filter>src\xre\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\xre\Utils\Color.h">
-      <Filter>src\xre\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\ECS\Scene.h" />
   </ItemGroup>
@@ -1575,7 +1572,7 @@
     <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Camera\PerspectiveCameraController.cpp">
+    <ClCompile Include="src\xre\Renderer\Camera\CameraController.cpp">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\FrameBuffer.cpp">
@@ -1624,6 +1621,5 @@
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\ECS\Scene.cpp" />
-    <ClCompile Include="src\xre\Utils\TransformUnpacking.h" />
   </ItemGroup>
 </Project>

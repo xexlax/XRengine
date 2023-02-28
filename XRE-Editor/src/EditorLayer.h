@@ -21,7 +21,7 @@ private:
 	void SetScene();
 private:
 	
-	PerspectiveCameraController m_CameraController;
+	CameraController m_CameraController;
 
 	Scene m_Scene;
 	

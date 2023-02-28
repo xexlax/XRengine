@@ -10,7 +10,7 @@ namespace XRE {
 		glm::vec3 m_Color;
 		float m_Intensity;
 
-		PointLight(glm::vec3 pos, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float intensity = 4.0f) {
+		PointLight(glm::vec3 pos= glm::vec3(0.0f), glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float intensity = 4.0f) {
 			m_Position = pos;
 			m_Color = color;
 			m_Intensity = intensity;
@@ -20,6 +20,7 @@ namespace XRE {
 
 	struct DirectionalLight {
 		glm::vec3 m_Direction;
+		glm::vec3 m_Rotation;
 		glm::vec3 m_Color;
 		float m_Intensity;
 
@@ -53,12 +54,12 @@ namespace XRE {
 		void SetPLight(GameObject& go,int i);
 
 		void RemovePLight(GameObject& go);
-		DirectionalLightComponent getDirLight() { return m_DirectionalLight; };
-		PointLightComponent getPointLight(int idx = 0) { return m_PointLights[idx]; };
+		DirectionalLight getDirLight() { return m_DirectionalLight; };
+		PointLight getPointLight(int idx = 0) { return m_PointLights[idx]; };
 	private:
 
-		DirectionalLightComponent m_DirectionalLight;
-		std::vector<PointLightComponent> m_PointLights;
+		DirectionalLight m_DirectionalLight;
+		std::vector<PointLight> m_PointLights;
 
 
 	};

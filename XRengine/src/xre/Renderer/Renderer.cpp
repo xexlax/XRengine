@@ -20,6 +20,8 @@ namespace XRE {
 		m_SceneData->ViewProjectionMatrix = camera->GetViewProjectionMatrix();
 	}
 
+	
+
 	void Renderer::EndScene()
 	{
 	}

@@ -22,7 +22,6 @@ void EditorLayer::OnAttach()
 {
 	
 	InitScene();
-	
 	Renderer3D::Init();
 	
 }
@@ -33,7 +32,7 @@ void EditorLayer::InitScene() {
 	CubeGO = m_Scene.CreateGameObject("Cube");
 	CylinderGO = m_Scene.CreateGameObject("Cylinder");
 	SphereGO = m_Scene.CreateGameObject("Sphere");
-	NanoGO = m_Scene.CreateGameObject("Nanosuit");
+	//NanoGO = m_Scene.CreateGameObject("Nanosuit");
 	BocchiGO = m_Scene.CreateGameObject("Bocchi");
 	FloorGO = m_Scene.CreateGameObject("Floor");
 
@@ -42,7 +41,7 @@ void EditorLayer::InitScene() {
 	FloorGO.AddComponent<MeshRendererComponent>(cubemesh);
 	CylinderGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/cylinder.obj"));
 	SphereGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/sphere.obj"));
-	NanoGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/nanosuit/nanosuit.obj"));
+	//NanoGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/nanosuit/nanosuit.obj"));
 	BocchiGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/bocchi/bocchi.obj"));
 
 
@@ -55,22 +54,17 @@ void EditorLayer::InitScene() {
 	DirLightGO.AddComponent<DirectionalLightComponent>(glm::vec3(0.5f, 0.4f, 0.35f), 2.0f);
 
 	SceneCameraGO = m_Scene.CreateGameObject("Camera");
+	SceneCameraGO.AddComponent<CameraComponent>(Perspective);
+	SceneCameraGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, 9.0f, 12.0f);
+	SceneCameraGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, 0.0f, 0.0f);
 
-	glm::mat4 transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, PI, glm::vec3(0, 1, 0));
-	transform = glm::scale(transform, glm::vec3(0.5f));
-	transform = glm::translate(transform, glm::vec3(-5.0f, 0.0f, 2.0f));
-	BocchiGO.GetComponent<TransformComponent>().m_Transform = transform;
+	BocchiGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(-5.0f, 0.0f, 2.0f);
+	BocchiGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(0.0f, 180.0f, 0.0f);
 
-	transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-	transform = glm::translate(transform, glm::vec3(0.0f, -2.5f, -2.0f));
-	NanoGO.GetComponent<TransformComponent>().m_Transform = transform;
+	FloorGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -1.0f, 0.0f);
+	FloorGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(20.0f, 0.2f, 20.0f);
 
-
-	transform = glm::scale(glm::mat4(1.0f), glm::vec3(20.0f, 0.2f, 20.0f));
-	transform = glm::translate(transform, glm::vec3(0.0f, -3.0f, 0.0f));
-	FloorGO.GetComponent<TransformComponent>().m_Transform = transform;
-
+	DirLightGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, -45.0f, 0.0f);
 
 	Renderer3D::m_Light.SetDirLight(DirLightGO);
 
@@ -88,44 +82,17 @@ void EditorLayer::OnUpdate(XRE::TimeStep ts)
 	if (m_ViewportFocused) {
 		m_CameraController.OnUpdate(ts);
 		//Application::GetApplication().GetWindow().HideCursor(m_ViewportFocused);
-	}
 		
-
-	Ref<Camera> camera = m_CameraController.GetCamera();
-	
-	//更新场景动态
-	SetScene();
-
-	
-
-	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-
-
-	//ShadowMap Pass
-	
-	Renderer3D::StartShadowPass();
-	m_Scene.OnUpdate(ts);
-	Renderer3D::EndShadowPass();
-	// Coloring Pass
-	Renderer3D::m_FrameBuffer->Bind();
-	RenderCommand::Clear();
-	//切shader一定要在startscene前
-	Renderer3D::StartScene(camera);
-	{
-		Renderer3D::activeShader->Bind();
-		Renderer3D::SetShadowMapOfActive(0);
-		Renderer3D::DrawLight();
-
-		m_Scene.OnUpdate(ts);
-
-		Renderer3D::DrawSkybox();
 	}
-	Renderer3D::EndScene();
-	Renderer3D::m_FrameBuffer->Unbind();
-
-	//Renderer3D::PostProcessing();
+	
+	Ref<Camera> camera = m_CameraController.GetCamera();
+	//Temp：更新场景属性
+	SetScene();
+	//场景处理
+	m_Scene.OnUpdate(ts);
 
 }
+
 void EditorLayer::SetScene()
 {
 	
@@ -134,36 +101,26 @@ void EditorLayer::SetScene()
 	float t = ImGui::GetTime();
 
 
-	PointLight1GO.GetComponent<PointLightComponent>().m_Position =
+	PointLight1GO.GetComponent<TransformComponent>().m_Translation =
 		 glm::vec3(2 * cos(2 * t), 2.5f, 2 * sin(2 * t));
 
-	PointLight2GO.GetComponent<PointLightComponent>().m_Position =
+	PointLight2GO.GetComponent<TransformComponent>().m_Translation =
 		glm::vec3(2 * cos(2 * t + PI), 2.5f, 2 * sin(2 * t + PI));
-
-	glm::mat4 transform = glm::mat4(1.0f);
 
 	Renderer3D::m_Light.SetPLight(PointLight1GO, 0);
 	Renderer3D::m_Light.SetPLight(PointLight2GO, 1);
-	
+	Renderer3D::m_Light.SetDirLight(DirLightGO);
 
 	int i = 0;
 	
-	transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1))));
-	transform = glm::rotate(transform, t, glm::vec3(1, 1, 1));
-	CubeGO.GetComponent<TransformComponent>().m_Transform = transform;
+	CubeGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1)));
+	CubeGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(t*10);
 	i = 1;
-	transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1))));
-	transform = glm::rotate(transform, t, glm::vec3(1, 1, 1));
-	CylinderGO.GetComponent<TransformComponent>().m_Transform = transform;
+	CylinderGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1)));
+	CylinderGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(t * 10);
 	i = 2;
-	transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1))));
-	transform = glm::rotate(transform, t, glm::vec3(1, 1, 1));
-	SphereGO.GetComponent<TransformComponent>().m_Transform = transform;
-
-
-
-	
-
+	SphereGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1)));
+	SphereGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(t * 10);
 	
 }
 
@@ -192,11 +149,6 @@ void EditorLayer::OnImGuiRender(){
 	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
-	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
-	// all active windows docked into it will lose their parent and become undocked.
-	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
-	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
 	ImGui::PopStyleVar();
@@ -216,9 +168,7 @@ void EditorLayer::OnImGuiRender(){
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			// Disabling fullscreen would allow the window to be moved to the front of other windows, 
-			// which we can't undo at the moment without finer window depth/z control.
-			//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+
 			if (ImGui::MenuItem("Open"));
 			if (ImGui::MenuItem("Save"));
 			if (ImGui::MenuItem("Exit")) XRE::Application::GetApplication().Close();
@@ -235,28 +185,18 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::Text("FPS:%d", Application::GetFPS());
 		ImGui::Separator();
 
-		//ImGui::ColorEdit4("PointLight1 Color", glm::value_ptr(m_Color1));
-		//ImGui::ColorEdit4("PointLight2 Color", glm::value_ptr(m_Color3));
-		//ImGui::ColorEdit4("DirLight Color", glm::value_ptr(m_Color2));
-		////ImGui::InputFloat("DirLight Intensity", &m_DirLightIntensity);
-		//ImGui::SliderFloat("DirLight Intensity", &m_DirLightIntensity, 0.0f, 5.0f);
-		ImGui::Separator();
-
-		//ImGui::Checkbox("Shadow", &m_Show_Shadow );
-		/*ImGui::Checkbox("PBR Shading", &m_PBR);
-		if (m_PBR) {
-			ImGui::SliderFloat("Metallic", &m_Metallic, 0.0f, 1.0f);
-			ImGui::SliderFloat("Roughness", &m_Roughness, 0.0f, 1.0f);
-		}*/
-
 		if (ImGui::Button("ReloadShader")) {
 			Renderer3D::Init();
 		}
+		ImGui::DragFloat3("Camera Translation",
+			glm::value_ptr(SceneCameraGO.GetComponent<TransformComponent>().m_Translation),0.1f);
 
-		
+		ImGui::DragFloat3("Camera Rotation",
+			glm::value_ptr(SceneCameraGO.GetComponent<TransformComponent>().m_Rotation),1.0f);
 
+		ImGui::DragFloat3("Sun Direction",
+			glm::value_ptr(DirLightGO.GetComponent<TransformComponent>().m_Rotation), 1.0f);
 
-		//ImGui::Checkbox("SkyBox", &m_ShowSkybox);
 		uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
 
 		ImGui::Separator();
@@ -282,6 +222,7 @@ void EditorLayer::OnImGuiRender(){
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 			m_CameraController.Resize(viewportPanelSize.x, viewportPanelSize.y);
+			m_Scene.OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment();

@@ -21,7 +21,7 @@
 #include "xre\Renderer\Light.h"
 #include "xre\Renderer\Camera\Camera.h"
 
-#include "xre\Renderer\Camera\PerspectiveCameraController.h"
+#include "xre\Renderer\Camera\CameraController.h"
 
 
 #include "xre/Resource/ResourceManager.h"

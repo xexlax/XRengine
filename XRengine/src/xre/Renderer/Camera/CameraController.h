@@ -10,15 +10,15 @@
 
 namespace XRE {
 
-	class PerspectiveCameraController
+	class CameraController
 	{
 	public:
-		PerspectiveCameraController(float aspectRatio,glm::vec3 position=glm::vec3(0.0f,0.0f,-3.0f));
+		CameraController(float aspectRatio,glm::vec3 position=glm::vec3(0.0f,0.0f,-3.0f));
 
 		void OnUpdate(XRE::TimeStep ts);
 		void OnEvent(Event& e);
 		void Resize(float width, float height);
-		Ref<PerspectiveCamera> GetCamera() { return std::make_shared<PerspectiveCamera>(m_Camera); }
+		Ref<Camera> GetCamera() { return std::make_shared<Camera>(m_Camera); }
 		
 
 		float GetZoomLevel() const { return m_ZoomLevel; }
@@ -37,7 +37,7 @@ namespace XRE {
 
 		float lastX=0, lastY=0;
 		bool firstMouse = true;
-		PerspectiveCamera m_Camera;
+		Camera m_Camera;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 3.0f };
 

@@ -2,7 +2,6 @@
 #include "pch.h"
 #include "Mesh.h"
 #include "Material.h"
-#include "xre\Utils\Color.h"
 using namespace std;
 namespace XRE {
 	

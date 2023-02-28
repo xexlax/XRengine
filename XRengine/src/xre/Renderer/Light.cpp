@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "Platforms\OpenGL\OpenGLShader.h"
 
-#include <xre\Utils\TransformUnpacking.h>
+
 
 
 namespace XRE {
@@ -23,7 +23,7 @@ namespace XRE {
 			openglshader->SetFloat3("d_light.color", m_DirectionalLight.m_Color);
 
 			int index = 0;
-			for (const PointLightComponent& p : m_PointLights) {
+			for (auto p : m_PointLights) {
 				
 				openglshader->SetFloat3("p_light["+ std::to_string(index) + "].position" , p.m_Position);
 				openglshader->SetFloat3("p_light[" + std::to_string(index) + "].color", p.m_Color);
@@ -37,8 +37,11 @@ namespace XRE {
 	
 	void Light::SetDirLight(GameObject &go)
 	{
-		m_DirectionalLight  = go.GetComponent<DirectionalLightComponent>();
+		TransformComponent t = go.GetComponent<TransformComponent>();
+		DirectionalLightComponent l  = go.GetComponent<DirectionalLightComponent>();
 		
+		m_DirectionalLight = { glm::vec4(0,0,-1,0) * t.GetTransform() ,l.m_Color,l.m_Intensity };
+		m_DirectionalLight.m_Rotation = t.m_Rotation;
 	}
 	void Light::ClearPLights()
 	{
@@ -47,9 +50,9 @@ namespace XRE {
 
 	void Light::SetPLight(GameObject& go,int i)
 	{
-		//TransformComponent t = go.GetComponent<TransformComponent>();
+		TransformComponent t = go.GetComponent<TransformComponent>();
 		PointLightComponent l = go.GetComponent<PointLightComponent>();
-		m_PointLights[i]=l;
+		m_PointLights[i] = {t.m_Translation,l.m_Color,l.m_Intensity };
 	}
 
 	void Light::RemovePLight(GameObject& go)

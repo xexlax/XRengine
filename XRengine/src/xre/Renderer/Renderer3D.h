@@ -11,7 +11,7 @@
 #include <xre\Renderer\FrameBuffer.h>
 #include <xre\Renderer\Light.h>
 #include <xre\Renderer\SkyBox.h>
-
+#include "xre\ECS\Components.h"
 namespace XRE {
 	class Renderer3D {
 	public:
@@ -19,6 +19,8 @@ namespace XRE {
 		static void ShutDown();
 		static void StartScene(const Ref<Camera> camera);
 		static void EndScene();
+		static void Clear();
+		static void SetClearColor(glm::vec4 color);
 
 
 		static void StartShadowPass();
