@@ -583,7 +583,7 @@
     <ClInclude Include="src\xre\Core\log.h" />
     <ClInclude Include="src\xre\ECS\Components.h" />
     <ClInclude Include="src\xre\ECS\GameObject.h" />
-    <ClInclude Include="src\xre\Editor\Console.h" />
+    <ClInclude Include="src\xre\ECS\NativeScript.h" />
     <ClInclude Include="src\xre\Event\AppEvent.h" />
     <ClInclude Include="src\xre\Event\Event.h" />
     <ClInclude Include="src\xre\Event\KeyEvent.h" />
@@ -631,7 +631,6 @@
     <ClCompile Include="src\xre\Core\application.cpp" />
     <ClCompile Include="src\xre\Core\log.cpp" />
     <ClCompile Include="src\xre\ECS\GameObject.cpp" />
-    <ClCompile Include="src\xre\Editor\Console.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp" />

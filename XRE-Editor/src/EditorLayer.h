@@ -1,6 +1,7 @@
 #pragma once
 
-#include "xre.h"
+#include "XRE.h"
+#include "XRE_Editor.h"
 
 using namespace XRE;
 class EditorLayer : public XRE::Layer
@@ -20,10 +21,14 @@ private:
 	void InitScene();
 	void SetScene();
 private:
-	
-	CameraController m_CameraController;
+	//Editor Panels
 
-	Scene m_Scene;
+	ScenePanel m_ScenePanel;
+	PropertiesPanel m_PropertiesPanel;
+
+
+	//Test Scene
+	Ref<Scene> m_Scene;
 	
 	GameObject SceneCameraGO;
 	GameObject PointLight1GO, PointLight2GO, DirLightGO;
@@ -32,4 +37,6 @@ private:
 	//IMGUI TESTING BOARD ARGS
 	bool m_ViewportFocused = false, m_ViewportHovered = false;
 	glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+
+
 };

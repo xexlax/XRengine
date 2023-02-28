@@ -8,8 +8,10 @@ namespace XRE {
 	class GameObject;
 	class Scene
 	{
+	friend class GameObject;
+	friend class ScenePanel;
 
-		
+
 	public:
 		Scene() = default;
 		~Scene() = default;
@@ -18,8 +20,13 @@ namespace XRE {
 		void OnUpdate(TimeStep ts);
 		entt::registry m_Registry;
 
+		std::string GetName()const { return m_Name; };
+		void SetName(const std::string& name) { m_Name = name; };
+
 	private:
 		uint32_t m_ViewportWidth, m_ViewportHeight;
+		std::string m_Name= "New Scene";
+
 
 		
 	};

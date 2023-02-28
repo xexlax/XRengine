@@ -1428,9 +1428,6 @@
     <ClInclude Include="src\xre\ECS\GameObject.h">
       <Filter>src\xre\ECS\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Editor\Console.h">
-      <Filter>src\xre\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="src\xre\Event\AppEvent.h">
       <Filter>src\xre\Event</Filter>
     </ClInclude>
@@ -1510,6 +1507,7 @@
       <Filter>src\xre\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\ECS\Scene.h" />
+    <ClInclude Include="src\xre\ECS\NativeScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
@@ -1559,9 +1557,6 @@
     </ClCompile>
     <ClCompile Include="src\xre\ECS\GameObject.cpp">
       <Filter>src\xre\ECS\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xre\Editor\Console.cpp">
-      <Filter>src\xre\Editor</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp">
       <Filter>src\xre\ImGui</Filter>

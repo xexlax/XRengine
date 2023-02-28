@@ -5,6 +5,7 @@
 #include "imgui/imgui.h"
 
 
+
 //temperory
 
 
@@ -13,7 +14,7 @@
 
 const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 EditorLayer::EditorLayer()
-	: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f , glm::vec3(0.0f,2.0f,5.0f))
+	: Layer("EditorLayer")
 {
 	
 }
@@ -23,18 +24,20 @@ void EditorLayer::OnAttach()
 	
 	InitScene();
 	Renderer3D::Init();
+	m_ScenePanel.AttachToScene(m_Scene);
+	m_PropertiesPanel.SetReference(&m_ScenePanel);
 	
 }
 
 void EditorLayer::InitScene() {
 	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
-
-	CubeGO = m_Scene.CreateGameObject("Cube");
-	CylinderGO = m_Scene.CreateGameObject("Cylinder");
-	SphereGO = m_Scene.CreateGameObject("Sphere");
-	//NanoGO = m_Scene.CreateGameObject("Nanosuit");
-	BocchiGO = m_Scene.CreateGameObject("Bocchi");
-	FloorGO = m_Scene.CreateGameObject("Floor");
+	m_Scene = make_shared<Scene>();
+	CubeGO = m_Scene->CreateGameObject("Cube");
+	CylinderGO = m_Scene->CreateGameObject("Cylinder");
+	SphereGO = m_Scene->CreateGameObject("Sphere");
+	//NanoGO = m_Scene->CreateGameObject("Nanosuit");
+	BocchiGO = m_Scene->CreateGameObject("Bocchi");
+	FloorGO = m_Scene->CreateGameObject("Floor");
 
 	Ref<Model> cubemesh = std::make_shared<Model>("../Assets/models/cube.obj");
 	CubeGO.AddComponent<MeshRendererComponent>(cubemesh);
@@ -45,15 +48,15 @@ void EditorLayer::InitScene() {
 	BocchiGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/bocchi/bocchi.obj"));
 
 
-	PointLight1GO = m_Scene.CreateGameObject("light1");
-	PointLight2GO = m_Scene.CreateGameObject("light2");
-	DirLightGO = m_Scene.CreateGameObject("sun");
+	PointLight1GO = m_Scene->CreateGameObject("light1");
+	PointLight2GO = m_Scene->CreateGameObject("light2");
+	DirLightGO = m_Scene->CreateGameObject("sun");
 
 	PointLight1GO.AddComponent<PointLightComponent>(glm::vec3(0.2f, 0.3f, 0.9f), 4.0f);
 	PointLight2GO.AddComponent<PointLightComponent>(glm::vec3(0.8f, 0.4f, 0.2f), 4.0f);
 	DirLightGO.AddComponent<DirectionalLightComponent>(glm::vec3(0.5f, 0.4f, 0.35f), 2.0f);
 
-	SceneCameraGO = m_Scene.CreateGameObject("Camera");
+	SceneCameraGO = m_Scene->CreateGameObject("Camera");
 	SceneCameraGO.AddComponent<CameraComponent>(Perspective);
 	SceneCameraGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, 9.0f, 12.0f);
 	SceneCameraGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, 0.0f, 0.0f);
@@ -68,6 +71,66 @@ void EditorLayer::InitScene() {
 
 	Renderer3D::m_Light.SetDirLight(DirLightGO);
 
+
+	class CameraController : public ScriptableGameObject
+	{
+	public:
+		
+		void OnUpdate(TimeStep ts)
+		{
+			auto& translation = GetComponent<TransformComponent>().m_Translation;
+			auto& rotation = GetComponent<TransformComponent>().m_Rotation;
+			float speed = 5.0f;
+			float anglespeed = 15.0f;
+
+			if (Input::IsKeyPressed(XRE_KEY_A))
+				translation.x -= speed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_D))
+				translation.x += speed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_W))
+				translation.z -= speed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_S))
+				translation.z += speed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_Q))
+				translation.y += speed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_E))
+				translation.y -= speed * ts;
+
+			if (Input::IsKeyPressed(XRE_KEY_C))
+				rotation.y += anglespeed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_Z))
+				rotation.y -= anglespeed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_V))
+				rotation.x += anglespeed * ts;
+			if (Input::IsKeyPressed(XRE_KEY_R))
+				rotation.x -= anglespeed * ts;
+
+		}
+	};
+
+	class Spinner : public ScriptableGameObject
+	{
+	public:
+		int i = 0;
+		void OnCreate() {
+			i = rand() % 5;
+		}
+		
+		void OnUpdate(TimeStep ts)
+		{
+			float speed = 25.0f;
+			float t = ImGui::GetTime();
+			GetComponent<TransformComponent>().m_Rotation = glm::vec3(t * speed);
+			GetComponent<TransformComponent>().m_Translation = glm::vec3((i + 1) * cos(t / (i + 1)), 0,  (i + 1) * sin(t / (i + 1)));
+		}
+
+		
+	};
+
+	SceneCameraGO.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+	CubeGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
+	CylinderGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
+	SphereGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
 	
 }
 
@@ -78,25 +141,16 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(XRE::TimeStep ts)
 {
-	
-	if (m_ViewportFocused) {
-		m_CameraController.OnUpdate(ts);
-		//Application::GetApplication().GetWindow().HideCursor(m_ViewportFocused);
 		
-	}
-	
-	Ref<Camera> camera = m_CameraController.GetCamera();
 	//Temp：更新场景属性
 	SetScene();
 	//场景处理
-	m_Scene.OnUpdate(ts);
+	m_Scene->OnUpdate(ts);
 
 }
 
 void EditorLayer::SetScene()
 {
-	
-	
 
 	float t = ImGui::GetTime();
 
@@ -110,18 +164,6 @@ void EditorLayer::SetScene()
 	Renderer3D::m_Light.SetPLight(PointLight1GO, 0);
 	Renderer3D::m_Light.SetPLight(PointLight2GO, 1);
 	Renderer3D::m_Light.SetDirLight(DirLightGO);
-
-	int i = 0;
-	
-	CubeGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1)));
-	CubeGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(t*10);
-	i = 1;
-	CylinderGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1)));
-	CylinderGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(t * 10);
-	i = 2;
-	SphereGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(1.3 * (i + 1) * cos(t / (i + 1)), 0, 1.3 * (i + 1) * sin(t / (i + 1)));
-	SphereGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(t * 10);
-	
 }
 
 void EditorLayer::OnImGuiRender(){
@@ -175,9 +217,6 @@ void EditorLayer::OnImGuiRender(){
 			
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit"));
-		if (ImGui::BeginMenu("Windows"));
-		if (ImGui::BeginMenu("Help"));
 		ImGui::EndMenuBar();
 	}
 
@@ -220,9 +259,7 @@ void EditorLayer::OnImGuiRender(){
 			//XRE_CORE_TRACE("viewport: {0} x {1} ", viewportPanelSize.x, viewportPanelSize.y);
 			Renderer3D::m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
-			m_CameraController.Resize(viewportPanelSize.x, viewportPanelSize.y);
-			m_Scene.OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment();
@@ -231,8 +268,8 @@ void EditorLayer::OnImGuiRender(){
 	ImGui::End();
 	ImGui::PopStyleVar();
 
-	ImGui::Begin("SceneManager");
-	ImGui::End();
+	m_ScenePanel.OnImGuiRender();
+	m_PropertiesPanel.OnImGuiRender();
 
 	ImGui::Begin("AssetManager");
 	ImGui::End();
@@ -250,7 +287,6 @@ void EditorLayer::OnEvent(XRE::Event& e)
 {
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyReleased));
-	m_CameraController.OnEvent(e);
 	
 }
 

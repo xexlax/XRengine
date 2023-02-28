@@ -132,10 +132,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\Editor\Console.h" />
+    <ClInclude Include="src\Editor\PropertiesPanel.h" />
+    <ClInclude Include="src\Editor\ScenePanel.h" />
+    <ClInclude Include="src\XRE_Editor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
+    <ClCompile Include="src\Editor\Console.cpp" />
+    <ClCompile Include="src\Editor\PropertiesPanel.cpp" />
+    <ClCompile Include="src\Editor\ScenePanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XRengine\XRengine.vcxproj">

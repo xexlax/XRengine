@@ -15,6 +15,21 @@ namespace XRE {
 
 	};
 
+	class NameComponent : public Component {
+	public:
+		std::string m_Name = "Name";
+		std::string m_ObjName = "gameobject";
+
+		NameComponent() = default;
+		NameComponent(const NameComponent&) = default;
+		NameComponent(const std::string & name)
+			: m_ObjName(name) {}
+
+
+		operator std::string& () { return m_ObjName; }
+		operator const std::string& () const { return m_ObjName; }
+	};
+
 	class TransformComponent : public Component {
 	public:
 		std::string m_Name= "Transform";

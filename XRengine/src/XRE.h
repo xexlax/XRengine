@@ -31,3 +31,4 @@
 #include "xre\ECS\Scene.h"
 #include "xre\ECS\Components.h"
 #include "xre\ECS\GameObject.h"
+#include "xre\ECS\NativeScript.h"
