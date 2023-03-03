@@ -27,6 +27,7 @@ namespace XRE {
 		~Mesh() {};
 
 		void SetMaterial(Ref<Material> mat) { m_Material = mat; };
+		Ref<Material> GetMaterial()const { return m_Material; };
 		void BindMaterial(Ref<Shader> shader);
 		void UnBindMatarial(Ref<Shader> shader);
 

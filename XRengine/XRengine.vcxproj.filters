@@ -13,6 +13,9 @@
     <Filter Include="3rdparty\Entt\single_include\entt">
       <UniqueIdentifier>{667CDDA8-D2EA-3228-1BD4-ED27878128C4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdparty\ImGuizmo">
+      <UniqueIdentifier>{5EB5FA48-CACB-F8DE-1343-84007F98C966}</UniqueIdentifier>
+    </Filter>
     <Filter Include="3rdparty\glm">
       <UniqueIdentifier>{8D7699EA-79D9-288F-225F-61450EA1F411}</UniqueIdentifier>
     </Filter>
@@ -61,15 +64,6 @@
     <Filter Include="src\xre\ECS">
       <UniqueIdentifier>{D5CE7033-4184-E928-CA78-E3FF362DE02C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\xre\ECS\Components">
-      <UniqueIdentifier>{CAA43D1A-B69E-666C-9F0B-FD7C8BA4CCD8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\xre\ECS\Entity">
-      <UniqueIdentifier>{8139704C-6D1D-31A2-D67D-2BF5C2801B24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\xre\Editor">
-      <UniqueIdentifier>{E10F3E31-CDDD-3137-B671-A25DA2DE0D9C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\xre\Event">
       <UniqueIdentifier>{9C2AFCD2-08EB-7709-D125-C1863DA5BCE5}</UniqueIdentifier>
     </Filter>
@@ -91,9 +85,6 @@
     <Filter Include="src\xre\Resource">
       <UniqueIdentifier>{820B50DC-6E04-6F2E-9736-54B3838E4E3A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\xre\Scene">
-      <UniqueIdentifier>{6816EFD3-D4D6-6A0A-9D11-B4870991AFE6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\xre\Utils">
       <UniqueIdentifier>{ABAA1CD4-176B-980A-E0A5-E1874C25DDE6}</UniqueIdentifier>
     </Filter>
@@ -101,6 +92,9 @@
   <ItemGroup>
     <ClInclude Include="3rdparty\Entt\single_include\entt\entt.hpp">
       <Filter>3rdparty\Entt\single_include\entt</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\ImGuizmo\ImGuizmo.h">
+      <Filter>3rdparty\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="3rdparty\glm\glm\common.hpp">
       <Filter>3rdparty\glm\glm</Filter>
@@ -1423,10 +1417,28 @@
       <Filter>src\xre\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\ECS\Components.h">
-      <Filter>src\xre\ECS\Components</Filter>
+      <Filter>src\xre\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\ECS\GameObject.h">
-      <Filter>src\xre\ECS\Entity</Filter>
+      <Filter>src\xre\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\NativeScript.h">
+      <Filter>src\xre\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\Reflection.h">
+      <Filter>src\xre\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\Scene.h">
+      <Filter>src\xre\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\SceneManager.h">
+      <Filter>src\xre\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\SceneSerializer.h">
+      <Filter>src\xre\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\ECS\USRefl99.h">
+      <Filter>src\xre\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Event\AppEvent.h">
       <Filter>src\xre\Event</Filter>
@@ -1491,6 +1503,9 @@
     <ClInclude Include="src\xre\Renderer\SkyBox.h">
       <Filter>src\xre\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\xre\Resource\Library.h">
+      <Filter>src\xre\Resource</Filter>
+    </ClInclude>
     <ClInclude Include="src\xre\Resource\Material.h">
       <Filter>src\xre\Resource</Filter>
     </ClInclude>
@@ -1503,13 +1518,15 @@
     <ClInclude Include="src\xre\Resource\ResourceManager.h">
       <Filter>src\xre\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\ECS\SceneManager.h">
-      <Filter>src\xre\Scene</Filter>
+    <ClInclude Include="src\xre\Utils\Math.h">
+      <Filter>src\xre\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\ECS\Scene.h" />
-    <ClInclude Include="src\xre\ECS\NativeScript.h" />
+    <ClInclude Include="src\xre\Renderer\Camera\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="3rdparty\ImGuizmo\ImGuizmo.cpp">
+      <Filter>3rdparty\ImGuizmo</Filter>
+    </ClCompile>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp">
       <Filter>3rdparty\stb_img</Filter>
     </ClCompile>
@@ -1556,7 +1573,13 @@
       <Filter>src\xre\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\ECS\GameObject.cpp">
-      <Filter>src\xre\ECS\Entity</Filter>
+      <Filter>src\xre\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\ECS\Scene.cpp">
+      <Filter>src\xre\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\ECS\SceneSerializer.cpp">
+      <Filter>src\xre\ECS</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp">
       <Filter>src\xre\ImGui</Filter>
@@ -1603,6 +1626,9 @@
     <ClCompile Include="src\xre\Renderer\SkyBox.cpp">
       <Filter>src\xre\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\xre\Resource\Library.cpp">
+      <Filter>src\xre\Resource</Filter>
+    </ClCompile>
     <ClCompile Include="src\xre\Resource\Material.cpp">
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
@@ -1615,6 +1641,9 @@
     <ClCompile Include="src\xre\Resource\ResourceManager.cpp">
       <Filter>src\xre\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\ECS\Scene.cpp" />
+    <ClCompile Include="src\xre\Utils\Math.cpp">
+      <Filter>src\xre\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Camera\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

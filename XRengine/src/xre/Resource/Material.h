@@ -14,6 +14,8 @@ namespace XRE{
 		Material();
 		~Material() {};
 
+		glm::vec3 baseColor=glm::vec3(1.0f);
+
 		std::string name;
 		glm::vec3 ambient;
 		glm::vec3 diffuse;

@@ -23,15 +23,15 @@ namespace XRE {
 	glm::mat4  Renderer3D::m_VP, Renderer3D::m_LVP;
 	void Renderer3D::Init()
 	{
-		defaultObjShader = ResourceManager::GetShaderLib()->Load("../Assets/shaders/default.glsl");
+		defaultObjShader = ResourceManager::GetShader("../Assets/shaders/default.glsl");
 
-		defaultPBRShader = ResourceManager::GetShaderLib()->Load("../Assets/shaders/pbr_object.glsl");
+		defaultPBRShader = ResourceManager::GetShader("../Assets/shaders/pbr_object.glsl");
 		//	Shader::Create("assets/shaders/default.glsl");
-		simpleDepthShader = ResourceManager::GetShaderLib()->Load("../Assets/shaders/depth.glsl");
+		simpleDepthShader = ResourceManager::GetShader("../Assets/shaders/depth.glsl");
 
-		postShader = ResourceManager::GetShaderLib()->Load("../Assets/shaders/postprocessing.glsl");
+		postShader = ResourceManager::GetShader("../Assets/shaders/postprocessing.glsl");
 
-		defaultAlbedo = ResourceManager::GetTex2DLib()->Load("../Assets/textures/albedo.jpg");
+		defaultAlbedo = ResourceManager::GetTex2D("../Assets/textures/albedo.jpg");
 
 		activeShader = defaultObjShader;
 			//Texture2D::Create("assets/textures/albedo.jpg");
@@ -160,7 +160,7 @@ namespace XRE {
 	}
 	void Renderer3D::DrawModel(const Ref<Model> model, glm::mat4 transform)
 	{
-
+		if(model)
 		for (auto mesh : model->m_Meshes) {
 			mesh.BindMaterial(activeShader);
 			activeShader->Bind();

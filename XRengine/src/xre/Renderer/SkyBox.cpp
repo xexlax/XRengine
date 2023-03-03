@@ -8,7 +8,7 @@ namespace XRE {
 
 	SkyBox::SkyBox()
 	{
-        m_SkyBoxShader = ResourceManager::GetShaderLib()->Load("../Assets/shaders/skybox.glsl");
+        m_SkyBoxShader = ResourceManager::GetShader("../Assets/shaders/skybox.glsl");
         
         std::vector<std::string> faces
         {

@@ -8,20 +8,26 @@ namespace XRE {
     //一个Model由数个Mesh组成，每个Mesh拥有唯一的Material
 	class Model {
     public:
-        /*  函数   */
-        Model(std::string path)
+
+        Model(std::string path):
+            m_Path(path)
         {
             LoadModel(path);
+
         }
      
         vector<Mesh> m_Meshes;
+        string getPath()const { return m_Path; };
+        std::string m_Path;
+
+        static Ref<Model> Create(const std::string& path);
     private:
-        /*  模型数据  */
         
         vector<Ref<Material>> m_Materials;
-        string directory;
         /*  函数   */
         void LoadModel(string path,
             bool triangulate = true);
+
+
 	};
 }

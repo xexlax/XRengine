@@ -20,3 +20,7 @@
 [submodule ".\\XRengine\\3rdparty\\Entt"]
 	path = .\\XRengine\\3rdparty\\Entt
 	url = https://github.com/skypjack/entt.git
+
+[submodule ".\\XRengine\\3rdparty\\ImGuizmo"]
+	path = .\\XRengine\\3rdparty\\ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

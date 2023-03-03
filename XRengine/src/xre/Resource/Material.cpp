@@ -13,18 +13,18 @@ namespace XRE {
 	void Material::LoadAllTex()
 	{
 		if (diffuseTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(diffuseTex);
+			diffuseTex.m_Tex = ResourceManager::GetTex2D(diffuseTex);
 		if (ambientTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(ambientTex);
+			ambientTex.m_Tex = ResourceManager::GetTex2D(ambientTex);
 		if (specularTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(specularTex);
+			specularTex.m_Tex = ResourceManager::GetTex2D(specularTex);
 		if (specularHighlightTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(specularHighlightTex);
+			specularHighlightTex.m_Tex = ResourceManager::GetTex2D(specularHighlightTex);
 		if (bumpTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(bumpTex);
+			bumpTex.m_Tex = ResourceManager::GetTex2D(bumpTex);
 		if (displacementTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(displacementTex);
+			displacementTex.m_Tex = ResourceManager::GetTex2D(displacementTex);
 		if (alphaTex.m_enable) 
-			ResourceManager::GetTex2DLib()->Load(alphaTex);
+			alphaTex.m_Tex = ResourceManager::GetTex2D(alphaTex);
 	}		
 }

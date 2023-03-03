@@ -18,6 +18,8 @@ namespace XRE {
 		void SetPosition(const glm::vec3& position) { m_Position = position; RecalculateViewMatrix(); }
 		void SetRotation(glm::vec3 euler) { m_EulerAngles = euler; RecalculateViewMatrix(); }
 		void SetProjection(glm::mat4 proj) { m_ProjectionMatrix = proj; RecalculateViewMatrix(); };
+
+		CameraType GetType() const { return m_Type; };
 		void SetType(const CameraType& type);
 
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
@@ -27,11 +29,29 @@ namespace XRE {
 		glm::vec3 GetEuler() const { return m_EulerAngles; }
 		glm::vec3 GetFront() const { return m_Front; }
 		glm::vec3 GetRight() const { return m_Right; }
+		glm::vec3 GetUp() const { return m_Up; }
 
 		void updateCameraVectors();
 		void RecalculateViewMatrix();
 		void RecalculateProjectionMatrix();
 		void SetViewPortSize(uint32_t width, uint32_t height);
+
+		float GetOrthographicSize	() { return m_OrthographicSize;		}
+		float GetOrthographicNear	() { return m_OrthographicNear;		}
+		float GetOrthographicFar	() { return m_OrthographicFar;		}
+		float GetPerspectiveFovy	() { return m_PerspectiveFovy;		}
+		float GetPerspectiveNear	() { return m_PerspectiveNear;		}
+		float GetPerspectiveFar		() { return m_PerspectiveFar;		}
+		float GetAspectRatio		() { return m_AspectRatio;			}
+		void SetOrthographicSize	(const float& OrthographicSize	){ m_OrthographicSize	=OrthographicSize	; RecalculateProjectionMatrix();}														  
+		void SetOrthographicNear	(const float& OrthographicNear	){ m_OrthographicNear	=OrthographicNear	; RecalculateProjectionMatrix();}
+		void SetOrthographicFar		(const float& OrthographicFar	){ m_OrthographicFar	=OrthographicFar	; RecalculateProjectionMatrix();}
+		void SetPerspectiveFovy		(const float& PerspectiveFovy	){ m_PerspectiveFovy	=PerspectiveFovy	; RecalculateProjectionMatrix();}
+		void SetPerspectiveNear		(const float& PerspectiveNear	){ m_PerspectiveNear	=PerspectiveNear	; RecalculateProjectionMatrix();}
+		void SetPerspectiveFar		(const float& PerspectiveFar	){ m_PerspectiveFar		=PerspectiveFar		; RecalculateProjectionMatrix();}	
+		void SetAspectRatio			(const float& AspectRatio		){ m_AspectRatio		=AspectRatio		; RecalculateProjectionMatrix();}
+		
+
 	protected:
 		
 
@@ -56,7 +76,6 @@ namespace XRE {
 		//²ÎÊý
 		float m_OrthographicSize=20.0f, m_OrthographicNear=-10.0f, m_OrthographicFar=10.0f;
 		float m_PerspectiveFovy=45.0f, m_PerspectiveNear = 0.1f, m_PerspectiveFar = 100.0f;
-
 		float m_AspectRatio=1.0f;
 		
 		

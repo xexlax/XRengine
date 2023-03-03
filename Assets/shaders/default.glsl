@@ -55,7 +55,7 @@ struct PointLight {
 };
 
 struct Material {
-   
+    vec3 baseColor;
     bool enable_diffuseTex;
     bool enable_specularTex;
     bool enable_bumpTex;
@@ -68,7 +68,8 @@ struct Material {
 };
 
 uniform DirectionalLight d_light;
-uniform PointLight p_light[3];
+uniform PointLight p_light[10];
+uniform int p_light_amount;
 
 uniform Material material;
 uniform sampler2D shadowMap;
@@ -81,11 +82,13 @@ float light_specular=1.0;
 const float PI = 3.14159265359;
 vec3 GetAlbedo()
 {
+    vec3 albedo;
     if(material.enable_diffuseTex)
-       return vec3(texture(material.diffuseTex, TexCoords));
+       albedo= vec3(texture(material.diffuseTex, TexCoords));
     else{
-       return vec3(1.0,1.0,1.0);
+       albedo= material.baseColor;
     }
+    return albedo;
 }
 
 vec3 GetSpecular(){
@@ -211,7 +214,7 @@ void main()
 
     vec3 color = CalcDirLight(d_light,N,V,shadow);
 
-    for(int i=0;i<3;i++){
+    for(int i=0;i<p_light_amount;i++){
         if(p_light[i].enable==1){
             color+=CalcPointLight(p_light[i],N,FragPos,V,shadow);
         }

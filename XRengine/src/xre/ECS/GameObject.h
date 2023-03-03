@@ -19,7 +19,7 @@ namespace XRE {
 
 		//重载：强制类型转换和逻辑
 		operator bool() const { return m_Entity != entt::null; }
-
+		operator entt::entity() const { return m_Entity; }
 		operator uint32_t() const { return (uint32_t)m_Entity; }
 
 		bool operator==(const GameObject& other) const
@@ -36,7 +36,9 @@ namespace XRE {
 		T& AddComponent(Args&&... args)
 		{
 			XRE_CORE_ASSERT(!HasComponent<T>(), "对象已存在组件!");
-			return m_Scene->m_Registry.emplace<T>(m_Entity, std::forward<Args>(args)...);
+			T& component= m_Scene->m_Registry.emplace<T>(m_Entity, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(*this, component);
+			return component;
 		}
 
 		template<typename T>
@@ -62,8 +64,8 @@ namespace XRE {
 		void SetName(const std::string& name) { GetComponent<NameComponent>() = name; }
 
 	private:
-		//不要给GameObj加上name属性，因为GO的获取只是从ECS池中读取编号，其所有的属性由component决定
-		//std::string m_Name;
+		//不要给GameObj加上除了Component以外的任何属性，因为GO的获取只是从ECS池中读取编号，其所有的属性由component决定
+		
 		entt::entity m_Entity{ entt::null };
 		Scene* m_Scene= nullptr;
 	};

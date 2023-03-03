@@ -3,6 +3,7 @@
 
 #include "xre\Core\Macros.h"
 namespace XRE {
+	//用于Material中的Texture相关属性
 	struct MaterialTex;
 	class Texture
 	{
@@ -14,8 +15,10 @@ namespace XRE {
 
 		virtual void Bind(uint32_t slot = 0) const = 0;
 		std::string GetName() const { return m_name; };
+		virtual uint32_t GetRendererId() const =0;
 	protected:
 		std::string m_name="default";
+		std::string m_Path;
 	};
 
 	class Texture2D : public Texture
@@ -25,21 +28,7 @@ namespace XRE {
 
 	};
 
-	//管理所有的贴图，防止重复加载
-	class Texture2DLibrary {
-	public:
-		void Add(const std::string& name, const Ref<Texture2D>& texture);
-		void Add(const Ref<Texture2D>& texture);
-		Ref<Texture2D> Load(const std::string& filepath);
-		Ref<Texture2D> Load(const std::string& name, const std::string& filepath);
-		Ref<Texture2D> Load(MaterialTex &materialTex);
-		Ref<Texture2D> Get(const std::string& name);
-
-		bool Exists(const std::string& name) const;
-	private:
-
-		std::unordered_map<std::string, Ref<Texture2D>> m_Textures;
-	};
+	
 
 	struct MaterialTex {
 	public:
@@ -52,6 +41,14 @@ namespace XRE {
 		MaterialTex(bool enable, std::string name, std::string filepath) :
 			m_enable(enable), m_name(name), m_filepath(filepath) {
 
+		}
+
+		operator std::string& () {
+			return m_filepath;
+		}
+
+		operator const std::string& () const {
+			return m_filepath;
 		}
 
 

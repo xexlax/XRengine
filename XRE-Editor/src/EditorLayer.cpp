@@ -2,7 +2,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "imgui/imgui.h"
 
 
 
@@ -32,20 +31,22 @@ void EditorLayer::OnAttach()
 void EditorLayer::InitScene() {
 	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
 	m_Scene = make_shared<Scene>();
+	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
+	
 	CubeGO = m_Scene->CreateGameObject("Cube");
 	CylinderGO = m_Scene->CreateGameObject("Cylinder");
 	SphereGO = m_Scene->CreateGameObject("Sphere");
-	//NanoGO = m_Scene->CreateGameObject("Nanosuit");
+	NanoGO = m_Scene->CreateGameObject("Nanosuit");
 	BocchiGO = m_Scene->CreateGameObject("Bocchi");
 	FloorGO = m_Scene->CreateGameObject("Floor");
 
-	Ref<Model> cubemesh = std::make_shared<Model>("../Assets/models/cube.obj");
-	CubeGO.AddComponent<MeshRendererComponent>(cubemesh);
-	FloorGO.AddComponent<MeshRendererComponent>(cubemesh);
-	CylinderGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/cylinder.obj"));
-	SphereGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/sphere.obj"));
-	//NanoGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/nanosuit/nanosuit.obj"));
-	BocchiGO.AddComponent<MeshRendererComponent>(std::make_shared<Model>("../Assets/models/bocchi/bocchi.obj"));
+
+	CubeGO.AddComponent<MeshRendererComponent>("../Assets/models/cube.obj");
+	FloorGO.AddComponent<MeshRendererComponent>("../Assets/models/cube.obj");
+	CylinderGO.AddComponent<MeshRendererComponent>("../Assets/models/cylinder.obj");
+	SphereGO.AddComponent<MeshRendererComponent>("../Assets/models/sphere.obj");
+	NanoGO.AddComponent<MeshRendererComponent>("../Assets/models/nanosuit/nanosuit.obj");
+	BocchiGO.AddComponent<MeshRendererComponent>("../Assets/models/bocchi/bocchi.obj");
 
 
 	PointLight1GO = m_Scene->CreateGameObject("light1");
@@ -61,15 +62,17 @@ void EditorLayer::InitScene() {
 	SceneCameraGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, 9.0f, 12.0f);
 	SceneCameraGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, 0.0f, 0.0f);
 
+	
+	NanoGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(0.3f);
+	NanoGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -0.9f, 0.0f);
+
 	BocchiGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(-5.0f, 0.0f, 2.0f);
 	BocchiGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(0.0f, 180.0f, 0.0f);
-
+	BocchiGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(0.5f);
 	FloorGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -1.0f, 0.0f);
 	FloorGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(20.0f, 0.2f, 20.0f);
 
 	DirLightGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, -45.0f, 0.0f);
-
-	Renderer3D::m_Light.SetDirLight(DirLightGO);
 
 
 	class CameraController : public ScriptableGameObject
@@ -144,8 +147,12 @@ void EditorLayer::OnUpdate(XRE::TimeStep ts)
 		
 	//Temp：更新场景属性
 	SetScene();
+	m_EditorCamera.OnUpdate(ts);
 	//场景处理
-	m_Scene->OnUpdate(ts);
+	//m_Scene->OnUpdate(ts);
+
+	m_Scene->OnUpdateEditing(ts,m_EditorCamera);
+	
 
 }
 
@@ -154,16 +161,12 @@ void EditorLayer::SetScene()
 
 	float t = ImGui::GetTime();
 
-
+	if(PointLight1GO)
 	PointLight1GO.GetComponent<TransformComponent>().m_Translation =
 		 glm::vec3(2 * cos(2 * t), 2.5f, 2 * sin(2 * t));
-
+	if(PointLight2GO)
 	PointLight2GO.GetComponent<TransformComponent>().m_Translation =
 		glm::vec3(2 * cos(2 * t + PI), 2.5f, 2 * sin(2 * t + PI));
-
-	Renderer3D::m_Light.SetPLight(PointLight1GO, 0);
-	Renderer3D::m_Light.SetPLight(PointLight2GO, 1);
-	Renderer3D::m_Light.SetDirLight(DirLightGO);
 }
 
 void EditorLayer::OnImGuiRender(){
@@ -208,7 +211,7 @@ void EditorLayer::OnImGuiRender(){
 
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu("File"))
+		if (ImGui::BeginMenu(u8"文件"))
 		{
 
 			if (ImGui::MenuItem("Open"));
@@ -220,22 +223,14 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::EndMenuBar();
 	}
 
-	ImGui::Begin("Settings");
+	ImGui::Begin(u8"设置");
 		ImGui::Text("FPS:%d", Application::GetFPS());
 		ImGui::Separator();
 
 		if (ImGui::Button("ReloadShader")) {
 			Renderer3D::Init();
 		}
-		ImGui::DragFloat3("Camera Translation",
-			glm::value_ptr(SceneCameraGO.GetComponent<TransformComponent>().m_Translation),0.1f);
-
-		ImGui::DragFloat3("Camera Rotation",
-			glm::value_ptr(SceneCameraGO.GetComponent<TransformComponent>().m_Rotation),1.0f);
-
-		ImGui::DragFloat3("Sun Direction",
-			glm::value_ptr(DirLightGO.GetComponent<TransformComponent>().m_Rotation), 1.0f);
-
+		
 		uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
 
 		ImGui::Separator();
@@ -246,11 +241,26 @@ void EditorLayer::OnImGuiRender(){
 
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-	ImGui::Begin("ViewPort");
+	
+	
+
+
+
+	ImGui::Begin(u8"视窗");
+		ImGui::Checkbox(u8"查看Gizmos", &m_ShowGizmos);ImGui::SameLine();
+
+		
+		ImGui::RadioButton(u8"移动", &m_GizmoType, ImGuizmo::OPERATION::TRANSLATE); ImGui::SameLine();
+		ImGui::RadioButton(u8"旋转", &m_GizmoType, ImGuizmo::OPERATION::ROTATE); ImGui::SameLine();
+		ImGui::RadioButton(u8"缩放", &m_GizmoType, ImGuizmo::OPERATION::SCALE); 
+
+		
+
+
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::GetApplication().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		Application::GetApplication().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -259,19 +269,61 @@ void EditorLayer::OnImGuiRender(){
 			//XRE_CORE_TRACE("viewport: {0} x {1} ", viewportPanelSize.x, viewportPanelSize.y);
 			Renderer3D::m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			m_EditorCamera.SetViewPortSize(m_ViewportSize.x, m_ViewportSize.y);
 			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
+		GameObject selectedEntity = m_ScenePanel.GetSelected();
+		if (selectedEntity && m_GizmoType != -1 && m_ShowGizmos)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			
+			const glm::mat4& cameraProjection = m_EditorCamera.GetProjectionMatrix();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
+			// Entity transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+
+			// Snapping
+			bool snap = Input::IsKeyPressed(XRE_KEY_LEFT_CONTROL);
+			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+			// Snap to 45 degrees for rotation
+			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				nullptr, snap ? snapValues : nullptr);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+
+				glm::vec3 deltaRotation = glm::degrees(rotation) - tc.m_Rotation;
+				tc.m_Translation = translation;
+				tc.m_Rotation += deltaRotation;
+				tc.m_Scale = scale;
+			}
+		}
 	ImGui::End();
 	ImGui::PopStyleVar();
 
 	m_ScenePanel.OnImGuiRender();
 	m_PropertiesPanel.OnImGuiRender();
 
-	ImGui::Begin("AssetManager");
+	ImGui::Begin(u8"资产管理器");
 	ImGui::End();
 
 	//ImGui::ShowDemoWindow();
@@ -285,15 +337,30 @@ void EditorLayer::OnImGuiRender(){
 
 void EditorLayer::OnEvent(XRE::Event& e)
 {
+	m_EditorCamera.OnEvent(e);
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyReleased));
+	
 	
 }
 
 bool EditorLayer::OnKeyReleased(KeyReleasedEvent& e)
 {
-	if (e.GetKeyCode() == XRE_KEY_ESCAPE) {
-		ImGui::SetWindowFocus(false);
+	
+	switch (e.GetKeyCode()) {
+		// Gizmos
+	case XRE_KEY_U:
+		m_GizmoType = -1;
+		break;
+	case XRE_KEY_I:
+		m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+		break;
+	case XRE_KEY_O:
+		m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+		break;
+	case XRE_KEY_P:
+		m_GizmoType = ImGuizmo::OPERATION::SCALE;
+		break;
 	}
 	return false;
 }

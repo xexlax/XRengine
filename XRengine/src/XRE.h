@@ -32,3 +32,5 @@
 #include "xre\ECS\Components.h"
 #include "xre\ECS\GameObject.h"
 #include "xre\ECS\NativeScript.h"
+
+#include "xre\Utils\Math.h"

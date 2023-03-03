@@ -3,6 +3,7 @@
 #include "xre\Event\AppEvent.h"
 #include "xre\Renderer\Renderer.h"
 #include "xre\Resource\ResourceManager.h"
+#include "xre\ECS\Reflection.h"
 #include  "Input.h"
 #include <GLFW\glfw3.h>
 
@@ -21,6 +22,7 @@ namespace XRE {
 
 		Renderer::Init();
 		ResourceManager::Init();
+		Reflection::Init();
 
 
 		m_ImGuiLayer = new ImGuiLayer();

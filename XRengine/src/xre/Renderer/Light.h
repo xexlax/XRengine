@@ -42,6 +42,7 @@ namespace XRE {
 		float m_Intensity;
 	};
 	//Light System
+	//整个当前场景的灯光布局
 	class Light {
 
 
@@ -49,9 +50,9 @@ namespace XRE {
 		Light();
 		~Light() {};
 		void Draw(Ref<Shader> shader);
-		void SetDirLight(GameObject& go);
+		void SetDirLight(TransformComponent t, DirectionalLightComponent l);
 		void ClearPLights();
-		void SetPLight(GameObject& go,int i);
+		void AddPLight(TransformComponent t, PointLightComponent l);
 
 		void RemovePLight(GameObject& go);
 		DirectionalLight getDirLight() { return m_DirectionalLight; };

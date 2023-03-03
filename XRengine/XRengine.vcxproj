@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XRE_PLATFORM_WINDOWS;XRE_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;XRE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;3rdparty\spdlog\include;3rdparty\GLFW\include;3rdparty\Glad\include;3rdparty\ImGui;3rdparty\glm;3rdparty\stb_img;3rdparty\tinyobjloader;3rdparty\Entt\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;3rdparty\spdlog\include;3rdparty\GLFW\include;3rdparty\Glad\include;3rdparty\ImGui;3rdparty\glm;3rdparty\stb_img;3rdparty\json11;3rdparty\tinyobjloader;3rdparty\Entt\single_include;3rdparty\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XRE_PLATFORM_WINDOWS;XRE_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;XRE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;3rdparty\spdlog\include;3rdparty\GLFW\include;3rdparty\Glad\include;3rdparty\ImGui;3rdparty\glm;3rdparty\stb_img;3rdparty\tinyobjloader;3rdparty\Entt\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;3rdparty\spdlog\include;3rdparty\GLFW\include;3rdparty\Glad\include;3rdparty\ImGui;3rdparty\glm;3rdparty\stb_img;3rdparty\json11;3rdparty\tinyobjloader;3rdparty\Entt\single_include;3rdparty\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,7 +121,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>XRE_PLATFORM_WINDOWS;XRE_BUILD_DLL;GLFW_INCLUDE_NONE;_CRT_SECURE_NO_WARNINGS;XRE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;3rdparty\spdlog\include;3rdparty\GLFW\include;3rdparty\Glad\include;3rdparty\ImGui;3rdparty\glm;3rdparty\stb_img;3rdparty\tinyobjloader;3rdparty\Entt\single_include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;3rdparty\spdlog\include;3rdparty\GLFW\include;3rdparty\Glad\include;3rdparty\ImGui;3rdparty\glm;3rdparty\stb_img;3rdparty\json11;3rdparty\tinyobjloader;3rdparty\Entt\single_include;3rdparty\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="3rdparty\Entt\single_include\entt\entt.hpp" />
+    <ClInclude Include="3rdparty\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="3rdparty\glm\glm\common.hpp" />
     <ClInclude Include="3rdparty\glm\glm\detail\_features.hpp" />
     <ClInclude Include="3rdparty\glm\glm\detail\_fixes.hpp" />
@@ -584,6 +585,11 @@
     <ClInclude Include="src\xre\ECS\Components.h" />
     <ClInclude Include="src\xre\ECS\GameObject.h" />
     <ClInclude Include="src\xre\ECS\NativeScript.h" />
+    <ClInclude Include="src\xre\ECS\Reflection.h" />
+    <ClInclude Include="src\xre\ECS\Scene.h" />
+    <ClInclude Include="src\xre\ECS\SceneManager.h" />
+    <ClInclude Include="src\xre\ECS\SceneSerializer.h" />
+    <ClInclude Include="src\xre\ECS\USRefl99.h" />
     <ClInclude Include="src\xre\Event\AppEvent.h" />
     <ClInclude Include="src\xre\Event\Event.h" />
     <ClInclude Include="src\xre\Event\KeyEvent.h" />
@@ -593,6 +599,7 @@
     <ClInclude Include="src\xre\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\xre\Renderer\Camera\Camera.h" />
     <ClInclude Include="src\xre\Renderer\Camera\CameraController.h" />
+    <ClInclude Include="src\xre\Renderer\Camera\EditorCamera.h" />
     <ClInclude Include="src\xre\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\xre\Renderer\GraphicContext.h" />
     <ClInclude Include="src\xre\Renderer\Light.h" />
@@ -605,14 +612,17 @@
     <ClInclude Include="src\xre\Renderer\Resources\Texture.h" />
     <ClInclude Include="src\xre\Renderer\Resources\VertexArrays.h" />
     <ClInclude Include="src\xre\Renderer\SkyBox.h" />
+    <ClInclude Include="src\xre\Resource\Library.h" />
     <ClInclude Include="src\xre\Resource\Material.h" />
     <ClInclude Include="src\xre\Resource\Mesh.h" />
     <ClInclude Include="src\xre\Resource\Model.h" />
     <ClInclude Include="src\xre\Resource\ResourceManager.h" />
-    <ClInclude Include="src\xre\ECS\Scene.h" />
-    <ClInclude Include="src\xre\ECS\SceneManager.h" />
+    <ClInclude Include="src\xre\Utils\Math.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="3rdparty\ImGuizmo\ImGuizmo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="3rdparty\stb_img\stb_image.cpp" />
     <ClCompile Include="src\Platforms\OpenGL\OpenGLBuffers.cpp" />
     <ClCompile Include="src\Platforms\OpenGL\OpenGLContext.cpp" />
@@ -631,10 +641,13 @@
     <ClCompile Include="src\xre\Core\application.cpp" />
     <ClCompile Include="src\xre\Core\log.cpp" />
     <ClCompile Include="src\xre\ECS\GameObject.cpp" />
+    <ClCompile Include="src\xre\ECS\Scene.cpp" />
+    <ClCompile Include="src\xre\ECS\SceneSerializer.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp" />
     <ClCompile Include="src\xre\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\xre\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="src\xre\Renderer\Camera\CameraController.cpp" />
+    <ClCompile Include="src\xre\Renderer\Camera\EditorCamera.cpp" />
     <ClCompile Include="src\xre\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\xre\Renderer\Light.cpp" />
     <ClCompile Include="src\xre\Renderer\RenderCommand.cpp" />
@@ -646,11 +659,12 @@
     <ClCompile Include="src\xre\Renderer\Resources\Texture.cpp" />
     <ClCompile Include="src\xre\Renderer\Resources\VertexArrays.cpp" />
     <ClCompile Include="src\xre\Renderer\SkyBox.cpp" />
+    <ClCompile Include="src\xre\Resource\Library.cpp" />
     <ClCompile Include="src\xre\Resource\Material.cpp" />
     <ClCompile Include="src\xre\Resource\Mesh.cpp" />
     <ClCompile Include="src\xre\Resource\Model.cpp" />
     <ClCompile Include="src\xre\Resource\ResourceManager.cpp" />
-    <ClCompile Include="src\xre\ECS\Scene.cpp" />
+    <ClCompile Include="src\xre\Utils\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="3rdparty\GLFW\GLFW.vcxproj">

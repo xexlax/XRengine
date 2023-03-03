@@ -5,6 +5,8 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
+#include "ImGuizmo.h"
+
 // TEMPORARY
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -32,6 +34,10 @@ namespace XRE {
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Assets/fonts/simhei.ttf",24.0f, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+		/*io.Fonts->AddFontFromFileTTF("../Assets/fonts/opensans/OpenSans-Bold.ttf", 24.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Assets/fonts/opensans/OpenSans-Regular.ttf", 24.0f);*/
 
 		// Setup Dear ImGui style
 		SetStyle();
@@ -75,6 +81,7 @@ namespace XRE {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()
@@ -99,6 +106,9 @@ namespace XRE {
 	void ImGuiLayer::SetStyle()
 	{
 		
+
+		
+
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.80f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);

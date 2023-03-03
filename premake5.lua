@@ -1,6 +1,6 @@
 workspace "XRengine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "XRE-Editor"
 	
 
 	configurations
@@ -22,7 +22,7 @@ IncludeDir["stb_img"] = "XRengine/3rdparty/stb_img"
 IncludeDir["tinyobjloader"] = "XRengine/3rdparty/tinyobjloader"
 IncludeDir["json11"] = "XRengine/3rdparty/json11"
 IncludeDir["Entt"] = "XRengine/3rdparty/Entt/single_include"
-
+IncludeDir["ImGuizmo"] = "XRengine/3rdparty/ImGuizmo"
 
 include "XRengine/3rdparty/GLFW"
 include "XRengine/3rdparty/Glad"
@@ -53,8 +53,10 @@ project "XRengine"
 		"%{prj.name}/3rdparty/stb_img/**.cpp",
 		"%{prj.name}/3rdparty/tinyobjloader/tiny_obj_loader.h",
 		"%{prj.name}/3rdparty/json11/**.hpp",
-		"%{prj.name}/3rdparty/Entt/single_include/**.hpp"
-		
+		"%{prj.name}/3rdparty/Entt/single_include/**.hpp",
+		"%{prj.name}/3rdparty/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/3rdparty/ImGuizmo/ImGuizmo.cpp"
+
 	}
 
 	includedirs
@@ -68,7 +70,9 @@ project "XRengine"
 		"%{IncludeDir.stb_img}",
 		"%{IncludeDir.json11}",
 		"%{IncludeDir.tinyobjloader}",
-		"%{IncludeDir.Entt}"
+		"%{IncludeDir.Entt}",
+		"%{IncludeDir.ImGuizmo}",
+
 	}
 
 	links 
@@ -77,8 +81,11 @@ project "XRengine"
 		"Glad",
 		"ImGui",
 		"opengl32.lib",
-		"assimp-vc142-mtd.dll"
+		"assimp-vc142-mtd.dll",
 	}
+
+	filter "files:3rdparty/ImGuizmo/ImGuizmo.cpp"
+	flags { "NoPCH" }
 
 	filter "system:windows"
 		
@@ -99,61 +106,6 @@ project "XRengine"
         runtime "Debug"
 		symbols "on"
         
-
-	filter "configurations:Release"
-		defines "XRE_RELEASE"
-        runtime "Release"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "XRE_DIST"
-        runtime "Release"
-		optimize "on"
-
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"XRengine/3rdparty/spdlog/include",
-		"XRengine/src",
-		
-		"XRengine/3rdparty",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.Entt}"
-	}
-
-	links
-	{
-		"XRengine"
-	}
-
-	filter "system:windows"
-		
-		systemversion "latest"
-
-		defines
-		{
-			"XRE_PLATFORM_WINDOWS"
-		}
-
-	filter "configurations:Debug"
-		defines "XRE_DEBUG"
-        runtime "Debug"
-		symbols "on"
 
 	filter "configurations:Release"
 		defines "XRE_RELEASE"
@@ -188,7 +140,9 @@ project "XRE-Editor"
 		"XRengine/src",
 		"XRengine/3rdparty",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.Entt}"
+		"%{IncludeDir.Entt}",
+		"%{IncludeDir.ImGuizmo}"
+
 	}
 
 	links

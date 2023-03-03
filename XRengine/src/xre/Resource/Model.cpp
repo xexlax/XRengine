@@ -48,6 +48,11 @@ namespace XRE {
 	};
 	
 
+	Ref<Model> Model::Create(const std::string& path)
+	{
+		return std::make_shared<Model>(path);
+	}
+
 	void Model::LoadModel(string path,bool triangulate)
 	{
 		std::string basepath;

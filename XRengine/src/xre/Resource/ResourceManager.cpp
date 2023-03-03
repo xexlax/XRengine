@@ -3,9 +3,9 @@
 
 namespace XRE {
 
-	Ref<Texture2DLibrary> ResourceManager::m_Tex2DLib = make_shared<Texture2DLibrary>();
-
-	Ref<ShaderLibrary> ResourceManager::m_ShaderLib = make_shared<ShaderLibrary>();
+	Library<Shader> ResourceManager::m_ShaderLib;
+	Library<Texture2D> ResourceManager::m_Texture2DLib;
+	Library<Model> ResourceManager::m_ModelLib;
 
 	void ResourceManager::Init()
 	{

@@ -17,21 +17,30 @@ namespace XRE {
 	public:
 		static void Init();
 		static void ShutDown();
+		//通用渲染的前置与后置
 		static void StartScene(const Ref<Camera> camera);
 		static void EndScene();
-		static void Clear();
-		static void SetClearColor(glm::vec4 color);
 
 
+		
+
+
+		//渲染ShadowMap的前置与后置
 		static void StartShadowPass();
-		//static void StartShadowPass(Ref<PointLight> pLight);
 		static void EndShadowPass();
+
+
 		static void SetShadowMapOfActive(uint32_t slot=0);
 		static void PostProcessing();
 
+		//Commands
+		static void Clear();
+		static void SetClearColor(glm::vec4 color);
 		static void CullFace(bool b);
 
+		//将m_Light中的灯光数据绑定到activeShader
 		static void DrawLight();
+
 		static void DrawModel(const Ref<Model> model, glm::mat4 transform = glm::mat4(1.0f));
 		static void DrawSkybox();
 
@@ -49,6 +58,8 @@ namespace XRE {
 		static Ref<Shader> activeShader;
 
 		static Ref<Texture2D> defaultAlbedo;
+
+		//暂时性储存
 		static glm::mat4 m_VP,m_LVP;
 		static Ref<VertexArray> m_Quad;
 

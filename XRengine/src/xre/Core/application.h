@@ -5,6 +5,7 @@
 #include "xre\ImGui\ImGuiLayer.h"
 #include "Window.h"
 
+
 namespace XRE {
 	class Application{
 	public:

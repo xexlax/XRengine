@@ -11,7 +11,7 @@ namespace XRE{
 	}
 	void ScenePanel::OnImGuiRender()
 	{
-		ImGui::Begin("Scene");
+		ImGui::Begin(u8"场景");
 
 		m_Scene->m_Registry.each([&](auto entityID)
 			{
@@ -19,6 +19,21 @@ namespace XRE{
 				GameObject go{ entityID , m_Scene.get() };
 				DrawGONode(go);
 			});
+
+
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+			m_Selected = {};
+
+		// Right-click on blank space
+		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
+		{
+			if (ImGui::MenuItem(u8"新的对象"))
+				m_Scene->CreateGameObject(u8"空对象");
+
+			ImGui::EndPopup();
+		}
+
+
 
 		ImGui::End();
 	}
@@ -32,13 +47,26 @@ namespace XRE{
 			m_Selected = gameObj;
 		}
 
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem(u8"删除对象"))
+				entityDeleted = true;
+
+			ImGui::EndPopup();
+		}
+
 		if (opened)
 		{
-			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
-			bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)gameObj, flags, gameObj.GetName().c_str());
-			if (opened)
-				ImGui::TreePop();
+			
 			ImGui::TreePop();
 		}
+		if (entityDeleted)
+		{
+			m_Scene->Destroy(gameObj);
+			if (m_Selected == gameObj)
+				m_Selected = {};
+		}
+
 	}
 }

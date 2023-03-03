@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QtCreatorProject>
+<!-- Written by QtCreator 4.14.1, 2023-03-03T14:13:45. -->
+<qtcreator>
+ <data>
+  <variable>EnvironmentId</variable>
+  <value type="QByteArray">{e85787b2-1ec6-46c7-ae97-3137b9bf6ca8}</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
+  <value type="int">0</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.EditorSettings</variable>
+  <valuemap type="QVariantMap">
+   <value type="bool" key="EditorConfiguration.AutoIndent">true</value>
+   <value type="bool" key="EditorConfiguration.AutoSpacesForTabs">false</value>
+   <value type="bool" key="EditorConfiguration.CamelCaseNavigation">true</value>
+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.0">
+    <value type="QString" key="language">Cpp</value>
+    <valuemap type="QVariantMap" key="value">
+     <value type="QByteArray" key="CurrentPreferences">CppGlobal</value>
+    </valuemap>
+   </valuemap>
+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.1">
+    <value type="QString" key="language">QmlJS</value>
+    <valuemap type="QVariantMap" key="value">
+     <value type="QByteArray" key="CurrentPreferences">QmlJSGlobal</value>
+    </valuemap>
+   </valuemap>
+   <value type="int" key="EditorConfiguration.CodeStyle.Count">2</value>
+   <value type="QByteArray" key="EditorConfiguration.Codec">UTF-8</value>
+   <value type="bool" key="EditorConfiguration.ConstrainTooltips">false</value>
+   <value type="int" key="EditorConfiguration.IndentSize">4</value>
+   <value type="bool" key="EditorConfiguration.KeyboardTooltips">false</value>
+   <value type="int" key="EditorConfiguration.MarginColumn">80</value>
+   <value type="bool" key="EditorConfiguration.MouseHiding">true</value>
+   <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
+   <value type="int" key="EditorConfiguration.PaddingMode">1</value>
+   <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
+   <value type="bool" key="EditorConfiguration.ShowMargin">false</value>
+   <value type="int" key="EditorConfiguration.SmartBackspaceBehavior">0</value>
+   <value type="bool" key="EditorConfiguration.SmartSelectionChanging">true</value>
+   <value type="bool" key="EditorConfiguration.SpacesForTabs">true</value>
+   <value type="int" key="EditorConfiguration.TabKeyBehavior">0</value>
+   <value type="int" key="EditorConfiguration.TabSize">8</value>
+   <value type="bool" key="EditorConfiguration.UseGlobal">true</value>
+   <value type="int" key="EditorConfiguration.Utf8BomBehavior">1</value>
+   <value type="bool" key="EditorConfiguration.addFinalNewLine">true</value>
+   <value type="bool" key="EditorConfiguration.cleanIndentation">true</value>
+   <value type="bool" key="EditorConfiguration.cleanWhitespace">true</value>
+   <value type="QString" key="EditorConfiguration.ignoreFileTypes">*.md, *.MD, Makefile</value>
+   <value type="bool" key="EditorConfiguration.inEntireDocument">false</value>
+   <value type="bool" key="EditorConfiguration.skipTrailingWhitespace">true</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.PluginSettings</variable>
+  <valuemap type="QVariantMap">
+   <valuemap type="QVariantMap" key="AutoTest.ActiveFrameworks">
+    <value type="bool" key="AutoTest.Framework.Boost">true</value>
+    <value type="bool" key="AutoTest.Framework.Catch">true</value>
+    <value type="bool" key="AutoTest.Framework.GTest">true</value>
+    <value type="bool" key="AutoTest.Framework.QtQuickTest">true</value>
+    <value type="bool" key="AutoTest.Framework.QtTest">true</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="AutoTest.CheckStates">
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:async periodic flush">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:basic async test ">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:discard policy ">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:discard policy using factory ">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:flush">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:multi threads">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:to_file">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:to_file multi-workers">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_async.cpp:tp-&gt;wait_empty() ">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_backtrace.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_backtrace.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_backtrace.cpp:bactrace-async">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_backtrace.cpp:bactrace-empty">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_backtrace.cpp:bactrace1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv4">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv5">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv6">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:argv7">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:env">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:level-not-set-test1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:level-not-set-test2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:level-not-set-test3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:level-not-set-test4">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:level-not-set-test5">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_cfg.cpp:restore-to-default">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_create_dir.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_create_dir.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_create_dir.cpp:create_dir">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_create_dir.cpp:create_invalid_dir">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_create_dir.cpp:dir_name">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_custom_callbacks.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_custom_callbacks.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_custom_callbacks.cpp:custom_callback_logger">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:daily_file_sink::daily_filename_calculator">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:daily_file_sink::daily_filename_format_calculator">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:daily_logger rotate">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:daily_logger with custom calculator">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:daily_logger with dateonly calculator">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:rotating_file_sink::calc_filename1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:rotating_file_sink::calc_filename2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_daily_logger.cpp:rotating_file_sink::calc_filename3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp:dup_filter_test1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp:dup_filter_test2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp:dup_filter_test3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp:dup_filter_test4">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_dup_filter.cpp:dup_filter_test5">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:async_error_handler">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:async_error_handler2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:custom_error_handler">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:default_error_handler">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:default_error_handler2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_errors.cpp:flush_error_handler">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_eventlog.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_eventlog.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_eventlog.cpp:eventlog">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_event_handlers">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_helper_filename">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_helper_open">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_helper_reopen">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_helper_reopen2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_helper_size">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_helper.cpp:file_helper_split_by_extension">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp:flush_on">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp:rotating_file_logger1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp:rotating_file_logger2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp:rotating_file_logger3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_file_logging.cpp:simple_file_logger">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_fmt_helper.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_fmt_helper.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_fmt_helper.cpp:pad2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_fmt_helper.cpp:pad3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_fmt_helper.cpp:pad6">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_fmt_helper.cpp:pad9">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_macros.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_macros.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_macros.cpp:debug and trace w/o format string">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_macros.cpp:disable param evaluation">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_macros.cpp:pass logger pointer">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:basic_logging ">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:clone async">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:clone-logger">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:default logger API">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:level_to_string_view">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:log_levels">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:periodic flush">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_hex">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_hex_different_size_per_line">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_hex_no_ascii">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_hex_no_delimiter">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_hex_show_ascii">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_hex_upper">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_level_enum">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_misc.cpp:to_short_c_str">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:bad_queue">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:dequeue-empty-nowait">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:dequeue-empty-wait">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:dequeue-full-nowait">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:dequeue-full-wait">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:empty_queue">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:enqueue_nowait">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_mpmc_q.cpp:full_queue">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:center_padded_short">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:clone-custom_formatter">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:clone-default-formatter">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:clone-default-formatter2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:clone-formatter">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:clone-formatter-2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:color range test1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:color range test2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:color range test3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:color range test4">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:color range test5">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:color range test6">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:custom eol">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:custom flags">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:custom flags-exception">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:custom flags-padding">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:date MM/DD/YY ">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:empty format">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:empty format2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:full filename formatter">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:left_padded_huge">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:left_padded_max">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:left_padded_short">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:level">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:level_center_padded">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:level_left_padded">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:level_right_padded">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:name">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:override need_localtime">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:padding_funcname">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:padding_truncate_funcname">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:paddinng_truncate">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:right_padded_short">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short filename formatter-1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short filename formatter-2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short filename formatter-3">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short level">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short level_center_padded">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short level_left_padded">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_pattern_formatter.cpp:short level_right_padded">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:apply_all">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:default logger">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:disable automatic registration">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:drop">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:drop non existing">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:drop-default">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:drop_all">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:explicit register">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:register_drop">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_registry.cpp:set_default_logger(nullptr)">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stderr_color_mt">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stderr_color_st">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stderr_mt">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stderr_st">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stdout_color_mt">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stdout_color_st">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stdout_mt">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:stdout_st">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stdout_api.cpp:wchar_api">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stopwatch.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stopwatch.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stopwatch.cpp:stopwatch1">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_stopwatch.cpp:stopwatch2">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_systemd.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_systemd.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_systemd.cpp:systemd">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_time_point.cpp:D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_time_point.cpp">Checked</value>
+    <value type="Qt::CheckState" key="D:/Study/bishe2023.1/dev/XRengine/XRengine/3rdparty/spdlog/tests/test_time_point.cpp:time_point1">Checked</value>
+   </valuemap>
+   <value type="int" key="AutoTest.RunAfterBuild">0</value>
+   <value type="bool" key="AutoTest.UseGlobal">true</value>
+   <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey">
+    <value type="QString">-fno-delayed-template-parsing</value>
+   </valuelist>
+   <value type="bool" key="ClangCodeModel.UseGlobalConfig">true</value>
+   <value type="QString" key="ClangCodeModel.WarningConfigId">Builtin.Questionable</value>
+   <valuemap type="QVariantMap" key="ClangTools">
+    <value type="bool" key="ClangTools.AnalyzeOpenFiles">true</value>
+    <value type="bool" key="ClangTools.BuildBeforeAnalysis">true</value>
+    <value type="QString" key="ClangTools.DiagnosticConfig">Builtin.DefaultTidyAndClazy</value>
+    <value type="int" key="ClangTools.ParallelJobs">8</value>
+    <valuelist type="QVariantList" key="ClangTools.SelectedDirs"/>
+    <valuelist type="QVariantList" key="ClangTools.SelectedFiles"/>
+    <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
+    <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
+   </valuemap>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Target.0</variable>
+  <valuemap type="QVariantMap">
+   <value type="QString" key="DeviceType">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop Qt 5.15.2 MinGW 64-bit</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop Qt 5.15.2 MinGW 64-bit</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">qt.qt5.5152.win64_mingw81_kit</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
+    <value type="QString" key="CMake.Initial.Parameters">-GNinja
+-DCMAKE_BUILD_TYPE:String=Debug
+-DQT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}
+-DCMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}
+-DCMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}
+-DCMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:\Study\bishe2023.1\dev\XRengine\..\build-XRengine-Desktop_Qt_5_15_2_MinGW_64_bit-Debug</value>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">all</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
+    </valuemap>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">clean</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
+    </valuemap>
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.CustomParsers"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Debug</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeBuildConfiguration</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
+    <value type="QString" key="CMake.Initial.Parameters">-GNinja
+-DCMAKE_BUILD_TYPE:String=Release
+-DQT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}
+-DCMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}
+-DCMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}
+-DCMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:\Study\bishe2023.1\dev\XRengine\..\build-XRengine-Desktop_Qt_5_15_2_MinGW_64_bit-Release</value>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">all</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
+    </valuemap>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">clean</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
+    </valuemap>
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.CustomParsers"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Release</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeBuildConfiguration</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
+    <value type="QString" key="CMake.Initial.Parameters">-GNinja
+-DCMAKE_BUILD_TYPE:String=RelWithDebInfo
+-DQT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}
+-DCMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}
+-DCMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}
+-DCMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:\Study\bishe2023.1\dev\XRengine\..\build-XRengine-Desktop_Qt_5_15_2_MinGW_64_bit-RelWithDebInfo</value>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">all</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
+    </valuemap>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">clean</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
+    </valuemap>
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.CustomParsers"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Release with Debug Information</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeBuildConfiguration</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.3">
+    <value type="QString" key="CMake.Initial.Parameters">-GNinja
+-DCMAKE_BUILD_TYPE:String=MinSizeRel
+-DQT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}
+-DCMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}
+-DCMAKE_C_COMPILER:STRING=%{Compiler:Executable:C}
+-DCMAKE_CXX_COMPILER:STRING=%{Compiler:Executable:Cxx}</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:\Study\bishe2023.1\dev\XRengine\..\build-XRengine-Desktop_Qt_5_15_2_MinGW_64_bit-MinSizeRel</value>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">all</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
+    </valuemap>
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <valuelist type="QVariantList" key="CMakeProjectManager.MakeStep.BuildTargets">
+       <value type="QString">clean</value>
+      </valuelist>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.MakeStep</value>
+     </valuemap>
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Clean</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
+    </valuemap>
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.CustomParsers"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Minimum Size Release</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeBuildConfiguration</value>
+   </valuemap>
+   <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">4</value>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">0</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Deploy</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Deploy</value>
+    </valuemap>
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
+    <valuemap type="QVariantMap" key="ProjectExplorer.DeployConfiguration.CustomData"/>
+    <value type="bool" key="ProjectExplorer.DeployConfiguration.CustomDataEnabled">false</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.DefaultDeployConfiguration</value>
+   </valuemap>
+   <value type="int" key="ProjectExplorer.Target.DeployConfigurationCount">1</value>
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.0">
+    <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
+    <valuelist type="QVariantList" key="Analyzer.Perf.Events">
+     <value type="QString">cpu-cycles</value>
+    </valuelist>
+    <valuelist type="QVariantList" key="Analyzer.Perf.ExtraArguments"/>
+    <value type="int" key="Analyzer.Perf.Frequency">250</value>
+    <valuelist type="QVariantList" key="Analyzer.Perf.RecordArguments">
+     <value type="QString">-e</value>
+     <value type="QString">cpu-cycles</value>
+     <value type="QString">--call-graph</value>
+     <value type="QString">dwarf,4096</value>
+     <value type="QString">-F</value>
+     <value type="QString">250</value>
+    </valuelist>
+    <value type="QString" key="Analyzer.Perf.SampleMode">-F</value>
+    <value type="bool" key="Analyzer.Perf.Settings.UseGlobalSettings">true</value>
+    <value type="int" key="Analyzer.Perf.StackSize">4096</value>
+    <value type="bool" key="Analyzer.QmlProfiler.AggregateTraces">false</value>
+    <value type="bool" key="Analyzer.QmlProfiler.FlushEnabled">false</value>
+    <value type="uint" key="Analyzer.QmlProfiler.FlushInterval">1000</value>
+    <value type="QString" key="Analyzer.QmlProfiler.LastTraceFile"></value>
+    <value type="bool" key="Analyzer.QmlProfiler.Settings.UseGlobalSettings">true</value>
+    <valuelist type="QVariantList" key="Analyzer.Valgrind.AddedSuppressionFiles"/>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.CollectBusEvents">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.CollectSystime">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableBranchSim">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableCacheSim">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableEventToolTips">true</value>
+    <value type="double" key="Analyzer.Valgrind.Callgrind.MinimumCostRatio">0.01</value>
+    <value type="double" key="Analyzer.Valgrind.Callgrind.VisualisationMinimumCostRatio">10</value>
+    <value type="bool" key="Analyzer.Valgrind.FilterExternalIssues">true</value>
+    <value type="QString" key="Analyzer.Valgrind.KCachegrindExecutable">kcachegrind</value>
+    <value type="int" key="Analyzer.Valgrind.LeakCheckOnFinish">1</value>
+    <value type="int" key="Analyzer.Valgrind.NumCallers">25</value>
+    <valuelist type="QVariantList" key="Analyzer.Valgrind.RemovedSuppressionFiles"/>
+    <value type="int" key="Analyzer.Valgrind.SelfModifyingCodeDetection">1</value>
+    <value type="bool" key="Analyzer.Valgrind.Settings.UseGlobalSettings">true</value>
+    <value type="bool" key="Analyzer.Valgrind.ShowReachable">false</value>
+    <value type="bool" key="Analyzer.Valgrind.TrackOrigins">true</value>
+    <value type="QString" key="Analyzer.Valgrind.ValgrindExecutable">valgrind</value>
+    <valuelist type="QVariantList" key="Analyzer.Valgrind.VisibleErrorKinds">
+     <value type="int">0</value>
+     <value type="int">1</value>
+     <value type="int">2</value>
+     <value type="int">3</value>
+     <value type="int">4</value>
+     <value type="int">5</value>
+     <value type="int">6</value>
+     <value type="int">7</value>
+     <value type="int">8</value>
+     <value type="int">9</value>
+     <value type="int">10</value>
+     <value type="int">11</value>
+     <value type="int">12</value>
+     <value type="int">13</value>
+     <value type="int">14</value>
+    </valuelist>
+    <valuelist type="QVariantList" key="CustomOutputParsers"/>
+    <value type="int" key="PE.EnvironmentAspect.Base">2</value>
+    <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">XREngine</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">CMakeProjectManager.CMakeRunConfiguration.XREngine</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">XREngine</value>
+    <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
+    <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/Study/bishe2023.1/dev/build-XRengine-Desktop_Qt_5_15_2_MinGW_64_bit-Debug</value>
+   </valuemap>
+   <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.TargetCount</variable>
+  <value type="int">1</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
+  <value type="int">22</value>
+ </data>
+ <data>
+  <variable>Version</variable>
+  <value type="int">22</value>
+ </data>
+</qtcreator>
