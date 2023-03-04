@@ -16,8 +16,9 @@ void main()
 
 #type fragment
 #version 330 core
-out vec4 FragColor;
 
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out int ID;
 in vec3 TexCoords;
 
 uniform samplerCube skybox;
@@ -25,4 +26,5 @@ uniform samplerCube skybox;
 void main()
 {
     FragColor = texture(skybox, TexCoords);
+    ID= -1;
 }

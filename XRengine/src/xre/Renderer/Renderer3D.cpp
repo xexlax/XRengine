@@ -23,6 +23,7 @@ namespace XRE {
 	glm::mat4  Renderer3D::m_VP, Renderer3D::m_LVP;
 	void Renderer3D::Init()
 	{
+		
 		defaultObjShader = ResourceManager::GetShader("../Assets/shaders/default.glsl");
 
 		defaultPBRShader = ResourceManager::GetShader("../Assets/shaders/pbr_object.glsl");
@@ -35,9 +36,27 @@ namespace XRE {
 
 		activeShader = defaultObjShader;
 			//Texture2D::Create("assets/textures/albedo.jpg");
-		m_FrameBuffer = Framebuffer::Create(1280, 720);
-		m_PostFrameBuffer = Framebuffer::Create(1280, 720);
-		m_ShadowFrameBuffer = Framebuffer::Create(2048, 2048);
+
+		FramebufferSpecification fb ;
+		fb.Width = 768;
+		fb.Height = 1024;
+		fb.Attachments = 
+		{ 
+			FramebufferTextureFormat::RGBA8,
+			FramebufferTextureFormat::RED_INTEGER, 
+			FramebufferTextureFormat::Depth 
+		};
+
+		FramebufferSpecification sfb;
+
+		sfb.Width = 2048;
+		sfb.Height = 2048;
+		sfb.Attachments = { FramebufferTextureFormat::Depth };
+
+
+		m_FrameBuffer = Framebuffer::Create(fb);
+		m_PostFrameBuffer = Framebuffer::Create(fb);
+		m_ShadowFrameBuffer = Framebuffer::Create(sfb);
 
 		m_SkyBox = make_shared<SkyBox>();
 

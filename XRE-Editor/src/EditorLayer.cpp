@@ -71,45 +71,7 @@ void EditorLayer::InitScene() {
 	BocchiGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(0.5f);
 	FloorGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -1.0f, 0.0f);
 	FloorGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(20.0f, 0.2f, 20.0f);
-
 	DirLightGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, -45.0f, 0.0f);
-
-
-	class CameraController : public ScriptableGameObject
-	{
-	public:
-		
-		void OnUpdate(TimeStep ts)
-		{
-			auto& translation = GetComponent<TransformComponent>().m_Translation;
-			auto& rotation = GetComponent<TransformComponent>().m_Rotation;
-			float speed = 5.0f;
-			float anglespeed = 15.0f;
-
-			if (Input::IsKeyPressed(XRE_KEY_A))
-				translation.x -= speed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_D))
-				translation.x += speed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_W))
-				translation.z -= speed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_S))
-				translation.z += speed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_Q))
-				translation.y += speed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_E))
-				translation.y -= speed * ts;
-
-			if (Input::IsKeyPressed(XRE_KEY_C))
-				rotation.y += anglespeed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_Z))
-				rotation.y -= anglespeed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_V))
-				rotation.x += anglespeed * ts;
-			if (Input::IsKeyPressed(XRE_KEY_R))
-				rotation.x -= anglespeed * ts;
-
-		}
-	};
 
 	class Spinner : public ScriptableGameObject
 	{
@@ -130,7 +92,7 @@ void EditorLayer::InitScene() {
 		
 	};
 
-	SceneCameraGO.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
 	CubeGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
 	CylinderGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
 	SphereGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
@@ -152,6 +114,9 @@ void EditorLayer::OnUpdate(XRE::TimeStep ts)
 	//m_Scene->OnUpdate(ts);
 
 	m_Scene->OnUpdateEditing(ts,m_EditorCamera);
+
+	//
+	
 	
 
 }
@@ -247,6 +212,9 @@ void EditorLayer::OnImGuiRender(){
 
 
 	ImGui::Begin(u8"视窗");
+		
+
+
 		ImGui::Checkbox(u8"查看Gizmos", &m_ShowGizmos);ImGui::SameLine();
 
 		
@@ -255,7 +223,7 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::RadioButton(u8"缩放", &m_GizmoType, ImGuizmo::OPERATION::SCALE); 
 
 		
-
+		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		
@@ -273,8 +241,17 @@ void EditorLayer::OnImGuiRender(){
 			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
-		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment();
+		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment(0);
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		auto windowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		ImVec2 maxBound = { minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y };
+		m_ViewportBounds[0] = { minBound.x, minBound.y };
+		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 		GameObject selectedEntity = m_ScenePanel.GetSelected();
 		if (selectedEntity && m_GizmoType != -1 && m_ShowGizmos)
@@ -340,7 +317,7 @@ void EditorLayer::OnEvent(XRE::Event& e)
 	m_EditorCamera.OnEvent(e);
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyReleased));
-	
+	dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	
 }
 
@@ -362,6 +339,33 @@ bool EditorLayer::OnKeyReleased(KeyReleasedEvent& e)
 		m_GizmoType = ImGuizmo::OPERATION::SCALE;
 		break;
 	}
+	return false;
+}
+
+bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+{
+	if(!ImGuizmo::IsOver())
+	if (e.GetMouseButton() == XRE_MOUSE_BUTTON_LEFT) {
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixelData;
+			Renderer3D::m_FrameBuffer->ReadPixel(1, mouseX, mouseY,&pixelData);
+			XRE_CORE_INFO("Pixel data = {0} at{1},{2}", pixelData, mouseX, mouseY);
+
+			m_ScenePanel.Select(pixelData);
+
+		}
+	}
+	
+
 	return false;
 }
 

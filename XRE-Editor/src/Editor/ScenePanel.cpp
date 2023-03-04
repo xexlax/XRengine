@@ -9,6 +9,11 @@ namespace XRE{
 	{
 		m_Scene = scene;
 	}
+	void ScenePanel::Select(int ObjId)
+	{
+		GameObject go( entt::entity(ObjId) , m_Scene.get() );
+		m_Selected = go;
+	}
 	void ScenePanel::OnImGuiRender()
 	{
 		ImGui::Begin(u8"³¡¾°");

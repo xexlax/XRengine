@@ -1452,12 +1452,6 @@
     <ClInclude Include="src\xre\Event\MouseEvent.h">
       <Filter>src\xre\Event</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\ImGui\EditorGui\ConsoleWindow.h">
-      <Filter>src\xre\ImGui\EditorGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\xre\ImGui\EditorGui\EditorWindow.h">
-      <Filter>src\xre\ImGui\EditorGui</Filter>
-    </ClInclude>
     <ClInclude Include="src\xre\ImGui\ImGuiLayer.h">
       <Filter>src\xre\ImGui</Filter>
     </ClInclude>

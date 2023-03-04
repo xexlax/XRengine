@@ -19,6 +19,7 @@ public:
 	void OnImGuiRender() override;
 private:
 	bool OnKeyReleased(KeyReleasedEvent& e);
+	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 	void InitScene();
 	void SetScene();
 private:
@@ -32,7 +33,7 @@ private:
 	SceneStatus m_Status = Editing;
 	Ref<Scene> m_Scene;
 	EditorCamera m_EditorCamera;
-	
+	glm::vec2 m_ViewportBounds[2];
 	GameObject SceneCameraGO;
 	GameObject PointLight1GO, PointLight2GO, DirLightGO;
 	GameObject CubeGO, CylinderGO, CapsuleGO, SphereGO, FloorGO, NanoGO, BocchiGO;

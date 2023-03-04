@@ -4,6 +4,9 @@
 
 namespace XRE {
 
+	
+
+
 	//VB
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{

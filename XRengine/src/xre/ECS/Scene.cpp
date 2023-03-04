@@ -106,7 +106,7 @@ namespace XRE{
 					Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
 				}
 
-				Renderer3D::DrawSkybox();
+				//Renderer3D::DrawSkybox();
 			}
 			Renderer3D::EndScene();
 			Renderer3D::m_FrameBuffer->Unbind();
@@ -180,6 +180,8 @@ namespace XRE{
 			// Coloring Pass
 			Renderer3D::m_FrameBuffer->Bind();
 			Renderer3D::Clear();
+			Renderer3D::m_FrameBuffer->ClearAttachment(1, -1);
+
 			//切shader一定要在startscene前
 			Renderer3D::StartScene(mainCamera);
 			{
@@ -187,11 +189,15 @@ namespace XRE{
 				Renderer3D::SetShadowMapOfActive(0);
 				Renderer3D::DrawLight();
 
-				for (auto entity : group)
+				for (auto obj : group)
 				{
-					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
-					if (meshrenderer.m_Active)
+					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(obj);
+					if (meshrenderer.m_Active) {
+						//Renderer3D::activeShader->Bind();
+						Renderer3D::activeShader->SetInt("ObjID", int(obj));
 						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+					}
+						
 				}
 
 				Renderer3D::DrawSkybox();

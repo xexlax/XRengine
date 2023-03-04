@@ -8,6 +8,7 @@ namespace XRE {
 		ScenePanel(const Ref<Scene>&scene);
 
 		void AttachToScene(const Ref<Scene>&scene);
+		void Select(int ObjId);
 		GameObject GetSelected() const { return m_Selected; }
 		void OnImGuiRender();
 	private:
