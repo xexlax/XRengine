@@ -6,7 +6,7 @@
 	url = https://github.com/TheCherno/glfw.git
 [submodule ".\\XRengine\\3rdparty\\ImGui"]
 	path = .\\XRengine\\3rdparty\\ImGui
-	url = https://github.com/TheCherno/imgui.git
+	url = https://github.com/xexlax/imgui.git
 [submodule ".\\XRengine\\3rdparty\\glm"]
 	path = .\\XRengine\\3rdparty\\glm
 	url = https://github.com/g-truc/glm.git
@@ -30,3 +30,6 @@
 [submodule ".\\XRengine\\3rdparty\\JoltPhysics"]
 	path = .\\XRengine\\3rdparty\\JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
+[submodule "XRengine/3rdparty/Entt"]
+	path = XRengine/3rdparty/Entt
+	url = https://github.com/skypjack/entt.git

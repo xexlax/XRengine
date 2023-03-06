@@ -3,6 +3,7 @@
 #include "xre/Core/Window.h"
 #include "xre\Renderer\GraphicContext.h"
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 

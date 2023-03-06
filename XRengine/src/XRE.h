@@ -35,3 +35,5 @@
 
 #include "xre\Utils\Math.h"
 #include "xre\Utils\PlatformUtils.h"
+
+#include <entt/entt.hpp>

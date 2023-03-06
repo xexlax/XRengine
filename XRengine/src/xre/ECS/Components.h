@@ -5,7 +5,6 @@
 #include "xre\Renderer\Camera\Camera.h"
 
 #include <cereal/archives/json.hpp>
-
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
