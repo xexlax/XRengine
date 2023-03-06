@@ -10,7 +10,7 @@ namespace XRE {
 	{
         m_SkyBoxShader = ResourceManager::GetShader("../Assets/shaders/skybox.glsl");
         
-        std::vector<std::string> faces
+       /* std::vector<std::string> faces
         {
             "../Assets/textures/Skybox/right.jpg",
             "../Assets/textures/Skybox/left.jpg",
@@ -18,6 +18,16 @@ namespace XRE {
             "../Assets/textures/Skybox/bottom.jpg",
             "../Assets/textures/Skybox/front.jpg",
             "../Assets/textures/Skybox/back.jpg"
+        };*/
+
+        std::vector<std::string> faces
+        {
+            "../Assets/textures/Skybox1/px.png",
+            "../Assets/textures/Skybox1/nx.png",
+            "../Assets/textures/Skybox1/py.png",
+            "../Assets/textures/Skybox1/ny.png",
+            "../Assets/textures/Skybox1/pz.png",
+            "../Assets/textures/Skybox1/nz.png"
         };
 
         CreateCubeMap(m_TextureID, faces);

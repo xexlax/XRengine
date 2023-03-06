@@ -30,25 +30,36 @@ namespace XRE {
 			{
 				if (ImGui::MenuItem("Camera"))
 				{
+					if(!go.HasComponent<CameraComponent>())
 					go.AddComponent<CameraComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Mesh Renderer"))
 				{
+					if (!go.HasComponent<MeshRendererComponent>())
 					go.AddComponent<MeshRendererComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Point Light"))
 				{
+					if (!go.HasComponent<PointLightComponent>())
 					go.AddComponent<PointLightComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Directional Light"))
 				{
+					if (!go.HasComponent<DirectionalLightComponent>())
 					go.AddComponent<DirectionalLightComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem("Easy Animator"))
+				{
+					if (!go.HasComponent<AnimatorComponent>())
+					go.AddComponent<AnimatorComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 
@@ -103,17 +114,24 @@ namespace XRE {
 			}
 		}
 
+		
+
+		
+
+		if (go.HasComponent<MeshRendererComponent>()) 
+			DrawComponent<MeshRendererComponent>(go);
+
+		if (go.HasComponent<AnimatorComponent>())
+			DrawComponent<AnimatorComponent>(go);
+
+		if (go.HasComponent<CameraComponent>())
+			DrawComponent<CameraComponent>(go);
+
 		if (go.HasComponent<PointLightComponent>())
 			DrawComponent<PointLightComponent>(go);
 
 		if (go.HasComponent<DirectionalLightComponent>())
 			DrawComponent<DirectionalLightComponent>(go);
-
-		if (go.HasComponent<CameraComponent>())
-			DrawComponent<CameraComponent>(go);
-
-		if (go.HasComponent<MeshRendererComponent>()) 
-			DrawComponent<MeshRendererComponent>(go);
 	}
 
 	template<typename T>
@@ -202,6 +220,16 @@ namespace XRE {
 
 
 
+	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<AnimatorComponent>(AnimatorComponent& component) {
+		DrawVec3Control("Pivot", component.m_Pivot);
+		DrawVec3Control("Axis", component.m_Axis);
+		ImGui::DragFloat("Radius", &component.m_Radius,0.1f,0.0f,10.0f);
+		ImGui::DragFloat("Speed", &component.m_AngleSpeed, 0.1f, 0.0f,10.0f);
+		ImGui::DragFloat("Phase", &component.m_Phase,1.0f,0.0f,360.0f);
+		
 	}
 
 	template<>

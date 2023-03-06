@@ -1,0 +1,512 @@
+{
+    "value0": {
+        "value0": "New Scene"
+    },
+    "value1": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "光源"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.10699957609176636,
+            "value2": 1.7395695447921754,
+            "value3": 4.269644737243652,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Point Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 0.10489939898252487,
+            "value2": 0.8523076772689819,
+            "value3": 0.6246355175971985,
+            "value4": 3.299999952316284
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value2": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Cube"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 1.6762548685073853,
+            "value2": 0.0,
+            "value3": 3.8509957790374758,
+            "value4": 98.06473541259766,
+            "value5": 98.06473541259766,
+            "value6": 98.06473541259766,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj"
+        },
+        "value6": {
+            "value0": "Animator"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 1.0,
+            "value6": 0.0,
+            "value7": 4.199999809265137,
+            "value8": 1.0,
+            "value9": 723.7265625
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value3": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Cylinder"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -3.4279353618621828,
+            "value2": 0.0,
+            "value3": -3.2154715061187746,
+            "value4": 98.06473541259766,
+            "value5": 98.06473541259766,
+            "value6": 98.06473541259766,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cylinder.obj"
+        },
+        "value6": {
+            "value0": "Animator"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 1.0,
+            "value6": 0.0,
+            "value7": 4.699999809265137,
+            "value8": 1.0,
+            "value9": 380.8861389160156
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value4": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Sphere"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 7.526002407073975,
+            "value2": 0.0,
+            "value3": 1.057964563369751,
+            "value4": 98.06473541259766,
+            "value5": 98.06473541259766,
+            "value6": 98.06473541259766,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/sphere.obj"
+        },
+        "value6": {
+            "value0": "Point Light"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0,
+            "value4": 1.0
+        },
+        "value8": {
+            "value0": "Animator"
+        },
+        "value9": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 1.0,
+            "value6": 0.0,
+            "value7": 7.599999904632568,
+            "value8": 0.4000000059604645,
+            "value9": 326.86529541015627
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value5": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Nanosuit"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": -0.8999999761581421,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 0.30000001192092898,
+            "value8": 0.30000001192092898,
+            "value9": 0.30000001192092898
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/nanosuit/nanosuit.obj"
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value6": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Bocchi"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -5.0,
+            "value2": 0.0,
+            "value3": 2.0,
+            "value4": 0.0,
+            "value5": 180.0,
+            "value6": 0.0,
+            "value7": 0.5,
+            "value8": 0.5,
+            "value9": 0.5
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/bocchi/bocchi.obj"
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value7": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Floor"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": -1.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 10.950000762939454,
+            "value8": 0.14600001275539399,
+            "value9": 10.950000762939454
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/plane.obj"
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value8": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "light1"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.6263126730918884,
+            "value2": 3.0,
+            "value3": 1.8994032144546509,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Point Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 0.20000000298023225,
+            "value2": 0.30000001192092898,
+            "value3": 0.8999999761581421,
+            "value4": 4.0
+        },
+        "value6": {
+            "value0": "Animator"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 3.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 1.0,
+            "value6": 0.0,
+            "value7": 2.0,
+            "value8": 5.0,
+            "value9": 1346.490966796875
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value9": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "light2"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 1.418668270111084,
+            "value2": 1.7999999523162842,
+            "value3": -1.4097447395324708,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Point Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 0.800000011920929,
+            "value2": 0.4000000059604645,
+            "value3": 0.20000000298023225,
+            "value4": 4.0
+        },
+        "value6": {
+            "value0": "Animator"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 1.7999999523162842,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 1.0,
+            "value6": 0.0,
+            "value7": 2.0,
+            "value8": 5.0,
+            "value9": 1456.916748046875
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value10": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "sun"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 43.019859313964847,
+            "value5": -47.66073226928711,
+            "value6": -2.0645499229431154,
+            "value7": 0.9999999403953552,
+            "value8": 0.9999998807907105,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Directional Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 0.5,
+            "value2": 0.4000000059604645,
+            "value3": 0.3499999940395355,
+            "value4": 0.699999988079071,
+            "value5": true
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value11": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Camera"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 9.0,
+            "value3": 12.0,
+            "value4": 45.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Camera"
+        },
+        "value5": {
+            "value0": true,
+            "value1": false,
+            "value2": true,
+            "value3": 1,
+            "value4": 10.0,
+            "value5": -10.0,
+            "value6": 20.0,
+            "value7": 100.0,
+            "value8": 0.10000000149011612,
+            "value9": 45.0
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value12": {
+         "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "####TheEnder####"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "EndObj"
+        }
+    }
+}

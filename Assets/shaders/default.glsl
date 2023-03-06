@@ -74,7 +74,7 @@ uniform int p_light_amount;
 
 uniform Material material;
 uniform sampler2D shadowMap;
-
+uniform bool Shadow_On;
 uniform int ObjID;
 
 float near_plane=0.1;
@@ -170,7 +170,7 @@ float LinearizeDepth(float depth)
 
 float ShadowCalculation(vec4 fragPosLightSpace ,float bias)
 {
-    
+    if(Shadow_On == false) return 0.0;
     // 执行透视除法
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     // 变换到[0,1]的范围
@@ -187,14 +187,15 @@ float ShadowCalculation(vec4 fragPosLightSpace ,float bias)
         for(int y = -1; y <= 1; ++y)
         {
             float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+           
             shadow += (currentDepth - bias > pcfDepth ? 1.0 : 0.0)*4/(1<<(abs(x)+abs(y)));        
         }    
     }
     shadow /= 16.0;
     // 检查当前片段是否在阴影中
-   
+     
    // float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
-    if(projCoords.z > 1.0)
+    if(projCoords.z > 1.0 ||projCoords.z <= 0.0)
         shadow = 0.0;
     return shadow;
 }

@@ -14,10 +14,24 @@ namespace XRE {
         {
             stbi_set_flip_vertically_on_load(0);
             data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+      
+            XRE_CORE_ASSERT(data, "Failed to load image!");
+
+            GLenum internalFormat = 0, dataFormat = 0;
+            if (nrChannels == 4)
+            {
+                internalFormat = GL_RGBA8;
+                dataFormat = GL_RGBA;
+            }
+            else if (nrChannels == 3)
+            {
+                internalFormat = GL_RGB8;
+                dataFormat = GL_RGB;
+            }
             if (data) {
                 glTexImage2D(
                     GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                    0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+                    0, GL_RGB, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data
                 );
             }
             else {

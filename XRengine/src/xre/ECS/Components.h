@@ -3,19 +3,43 @@
 #include "xre\Resource\ResourceManager.h"
 #include "xre\Resource\Model.h"
 #include "xre\Renderer\Camera\Camera.h"
+
+#include <cereal/archives/json.hpp>
+
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
+
 
 using namespace entt;
 namespace XRE {
 
 	//ECS中的组件只包含数据不包含方法。
+	struct ComponentType {
+		std::string m_Name;
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Name);
+		}
+
+		ComponentType(const std::string& name) {
+			m_Name = name;
+		}
+	};
 	class Component
 	{
 	public:
 		std::string m_Name;
 		bool m_Active=true;
+
+		Component() = default;
+		Component(const std::string& name) {
+			m_Name = name;
+		}
+
+		
+
 	};
 	
 	
@@ -25,7 +49,7 @@ namespace XRE {
 		std::string m_Name = "Name";
 		std::string m_ObjName = "gameobject";
 
-		static void CreateReflection() {
+		/*static void CreateReflection() {
 			meta<NameComponent>().type("NameComponent"_hs)
 				.ctor<const std::string&>()
 				.data<&NameComponent::m_Active>("active"_hs)
@@ -33,7 +57,7 @@ namespace XRE {
 				.data<&NameComponent::m_ObjName>("name"_hs)
 				.prop<std::string>("name"_hs, "name");
 				
-		}
+		}*/
 
 		NameComponent() = default;
 		NameComponent(const NameComponent&) = default;
@@ -43,7 +67,11 @@ namespace XRE {
 		operator std::string& () { return m_ObjName; }
 		operator const std::string& () const { return m_ObjName; }
 
-		
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active,m_ObjName);
+		}
 	};
 
 
@@ -55,15 +83,26 @@ namespace XRE {
 		glm::vec3 m_Rotation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_Scale = { 1.0f, 1.0f, 1.0f };
 
-		static void CreateReflection() {
-			meta<TransformComponent>().type("TransfromComponent"_hs)
-				.data<&TransformComponent::m_Translation>("Translation"_hs)
-				.data<&TransformComponent::m_Rotation>("Rotation"_hs)
-				.data<&TransformComponent::m_Scale>("Scale"_hs);
+
+
+		template <class Archive>
+		void save(Archive& ar) const
+		{
+			ar(m_Active, m_Translation.x,m_Translation.y,m_Translation.z,
+				m_Rotation.x, m_Rotation.y, m_Rotation.z, 
+				m_Scale.x, m_Scale.y, m_Scale.z);
 		}
 
-		TransformComponent* m_parent = nullptr;
+		template <class Archive>
+		void load(Archive& ar)
+		{
+			ar(m_Active, m_Translation.x, m_Translation.y, m_Translation.z,
+				m_Rotation.x, m_Rotation.y, m_Rotation.z,
+				m_Scale.x, m_Scale.y, m_Scale.z);
+		}
 
+		TransformComponent* parent=nullptr;
+		std::vector<entt::entity> children;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
@@ -72,11 +111,12 @@ namespace XRE {
 
 		glm::mat4 GetTransform() const
 		{
-			
-
-			return glm::translate(glm::mat4(1.0f), m_Translation)
+			glm::mat4 result = glm::translate(glm::mat4(1.0f), m_Translation)
 				* glm::toMat4(glm::quat(glm::radians(m_Rotation)))
 				* glm::scale(glm::mat4(1.0f), m_Scale);
+			if (parent)
+				return parent->GetTransform() * result;
+			else return result;
 		}
 
 
@@ -84,18 +124,35 @@ namespace XRE {
 
 	class MeshRendererComponent : public Component {
 	public:
-		std::string m_Name  = "MeshRenderer";
+		std::string m_Name  = "Mesh Renderer";
+		std::string m_ModelPath;
 		bool m_ShadowCasting = true;
 		Ref<Model> m_Model;
 		MeshRendererComponent() = default;
 		MeshRendererComponent(const MeshRendererComponent&) = default;
 		MeshRendererComponent(Ref<Model> model)
-			: m_Model(model) {}
+			: m_Model(model) {
+			m_ModelPath = model->getPath();
+		}
 		MeshRendererComponent(const std::string& path)
-			: m_Model(ResourceManager::GetModel(path)) {}
+			: m_Model(ResourceManager::GetModel(path)),m_ModelPath(path) {}
 
 		operator Ref<Model>& () { return m_Model; }
 		operator const Ref<Model>& () const { return m_Model; }
+
+		template <class Archive>
+		void save(Archive& ar)const
+		{
+			ar(m_Active, m_ModelPath);
+			
+		}
+
+		template <class Archive>
+		void load(Archive& ar)
+		{
+			ar(m_Active, m_ModelPath);
+			m_Model = ResourceManager::GetModel(m_ModelPath);
+		}
 
 	};
 
@@ -111,6 +168,14 @@ namespace XRE {
 		PointLightComponent(const glm::vec3& color, const float& intensity=1.0f)
 			:m_Color(color), m_Intensity(intensity) {}
 
+		
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active, m_Color.r,m_Color.g,m_Color.b,m_Intensity);
+		
+		}
 	
 	};
 
@@ -118,14 +183,21 @@ namespace XRE {
 	public:
 		std::string m_Name = "Directional Light";
 
-		glm::vec3 m_Color;
-		float m_Intensity;
+		glm::vec3 m_Color=glm::vec3(1.0f);
+		float m_Intensity=1.0f;
 		bool m_ShadowCasting = true;
 		DirectionalLightComponent() = default;
 		DirectionalLightComponent(const DirectionalLightComponent&) = default;
 		DirectionalLightComponent(const glm::vec3 & color, const float& intensity = 1.0f)
 			:m_Color(color), m_Intensity(intensity) {}
 	
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active, m_Color.r, m_Color.g, m_Color.b, m_Intensity, m_ShadowCasting);
+
+		}
 	};
 
 
@@ -136,6 +208,7 @@ namespace XRE {
 		Ref<Camera> m_Camera;
 		bool m_FixedAspectRatio=false;
 		bool m_Primary = true;
+		
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
@@ -143,7 +216,55 @@ namespace XRE {
 			:m_Camera(std::make_shared<Camera>(projection)) {}
 		CameraComponent(const CameraType& type)
 			:m_Camera(std::make_shared<Camera>(type)) {}
+
+
+		template <class Archive>
+		void save(Archive& ar)const
+		{
+			ar(m_Active, m_FixedAspectRatio , m_Primary ,
+				m_Camera->m_Type,m_Camera->m_OrthographicFar, m_Camera->m_OrthographicNear,
+				m_Camera->m_OrthographicSize, m_Camera->m_PerspectiveFar,
+			m_Camera->m_PerspectiveNear,m_Camera->m_PerspectiveFovy);
+
+		}
+
+		template <class Archive>
+		void load(Archive& ar)
+		{
+			m_Camera = make_shared<Camera>();
+			ar(m_Active, m_FixedAspectRatio, m_Primary,
+				m_Camera->m_Type, m_Camera->m_OrthographicFar, m_Camera->m_OrthographicNear,
+				m_Camera->m_OrthographicSize, m_Camera->m_PerspectiveFar,
+				m_Camera->m_PerspectiveNear, m_Camera->m_PerspectiveFovy);
+			m_Camera->RecalculateProjectionMatrix();
+			
+		}
 		
+	};
+
+	class AnimatorComponent : public Component {
+	public:
+		std::string m_Name = "Animator";
+		glm::vec3 m_Pivot = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_Axis = { 0.0f, 1.0f, 0.0f };
+		float m_Radius = 1.0f;
+		float m_AngleSpeed = 1.0f;
+		float m_Phase = 0.0f;
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active, m_Pivot.x, m_Pivot.y,m_Pivot.z
+				,m_Axis.x,m_Axis.y,m_Axis.z
+				, m_Radius,m_AngleSpeed,m_Phase);
+		}
+
+		AnimatorComponent() = default;
+		AnimatorComponent(float r, float s,float f=0) :m_Radius(r), m_AngleSpeed(s), m_Phase(f) {
+
+		};
+
+
 	};
 
 

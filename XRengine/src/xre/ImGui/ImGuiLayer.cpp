@@ -35,7 +35,7 @@ namespace XRE {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Assets/fonts/simhei.ttf",24.0f, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Assets/fonts/simhei.ttf",24.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
 		/*io.Fonts->AddFontFromFileTTF("../Assets/fonts/opensans/OpenSans-Bold.ttf", 24.0f);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("../Assets/fonts/opensans/OpenSans-Regular.ttf", 24.0f);*/
 

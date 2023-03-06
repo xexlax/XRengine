@@ -21,7 +21,9 @@ EditorLayer::EditorLayer()
 void EditorLayer::OnAttach()
 {
 	
-	InitScene();
+	//InitScene();
+	m_Scene = make_shared<Scene>();
+	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
 	Renderer3D::Init();
 	m_ScenePanel.AttachToScene(m_Scene);
 	m_PropertiesPanel.SetReference(&m_ScenePanel);
@@ -30,8 +32,7 @@ void EditorLayer::OnAttach()
 
 void EditorLayer::InitScene() {
 	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
-	m_Scene = make_shared<Scene>();
-	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
+	
 	
 	CubeGO = m_Scene->CreateGameObject("Cube");
 	CylinderGO = m_Scene->CreateGameObject("Cylinder");
@@ -41,10 +42,10 @@ void EditorLayer::InitScene() {
 	FloorGO = m_Scene->CreateGameObject("Floor");
 
 
-	CubeGO.AddComponent<MeshRendererComponent>("../Assets/models/cube.obj");
-	FloorGO.AddComponent<MeshRendererComponent>("../Assets/models/cube.obj");
-	CylinderGO.AddComponent<MeshRendererComponent>("../Assets/models/cylinder.obj");
-	SphereGO.AddComponent<MeshRendererComponent>("../Assets/models/sphere.obj");
+	CubeGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cube));
+	FloorGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Plane));
+	CylinderGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cylinder));
+	SphereGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Sphere));
 	NanoGO.AddComponent<MeshRendererComponent>("../Assets/models/nanosuit/nanosuit.obj");
 	BocchiGO.AddComponent<MeshRendererComponent>("../Assets/models/bocchi/bocchi.obj");
 
@@ -70,13 +71,15 @@ void EditorLayer::InitScene() {
 	BocchiGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(0.0f, 180.0f, 0.0f);
 	BocchiGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(0.5f);
 	FloorGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -1.0f, 0.0f);
-	FloorGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(20.0f, 0.2f, 20.0f);
+	FloorGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(15.0f, 0.2f, 15.0f);
 	DirLightGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, -45.0f, 0.0f);
 
 	class Spinner : public ScriptableGameObject
 	{
 	public:
 		int i = 0;
+
+
 		void OnCreate() {
 			i = rand() % 5;
 		}
@@ -108,7 +111,7 @@ void EditorLayer::OnUpdate(XRE::TimeStep ts)
 {
 		
 	//Temp：更新场景属性
-	SetScene();
+	//SetScene();
 	m_EditorCamera.OnUpdate(ts);
 	//场景处理
 	//m_Scene->OnUpdate(ts);
@@ -179,9 +182,21 @@ void EditorLayer::OnImGuiRender(){
 		if (ImGui::BeginMenu(u8"文件"))
 		{
 
-			if (ImGui::MenuItem("Open"));
-			if (ImGui::MenuItem("Save"));
-			if (ImGui::MenuItem("Exit")) XRE::Application::GetApplication().Close();
+			if (ImGui::MenuItem(u8"打开")) {
+				m_Scene = make_shared<Scene>();
+				auto path = FileDialogs::OpenFile("Scene (*.scene)\0*.scene\0");
+				m_Scene->Deserialize(path);
+				m_ScenePanel.AttachToScene(m_Scene);
+			}
+			if (ImGui::MenuItem(u8"保存")) m_Scene->Save();
+			if (ImGui::MenuItem(u8"另存为")) {
+				
+				auto path = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
+				m_Scene->Serialize(path);
+			}
+				
+				
+			if (ImGui::MenuItem(u8"退出")) XRE::Application::GetApplication().Close();
 			
 			ImGui::EndMenu();
 		}
@@ -358,8 +373,6 @@ bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 		{
 			int pixelData;
 			Renderer3D::m_FrameBuffer->ReadPixel(1, mouseX, mouseY,&pixelData);
-			XRE_CORE_INFO("Pixel data = {0} at{1},{2}", pixelData, mouseX, mouseY);
-
 			m_ScenePanel.Select(pixelData);
 
 		}

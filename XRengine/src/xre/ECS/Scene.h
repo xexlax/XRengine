@@ -5,12 +5,16 @@
 #include "xre\ECS\Components.h"
 #include <xre\Renderer\Camera\EditorCamera.h>
 
+#include <cereal\archives\json.hpp>
+
 namespace XRE {
 
 	enum SceneStatus {
 		Editing, Runtime
 	};
 	class GameObject;
+	
+
 	class Scene
 	{
 	friend class GameObject;
@@ -27,6 +31,11 @@ namespace XRE {
 		void OnViewportResize(uint32_t width, uint32_t height);
 		
 		
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Name);
+		}
 
 
 
@@ -45,6 +54,7 @@ namespace XRE {
 		void SetName(const std::string& name) { m_Name = name; };
 
 		void Serialize(const std::string& filepath);
+		void Save() { Serialize(m_FilePath); }
 		void Deserialize(const std::string& filepath);
 
 	private:
@@ -54,10 +64,14 @@ namespace XRE {
 	private:
 		uint32_t m_ViewportWidth, m_ViewportHeight;
 		std::string m_Name= "New Scene";
+		std::string m_FilePath;
+		
 
 		void UpdateLighting();
 		void UpdateNativeScripting(TimeStep ts);
 		void UpdateRendering(Ref<Camera> c);
+
+		
 
 
 		

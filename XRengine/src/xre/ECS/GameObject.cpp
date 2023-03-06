@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "GameObject.h"
+#include "xre\Utils\Math.h"
+
+#include "cereal\archives\json.hpp"
 
 namespace XRE {
 
@@ -7,6 +10,83 @@ namespace XRE {
 		m_Entity(entityhandle),m_Scene(scene)
 	{
 	}
+	
+	void GameObject::SetParent(GameObject* parent) {
+		TransformComponent& sc = GetComponent<TransformComponent>();
+		if (parent == nullptr) {
+			if (sc.parent) {
+				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
+				Math::DecomposeTransform(sc.GetTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
+
+			}
+			sc.parent = nullptr;
+			
+			return;
+		}
+		
+		TransformComponent& pc = parent->GetComponent<TransformComponent>();
+		if (sc.parent != &pc) {
+			if (sc.parent)
+				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
+			
+			Math::DecomposeTransform(glm::inverse(pc.GetTransform())*sc.GetTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
+
+			
+			sc.parent = &pc;
+			pc.children.push_back(m_Entity);
+		}
+	}
+
+	void GameObject::SetParentAbs(GameObject* parent) {
+		TransformComponent& sc = GetComponent<TransformComponent>();
+		if (parent == nullptr) {
+			if (sc.parent) {
+				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
+
+			}
+			sc.parent = nullptr;
+
+			return;
+		}
+
+		TransformComponent& pc = parent->GetComponent<TransformComponent>();
+		if (sc.parent != &pc) {
+			if (sc.parent)
+				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
+
+			sc.parent = &pc;
+			pc.children.push_back(m_Entity);
+		}
+	}
+
+	GameObject GameObject::Duplicate()
+	{
+
+		//std::stringstream ss;
+
+		//输入输出要将生命周期完成之后再切换
+		{
+			std::ofstream fs("../Assets/tmp");
+			//auto ngo = GameObject(m_Entity, m_Scene);
+			cereal::JSONOutputArchive oarchive(fs);
+
+			oarchive(*this);
+		}
+
+		{
+			std::ifstream ifs("../Assets/tmp");
+			cereal::JSONInputArchive iarchive(ifs);
+
+
+
+			GameObject go = m_Scene->CreateGameObject(GetName() + u8" 副本");
+			iarchive(go);
+			go.GetComponent<NameComponent>().m_Name = GetName() + u8" 副本";
+			return go;
+		}
+
+	}
+
 	
 	
 }

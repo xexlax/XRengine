@@ -16,6 +16,33 @@
     <Filter Include="3rdparty\ImGuizmo">
       <UniqueIdentifier>{5EB5FA48-CACB-F8DE-1343-84007F98C966}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdparty\cereal">
+      <UniqueIdentifier>{D9312CC7-45BD-998B-4ECE-1C80BAD8F58B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include">
+      <UniqueIdentifier>{4C22D6BC-B859-1E54-C163-82772D1A454D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal">
+      <UniqueIdentifier>{27DB2A22-1301-F588-FC46-7A54E80B1A55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal\archives">
+      <UniqueIdentifier>{4B0FEBF6-B79E-ACE1-C09A-8DF92CA9E7ED}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal\details">
+      <UniqueIdentifier>{9C02A445-8854-7B35-7173-B8455D64941E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal\external">
+      <UniqueIdentifier>{5905469D-C594-0788-CE90-E89F3A9F4294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal\external\rapidxml">
+      <UniqueIdentifier>{29606958-1509-D187-3E9F-EC062AA7EBC8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal\types">
+      <UniqueIdentifier>{2B30DCDB-1717-9ED3-C067-04F1AC2D173A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\cereal\include\cereal\types\concepts">
+      <UniqueIdentifier>{9937F7C4-05A8-F93D-CEC6-73C63AF6313F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="3rdparty\glm">
       <UniqueIdentifier>{8D7699EA-79D9-288F-225F-61450EA1F411}</UniqueIdentifier>
     </Filter>
@@ -70,9 +97,6 @@
     <Filter Include="src\xre\ImGui">
       <UniqueIdentifier>{751E3FD3-E1DE-BA09-AA19-04871699FFE5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\xre\ImGui\EditorGui">
-      <UniqueIdentifier>{B06B1F15-1CA3-67AC-25AD-CBCF91638EA5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\xre\Renderer">
       <UniqueIdentifier>{116DD6CF-FD65-F521-2698-DAA612F0D42D}</UniqueIdentifier>
     </Filter>
@@ -95,6 +119,153 @@
     </ClInclude>
     <ClInclude Include="3rdparty\ImGuizmo\ImGuizmo.h">
       <Filter>3rdparty\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\access.hpp">
+      <Filter>3rdparty\cereal\include\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\archives\adapters.hpp">
+      <Filter>3rdparty\cereal\include\cereal\archives</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\archives\binary.hpp">
+      <Filter>3rdparty\cereal\include\cereal\archives</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\archives\json.hpp">
+      <Filter>3rdparty\cereal\include\cereal\archives</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\archives\portable_binary.hpp">
+      <Filter>3rdparty\cereal\include\cereal\archives</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\archives\xml.hpp">
+      <Filter>3rdparty\cereal\include\cereal\archives</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\cereal.hpp">
+      <Filter>3rdparty\cereal\include\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\details\helpers.hpp">
+      <Filter>3rdparty\cereal\include\cereal\details</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\details\polymorphic_impl.hpp">
+      <Filter>3rdparty\cereal\include\cereal\details</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\details\polymorphic_impl_fwd.hpp">
+      <Filter>3rdparty\cereal\include\cereal\details</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\details\static_object.hpp">
+      <Filter>3rdparty\cereal\include\cereal\details</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\details\traits.hpp">
+      <Filter>3rdparty\cereal\include\cereal\details</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\details\util.hpp">
+      <Filter>3rdparty\cereal\include\cereal\details</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\external\base64.hpp">
+      <Filter>3rdparty\cereal\include\cereal\external</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\external\rapidxml\rapidxml.hpp">
+      <Filter>3rdparty\cereal\include\cereal\external\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\external\rapidxml\rapidxml_iterators.hpp">
+      <Filter>3rdparty\cereal\include\cereal\external\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\external\rapidxml\rapidxml_print.hpp">
+      <Filter>3rdparty\cereal\include\cereal\external\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\external\rapidxml\rapidxml_utils.hpp">
+      <Filter>3rdparty\cereal\include\cereal\external\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\macros.hpp">
+      <Filter>3rdparty\cereal\include\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\specialize.hpp">
+      <Filter>3rdparty\cereal\include\cereal</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\array.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\atomic.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\base_class.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\bitset.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\boost_variant.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\chrono.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\common.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\complex.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\concepts\pair_associative_container.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types\concepts</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\deque.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\forward_list.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\functional.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\list.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\map.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\memory.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\optional.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\polymorphic.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\queue.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\set.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\stack.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\string.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\tuple.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\unordered_map.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\unordered_set.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\utility.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\valarray.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\variant.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\types\vector.hpp">
+      <Filter>3rdparty\cereal\include\cereal\types</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\cereal\include\cereal\version.hpp">
+      <Filter>3rdparty\cereal\include\cereal</Filter>
     </ClInclude>
     <ClInclude Include="3rdparty\glm\glm\common.hpp">
       <Filter>3rdparty\glm\glm</Filter>
@@ -1434,12 +1605,6 @@
     <ClInclude Include="src\xre\ECS\SceneManager.h">
       <Filter>src\xre\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\ECS\SceneSerializer.h">
-      <Filter>src\xre\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="src\xre\ECS\USRefl99.h">
-      <Filter>src\xre\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="src\xre\Event\AppEvent.h">
       <Filter>src\xre\Event</Filter>
     </ClInclude>
@@ -1459,6 +1624,9 @@
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\Camera\CameraController.h">
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xre\Renderer\Camera\EditorCamera.h">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\xre\Renderer\FrameBuffer.h">
@@ -1515,7 +1683,7 @@
     <ClInclude Include="src\xre\Utils\Math.h">
       <Filter>src\xre\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\xre\Renderer\Camera\EditorCamera.h" />
+    <ClInclude Include="src\xre\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rdparty\ImGuizmo\ImGuizmo.cpp">
@@ -1572,9 +1740,6 @@
     <ClCompile Include="src\xre\ECS\Scene.cpp">
       <Filter>src\xre\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\ECS\SceneSerializer.cpp">
-      <Filter>src\xre\ECS</Filter>
-    </ClCompile>
     <ClCompile Include="src\xre\ImGui\ImGuiBuilder.cpp">
       <Filter>src\xre\ImGui</Filter>
     </ClCompile>
@@ -1585,6 +1750,9 @@
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\Camera\CameraController.cpp">
+      <Filter>src\xre\Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xre\Renderer\Camera\EditorCamera.cpp">
       <Filter>src\xre\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\xre\Renderer\FrameBuffer.cpp">
@@ -1638,6 +1806,6 @@
     <ClCompile Include="src\xre\Utils\Math.cpp">
       <Filter>src\xre\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\xre\Renderer\Camera\EditorCamera.cpp" />
+    <ClCompile Include="src\Platforms\Windows\WindowsPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

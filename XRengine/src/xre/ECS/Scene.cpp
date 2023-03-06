@@ -7,7 +7,7 @@
 #include "xre\Renderer\Renderer3D.h"
 #include "xre\ECS\NativeScript.h"
 
-#include "SceneSerializer.h"
+
 
 
 namespace XRE{
@@ -133,6 +133,19 @@ namespace XRE{
 				});
 		}
 
+		//Easy Animator
+		{
+			auto view = m_Registry.view<TransformComponent, AnimatorComponent>();
+			for (auto entity : view) {
+				auto& [transform, anm] = view.get<TransformComponent, AnimatorComponent>(entity);
+				if (anm.m_Active) {
+					anm.m_Phase += ts * anm.m_AngleSpeed;
+					transform.m_Translation = anm.m_Pivot + anm.m_Radius * glm::vec3(cos(anm.m_Phase), 0, sin(anm.m_Phase));
+				}
+			}
+		}
+
+		bool dirLightFound = false;
 		//Lighting
 		{
 			auto view = m_Registry.view<TransformComponent, DirectionalLightComponent>();
@@ -140,6 +153,7 @@ namespace XRE{
 			for (auto entity : view) {
 				auto [transform, dl] = view.get<TransformComponent, DirectionalLightComponent>(entity);
 				if (dl.m_Active) {
+					dirLightFound = true;
 					Renderer3D::m_Light.SetDirLight(transform, dl);
 					break;
 				}
@@ -166,15 +180,17 @@ namespace XRE{
 		Renderer3D::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		if (mainCamera)
 		{
-
-			Renderer3D::StartShadowPass();
-			for (auto entity : group)
-			{
-				auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
-				if (meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
-					Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+			if (dirLightFound) {
+				Renderer3D::StartShadowPass();
+				for (auto entity : group)
+				{
+					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
+					if (meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
+						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+				}
+				Renderer3D::EndShadowPass();
 			}
-			Renderer3D::EndShadowPass();
+			
 
 
 			// Coloring Pass
@@ -186,6 +202,7 @@ namespace XRE{
 			Renderer3D::StartScene(mainCamera);
 			{
 				Renderer3D::activeShader->Bind();
+				Renderer3D::activeShader->SetBool("Shadow_On",dirLightFound);
 				Renderer3D::SetShadowMapOfActive(0);
 				Renderer3D::DrawLight();
 
@@ -234,15 +251,61 @@ namespace XRE{
 
 	void Scene::Serialize(const std::string& filepath)
 	{
-		SceneSerializer ss(this);
-		ss.SaveToJsonFile(filepath);
+		std::ofstream os(filepath);
+		if (os.is_open()) {
+			cereal::JSONOutputArchive archive(os);
+			archive(*this);
+
+			m_Registry.each([&](auto entityID)
+				{
+					//shared_ptr.get ·µ»ØÆäraw pointer
+					GameObject go{ entityID , this };
+					if(go.GetComponent<TransformComponent>().parent==nullptr)
+					archive(go);
+				});
+
+			GameObject go = CreateGameObject("####TheEnder####");
+			
+			archive(go);
+
+
+			Destroy(go);
+
+
+		}
+		
 	}
 
 	void Scene::Deserialize(const std::string& filepath)
 	{
-		SceneSerializer ss(this);
-		ss.LoadFromJsonFile(filepath);
+		m_FilePath = filepath;
+		std::ifstream is(filepath);
+		if (is.is_open()) {
+			cereal::JSONInputArchive archive(is);
+			archive(*this);
+
+			GameObject go;
+
+			while (true) {
+				
+				
+				go = CreateGameObject("1");
+				archive(go);
+				if (go.GetComponent<NameComponent>().m_ObjName == "####TheEnder####") {
+					Destroy(go);
+					break;
+				}
+				
+				
+
+			}
+
+			
+			 
+		}
 	}
+
+	
 
 	void Scene::Destroy(GameObject go)
 	{
@@ -268,10 +331,12 @@ namespace XRE{
 	}
 
 
+	
+
 	template<typename T>
 	void Scene::OnComponentAdded(GameObject go, T& component)
 	{
-		static_assert(false);
+		//static_assert(false);
 	}
 
 	template<>

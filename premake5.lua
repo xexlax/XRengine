@@ -23,6 +23,7 @@ IncludeDir["tinyobjloader"] = "XRengine/3rdparty/tinyobjloader"
 IncludeDir["json11"] = "XRengine/3rdparty/json11"
 IncludeDir["Entt"] = "XRengine/3rdparty/Entt/single_include"
 IncludeDir["ImGuizmo"] = "XRengine/3rdparty/ImGuizmo"
+IncludeDir["cereal"] = "XRengine/3rdparty/cereal/include"
 
 include "XRengine/3rdparty/GLFW"
 include "XRengine/3rdparty/Glad"
@@ -55,7 +56,9 @@ project "XRengine"
 		"%{prj.name}/3rdparty/json11/**.hpp",
 		"%{prj.name}/3rdparty/Entt/single_include/**.hpp",
 		"%{prj.name}/3rdparty/ImGuizmo/ImGuizmo.h",
-		"%{prj.name}/3rdparty/ImGuizmo/ImGuizmo.cpp"
+		"%{prj.name}/3rdparty/ImGuizmo/ImGuizmo.cpp",
+		"%{prj.name}/3rdparty/cereal/include/**.hpp"
+	
 
 	}
 
@@ -72,6 +75,7 @@ project "XRengine"
 		"%{IncludeDir.tinyobjloader}",
 		"%{IncludeDir.Entt}",
 		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.cereal}"
 
 	}
 
@@ -141,7 +145,8 @@ project "XRE-Editor"
 		"XRengine/3rdparty",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.Entt}",
-		"%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.cereal}"
 
 	}
 

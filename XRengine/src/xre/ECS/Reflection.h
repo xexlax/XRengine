@@ -9,7 +9,7 @@ namespace XRE {
 	public:
 		static void Init() {
 
-			NameComponent::CreateReflection();
+			//NameComponent::CreateReflection();
 
 			
 			

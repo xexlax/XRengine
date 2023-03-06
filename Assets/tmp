@@ -1,0 +1,100 @@
+{
+    "value0": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.6012483835220337,
+            "value3": -0.66218501329422,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj"
+        },
+        "value6": {
+            "value0": "PUSHSTACK"
+        },
+        "value7": {
+            "value0": {
+                "value0": "Name"
+            },
+            "value1": {
+                "value0": true,
+                "value1": "圆锥"
+            },
+            "value2": {
+                "value0": "Transform"
+            },
+            "value3": {
+                "value0": true,
+                "value1": -1.5070114135742188,
+                "value2": -0.20784643292427064,
+                "value3": 0.0,
+                "value4": 0.0,
+                "value5": -0.0,
+                "value6": 0.0,
+                "value7": 1.0,
+                "value8": 1.0,
+                "value9": 1.0
+            },
+            "value4": {
+                "value0": "Mesh Renderer"
+            },
+            "value5": {
+                "value0": true,
+                "value1": "../Assets/models/cone.obj"
+            },
+            "value6": {
+                "value0": "EndObj"
+            }
+        },
+        "value8": {
+            "value0": {
+                "value0": "Name"
+            },
+            "value1": {
+                "value0": true,
+                "value1": "####ThePoper####"
+            },
+            "value2": {
+                "value0": "Transform"
+            },
+            "value3": {
+                "value0": true,
+                "value1": 0.0,
+                "value2": 0.0,
+                "value3": 0.0,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 1.0,
+                "value8": 1.0,
+                "value9": 1.0
+            },
+            "value4": {
+                "value0": "EndObj"
+            }
+        },
+        "value9": {
+            "value0": "EndObj"
+        }
+    }
+}

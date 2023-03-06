@@ -24,3 +24,9 @@
 [submodule ".\\XRengine\\3rdparty\\ImGuizmo"]
 	path = .\\XRengine\\3rdparty\\ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule ".\\XRengine\\3rdparty\\cereal"]
+	path = .\\XRengine\\3rdparty\\cereal
+	url = https://github.com/USCiLab/cereal.git
+[submodule ".\\XRengine\\3rdparty\\JoltPhysics"]
+	path = .\\XRengine\\3rdparty\\JoltPhysics
+	url = https://github.com/jrouwe/JoltPhysics.git

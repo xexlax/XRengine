@@ -26,5 +26,5 @@ namespace XRE {
 		void DrawComponentLayout(T& component);
 
 	};
-	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue=0.0f, float columnWidth=100.0f);
+	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue=0.0f, float columnWidth=110.0f);
 }

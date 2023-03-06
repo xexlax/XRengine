@@ -34,3 +34,4 @@
 #include "xre\ECS\NativeScript.h"
 
 #include "xre\Utils\Math.h"
+#include "xre\Utils\PlatformUtils.h"
