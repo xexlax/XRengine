@@ -18,7 +18,7 @@ namespace XRE {
 		static void Init();
 		static void ShutDown();
 		//通用渲染的前置与后置
-		static void StartScene(const Ref<Camera> camera);
+		static void StartScene(const XRef<Camera> camera);
 		static void EndScene();
 
 
@@ -41,27 +41,27 @@ namespace XRE {
 		//将m_Light中的灯光数据绑定到activeShader
 		static void DrawLight();
 
-		static void DrawModel(const Ref<Model> model, glm::mat4 transform = glm::mat4(1.0f));
+		static void DrawModel(const XRef<Model> model, glm::mat4 transform = glm::mat4(1.0f));
 		static void DrawSkybox();
 
-		static Ref<Shader> defaultObjShader;
-		static Ref<Shader> defaultPBRShader;
-		static Ref<Shader> simpleDepthShader;
-		static Ref<Shader> postShader;
+		static XRef<Shader> defaultObjShader;
+		static XRef<Shader> defaultPBRShader;
+		static XRef<Shader> simpleDepthShader;
+		static XRef<Shader> postShader;
 
 		static Light m_Light;
 	
 		
-		static Ref<Framebuffer> m_FrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;
-		static Ref<SkyBox> m_SkyBox;
+		static XRef<Framebuffer> m_FrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;
+		static XRef<SkyBox> m_SkyBox;
 
-		static Ref<Shader> activeShader;
+		static XRef<Shader> activeShader;
 
-		static Ref<Texture2D> defaultAlbedo;
+		static XRef<Texture2D> defaultAlbedo;
 
 		//暂时性储存
 		static glm::mat4 m_VP,m_LVP;
-		static Ref<VertexArray> m_Quad;
+		static XRef<VertexArray> m_Quad;
 
 	};	
 }

@@ -7,7 +7,7 @@
 #include "Platforms\OpenGL\OpenGLShader.h"
 namespace XRE {
 	
-    Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+    XRef<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
     {
 		switch (Renderer::GetAPI())
 		{
@@ -19,14 +19,14 @@ namespace XRE {
 		return nullptr;
     }
 
-	Ref<Shader> Shader::Create(const std::string& src)
+	XRef<Shader> Shader::Create(const std::string& src)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    XRE_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
 		case RendererAPI::API::OpenGL:  
 			
-			Ref<Shader> s= std::make_shared<OpenGLShader>(src);
+			XRef<Shader> s= std::make_shared<OpenGLShader>(src);
 			s->m_Path = src;
 			return s;
 		}

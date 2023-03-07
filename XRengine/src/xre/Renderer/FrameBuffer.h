@@ -53,7 +53,7 @@ namespace XRE {
 		virtual void ActiveColor(int slot,int id=0) = 0;
 
 		virtual const FramebufferSpecification& GetSpecification() const = 0;
-		static Ref<Framebuffer> Create(const FramebufferSpecification& spec);
+		static XRef<Framebuffer> Create(const FramebufferSpecification& spec);
 	protected:
 
 	};

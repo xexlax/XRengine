@@ -15,10 +15,10 @@ namespace XRE {
 	public:
 		static void Init();
 		
-		static Ref<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
-		static Ref<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
-		static Ref<Model> GetModel(const std::string& path) { return m_ModelLib.Get(path); }
-		static Ref<Model> GetElementalModel(const Elemental_Model& em);
+		static XRef<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
+		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
+		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(path); }
+		static XRef<Model> GetElementalModel(const Elemental_Model& em);
 
 
 	private:

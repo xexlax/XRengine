@@ -11,8 +11,11 @@
 
 
 namespace XRE{
-	
-
+	Scene::Scene()
+	{
+		m_PhysicsScene = XMakeRef<PhysicsScene>();
+		m_PhysicsScene->Init();
+	}
 	GameObject Scene::CreateGameObject(const std::string& Name)
 	{
 		GameObject go = { m_Registry.create(), this};
@@ -23,7 +26,7 @@ namespace XRE{
 
 	
 	
-	void Scene::OnUpdate(TimeStep ts)
+	void Scene::OnUpdateRuntime(TimeStep ts)
 	{
 		//Native Scripting
 		{
@@ -67,7 +70,7 @@ namespace XRE{
 		}
 
 		//Rendering System
-		Ref<Camera> mainCamera= nullptr;
+		XRef<Camera> mainCamera= nullptr;
 		TransformComponent* cameraTransform=nullptr;
 		auto cct = GetPrimaryCamera(); 
 		mainCamera = cct.first.m_Camera;
@@ -117,6 +120,12 @@ namespace XRE{
 
 	void Scene::OnUpdateEditing(TimeStep ts, EditorCamera& ec)
 	{
+		//Physics
+		
+		m_PhysicsScene->OnUpdate(ts);
+
+
+		//Native Scripting
 		{
 			m_Registry.view<NativeScriptComponent>().each(
 				[=](entt::entity entity, NativeScriptComponent& nsc)
@@ -172,7 +181,7 @@ namespace XRE{
 		}
 
 		//Rendering System
-		Ref<Camera> mainCamera = make_shared<Camera>(ec);
+		XRef<Camera> mainCamera = make_shared<Camera>(ec);
 	
 		auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
 		//auto dl = m_Registry.view<DirectionalLightComponent>();
@@ -373,6 +382,12 @@ namespace XRE{
 	template<>
 	void Scene::OnComponentAdded<DirectionalLightComponent>(GameObject go, DirectionalLightComponent& component)
 	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<RigidBodyComponent>(GameObject go, RigidBodyComponent& component)
+	{
+		m_PhysicsScene->CreateRigidBody(go.GetComponent<TransformComponent>(), component);
 	}
 
 

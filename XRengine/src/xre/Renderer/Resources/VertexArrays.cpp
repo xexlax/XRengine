@@ -6,7 +6,7 @@
 
 namespace XRE {
 
-	Ref<VertexArray> VertexArray::Create()
+	XRef<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{

@@ -108,7 +108,6 @@ fabric.properties
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch

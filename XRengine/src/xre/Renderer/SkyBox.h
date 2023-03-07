@@ -8,15 +8,15 @@ namespace XRE {
 
 		SkyBox();
 		~SkyBox();
-		Ref<Shader> GetShader() const { return m_SkyBoxShader; };
-		Ref<VertexArray> GetVAO() const { return m_VertexArray; };
+		XRef<Shader> GetShader() const { return m_SkyBoxShader; };
+		XRef<VertexArray> GetVAO() const { return m_VertexArray; };
 		uint32_t GetCubemapTexture() const { return m_TextureID; };
 		
 	private:
 
-		Ref<Shader> m_SkyBoxShader;
+		XRef<Shader> m_SkyBoxShader;
 		uint32_t m_TextureID;
-		Ref<VertexArray> m_VertexArray;
+		XRef<VertexArray> m_VertexArray;
 
 	};
 }

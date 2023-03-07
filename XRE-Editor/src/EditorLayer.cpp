@@ -21,7 +21,7 @@ EditorLayer::EditorLayer()
 void EditorLayer::OnAttach()
 {
 	
-	//InitScene();
+	InitScene();
 	m_Scene = make_shared<Scene>();
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
 	Renderer3D::Init();
@@ -31,74 +31,7 @@ void EditorLayer::OnAttach()
 }
 
 void EditorLayer::InitScene() {
-	//m_NanosuitModel.reset(new Model("./assets/models/nanosuit/nanosuit.obj"));
 	
-	
-	CubeGO = m_Scene->CreateGameObject("Cube");
-	CylinderGO = m_Scene->CreateGameObject("Cylinder");
-	SphereGO = m_Scene->CreateGameObject("Sphere");
-	NanoGO = m_Scene->CreateGameObject("Nanosuit");
-	BocchiGO = m_Scene->CreateGameObject("Bocchi");
-	FloorGO = m_Scene->CreateGameObject("Floor");
-
-
-	CubeGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cube));
-	FloorGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Plane));
-	CylinderGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cylinder));
-	SphereGO.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Sphere));
-	NanoGO.AddComponent<MeshRendererComponent>("../Assets/models/nanosuit/nanosuit.obj");
-	BocchiGO.AddComponent<MeshRendererComponent>("../Assets/models/bocchi/bocchi.obj");
-
-
-	PointLight1GO = m_Scene->CreateGameObject("light1");
-	PointLight2GO = m_Scene->CreateGameObject("light2");
-	DirLightGO = m_Scene->CreateGameObject("sun");
-
-	PointLight1GO.AddComponent<PointLightComponent>(glm::vec3(0.2f, 0.3f, 0.9f), 4.0f);
-	PointLight2GO.AddComponent<PointLightComponent>(glm::vec3(0.8f, 0.4f, 0.2f), 4.0f);
-	DirLightGO.AddComponent<DirectionalLightComponent>(glm::vec3(0.5f, 0.4f, 0.35f), 2.0f);
-
-	SceneCameraGO = m_Scene->CreateGameObject("Camera");
-	SceneCameraGO.AddComponent<CameraComponent>(Perspective);
-	SceneCameraGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, 9.0f, 12.0f);
-	SceneCameraGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, 0.0f, 0.0f);
-
-	
-	NanoGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(0.3f);
-	NanoGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -0.9f, 0.0f);
-
-	BocchiGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(-5.0f, 0.0f, 2.0f);
-	BocchiGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(0.0f, 180.0f, 0.0f);
-	BocchiGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(0.5f);
-	FloorGO.GetComponent<TransformComponent>().m_Translation = glm::vec3(0.0f, -1.0f, 0.0f);
-	FloorGO.GetComponent<TransformComponent>().m_Scale = glm::vec3(15.0f, 0.2f, 15.0f);
-	DirLightGO.GetComponent<TransformComponent>().m_Rotation = glm::vec3(45.0f, -45.0f, 0.0f);
-
-	class Spinner : public ScriptableGameObject
-	{
-	public:
-		int i = 0;
-
-
-		void OnCreate() {
-			i = rand() % 5;
-		}
-		
-		void OnUpdate(TimeStep ts)
-		{
-			float speed = 25.0f;
-			float t = ImGui::GetTime();
-			GetComponent<TransformComponent>().m_Rotation = glm::vec3(t * speed);
-			GetComponent<TransformComponent>().m_Translation = glm::vec3((i + 1) * cos(t / (i + 1)), 0,  (i + 1) * sin(t / (i + 1)));
-		}
-
-		
-	};
-
-
-	CubeGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
-	CylinderGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
-	SphereGO.AddComponent<NativeScriptComponent>().Bind<Spinner>();
 	
 }
 
@@ -111,30 +44,22 @@ void EditorLayer::OnUpdate(XRE::TimeStep ts)
 {
 		
 	//Temp：更新场景属性
-	//SetScene();
+	UpdateScene();
 	m_EditorCamera.OnUpdate(ts);
 	//场景处理
 	//m_Scene->OnUpdate(ts);
 
 	m_Scene->OnUpdateEditing(ts,m_EditorCamera);
 
-	//
+	
 	
 	
 
 }
 
-void EditorLayer::SetScene()
+void EditorLayer::UpdateScene()
 {
 
-	float t = ImGui::GetTime();
-
-	if(PointLight1GO)
-	PointLight1GO.GetComponent<TransformComponent>().m_Translation =
-		 glm::vec3(2 * cos(2 * t), 2.5f, 2 * sin(2 * t));
-	if(PointLight2GO)
-	PointLight2GO.GetComponent<TransformComponent>().m_Translation =
-		glm::vec3(2 * cos(2 * t + PI), 2.5f, 2 * sin(2 * t + PI));
 }
 
 void EditorLayer::OnImGuiRender(){

@@ -4,7 +4,7 @@
 #include "Platforms\OpenGL\OpenGLFrameBuffer.h"
 namespace XRE {
 	
-	Ref<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)
+	XRef<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)
 	{
 		switch (Renderer::GetAPI())
 		{

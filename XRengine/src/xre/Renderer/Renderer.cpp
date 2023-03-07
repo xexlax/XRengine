@@ -15,7 +15,7 @@ namespace XRE {
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(const Ref<Camera>& camera)
+	void Renderer::BeginScene(const XRef<Camera>& camera)
 	{
 		m_SceneData->ViewProjectionMatrix = camera->GetViewProjectionMatrix();
 	}

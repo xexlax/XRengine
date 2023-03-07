@@ -12,7 +12,7 @@ namespace XRE {
 		setupMesh();
 	}
 	
-	void Mesh::BindMaterial(Ref<Shader> shader)
+	void Mesh::BindMaterial(XRef<Shader> shader)
 	{
 		shader->Bind();
 	
@@ -43,7 +43,7 @@ namespace XRE {
 			
 		
 	}
-	void Mesh::UnBindMatarial(Ref<Shader> shader)
+	void Mesh::UnBindMatarial(XRef<Shader> shader)
 	{
 	}
 	void Mesh::setupMesh()
@@ -58,14 +58,14 @@ namespace XRE {
 		m_VertexArray = VertexArray::Create();
 
 		//2.1 setup VBO
-		Ref<VertexBuffer> vertexBuffer;
+		XRef<VertexBuffer> vertexBuffer;
 		float *s = (float*)&m_vertices[0];
 		vertexBuffer.reset(VertexBuffer::Create( (float*) &m_vertices[0] ,m_vertices.size()* layout.GetStride()));
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		//2.2 setup IBO
-		Ref<IndexBuffer> indexBuffer;
+		XRef<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::Create( (uint32_t*) &m_indices[0], m_indices.size()));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 

@@ -49,7 +49,7 @@ namespace XRE {
 	public:
 		Light();
 		~Light() {};
-		void Draw(Ref<Shader> shader);
+		void Draw(XRef<Shader> shader);
 		void SetDirLight(TransformComponent t, DirectionalLightComponent l);
 		void ClearPLights();
 		void AddPLight(TransformComponent t, PointLightComponent l);

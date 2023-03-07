@@ -4,7 +4,7 @@
 #include "xre/Core/Timestep.h"
 #include "xre\ECS\Components.h"
 #include <xre\Renderer\Camera\EditorCamera.h>
-
+#include "xre\Physics\PhysicsScene.h"
 #include <cereal\archives\json.hpp>
 
 namespace XRE {
@@ -22,7 +22,7 @@ namespace XRE {
 
 
 	public:
-		Scene() = default;
+		Scene();
 		~Scene() = default;
 		//在场景中新建物体
 		GameObject CreateGameObject(const std::string& Name);
@@ -38,9 +38,9 @@ namespace XRE {
 		}
 
 
-
+	
 		//整个场景的更新流程
-		void OnUpdate(TimeStep ts);
+		void OnUpdateRuntime(TimeStep ts);
 		void OnUpdateEditing(TimeStep ts, EditorCamera& ec);
 
 		std::pair<CameraComponent, TransformComponent> GetPrimaryCamera();
@@ -65,11 +65,16 @@ namespace XRE {
 		uint32_t m_ViewportWidth, m_ViewportHeight;
 		std::string m_Name= "New Scene";
 		std::string m_FilePath;
+
+
+
+		XRef<PhysicsScene> m_PhysicsScene;
 		
 
 		void UpdateLighting();
 		void UpdateNativeScripting(TimeStep ts);
-		void UpdateRendering(Ref<Camera> c);
+		void UpdatePhysics();
+		void UpdateRendering(XRef<Camera> c);
 
 		
 

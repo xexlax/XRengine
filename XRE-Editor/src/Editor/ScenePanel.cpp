@@ -2,11 +2,11 @@
 
 #include <ImGui\imgui.h>
 namespace XRE{
-	ScenePanel::ScenePanel(const Ref<Scene>& scene)
+	ScenePanel::ScenePanel(const XRef<Scene>& scene)
 	{
 		AttachToScene(scene);
 	}
-	void ScenePanel::AttachToScene(const Ref<Scene>& scene)
+	void ScenePanel::AttachToScene(const XRef<Scene>& scene)
 	{
 		m_Scene = scene;
 		m_Selected = GameObject(entt::null ,m_Scene.get());

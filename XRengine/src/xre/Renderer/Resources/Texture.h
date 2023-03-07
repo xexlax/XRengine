@@ -24,7 +24,7 @@ namespace XRE {
 	class Texture2D : public Texture
 	{
 	public:
-		static Ref<Texture2D> Create(const std::string& path);
+		static XRef<Texture2D> Create(const std::string& path);
 
 	};
 
@@ -33,7 +33,7 @@ namespace XRE {
 	struct MaterialTex {
 	public:
 		bool m_enable = false;
-		Ref<Texture2D> m_Tex;
+		XRef<Texture2D> m_Tex;
 		std::string m_name, m_filepath;
 		MaterialTex() {
 

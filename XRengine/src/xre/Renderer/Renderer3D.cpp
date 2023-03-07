@@ -5,18 +5,18 @@
 namespace XRE {
 
 	//Declaration of Static Variables
-	Ref<Shader> Renderer3D::defaultObjShader;
-	Ref<Shader> Renderer3D::defaultPBRShader;
-	Ref<Shader> Renderer3D::simpleDepthShader;
-	Ref<Shader> Renderer3D::postShader;
-	Ref<Shader> Renderer3D::activeShader;
-	Ref<Texture2D> Renderer3D::defaultAlbedo;
+	XRef<Shader> Renderer3D::defaultObjShader;
+	XRef<Shader> Renderer3D::defaultPBRShader;
+	XRef<Shader> Renderer3D::simpleDepthShader;
+	XRef<Shader> Renderer3D::postShader;
+	XRef<Shader> Renderer3D::activeShader;
+	XRef<Texture2D> Renderer3D::defaultAlbedo;
 
-	Ref<SkyBox> Renderer3D::m_SkyBox;
-	Ref<Framebuffer> Renderer3D::m_FrameBuffer;
-	Ref<Framebuffer> Renderer3D::m_ShadowFrameBuffer;
-	Ref<Framebuffer> Renderer3D::m_PostFrameBuffer;
-	Ref<VertexArray> Renderer3D::m_Quad;
+	XRef<SkyBox> Renderer3D::m_SkyBox;
+	XRef<Framebuffer> Renderer3D::m_FrameBuffer;
+	XRef<Framebuffer> Renderer3D::m_ShadowFrameBuffer;
+	XRef<Framebuffer> Renderer3D::m_PostFrameBuffer;
+	XRef<VertexArray> Renderer3D::m_Quad;
 
 	Light Renderer3D::m_Light;
 
@@ -83,13 +83,13 @@ namespace XRE {
 		m_Quad = VertexArray::Create();
 
 		//2.1 setup VBO
-		Ref<VertexBuffer> vertexBuffer;
+		XRef<VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(VertexBuffer::Create(quadVertices, sizeof(quadVertices)));
 		vertexBuffer->SetLayout(layout);
 		m_Quad->AddVertexBuffer(vertexBuffer);
 
 		//2.2 setup IBO
-		Ref<IndexBuffer> indexBuffer;
+		XRef<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::Create(Indices,6));
 		m_Quad->SetIndexBuffer(indexBuffer);
 
@@ -98,7 +98,7 @@ namespace XRE {
 	void Renderer3D::ShutDown()
 	{
 	}
-	void Renderer3D::StartScene(const Ref<Camera> camera)
+	void Renderer3D::StartScene(const XRef<Camera> camera)
 	{
 		activeShader->Bind();
 		m_VP = camera->GetProjectionMatrix() * glm::mat4(glm::mat3(camera->GetViewMatrix())) ;
@@ -132,8 +132,8 @@ namespace XRE {
 		m_ShadowFrameBuffer->Bind();
 
 		RenderCommand::Clear();
-		//Ref<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(-10.0f, 10.0f, -10.0f, 10.0f, m_Light.getDirLight()->m_Direction);
-		Ref<Camera> dirLight_Camera = make_shared<Camera>(Orthographic, m_Light.getDirLight().m_Rotation);
+		//XRef<OrthographicCamera> dirLight_Camera = make_shared<OrthographicCamera>(-10.0f, 10.0f, -10.0f, 10.0f, m_Light.getDirLight()->m_Direction);
+		XRef<Camera> dirLight_Camera = make_shared<Camera>(Orthographic, m_Light.getDirLight().m_Rotation);
 		m_LVP = dirLight_Camera->GetViewProjectionMatrix();
 		// render scene from light's point of view
 		activeShader = simpleDepthShader;
@@ -177,7 +177,7 @@ namespace XRE {
 	{
 		m_Light.Draw(activeShader);
 	}
-	void Renderer3D::DrawModel(const Ref<Model> model, glm::mat4 transform)
+	void Renderer3D::DrawModel(const XRef<Model> model, glm::mat4 transform)
 	{
 		if(model)
 		for (auto mesh : model->m_Meshes) {

@@ -21,7 +21,7 @@ private:
 	bool OnKeyReleased(KeyReleasedEvent& e);
 	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 	void InitScene();
-	void SetScene();
+	void UpdateScene();
 private:
 	//Editor Panels
 
@@ -31,7 +31,7 @@ private:
 	
 	//Test Scene
 	SceneStatus m_Status = Editing;
-	Ref<Scene> m_Scene;
+	XRef<Scene> m_Scene;
 	EditorCamera m_EditorCamera;
 	glm::vec2 m_ViewportBounds[2];
 	GameObject SceneCameraGO;

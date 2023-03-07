@@ -63,6 +63,14 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (ImGui::MenuItem("Rigid Body"))
+				{
+					if (!go.HasComponent<RigidBodyComponent>())
+						go.AddComponent<RigidBodyComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+
 				ImGui::EndPopup();
 			}
 		}
@@ -93,7 +101,7 @@ namespace XRE {
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), tag.c_str());
-			if (ImGui::InputText("Name", buffer, sizeof(buffer)))
+			if (ImGui::InputText(u8"名称", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
 			}
@@ -104,9 +112,9 @@ namespace XRE {
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
 				auto& transform = go.GetComponent<TransformComponent>();
-				DrawVec3Control("Position", transform.m_Translation);
-				DrawVec3Control("Rotation", transform.m_Rotation);
-				DrawVec3Control("Scale", transform.m_Scale);
+				DrawVec3Control(u8"位置", transform.m_Translation);
+				DrawVec3Control(u8"旋转", transform.m_Rotation);
+				DrawVec3Control(u8"缩放", transform.m_Scale);
 				/*	ImGui::DragFloat3("Position", glm::value_ptr(transform.m_Translation), 0.1f);
 					ImGui::DragFloat3("Rotation", glm::value_ptr(transform.m_Rotation), 1.0f);
 					ImGui::DragFloat3("Scale", glm::value_ptr(transform.m_Scale), 0.1f);*/
@@ -132,6 +140,9 @@ namespace XRE {
 
 		if (go.HasComponent<DirectionalLightComponent>())
 			DrawComponent<DirectionalLightComponent>(go);
+
+		if (go.HasComponent<RigidBodyComponent>())
+			DrawComponent<RigidBodyComponent>(go);
 	}
 
 	template<typename T>
@@ -140,17 +151,17 @@ namespace XRE {
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 		bool open = ImGui::TreeNodeEx((void*)typeid(MeshRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, c.m_Name.c_str());
 		ImGui::SameLine(ImGui::GetWindowWidth() - 120.0f);
-		ImGui::Checkbox("Activate", &c.m_Active);
+		ImGui::Checkbox(u8"激活", &c.m_Active);
 		ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
 		if (ImGui::Button("+"))
 		{
-			ImGui::OpenPopup("ComponentSettings");
+			ImGui::OpenPopup(u8"组件选项");
 		}
 		ImGui::PopStyleVar();
 		bool removeComponent = false;
-		if (ImGui::BeginPopup("ComponentSettings"))
+		if (ImGui::BeginPopup(u8"组件选项"))
 		{
-			if (ImGui::MenuItem("Remove component"))
+			if (ImGui::MenuItem(u8"删除组件"))
 				removeComponent = true;
 
 			ImGui::EndPopup();
@@ -169,10 +180,10 @@ namespace XRE {
 	void PropertiesPanel::DrawComponentLayout<MeshRendererComponent>(MeshRendererComponent& component)
 	{
 		auto& model = component.m_Model;
-		ImGui::Checkbox("Shadow Casting", &component.m_ShadowCasting);
+		ImGui::Checkbox(u8"阴影映射", &component.m_ShadowCasting);
 		if (model) {
 			ImGui::Text(model->getPath().c_str());
-			if (ImGui::TreeNodeEx("SubMeshes", ImGuiTreeNodeFlags_None))
+			if (ImGui::TreeNodeEx(u8"子网格", ImGuiTreeNodeFlags_None))
 			{
 				int i = 0;
 				for (auto& m : model->m_Meshes) {
@@ -183,7 +194,7 @@ namespace XRE {
 						auto& mat = m.GetMaterial();
 
 						ImGui::Text(mat->name.c_str());
-						ImGui::ColorEdit3("BaseColor", glm::value_ptr(mat->baseColor));
+						ImGui::ColorEdit3(u8"基础色", glm::value_ptr(mat->baseColor));
 						ImGui::DragFloat("Shininess", &mat->shininess);
 						ImGui::DragFloat("Metallic", &mat->metallic);
 						ImGui::DragFloat("Roughness", &mat->roughness);
@@ -216,7 +227,7 @@ namespace XRE {
 			}
 		}
 		else
-			ImGui::Text("No Model Yet");
+			ImGui::Text(u8"未选择模型");
 
 
 
@@ -235,27 +246,27 @@ namespace XRE {
 	template<>
 	void PropertiesPanel::DrawComponentLayout<PointLightComponent>(PointLightComponent& component) {
 
-		ImGui::ColorEdit3("Color", glm::value_ptr(component.m_Color));
-		ImGui::DragFloat("Intensity", &component.m_Intensity, 0.1f, 0.0f, 10.0f);
+		ImGui::ColorEdit3(u8"颜色", glm::value_ptr(component.m_Color));
+		ImGui::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 10.0f);
 	}
 	
 	template<>
 	void PropertiesPanel::DrawComponentLayout<DirectionalLightComponent>(DirectionalLightComponent& component) {
 
-		ImGui::ColorEdit3("Color", glm::value_ptr(component.m_Color));
-		ImGui::DragFloat("Intensity", &component.m_Intensity, 0.1f, 0.0f, 3.0f);
-		ImGui::Checkbox("Cast Shadow", &component.m_ShadowCasting);
+		ImGui::ColorEdit3(u8"颜色", glm::value_ptr(component.m_Color));
+		ImGui::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 3.0f);
+		ImGui::Checkbox(u8"阴影", &component.m_ShadowCasting);
 	}
 
 	template<>
 	void PropertiesPanel::DrawComponentLayout<CameraComponent>(CameraComponent& component) {
 		auto& camera = component.m_Camera;
-		ImGui::Checkbox("Primary", &component.m_Primary);
+		ImGui::Checkbox(u8"主摄像机", &component.m_Primary);
 
 
-		const char* projectionTypeStrings[] = { "Orthographic","Perspective" };
+		const char* projectionTypeStrings[] = { u8"正交",u8"透视" };
 		const char* currentProjectionTypeString = projectionTypeStrings[(int)camera->GetType()];
-		if (ImGui::BeginCombo("Projection Type", currentProjectionTypeString)) {
+		if (ImGui::BeginCombo(u8"投影矩阵", currentProjectionTypeString)) {
 			for (int i = 0; i < 2; i++)
 			{
 				bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
@@ -275,36 +286,83 @@ namespace XRE {
 		if (camera->GetType() == CameraType::Perspective)
 		{
 			float verticalFov = glm::degrees(camera->GetPerspectiveFovy());
-			if (ImGui::DragFloat("Vertical FOV", &verticalFov))
+			if (ImGui::DragFloat(u8"视域", &verticalFov))
 				camera->SetPerspectiveFovy(glm::radians(verticalFov));
 
 			float Near = camera->GetPerspectiveNear();
-			if (ImGui::DragFloat("Near", &Near))
+			if (ImGui::DragFloat(u8"近平面", &Near))
 				camera->SetPerspectiveNear(Near);
 
 			float Far = camera->GetPerspectiveFar();
-			if (ImGui::DragFloat("Far", &Far))
+			if (ImGui::DragFloat(u8"远平面", &Far))
 				camera->SetPerspectiveFar(Far);
 		}
 
 		if (camera->GetType() == CameraType::Orthographic)
 		{
 			float orthoSize = camera->GetOrthographicSize();
-			if (ImGui::DragFloat("Size", &orthoSize))
+			if (ImGui::DragFloat(u8"大小", &orthoSize))
 				camera->SetOrthographicSize(orthoSize);
 
 			float orthoNear = camera->GetOrthographicNear();
-			if (ImGui::DragFloat("Near", &orthoNear))
+			if (ImGui::DragFloat(u8"近平面", &orthoNear))
 				camera->SetOrthographicNear(orthoNear);
 
 			float orthoFar = camera->GetPerspectiveNear();
-			if (ImGui::DragFloat("Far", &orthoFar))
+			if (ImGui::DragFloat(u8"远平面", &orthoFar))
 				camera->SetOrthographicFar(orthoFar);
 
 
 		}
-		ImGui::Checkbox("Fixed Aspect Ratio", &component.m_FixedAspectRatio);
+		ImGui::Checkbox(u8"固定长宽比", &component.m_FixedAspectRatio);
 	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<RigidBodyComponent>(RigidBodyComponent& component) {
+
+		const char* MotionTypeStrings[] = { u8"静止",u8"运动学",u8"动力学"};
+		const char* ShapeTypeStrings[] = { u8"方形",u8"球形",u8"胶囊" };
+
+		const char* currentMotionTypeString = MotionTypeStrings[component.m_MotionType];
+		const char* currentShapeTypeString = ShapeTypeStrings[component.m_RigidBodyShape];
+		if (ImGui::BeginCombo(u8"运动形式", currentMotionTypeString)) {
+			for (int i = 0; i < 3; i++)
+			{
+				bool isSelected = currentMotionTypeString == MotionTypeStrings[i];
+				if (ImGui::Selectable(MotionTypeStrings[i], isSelected))
+				{
+					currentMotionTypeString = MotionTypeStrings[i];
+					component.SetMotion(i);
+				}
+
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		if (ImGui::BeginCombo(u8"形状", currentShapeTypeString)) {
+			for (int i = 0; i < 3; i++)
+			{
+				bool isSelected = currentShapeTypeString == ShapeTypeStrings[i];
+				if (ImGui::Selectable(ShapeTypeStrings[i], isSelected))
+				{
+					currentShapeTypeString = ShapeTypeStrings[i];
+					component.SetShape(i);
+				}
+
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+		
+		ImGui::DragFloat("Mass", &component.m_Mass, 0.1f, 0.0f, 10.0f);
+	}
+
+
 
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue , float columnWidth )
 	{

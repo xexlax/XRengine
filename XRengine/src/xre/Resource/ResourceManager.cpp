@@ -11,7 +11,7 @@ namespace XRE {
 	{
 		
 	}
-	Ref<Model> ResourceManager::GetElementalModel(const Elemental_Model& em)
+	XRef<Model> ResourceManager::GetElementalModel(const Elemental_Model& em)
 	{
 		switch (em)
 		{

@@ -23,12 +23,12 @@ namespace XRE {
 	public:
 		
 		static void Init();
-		inline static Ref<spdlog::logger> getCoreLogger() { return s_coreLogger; }
-		inline static Ref<spdlog::logger> getClientLogger() { return s_clientLogger; }
+		inline static XRef<spdlog::logger> getCoreLogger() { return s_coreLogger; }
+		inline static XRef<spdlog::logger> getClientLogger() { return s_clientLogger; }
 
 	private:
-		static Ref<spdlog::logger> s_coreLogger;
-		static Ref<spdlog::logger> s_clientLogger;
+		static XRef<spdlog::logger> s_coreLogger;
+		static XRef<spdlog::logger> s_clientLogger;
 	};
 
 }

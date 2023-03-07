@@ -83,7 +83,7 @@ namespace XRE {
 
         m_VertexArray = VertexArray::Create();
 
-        Ref<VertexBuffer> vertexBuffer;
+        XRef<VertexBuffer> vertexBuffer;
         vertexBuffer.reset(VertexBuffer::Create(skyboxVertices,sizeof(skyboxVertices)));
         vertexBuffer->SetLayout(layout);
         m_VertexArray->AddVertexBuffer(vertexBuffer);

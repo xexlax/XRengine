@@ -48,7 +48,7 @@ namespace XRE {
 	};
 	
 
-	Ref<Model> Model::Create(const std::string& path)
+	XRef<Model> Model::Create(const std::string& path)
 	{
 		return std::make_shared<Model>(path);
 	}
@@ -99,7 +99,7 @@ namespace XRE {
 		///1. 获取各种材质和纹理
 		{
 			for (int i = 0; i < materials.size(); i++) {
-				Ref<Material> m = make_shared<Material>();
+				XRef<Material> m = make_shared<Material>();
 				tinyobj::material_t tm = materials[i];
 				
 				string name = tm.name;

@@ -12,7 +12,7 @@ namespace XRE {
 	{
 		
 	}
-	void Light::Draw(Ref<Shader> shader)
+	void Light::Draw(XRef<Shader> shader)
 	{
 		if (Renderer::GetAPI() == RendererAPI::API::OpenGL) {
 

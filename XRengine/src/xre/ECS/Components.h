@@ -4,11 +4,13 @@
 #include "xre\Resource\Model.h"
 #include "xre\Renderer\Camera\Camera.h"
 
+
 #include <cereal/archives/json.hpp>
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
+#include <entt/entt.hpp>
 
 using namespace entt;
 namespace XRE {
@@ -126,18 +128,18 @@ namespace XRE {
 		std::string m_Name  = "Mesh Renderer";
 		std::string m_ModelPath;
 		bool m_ShadowCasting = true;
-		Ref<Model> m_Model;
+		XRef<Model> m_Model;
 		MeshRendererComponent() = default;
 		MeshRendererComponent(const MeshRendererComponent&) = default;
-		MeshRendererComponent(Ref<Model> model)
+		MeshRendererComponent(XRef<Model> model)
 			: m_Model(model) {
 			m_ModelPath = model->getPath();
 		}
 		MeshRendererComponent(const std::string& path)
 			: m_Model(ResourceManager::GetModel(path)),m_ModelPath(path) {}
 
-		operator Ref<Model>& () { return m_Model; }
-		operator const Ref<Model>& () const { return m_Model; }
+		operator XRef<Model>& () { return m_Model; }
+		operator const XRef<Model>& () const { return m_Model; }
 
 		template <class Archive>
 		void save(Archive& ar)const
@@ -204,7 +206,7 @@ namespace XRE {
 	class CameraComponent: public Component {
 	public:
 		std::string m_Name = "Camera";
-		Ref<Camera> m_Camera;
+		XRef<Camera> m_Camera;
 		bool m_FixedAspectRatio=false;
 		bool m_Primary = true;
 		
@@ -212,9 +214,9 @@ namespace XRE {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(const glm::mat4& projection)
-			:m_Camera(std::make_shared<Camera>(projection)) {}
+			:m_Camera(XMakeRef<Camera>(projection)) {}
 		CameraComponent(const CameraType& type)
-			:m_Camera(std::make_shared<Camera>(type)) {}
+			:m_Camera(XMakeRef<Camera>(type)) {}
 
 
 		template <class Archive>
@@ -264,6 +266,39 @@ namespace XRE {
 		};
 
 
+	};
+
+	class RigidBodyComponent : public Component {
+	public:
+		std::string m_Name = "Rigid Body";
+
+		enum RigidBodyShape
+		{
+			Box, Sphere, Capsule, None
+		} 
+		m_RigidBodyShape = RigidBodyShape::Box;
+
+		enum RigidBodyMotion
+		{
+			Static, Kinematic, Dynamic
+		} 
+		m_MotionType = RigidBodyMotion::Static;
+
+
+		float m_Mass = 1.0f;
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active, m_RigidBodyShape, m_MotionType, m_Mass);
+		}
+
+		RigidBodyComponent() = default;
+		RigidBodyComponent(RigidBodyShape shape, RigidBodyMotion motion, float mass) :
+			m_RigidBodyShape(shape), m_MotionType(motion), m_Mass(mass) {}
+
+		void SetMotion(int i) { m_MotionType = RigidBodyComponent::RigidBodyMotion(i); };
+		void SetShape(int i) { m_RigidBodyShape = RigidBodyComponent::RigidBodyShape(i); };
 	};
 
 

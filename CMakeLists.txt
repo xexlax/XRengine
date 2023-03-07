@@ -25,8 +25,10 @@ set(ENGINE_SRC_DIR "${ENGINE_ROOT_DIR}/src")
 add_subdirectory(${THIRD_PARTY_DIR}/Glad)
 add_subdirectory(${THIRD_PARTY_DIR}/GLFW)
 add_subdirectory(${THIRD_PARTY_DIR}/ImGui)
+add_subdirectory(${THIRD_PARTY_DIR}/JoltPhysics/Build)
 
 add_subdirectory(XRengine)
 add_subdirectory(XRE-Editor)
+add_subdirectory(XRE-SANDBOX)
 
 set_property ( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT XRE-Editor )

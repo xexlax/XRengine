@@ -18,7 +18,7 @@ namespace XRE {
 		void OnUpdate(XRE::TimeStep ts);
 		void OnEvent(Event& e);
 		void Resize(float width, float height);
-		Ref<Camera> GetCamera() { return std::make_shared<Camera>(m_Camera); }
+		XRef<Camera> GetCamera() { return std::make_shared<Camera>(m_Camera); }
 		
 
 		float GetZoomLevel() const { return m_ZoomLevel; }

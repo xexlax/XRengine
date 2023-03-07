@@ -20,10 +20,10 @@ namespace XRE {
         string getPath()const { return m_Path; };
         std::string m_Path;
 
-        static Ref<Model> Create(const std::string& path);
+        static XRef<Model> Create(const std::string& path);
     private:
         
-        vector<Ref<Material>> m_Materials;
+        vector<XRef<Material>> m_Materials;
         /*  º¯Êý   */
         void LoadModel(string path,
             bool triangulate = true);

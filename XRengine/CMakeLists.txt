@@ -22,7 +22,6 @@ endif ()
 
 
 set(THIRD_PARTY_INCLUDE  
-
 ${THIRD_PARTY_DIR}/spdlog/include
 ${THIRD_PARTY_DIR}/GLFW/include 
 ${THIRD_PARTY_DIR}/Glad/include
@@ -34,6 +33,7 @@ ${THIRD_PARTY_DIR}/json11
 ${THIRD_PARTY_DIR}/Entt/single_include
 ${THIRD_PARTY_DIR}/ImGuizmo
 ${THIRD_PARTY_DIR}/cereal/include
+${THIRD_PARTY_DIR}/JoltPhysicss
 )
 
 
@@ -50,11 +50,13 @@ file(GLOB_RECURSE HEADER_FILES
 "${THIRD_PARTY_DIR}/cereal/include/*.hpp"
 
 
+
 )
 file(GLOB_RECURSE SOURCE_FILES 
 "${ENGINE_SRC_DIR}/*.cpp"
 "${THIRD_PARTY_DIR}/stb_img/stb_image.cpp"
 "${THIRD_PARTY_DIR}/ImGuizmo/ImGuizmo.cpp"
+
 )
 
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -85,6 +87,6 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_link_libraries(${PROJECT_NAME}
         # ${CMAKE_THREAD_LIBS_INIT}     # Needed for unix builds to link to pthread
         # LOGGING
-        Glad GLFW ImGui OpenGL32.Lib
+        Glad GLFW ImGui OpenGL32.Lib Jolt
         )
 

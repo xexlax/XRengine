@@ -2,8 +2,8 @@
 
 
 namespace XRE {
-	Ref<spdlog::logger> Log::s_coreLogger;
-	Ref<spdlog::logger> Log::s_clientLogger;
+	XRef<spdlog::logger> Log::s_coreLogger;
+	XRef<spdlog::logger> Log::s_clientLogger;
 	void Log::Init()
 	{	
 		spdlog::set_pattern("%^[%T] %n: %v%$");
