@@ -31,7 +31,7 @@ namespace XRE {
 				if (ImGui::MenuItem("Camera"))
 				{
 					if(!go.HasComponent<CameraComponent>())
-					go.AddComponent<CameraComponent>();
+					go.AddComponent<CameraComponent>(CameraType::Perspective);
 					ImGui::CloseCurrentPopup();
 				}
 
@@ -118,7 +118,19 @@ namespace XRE {
 				/*	ImGui::DragFloat3("Position", glm::value_ptr(transform.m_Translation), 0.1f);
 					ImGui::DragFloat3("Rotation", glm::value_ptr(transform.m_Rotation), 1.0f);
 					ImGui::DragFloat3("Scale", glm::value_ptr(transform.m_Scale), 0.1f);*/
+				
+				if(go.HasComponent<CameraComponent>()&&m_EditorCamera)
+				if (ImGui::Button(u8"从编辑器摄像机衍生变换")) {
+					transform.m_Translation = m_EditorCamera->GetPosition();
+					transform.m_Rotation = m_EditorCamera->GetEuler();
+				}
+				
+				
+				
 				ImGui::TreePop();
+
+
+
 			}
 		}
 
@@ -149,7 +161,7 @@ namespace XRE {
 	void PropertiesPanel::DrawComponent(GameObject go) {
 		T& c = go.GetComponent<T>();
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-		bool open = ImGui::TreeNodeEx((void*)typeid(MeshRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, c.m_Name.c_str());
+		bool open = ImGui::TreeNodeEx((void*)typeid(Component).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, c.m_Name.c_str());
 		ImGui::SameLine(ImGui::GetWindowWidth() - 120.0f);
 		ImGui::Checkbox(u8"激活", &c.m_Active);
 		ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
@@ -163,7 +175,6 @@ namespace XRE {
 		{
 			if (ImGui::MenuItem(u8"删除组件"))
 				removeComponent = true;
-
 			ImGui::EndPopup();
 		}
 		if (open)
@@ -172,7 +183,7 @@ namespace XRE {
 			ImGui::TreePop();
 		}
 		if (removeComponent)
-			go.RemoveComponent<MeshRendererComponent>();
+			go.RemoveComponent<T>();
 
 	}
 
@@ -261,8 +272,12 @@ namespace XRE {
 	template<>
 	void PropertiesPanel::DrawComponentLayout<CameraComponent>(CameraComponent& component) {
 		auto& camera = component.m_Camera;
+
+
 		ImGui::Checkbox(u8"主摄像机", &component.m_Primary);
 
+		
+		
 
 		const char* projectionTypeStrings[] = { u8"正交",u8"透视" };
 		const char* currentProjectionTypeString = projectionTypeStrings[(int)camera->GetType()];

@@ -8,6 +8,10 @@ namespace XRE {
 		PropertiesPanel(ScenePanel* sp);
 
 		void SetReference(ScenePanel* sp);
+		void SetEC(EditorCamera* ec) {
+			m_EditorCamera = ec;
+		}
+		
 		void OnImGuiRender();
 
 		//绘制go所有的Component
@@ -15,6 +19,7 @@ namespace XRE {
 	private:
 
 		ScenePanel* m_ReferenceScenePanel;
+		EditorCamera* m_EditorCamera=nullptr;
 
 
 		//绘制Component 通用UI部分（Treenode，active，删除等组件）

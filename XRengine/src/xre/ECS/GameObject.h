@@ -60,6 +60,11 @@ namespace XRE {
 					archive(c);
 					archive(ngo.GetComponent<AnimatorComponent>());
 				}
+				if (ngo.HasComponent<RigidBodyComponent>()) {
+					ComponentType c("Rigid Body");
+					archive(c);
+					archive(ngo.GetComponent<RigidBodyComponent>());
+				}
 
 				if (ngo.HasComponent<TransformComponent>()) {
 					TransformComponent tc = ngo.GetComponent<TransformComponent>();
@@ -117,11 +122,15 @@ namespace XRE {
 					archive(tc);
 				}
 				if (n.m_Name == "Camera") {
-					CameraComponent& tc = go.AddComponent<CameraComponent>();
+					CameraComponent& tc = go.AddComponent<CameraComponent>(Perspective);
 					archive(tc);
 				}
 				if (n.m_Name == "Animator") {
 					AnimatorComponent& tc = go.AddComponent<AnimatorComponent>();
+					archive(tc);
+				}
+				if (n.m_Name == "Rigid Body") {
+					RigidBodyComponent& tc = go.AddComponent<RigidBodyComponent>();
 					archive(tc);
 				}
 

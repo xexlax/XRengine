@@ -14,7 +14,8 @@ namespace XRE{
 	Scene::Scene()
 	{
 		m_PhysicsScene = XMakeRef<PhysicsScene>();
-		m_PhysicsScene->Init();
+		//Create Floor For Testing
+		//m_PhysicsScene->Init();
 	}
 	GameObject Scene::CreateGameObject(const std::string& Name)
 	{
@@ -28,209 +29,55 @@ namespace XRE{
 	
 	void Scene::OnUpdateRuntime(TimeStep ts)
 	{
-		//Native Scripting
+
+		//Physics
+
+		UpdatePhysics(ts);
+
+		UpdateNativeScripting(ts);
+		
+		XRef<Camera> mainCamera = nullptr;
+
+		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		for (auto entity : view)
 		{
-			m_Registry.view<NativeScriptComponent>().each(
-				[=](entt::entity entity, NativeScriptComponent& nsc)
+			auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+
+			if (camera.m_Active) {
+
+				camera.m_Camera->SetPosition(transform.m_Translation);
+				camera.m_Camera->SetRotation(transform.m_Rotation);
+				camera.m_Camera->updateCameraVectors();
+
+				if (camera.m_Primary)
 				{
-					if (!nsc.Instance)
-					{
-						nsc.Instance = nsc.InstantiateScript();
-						nsc.Instance->m_Object = GameObject{ entity, this };
-
-						nsc.Instance->OnCreate();
-					}
-
-					nsc.Instance->OnUpdate(ts);
-				});
-		}
-
-		//Lighting
-		{
-			auto view = m_Registry.view<TransformComponent, DirectionalLightComponent>();
-
-			for (auto entity : view) {
-				auto [transform,dl] = view.get<TransformComponent, DirectionalLightComponent>(entity);
-				if (dl.m_Active) {
-					Renderer3D::m_Light.SetDirLight(transform,dl);
+					mainCamera = camera.m_Camera;
 					break;
 				}
 			}
-		}
 
-		{
-			auto view = m_Registry.view<TransformComponent, PointLightComponent>();
-			Renderer3D::m_Light.ClearPLights();
-			for (auto entity : view) {
-				auto [transform, l] = view.get<TransformComponent, PointLightComponent>(entity);
-				if (l.m_Active) {
-					Renderer3D::m_Light.AddPLight(transform, l);
-				}
-			}
-		}
-
-		//Rendering System
-		XRef<Camera> mainCamera= nullptr;
-		TransformComponent* cameraTransform=nullptr;
-		auto cct = GetPrimaryCamera(); 
-		mainCamera = cct.first.m_Camera;
-		cameraTransform = &cct.second;
-		auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
-		//auto dl = m_Registry.view<DirectionalLightComponent>();
-
-		Renderer3D::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		if (mainCamera&&cameraTransform)
-		{
-	
-			Renderer3D::StartShadowPass();
-			for (auto entity : group)
-			{
-				auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
-				if(meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
-				Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
-			}
-			Renderer3D::EndShadowPass();
-
-
-			// Coloring Pass
-			Renderer3D::m_FrameBuffer->Bind();
-			Renderer3D::Clear();
-			//切shader一定要在startscene前
-			Renderer3D::StartScene(mainCamera);
-			{
-				Renderer3D::activeShader->Bind();
-				Renderer3D::SetShadowMapOfActive(0);
-				Renderer3D::DrawLight();
-
-				for (auto entity : group)
-				{
-					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
-					if(meshrenderer.m_Active)
-					Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
-				}
-
-				//Renderer3D::DrawSkybox();
-			}
-			Renderer3D::EndScene();
-			Renderer3D::m_FrameBuffer->Unbind();
 
 		}
+		if(mainCamera)
+		UpdateRendering(mainCamera);
 		
 	}
 
 	void Scene::OnUpdateEditing(TimeStep ts, EditorCamera& ec)
 	{
-		//Physics
 		
-		m_PhysicsScene->OnUpdate(ts);
-
-
-		//Native Scripting
-		{
-			m_Registry.view<NativeScriptComponent>().each(
-				[=](entt::entity entity, NativeScriptComponent& nsc)
-				{
-					if (!nsc.Instance)
-					{
-						nsc.Instance = nsc.InstantiateScript();
-						nsc.Instance->m_Object = GameObject{ entity, this };
-
-						nsc.Instance->OnCreate();
-					}
-
-					nsc.Instance->OnUpdate(ts);
-				});
-		}
-
-		//Easy Animator
-		{
-			auto view = m_Registry.view<TransformComponent, AnimatorComponent>();
-			for (auto entity : view) {
-				auto& [transform, anm] = view.get<TransformComponent, AnimatorComponent>(entity);
-				if (anm.m_Active) {
-					anm.m_Phase += ts * anm.m_AngleSpeed;
-					transform.m_Translation = anm.m_Pivot + anm.m_Radius * glm::vec3(cos(anm.m_Phase), 0, sin(anm.m_Phase));
-				}
-			}
-		}
-
-		bool dirLightFound = false;
-		//Lighting
-		{
-			auto view = m_Registry.view<TransformComponent, DirectionalLightComponent>();
-
-			for (auto entity : view) {
-				auto [transform, dl] = view.get<TransformComponent, DirectionalLightComponent>(entity);
-				if (dl.m_Active) {
-					dirLightFound = true;
-					Renderer3D::m_Light.SetDirLight(transform, dl);
-					break;
-				}
-			}
-		}
-
-		{
-			auto view = m_Registry.view<TransformComponent, PointLightComponent>();
-			Renderer3D::m_Light.ClearPLights();
-			for (auto entity : view) {
-				auto [transform, l] = view.get<TransformComponent, PointLightComponent>(entity);
-				if (l.m_Active) {
-					Renderer3D::m_Light.AddPLight(transform, l);
-				}
-			}
-		}
+		
+	
+		
 
 		//Rendering System
 		XRef<Camera> mainCamera = make_shared<Camera>(ec);
+
+		UpdateRendering(mainCamera);
+
 	
-		auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
-		//auto dl = m_Registry.view<DirectionalLightComponent>();
-
-		Renderer3D::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		if (mainCamera)
-		{
-			if (dirLightFound) {
-				Renderer3D::StartShadowPass();
-				for (auto entity : group)
-				{
-					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
-					if (meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
-						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
-				}
-				Renderer3D::EndShadowPass();
-			}
-			
-
-
-			// Coloring Pass
-			Renderer3D::m_FrameBuffer->Bind();
-			Renderer3D::Clear();
-			Renderer3D::m_FrameBuffer->ClearAttachment(1, -1);
-
-			//切shader一定要在startscene前
-			Renderer3D::StartScene(mainCamera);
-			{
-				Renderer3D::activeShader->Bind();
-				Renderer3D::activeShader->SetBool("Shadow_On",dirLightFound);
-				Renderer3D::SetShadowMapOfActive(0);
-				Renderer3D::DrawLight();
-
-				for (auto obj : group)
-				{
-					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(obj);
-					if (meshrenderer.m_Active) {
-						//Renderer3D::activeShader->Bind();
-						Renderer3D::activeShader->SetInt("ObjID", int(obj));
-						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
-					}
-						
-				}
-
-				Renderer3D::DrawSkybox();
-			}
-			Renderer3D::EndScene();
-			Renderer3D::m_FrameBuffer->Unbind();
-		}
+		
 	}
 
 	std::pair<CameraComponent, TransformComponent> Scene::GetPrimaryCamera()
@@ -316,6 +163,136 @@ namespace XRE{
 
 	
 
+	void Scene::UpdateNativeScripting(TimeStep ts)
+	{
+		{
+		m_Registry.view<NativeScriptComponent>().each(
+			[=](entt::entity entity, NativeScriptComponent& nsc)
+			{
+				if (!nsc.Instance)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Object = GameObject{ entity, this };
+
+					nsc.Instance->OnCreate();
+				}
+
+				nsc.Instance->OnUpdate(ts);
+			});
+		}
+
+
+		{
+			auto view = m_Registry.view<TransformComponent, AnimatorComponent>();
+			for (auto entity : view) {
+				auto& [transform, anm] = view.get<TransformComponent, AnimatorComponent>(entity);
+				if (anm.m_Active) {
+					anm.m_Phase += ts * anm.m_AngleSpeed;
+					transform.m_Translation = anm.m_Pivot + anm.m_Radius * glm::vec3(cos(anm.m_Phase), 0, sin(anm.m_Phase));
+				}
+			}
+		}
+	}
+
+	void Scene::UpdatePhysics(TimeStep ts)
+	{
+		m_PhysicsScene->OnUpdate(ts);
+
+
+		{
+			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
+
+			for (auto entity : view) {
+				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+
+				if (rbc.m_Active) {
+					m_PhysicsScene->UpdateRigidBody(tc, rbc);
+				}
+
+			}
+		}
+	}
+
+	void Scene::UpdateRendering(XRef<Camera> c)
+	{
+		bool dirLightFound = false;
+		//Lighting
+		{
+			auto view = m_Registry.view<TransformComponent, DirectionalLightComponent>();
+
+			for (auto entity : view) {
+				auto [transform, dl] = view.get<TransformComponent, DirectionalLightComponent>(entity);
+				if (dl.m_Active) {
+					dirLightFound = true;
+					Renderer3D::m_Light.SetDirLight(transform, dl);
+					break;
+				}
+			}
+		}
+
+		{
+			auto view = m_Registry.view<TransformComponent, PointLightComponent>();
+			Renderer3D::m_Light.ClearPLights();
+			for (auto entity : view) {
+				auto [transform, l] = view.get<TransformComponent, PointLightComponent>(entity);
+				if (l.m_Active) {
+					Renderer3D::m_Light.AddPLight(transform, l);
+				}
+			}
+		}
+
+		auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
+		//auto dl = m_Registry.view<DirectionalLightComponent>();
+
+		Renderer3D::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		if (c)
+		{
+			if (dirLightFound) {
+				Renderer3D::StartShadowPass();
+				for (auto entity : group)
+				{
+					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
+					if (meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
+						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+				}
+				Renderer3D::EndShadowPass();
+			}
+
+
+
+			// Coloring Pass
+			Renderer3D::m_FrameBuffer->Bind();
+			Renderer3D::Clear();
+			Renderer3D::m_FrameBuffer->ClearAttachment(1, -1);
+
+			//切shader一定要在startscene前
+			Renderer3D::StartScene(c);
+			{
+				Renderer3D::activeShader->Bind();
+				Renderer3D::activeShader->SetBool("Shadow_On", dirLightFound);
+				Renderer3D::SetShadowMapOfActive(0);
+				Renderer3D::DrawLight();
+
+				for (auto obj : group)
+				{
+					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(obj);
+					if (meshrenderer.m_Active) {
+						//Renderer3D::activeShader->Bind();
+						Renderer3D::activeShader->SetInt("ObjID", int(obj));
+						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+					}
+
+				}
+
+				Renderer3D::DrawSkybox();
+			}
+			Renderer3D::EndScene();
+			Renderer3D::m_FrameBuffer->Unbind();
+		}
+	}
+
+	
+
 	void Scene::Destroy(GameObject go)
 	{
 		
@@ -337,6 +314,49 @@ namespace XRE{
 				cameraComponent.m_Camera->SetViewPortSize(width, height);
 		}
 
+	}
+
+	void Scene::OnRuntimeBegin()
+	{
+		{
+			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
+
+			for (auto entity : view) {
+				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+
+				if (rbc.m_Active) {
+					rbc.m_PhysicObj = m_PhysicsScene->CreateRigidBody(tc, rbc);
+				}
+
+			}
+		}
+		{
+			
+			auto view = m_Registry.view<CameraComponent>();
+			for (auto entity : view) {
+				auto cc = view.get<CameraComponent>(entity);
+
+				cc.m_Camera->SetViewPortSize(m_ViewportWidth, m_ViewportHeight);
+			
+			}
+		}
+	}
+
+	void Scene::OnRuntimeEnd()
+	{
+
+		{
+			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
+
+			for (auto entity : view) {
+				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+
+				if (rbc.m_Active) {
+					m_PhysicsScene->RemoveRigidBody(rbc.m_PhysicObj);
+				}
+
+			}
+		}
 	}
 
 
@@ -387,7 +407,7 @@ namespace XRE{
 	template<>
 	void Scene::OnComponentAdded<RigidBodyComponent>(GameObject go, RigidBodyComponent& component)
 	{
-		m_PhysicsScene->CreateRigidBody(go.GetComponent<TransformComponent>(), component);
+		
 	}
 
 

@@ -5,95 +5,40 @@
         },
         "value1": {
             "value0": true,
-            "value1": "立方体"
+            "value1": "球"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": 0.0,
-            "value2": 0.6012483835220337,
-            "value3": -0.66218501329422,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
+            "value1": -5.1160173416137699,
+            "value2": 6.993399620056152,
+            "value3": 1.5435712337493897,
+            "value4": 168.0741729736328,
+            "value5": 29.867666244506837,
+            "value6": 118.3236312866211,
+            "value7": 0.9999622702598572,
+            "value8": 0.9999995231628418,
+            "value9": 0.9999997615814209
         },
         "value4": {
             "value0": "Mesh Renderer"
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets/models/cube.obj"
+            "value1": "../Assets/models/sphere.obj"
         },
         "value6": {
-            "value0": "PUSHSTACK"
+            "value0": "Rigid Body"
         },
         "value7": {
-            "value0": {
-                "value0": "Name"
-            },
-            "value1": {
-                "value0": true,
-                "value1": "圆锥"
-            },
-            "value2": {
-                "value0": "Transform"
-            },
-            "value3": {
-                "value0": true,
-                "value1": -1.5070114135742188,
-                "value2": -0.20784643292427064,
-                "value3": 0.0,
-                "value4": 0.0,
-                "value5": -0.0,
-                "value6": 0.0,
-                "value7": 1.0,
-                "value8": 1.0,
-                "value9": 1.0
-            },
-            "value4": {
-                "value0": "Mesh Renderer"
-            },
-            "value5": {
-                "value0": true,
-                "value1": "../Assets/models/cone.obj"
-            },
-            "value6": {
-                "value0": "EndObj"
-            }
+            "value0": true,
+            "value1": 1,
+            "value2": 2,
+            "value3": 1.0
         },
         "value8": {
-            "value0": {
-                "value0": "Name"
-            },
-            "value1": {
-                "value0": true,
-                "value1": "####ThePoper####"
-            },
-            "value2": {
-                "value0": "Transform"
-            },
-            "value3": {
-                "value0": true,
-                "value1": 0.0,
-                "value2": 0.0,
-                "value3": 0.0,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 1.0,
-                "value8": 1.0,
-                "value9": 1.0
-            },
-            "value4": {
-                "value0": "EndObj"
-            }
-        },
-        "value9": {
             "value0": "EndObj"
         }
     }

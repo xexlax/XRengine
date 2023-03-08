@@ -1,10 +1,14 @@
 #include "PhysicsScene.h"
 #include "pch.h"
 #include "xre\Core\Macros.h"
+#include <xre\Utils\Math.h>
 #pragma once
 using namespace JPH;
 using namespace JPH::literals;
 namespace XRE {
+
+	
+
 	PhysicsScene::PhysicsScene()
 	{
 		// Register allocation hook
@@ -55,62 +59,94 @@ namespace XRE {
 		delete Factory::sInstance;
 		Factory::sInstance = nullptr;
 	}
-	void PhysicsScene::Init()
+
+	uint32_t PhysicsScene::CreateRigidBody(TransformComponent& tc, const RigidBodyComponent& rbc)
 	{
+		auto& BodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
+		ShapeRefC body_shape;
+		RVec3 pos(tc.m_Translation.x, tc.m_Translation.y, tc.m_Translation.z);
+		auto q = glm::quat(glm::radians(tc.m_Rotation));
 
-		BoxShapeSettings floor_shape_settings(Vec3(100.0f, 1.0f, 100.0f));
+		Quat rot(q.x, q.y, q.z, q.w);
 
-		// Create the shape
-		ShapeSettings::ShapeResult floor_shape_result = floor_shape_settings.Create();
-		ShapeRefC floor_shape = floor_shape_result.Get(); // We don't expect an error here, but you can check floor_shape_result for HasError() / GetError()
+		if (rbc.m_RigidBodyShape == RigidBodyComponent::RigidBodyShape::Box) {
 
-		// Create the settings for the body itself. Note that here you can also set other properties like the restitution / friction.
-		BodyCreationSettings floor_settings(floor_shape, RVec3(0.0_r, -1.0_r, 0.0_r), Quat::sIdentity(), EMotionType::Static, Layers::NON_MOVING);
+			BoxShapeSettings box_shape_settings(Vec3(tc.m_Scale.x/2, tc.m_Scale.y/2, tc.m_Scale.z/2));
+			body_shape = box_shape_settings.Create().Get();
 
-		auto m_BodyInterface = &m_physics.m_PhysicsSystem->GetBodyInterface();
-		// Create the actual rigid body
-		m_floor = m_BodyInterface->CreateBody(floor_settings); // Note that if we run out of bodies this can return nullptr
+		}
+		else if (rbc.m_RigidBodyShape == RigidBodyComponent::RigidBodyShape::Sphere) {
 
-		// Add it to the world
-		m_BodyInterface->AddBody(m_floor->GetID(), EActivation::DontActivate);
+			SphereShapeSettings sphere_shape_settings(tc.m_Scale.y / 2);
+			body_shape = sphere_shape_settings.Create().Get();
 
-		// Now create a dynamic body to bounce on the floor
-		// Note that this uses the shorthand version of creating and adding a body to the world
-		BodyCreationSettings sphere_settings(new SphereShape(0.5f), RVec3(0.0_r, 2.0_r, 0.0_r), Quat::sIdentity(), EMotionType::Dynamic, Layers::MOVING);
-		m_sphere_id = m_BodyInterface->CreateAndAddBody(sphere_settings, EActivation::Activate);
+		}
 
-		// Now you can interact with the dynamic body, in this case we're going to give it a velocity.
-		// (note that if we had used CreateBody then we could have set the velocity straight on the body before adding it to the physics system)
-		m_BodyInterface->SetLinearVelocity(m_sphere_id, Vec3(0.0f, 0.0f, 0.0f));
-
-	}
-	uint32_t PhysicsScene::CreateRigidBody(const TransformComponent& tc, const RigidBodyComponent& rbc)
-	{
-
-
+		
+		EMotionType emotionType = EMotionType(rbc.m_MotionType);
+		uint8_t layer=0;
+		if (emotionType == EMotionType::Static) layer = Layers::NON_MOVING;
+		else layer = Layers::MOVING;
+			 
+		BodyCreationSettings body_settings(body_shape, pos, rot, emotionType, layer);
+		JPH::BodyID objID = BodyInterface.CreateAndAddBody(body_settings, EActivation::Activate);
+		uint32_t id = objID.GetIndexAndSequenceNumber();
 
 
-		auto m_BodyInterface = &m_physics.m_PhysicsSystem->GetBodyInterface();
-
-
-
-		return uint32_t();
+		return id;
 	}
 	void PhysicsScene::RemoveRigidBody(uint32_t body_id)
 	{
+
+		m_PendingRemove.push_back(body_id);
+
+	}
+
+	//更新前
+	void PhysicsScene::ResetRigidBody(TransformComponent& tc, RigidBodyComponent& rbc)
+	{
+		BodyID id(rbc.m_PhysicObj);
+
+		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
+		if(bodyInterface.GetMotionType(id)!=EMotionType(rbc.m_MotionType))
+		bodyInterface.SetMotionType(id, EMotionType(rbc.m_MotionType), EActivation::Activate);
+
+
+		
+
+	}
+	//更新后
+	void PhysicsScene::UpdateRigidBody(TransformComponent& tc,RigidBodyComponent &rbc)
+	{
+		
+			BodyID id(rbc.m_PhysicObj);
+
+			auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
+			
+			if (bodyInterface.IsActive(id)&& bodyInterface.GetMotionType(id)!=EMotionType::Static) {
+				
+				JPH::RMat44 trans = bodyInterface.GetCenterOfMassTransform(id);
+				glm::mat4 tr;
+
+				for (int i = 0;i < 4;i++) {
+					for (int j = 0; j < 4;j++) {
+						tr[i][j] = trans.GetColumn4(i)[j];
+					}
+				}
+				glm::vec3 t(1.0f);
+				glm::vec3 rot(0.0f);
+				Math::DecomposeTransform(tr,tc.m_Translation, rot,t );
+				tc.m_Rotation = glm::degrees(rot);
+			}
+
+		
 	}
 	void PhysicsScene::OnUpdate(float dt)
 	{
-		auto m_BodyInterface = &m_physics.m_PhysicsSystem->GetBodyInterface();
-		if (!m_BodyInterface->IsActive(m_sphere_id))return;
+		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
 		// Next step
 
-		// Output current position and velocity of the sphere
-		RVec3 position = m_BodyInterface->GetCenterOfMassPosition(m_sphere_id);
-		Vec3 velocity = m_BodyInterface->GetLinearVelocity(m_sphere_id);
-		XRE_INFO("Position: {0},{1},{2}", position.GetX(), position.GetY(), position.GetZ());
 		
-
 		// If you take larger steps than 1 / 60th of a second you need to do multiple collision steps in order to keep the simulation stable. Do 1 collision step per 1 / 60th of a second (round up).
 		const int cCollisionSteps = 1;
 
@@ -119,8 +155,18 @@ namespace XRE {
 
 
 
+
 		// Step the world
-		m_physics.m_PhysicsSystem->Update( 1.0f/60.0f, cCollisionSteps, cIntegrationSubSteps, m_physics.m_TempAllocator, m_physics.m_JobSystem);
+		m_physics.m_PhysicsSystem->Update( dt, cCollisionSteps, cIntegrationSubSteps, m_physics.m_TempAllocator, m_physics.m_JobSystem);
+
+		for (uint32_t body_id : m_PendingRemove)
+		{
+			XRE_INFO("Remove Body {0}", body_id);
+			bodyInterface.RemoveBody(JPH::BodyID(body_id));
+			bodyInterface.DestroyBody(JPH::BodyID(body_id));
+		}
+		m_PendingRemove.clear();
+
 
 	}
 }

@@ -109,7 +109,6 @@ namespace XRE {
 		
 
 		
-
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.80f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
@@ -133,8 +132,8 @@ namespace XRE {
 		colors[ImGuiCol_SliderGrab] = ImVec4(0.96f, 0.27f, 0.11f, 1.00f);
 		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.93f, 0.62f, 0.10f, 0.99f);
 		colors[ImGuiCol_Button] = ImVec4(0.01f, 0.01f, 0.01f, 1.00f);
-		colors[ImGuiCol_ButtonHovered] = ImVec4(0.02f, 0.02f, 0.02f, 1.00f);
-		colors[ImGuiCol_ButtonActive] = ImVec4(0.04f, 0.02f, 0.02f, 1.00f);
+		colors[ImGuiCol_ButtonHovered] = ImVec4(0.28f, 0.28f, 0.28f, 1.00f);
+		colors[ImGuiCol_ButtonActive] = ImVec4(0.17f, 0.17f, 0.17f, 1.00f);
 		colors[ImGuiCol_Header] = ImVec4(0.23f, 0.23f, 0.25f, 0.59f);
 		colors[ImGuiCol_HeaderHovered] = ImVec4(0.02f, 0.02f, 0.02f, 1.00f);
 		colors[ImGuiCol_HeaderActive] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
@@ -166,6 +165,7 @@ namespace XRE {
 		colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 		colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 		colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+
 
 
 

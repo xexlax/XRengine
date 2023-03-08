@@ -10,7 +10,7 @@
 namespace XRE {
 
 	enum SceneStatus {
-		Editing, Runtime
+		Editing, Runtime ,Paused
 	};
 	class GameObject;
 	
@@ -23,13 +23,16 @@ namespace XRE {
 
 	public:
 		Scene();
+
+
 		~Scene() = default;
 		//在场景中新建物体
 		GameObject CreateGameObject(const std::string& Name);
 		//删除物体
 		void Destroy(GameObject go);
 		void OnViewportResize(uint32_t width, uint32_t height);
-		
+		void OnRuntimeBegin();
+		void OnRuntimeEnd();
 		
 		template <class Archive>
 		void serialize(Archive& ar)
@@ -53,6 +56,8 @@ namespace XRE {
 		std::string GetName()const { return m_Name; };
 		void SetName(const std::string& name) { m_Name = name; };
 
+		std::string GetFilePath() const { return m_FilePath; };
+
 		void Serialize(const std::string& filepath);
 		void Save() { Serialize(m_FilePath); }
 		void Deserialize(const std::string& filepath);
@@ -64,16 +69,15 @@ namespace XRE {
 	private:
 		uint32_t m_ViewportWidth, m_ViewportHeight;
 		std::string m_Name= "New Scene";
-		std::string m_FilePath;
+		std::string m_FilePath = "";
 
 
 
 		XRef<PhysicsScene> m_PhysicsScene;
 		
 
-		void UpdateLighting();
 		void UpdateNativeScripting(TimeStep ts);
-		void UpdatePhysics();
+		void UpdatePhysics(TimeStep ts);
 		void UpdateRendering(XRef<Camera> c);
 
 		

@@ -17,11 +17,14 @@ public:
 	void OnUpdate(TimeStep ts) override;
 	void OnEvent(Event& e) override;
 	void OnImGuiRender() override;
+
+
+
 private:
 	bool OnKeyReleased(KeyReleasedEvent& e);
 	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
-	void InitScene();
-	void UpdateScene();
+
+	void ToolBar();
 private:
 	//Editor Panels
 
@@ -44,6 +47,6 @@ private:
 
 	int m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
 	bool m_ShowGizmos= true;
-
+	XRef<Texture2D> m_IconPlay, m_IconStop, m_IconPause, m_IconSimulate;
 
 };

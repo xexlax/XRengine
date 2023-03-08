@@ -101,7 +101,7 @@ namespace XRE{
 				
 			}
 			if (ImGui::MenuItem(u8"ÉãÏñ»ú")) {
-				m_Scene->CreateGameObject(u8"ÉãÏñ»ú").AddComponent<CameraComponent>();
+				m_Scene->CreateGameObject(u8"ÉãÏñ»ú").AddComponent<CameraComponent>(CameraType::Perspective);
 			}
 
 				

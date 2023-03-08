@@ -21,19 +21,21 @@ EditorLayer::EditorLayer()
 void EditorLayer::OnAttach()
 {
 	
-	InitScene();
+	
 	m_Scene = make_shared<Scene>();
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
 	Renderer3D::Init();
 	m_ScenePanel.AttachToScene(m_Scene);
 	m_PropertiesPanel.SetReference(&m_ScenePanel);
+	m_PropertiesPanel.SetEC(&m_EditorCamera);
+	m_IconPlay = ResourceManager::GetTex2D(AssetsDirectory"textures/Play.png");
+	m_IconStop = ResourceManager::GetTex2D(AssetsDirectory"textures/Stop.png");
+	m_IconPause = ResourceManager::GetTex2D(AssetsDirectory"textures/Pause.png");
+	m_IconSimulate = ResourceManager::GetTex2D(AssetsDirectory"textures/Simulate.png");
 	
 }
 
-void EditorLayer::InitScene() {
-	
-	
-}
+
 
 void EditorLayer::OnDetach()
 {
@@ -43,13 +45,31 @@ void EditorLayer::OnDetach()
 void EditorLayer::OnUpdate(XRE::TimeStep ts)
 {
 		
-	//Temp：更新场景属性
-	UpdateScene();
-	m_EditorCamera.OnUpdate(ts);
+
 	//场景处理
 	//m_Scene->OnUpdate(ts);
 
-	m_Scene->OnUpdateEditing(ts,m_EditorCamera);
+	switch (m_Status)
+	{
+	case SceneStatus::Editing:
+
+		m_EditorCamera.OnUpdate(ts);
+
+		m_Scene->OnUpdateEditing(ts, m_EditorCamera);
+
+		break;
+	case SceneStatus::Runtime:
+		m_Scene->OnUpdateRuntime(ts);
+
+		break;
+
+	case SceneStatus::Paused:
+
+		break;
+	default:
+		break;
+	};
+	
 
 	
 	
@@ -57,8 +77,69 @@ void EditorLayer::OnUpdate(XRE::TimeStep ts)
 
 }
 
-void EditorLayer::UpdateScene()
+void EditorLayer::ToolBar()
 {
+	
+
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+	auto& colors = ImGui::GetStyle().Colors;
+	const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+	const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+	ImGui::Begin("##Tools");
+
+	ImGui::Checkbox(u8"查看Gizmos", &m_ShowGizmos);ImGui::SameLine();
+
+
+	ImGui::RadioButton(u8"移动", &m_GizmoType, ImGuizmo::OPERATION::TRANSLATE); ImGui::SameLine();
+	ImGui::RadioButton(u8"旋转", &m_GizmoType, ImGuizmo::OPERATION::ROTATE); ImGui::SameLine();
+	ImGui::RadioButton(u8"缩放", &m_GizmoType, ImGuizmo::OPERATION::SCALE); ImGui::SameLine();
+
+	float size = ImGui::GetTextLineHeightWithSpacing();
+	XRef<Texture2D> icon1 = ((m_Status == SceneStatus::Editing) ? m_IconPlay : m_IconStop);
+	XRef<Texture2D> icon2 = ((m_Status == SceneStatus::Paused) ? m_IconPlay : m_IconPause);
+	ImGui::SetCursorPosX(ImGui::GetWindowContentRegionMax().x * 0.5f - size);
+	//ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+	if (ImGui::ImageButton((ImTextureID)icon1->GetRendererId(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+	{
+		if (m_Status == SceneStatus::Editing) {
+			m_Status = SceneStatus::Runtime;
+			m_Scene->OnRuntimeBegin();
+		}
+
+		else if (m_Status == SceneStatus::Runtime || m_Status == SceneStatus::Paused) {
+			m_Status = SceneStatus::Editing;
+			m_Scene->OnRuntimeEnd();
+		}
+
+	
+
+	}
+	ImGui::SameLine();
+	ImGui::SetCursorPosX(ImGui::GetWindowContentRegionMax().x * 0.5f );
+
+	if (m_Status == SceneStatus::Editing) ImGui::BeginDisabled();
+	if (ImGui::ImageButton((ImTextureID)icon2->GetRendererId(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+	{
+		if (m_Status == SceneStatus::Runtime) {
+			m_Status = SceneStatus::Paused;
+		}
+		else 
+		if (m_Status == SceneStatus::Paused) {
+			m_Status = SceneStatus::Runtime;
+		}
+
+	}
+	if (m_Status == SceneStatus::Editing) ImGui::EndDisabled();
+
+	ImGui::End();
+	ImGui::PopStyleVar(2);
+	ImGui::PopStyleColor(3);;
 
 }
 
@@ -108,12 +189,32 @@ void EditorLayer::OnImGuiRender(){
 		{
 
 			if (ImGui::MenuItem(u8"打开")) {
+
+				if (m_Status == SceneStatus::Runtime || m_Status == SceneStatus::Paused) {
+					m_Status = SceneStatus::Editing;
+					m_Scene->OnRuntimeEnd();
+				}
 				m_Scene = make_shared<Scene>();
 				auto path = FileDialogs::OpenFile("Scene (*.scene)\0*.scene\0");
 				m_Scene->Deserialize(path);
 				m_ScenePanel.AttachToScene(m_Scene);
+				m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			
+				
+			
 			}
-			if (ImGui::MenuItem(u8"保存")) m_Scene->Save();
+
+			if (ImGui::MenuItem(u8"保存")) {
+				if (m_Scene->GetFilePath() == "") {
+					auto path = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
+					m_Scene->Serialize(path);
+				}
+				else
+					m_Scene->Save();
+			}
+				
+				
+				
 			if (ImGui::MenuItem(u8"另存为")) {
 				
 				auto path = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
@@ -127,6 +228,8 @@ void EditorLayer::OnImGuiRender(){
 		}
 		ImGui::EndMenuBar();
 	}
+
+	ToolBar();
 
 	ImGui::Begin(u8"设置");
 		ImGui::Text("FPS:%d", Application::GetFPS());
@@ -144,27 +247,23 @@ void EditorLayer::OnImGuiRender(){
 
 	ImGui::End();
 
+	
+	
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-	
-	
-
-
 
 	ImGui::Begin(u8"视窗");
 		
 
+		//ToolBar();
 
-		ImGui::Checkbox(u8"查看Gizmos", &m_ShowGizmos);ImGui::SameLine();
-
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 		
-		ImGui::RadioButton(u8"移动", &m_GizmoType, ImGuizmo::OPERATION::TRANSLATE); ImGui::SameLine();
-		ImGui::RadioButton(u8"旋转", &m_GizmoType, ImGuizmo::OPERATION::ROTATE); ImGui::SameLine();
-		ImGui::RadioButton(u8"缩放", &m_GizmoType, ImGuizmo::OPERATION::SCALE); 
-
 		
-		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar
-
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		
 		m_ViewportHovered = ImGui::IsWindowHovered();
@@ -182,57 +281,53 @@ void EditorLayer::OnImGuiRender(){
 		}
 
 		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment(0);
-		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		ImGui::Image((ImTextureID)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		auto windowSize = ImGui::GetWindowSize();
-		ImVec2 minBound = ImGui::GetWindowPos();
-		minBound.x += viewportOffset.x;
-		minBound.y += viewportOffset.y;
+		//Draw Gizmo
+		if (m_Status != SceneStatus::Runtime) {
 
-		ImVec2 maxBound = { minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y };
-		m_ViewportBounds[0] = { minBound.x, minBound.y };
-		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
-
-		GameObject selectedEntity = m_ScenePanel.GetSelected();
-		if (selectedEntity && m_GizmoType != -1 && m_ShowGizmos)
-		{
-			ImGuizmo::SetOrthographic(false);
-			ImGuizmo::SetDrawlist();
-
-			float windowWidth = (float)ImGui::GetWindowWidth();
-			float windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
-			
-			const glm::mat4& cameraProjection = m_EditorCamera.GetProjectionMatrix();
-			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
-
-			// Entity transform
-			auto& tc = selectedEntity.GetComponent<TransformComponent>();
-			glm::mat4 transform = tc.GetTransform();
-
-			// Snapping
-			bool snap = Input::IsKeyPressed(XRE_KEY_LEFT_CONTROL);
-			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
-			// Snap to 45 degrees for rotation
-			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
-				snapValue = 45.0f;
-
-			float snapValues[3] = { snapValue, snapValue, snapValue };
-
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
-				nullptr, snap ? snapValues : nullptr);
-
-			if (ImGuizmo::IsUsing())
+			GameObject selectedEntity = m_ScenePanel.GetSelected();
+			if (selectedEntity && m_GizmoType != -1 && m_ShowGizmos)
 			{
-				glm::vec3 translation, rotation, scale;
-				Math::DecomposeTransform(transform, translation, rotation, scale);
+				ImGuizmo::SetOrthographic(false);
+				ImGuizmo::SetDrawlist();
 
-				glm::vec3 deltaRotation = glm::degrees(rotation) - tc.m_Rotation;
-				tc.m_Translation = translation;
-				tc.m_Rotation += deltaRotation;
-				tc.m_Scale = scale;
+			
+				ImGuizmo::SetRect(m_ViewportBounds[0].x,m_ViewportBounds[0].y, 
+					m_ViewportBounds[1].x- m_ViewportBounds[0].x, m_ViewportBounds[1].y- m_ViewportBounds[0].y);
+
+				const glm::mat4& cameraProjection = m_EditorCamera.GetProjectionMatrix();
+				glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
+				// Entity transform
+				auto& tc = selectedEntity.GetComponent<TransformComponent>();
+				glm::mat4 transform = tc.GetTransform();
+
+				// Snapping
+				bool snap = Input::IsKeyPressed(XRE_KEY_LEFT_CONTROL);
+				float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+				// Snap to 45 degrees for rotation
+				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+					snapValue = 45.0f;
+
+				float snapValues[3] = { snapValue, snapValue, snapValue };
+
+				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+					(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+					nullptr, snap ? snapValues : nullptr);
+
+				if (ImGuizmo::IsUsing())
+				{
+					glm::vec3 translation, rotation, scale;
+					Math::DecomposeTransform(transform, translation, rotation, scale);
+
+					glm::vec3 deltaRotation = glm::degrees(rotation) - tc.m_Rotation;
+					tc.m_Translation = translation;
+					tc.m_Rotation += deltaRotation;
+					tc.m_Scale = scale;
+				}
 			}
+		
 		}
 	ImGui::End();
 	ImGui::PopStyleVar();

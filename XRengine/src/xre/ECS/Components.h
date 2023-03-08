@@ -272,6 +272,8 @@ namespace XRE {
 	public:
 		std::string m_Name = "Rigid Body";
 
+		uint32_t m_PhysicObj=0;
+
 		enum RigidBodyShape
 		{
 			Box, Sphere, Capsule, None
@@ -282,7 +284,7 @@ namespace XRE {
 		{
 			Static, Kinematic, Dynamic
 		} 
-		m_MotionType = RigidBodyMotion::Static;
+		m_MotionType = RigidBodyMotion::Dynamic;
 
 
 		float m_Mass = 1.0f;
@@ -297,8 +299,17 @@ namespace XRE {
 		RigidBodyComponent(RigidBodyShape shape, RigidBodyMotion motion, float mass) :
 			m_RigidBodyShape(shape), m_MotionType(motion), m_Mass(mass) {}
 
-		void SetMotion(int i) { m_MotionType = RigidBodyComponent::RigidBodyMotion(i); };
-		void SetShape(int i) { m_RigidBodyShape = RigidBodyComponent::RigidBodyShape(i); };
+		
+
+		void SetMotion(int i) { 
+			m_MotionType = RigidBodyComponent::RigidBodyMotion(i); 
+			
+		
+		};
+		void SetShape(int i) { 
+			m_RigidBodyShape = RigidBodyComponent::RigidBodyShape(i); 
+		
+		};
 	};
 
 
