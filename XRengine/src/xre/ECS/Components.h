@@ -3,7 +3,7 @@
 #include "xre\Resource\ResourceManager.h"
 #include "xre\Resource\Model.h"
 #include "xre\Renderer\Camera\Camera.h"
-
+#include "xre\Physics\PhysicsShape.h"
 
 #include <cereal/archives/json.hpp>
 #include <string>
@@ -274,42 +274,34 @@ namespace XRE {
 
 		uint32_t m_PhysicObj=0;
 
-		enum RigidBodyShape
-		{
-			Box, Sphere, Capsule, None
-		} 
-		m_RigidBodyShape = RigidBodyShape::Box;
+		bool m_UseIndependentShapeTransform = false;
+
+		PhysicsShape m_Shape;
 
 		enum RigidBodyMotion
 		{
 			Static, Kinematic, Dynamic
 		} 
-		m_MotionType = RigidBodyMotion::Dynamic;
+		m_MotionType = RigidBodyMotion::Static;
 
-
+		bool m_AutoMass = true;
 		float m_Mass = 1.0f;
 
 		template <class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(m_Active, m_RigidBodyShape, m_MotionType, m_Mass);
+			ar(m_Active, m_UseIndependentShapeTransform, m_Shape, m_MotionType,m_AutoMass, m_Mass);
 		}
 
 		RigidBodyComponent() = default;
-		RigidBodyComponent(RigidBodyShape shape, RigidBodyMotion motion, float mass) :
-			m_RigidBodyShape(shape), m_MotionType(motion), m_Mass(mass) {}
+		
 
 		
 
 		void SetMotion(int i) { 
 			m_MotionType = RigidBodyComponent::RigidBodyMotion(i); 
-			
-		
 		};
-		void SetShape(int i) { 
-			m_RigidBodyShape = RigidBodyComponent::RigidBodyShape(i); 
-		
-		};
+
 	};
 
 

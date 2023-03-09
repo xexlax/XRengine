@@ -1,5 +1,5 @@
 #include "ScenePanel.h"
-
+#include "../Commands/CommandManager.h"
 #include <ImGui\imgui.h>
 namespace XRE{
 	ScenePanel::ScenePanel(const XRef<Scene>& scene)
@@ -63,45 +63,50 @@ namespace XRE{
 			if (ImGui::BeginMenu(u8"预设体"))
 			{
 				if (ImGui::MenuItem(u8"立方体")) {
-					m_Scene->CreateGameObject(u8"立方体").AddComponent<MeshRendererComponent>(
-						ResourceManager::GetElementalModel(Elemental_Model::Cube)
-						);
+
+					auto go = m_Scene->CreateGameObject(u8"立方体");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cube));
+					CommandManager::Get().Command_CreateObj(go);
+
 
 				}
 				if (ImGui::MenuItem(u8"平面")) {
-					m_Scene->CreateGameObject(u8"平面").AddComponent<MeshRendererComponent>(
-						ResourceManager::GetElementalModel(Elemental_Model::Plane)
-						);
+					auto go = m_Scene->CreateGameObject(u8"平面");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Plane));
+					CommandManager::Get().Command_CreateObj(go);
 				}
 				if (ImGui::MenuItem(u8"球")) {
-					m_Scene->CreateGameObject(u8"球").AddComponent<MeshRendererComponent>(
-						ResourceManager::GetElementalModel(Elemental_Model::Sphere)
-						);
+					auto go = m_Scene->CreateGameObject(u8"球");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Sphere));
+					CommandManager::Get().Command_CreateObj(go);
 				}
 				if (ImGui::MenuItem(u8"圆锥")) {
-					m_Scene->CreateGameObject(u8"圆锥").AddComponent<MeshRendererComponent>(
-						ResourceManager::GetElementalModel(Elemental_Model::Cone)
-						);
+					auto go = m_Scene->CreateGameObject(u8"圆锥");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cone));
+					CommandManager::Get().Command_CreateObj(go);
 				}
 				if (ImGui::MenuItem(u8"圆柱")) {
-					m_Scene->CreateGameObject(u8"圆柱").AddComponent<MeshRendererComponent>(
-						ResourceManager::GetElementalModel(Elemental_Model::Cylinder)
-						);
+					auto go = m_Scene->CreateGameObject(u8"圆柱");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cylinder));
+					CommandManager::Get().Command_CreateObj(go);
 				}
 				if (ImGui::MenuItem(u8"Monkey")) {
-					m_Scene->CreateGameObject(u8"Monkey").AddComponent<MeshRendererComponent>(
-						ResourceManager::GetElementalModel(Elemental_Model::Torus)
-						);
+					auto go = m_Scene->CreateGameObject(u8"Monkey");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Torus));
+					CommandManager::Get().Command_CreateObj(go);
 				}
 				ImGui::EndMenu();
 			}
 				
 			if (ImGui::MenuItem(u8"点光源")) {
+				auto go = m_Scene->CreateGameObject(u8"光源");
 				m_Scene->CreateGameObject(u8"光源").AddComponent<PointLightComponent>();
-				
+				CommandManager::Get().Command_CreateObj(go);
 			}
 			if (ImGui::MenuItem(u8"摄像机")) {
-				m_Scene->CreateGameObject(u8"摄像机").AddComponent<CameraComponent>(CameraType::Perspective);
+				auto go = m_Scene->CreateGameObject(u8"摄像机");
+				go.AddComponent<CameraComponent>(CameraType::Perspective);
+				CommandManager::Get().Command_CreateObj(go);
 			}
 
 				
@@ -147,10 +152,16 @@ namespace XRE{
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
 		{
-			if (ImGui::MenuItem(u8"删除对象"))
+			if (ImGui::MenuItem(u8"删除对象")) {
+
+				CommandManager::Get().Command_DeleteObj(gameObj);
 				entityDeleted = true;
-			if (ImGui::MenuItem(u8"创建副本"))
-				gameObj.Duplicate();
+			}
+				
+			if (ImGui::MenuItem(u8"创建副本")) {
+				CommandManager::Get().Command_CreateObj(gameObj.Duplicate());
+			}
+				
 			ImGui::EndPopup();
 		}
 

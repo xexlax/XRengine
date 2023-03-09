@@ -13,7 +13,7 @@
 namespace XRE{
 	Scene::Scene()
 	{
-		m_PhysicsScene = XMakeRef<PhysicsScene>();
+		m_PhysicsScene = PhysicsScene::Create();
 		//Create Floor For Testing
 		//m_PhysicsScene->Init();
 	}

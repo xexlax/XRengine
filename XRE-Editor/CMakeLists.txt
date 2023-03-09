@@ -11,6 +11,7 @@ target_include_directories(
     PUBLIC
     
     "${ENGINE_SRC_DIR}"
+    "${EDITOR_ROOT_DIR}"
     "${THIRD_PARTY_DIR}"
     "${THIRD_PARTY_INCLUDE}"
 )

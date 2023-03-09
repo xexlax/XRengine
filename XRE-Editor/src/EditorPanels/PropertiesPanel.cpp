@@ -1,5 +1,6 @@
 #include <ImGui\imgui.h>
 #include "PropertiesPanel.h"
+#include "Data.h"
 #include <glm\glm\gtc\type_ptr.hpp>
 #include <ImGui\imgui_internal.h>
 
@@ -30,43 +31,44 @@ namespace XRE {
 			{
 				if (ImGui::MenuItem("Camera"))
 				{
-					if(!go.HasComponent<CameraComponent>())
-					go.AddComponent<CameraComponent>(CameraType::Perspective);
+					if (!go.HasComponent<CameraComponent>())
+						CommandManager::Get().Command_Create_Component<CameraComponent>(go.AddComponent<CameraComponent>(CameraType::Perspective), go);
+					
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Mesh Renderer"))
 				{
 					if (!go.HasComponent<MeshRendererComponent>())
-					go.AddComponent<MeshRendererComponent>();
+						CommandManager::Get().Command_Create_Component<MeshRendererComponent>(go.AddComponent<MeshRendererComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Point Light"))
 				{
 					if (!go.HasComponent<PointLightComponent>())
-					go.AddComponent<PointLightComponent>();
+						CommandManager::Get().Command_Create_Component<PointLightComponent>(go.AddComponent<PointLightComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Directional Light"))
 				{
 					if (!go.HasComponent<DirectionalLightComponent>())
-					go.AddComponent<DirectionalLightComponent>();
+						CommandManager::Get().Command_Create_Component<DirectionalLightComponent>(go.AddComponent<DirectionalLightComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Easy Animator"))
 				{
 					if (!go.HasComponent<AnimatorComponent>())
-					go.AddComponent<AnimatorComponent>();
+						CommandManager::Get().Command_Create_Component<AnimatorComponent>(go.AddComponent<AnimatorComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
 				if (ImGui::MenuItem("Rigid Body"))
 				{
 					if (!go.HasComponent<RigidBodyComponent>())
-						go.AddComponent<RigidBodyComponent>();
+						CommandManager::Get().Command_Create_Component<RigidBodyComponent>(go.AddComponent<RigidBodyComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
@@ -115,9 +117,9 @@ namespace XRE {
 				DrawVec3Control(u8"位置", transform.m_Translation);
 				DrawVec3Control(u8"旋转", transform.m_Rotation);
 				DrawVec3Control(u8"缩放", transform.m_Scale);
-				/*	ImGui::DragFloat3("Position", glm::value_ptr(transform.m_Translation), 0.1f);
-					ImGui::DragFloat3("Rotation", glm::value_ptr(transform.m_Rotation), 1.0f);
-					ImGui::DragFloat3("Scale", glm::value_ptr(transform.m_Scale), 0.1f);*/
+				/*	XUI::DragFloat3("Position", glm::value_ptr(transform.m_Translation), 0.1f);
+					XUI::DragFloat3("Rotation", glm::value_ptr(transform.m_Rotation), 1.0f);
+					XUI::DragFloat3("Scale", glm::value_ptr(transform.m_Scale), 0.1f);*/
 				
 				if(go.HasComponent<CameraComponent>()&&m_EditorCamera)
 				if (ImGui::Button(u8"从编辑器摄像机衍生变换")) {
@@ -159,13 +161,14 @@ namespace XRE {
 
 	template<typename T>
 	void PropertiesPanel::DrawComponent(GameObject go) {
+		ImGui::Separator();
 		T& c = go.GetComponent<T>();
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-		bool open = ImGui::TreeNodeEx((void*)typeid(Component).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, c.m_Name.c_str());
+		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, c.m_Name.c_str());
 		ImGui::SameLine(ImGui::GetWindowWidth() - 120.0f);
 		ImGui::Checkbox(u8"激活", &c.m_Active);
 		ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
-		if (ImGui::Button("+"))
+		if (ImGui::Button("x"))
 		{
 			ImGui::OpenPopup(u8"组件选项");
 		}
@@ -173,8 +176,11 @@ namespace XRE {
 		bool removeComponent = false;
 		if (ImGui::BeginPopup(u8"组件选项"))
 		{
-			if (ImGui::MenuItem(u8"删除组件"))
+			if (ImGui::MenuItem(u8"删除组件")) {
+				CommandManager::Get().Command_Delete_Component(c, go);
 				removeComponent = true;
+			}
+				
 			ImGui::EndPopup();
 		}
 		if (open)
@@ -206,9 +212,9 @@ namespace XRE {
 
 						ImGui::Text(mat->name.c_str());
 						ImGui::ColorEdit3(u8"基础色", glm::value_ptr(mat->baseColor));
-						ImGui::DragFloat("Shininess", &mat->shininess);
-						ImGui::DragFloat("Metallic", &mat->metallic);
-						ImGui::DragFloat("Roughness", &mat->roughness);
+						XUI::DragFloat("Shininess", &mat->shininess);
+						XUI::DragFloat("Metallic", &mat->metallic);
+						XUI::DragFloat("Roughness", &mat->roughness);
 						if (mat->diffuseTex.m_enable) {
 							auto tex = mat->diffuseTex.m_Tex->GetRendererId();
 
@@ -248,9 +254,9 @@ namespace XRE {
 	void PropertiesPanel::DrawComponentLayout<AnimatorComponent>(AnimatorComponent& component) {
 		DrawVec3Control("Pivot", component.m_Pivot);
 		DrawVec3Control("Axis", component.m_Axis);
-		ImGui::DragFloat("Radius", &component.m_Radius,0.1f,0.0f,10.0f);
-		ImGui::DragFloat("Speed", &component.m_AngleSpeed, 0.1f, 0.0f,10.0f);
-		ImGui::DragFloat("Phase", &component.m_Phase,1.0f,0.0f,360.0f);
+		XUI::DragFloat("Radius", &component.m_Radius,0.1f,0.0f,10.0f);
+		XUI::DragFloat("Speed", &component.m_AngleSpeed, 0.1f, 0.0f,10.0f);
+		XUI::DragFloat("Phase", &component.m_Phase,1.0f,0.0f,360.0f);
 		
 	}
 
@@ -258,14 +264,14 @@ namespace XRE {
 	void PropertiesPanel::DrawComponentLayout<PointLightComponent>(PointLightComponent& component) {
 
 		ImGui::ColorEdit3(u8"颜色", glm::value_ptr(component.m_Color));
-		ImGui::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 10.0f);
+		XUI::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 10.0f);
 	}
 	
 	template<>
 	void PropertiesPanel::DrawComponentLayout<DirectionalLightComponent>(DirectionalLightComponent& component) {
 
 		ImGui::ColorEdit3(u8"颜色", glm::value_ptr(component.m_Color));
-		ImGui::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 3.0f);
+		XUI::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 3.0f);
 		ImGui::Checkbox(u8"阴影", &component.m_ShadowCasting);
 	}
 
@@ -301,30 +307,30 @@ namespace XRE {
 		if (camera->GetType() == CameraType::Perspective)
 		{
 			float verticalFov = glm::degrees(camera->GetPerspectiveFovy());
-			if (ImGui::DragFloat(u8"视域", &verticalFov))
+			if (XUI::DragFloat(u8"视域", &verticalFov))
 				camera->SetPerspectiveFovy(glm::radians(verticalFov));
 
 			float Near = camera->GetPerspectiveNear();
-			if (ImGui::DragFloat(u8"近平面", &Near))
+			if (XUI::DragFloat(u8"近平面", &Near))
 				camera->SetPerspectiveNear(Near);
 
 			float Far = camera->GetPerspectiveFar();
-			if (ImGui::DragFloat(u8"远平面", &Far))
+			if (XUI::DragFloat(u8"远平面", &Far))
 				camera->SetPerspectiveFar(Far);
 		}
 
 		if (camera->GetType() == CameraType::Orthographic)
 		{
 			float orthoSize = camera->GetOrthographicSize();
-			if (ImGui::DragFloat(u8"大小", &orthoSize))
+			if (XUI::DragFloat(u8"大小", &orthoSize))
 				camera->SetOrthographicSize(orthoSize);
 
 			float orthoNear = camera->GetOrthographicNear();
-			if (ImGui::DragFloat(u8"近平面", &orthoNear))
+			if (XUI::DragFloat(u8"近平面", &orthoNear))
 				camera->SetOrthographicNear(orthoNear);
 
 			float orthoFar = camera->GetPerspectiveNear();
-			if (ImGui::DragFloat(u8"远平面", &orthoFar))
+			if (XUI::DragFloat(u8"远平面", &orthoFar))
 				camera->SetOrthographicFar(orthoFar);
 
 
@@ -339,7 +345,7 @@ namespace XRE {
 		const char* ShapeTypeStrings[] = { u8"方形",u8"球形",u8"胶囊" };
 
 		const char* currentMotionTypeString = MotionTypeStrings[component.m_MotionType];
-		const char* currentShapeTypeString = ShapeTypeStrings[component.m_RigidBodyShape];
+		const char* currentShapeTypeString = ShapeTypeStrings[component.m_Shape.m_Type];
 		if (ImGui::BeginCombo(u8"运动形式", currentMotionTypeString)) {
 			for (int i = 0; i < 3; i++)
 			{
@@ -364,7 +370,7 @@ namespace XRE {
 				if (ImGui::Selectable(ShapeTypeStrings[i], isSelected))
 				{
 					currentShapeTypeString = ShapeTypeStrings[i];
-					component.SetShape(i);
+					component.m_Shape.SetType(i);
 				}
 
 				if (isSelected)
@@ -373,8 +379,34 @@ namespace XRE {
 
 			ImGui::EndCombo();
 		}
+
+		ImGui::Checkbox(u8"使用独立变换", &component.m_UseIndependentShapeTransform);
+		if (component.m_UseIndependentShapeTransform == true) {
+			if (component.m_Shape.m_Type == PhysicsShape::Box) {
+				DrawVec3Control(u8"半轴", component.m_Shape.m_Size);
+
+			}
+			if (component.m_Shape.m_Type == PhysicsShape::Sphere) {
+				XUI::DragFloat(u8"半径", &component.m_Shape.m_Size.x);
+			}
+			if (component.m_Shape.m_Type == PhysicsShape::Capsule) {
+				XUI::DragFloat(u8"半径", &component.m_Shape.m_Size.x,0.1f,0.0f,5.0f);
+				XUI::DragFloat(u8"半长轴", &component.m_Shape.m_Size.y,0.1f, 0.0f, 5.0f);
+			}
+
+			DrawVec3Control(u8"偏移", component.m_Shape.m_Offset);
+
+			if (component.m_Shape.m_Type != PhysicsShape::Sphere)
+			DrawVec3Control(u8"旋转", component.m_Shape.m_Rotation);
+		}
 		
-		ImGui::DragFloat("Mass", &component.m_Mass, 0.1f, 0.0f, 10.0f);
+
+
+
+		ImGui::Checkbox(u8"自动质量", &component.m_AutoMass);
+		if (component.m_AutoMass) ImGui::BeginDisabled();
+		XUI::DragFloat("质量", &component.m_Mass, 0.1f, 0.0f, 10.0f);
+		if (component.m_AutoMass) ImGui::EndDisabled();
 	}
 
 
@@ -402,7 +434,8 @@ namespace XRE {
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		XUI::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -414,7 +447,9 @@ namespace XRE {
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		XUI::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		
+
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
@@ -426,7 +461,7 @@ namespace XRE {
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		XUI::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
 		ImGui::PopItemWidth();
 
 		ImGui::PopStyleVar();

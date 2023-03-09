@@ -2,5 +2,7 @@
 
 #define AssetsDirectory "../Assets/"
 
-#include "Editor\ScenePanel.h"
-#include "Editor\PropertiesPanel.h"
+#include "EditorPanels\ScenePanel.h"
+#include "EditorPanels\PropertiesPanel.h"
+
+#include "Commands\CommandManager.h"

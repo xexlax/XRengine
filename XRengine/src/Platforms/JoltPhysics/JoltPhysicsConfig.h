@@ -1,9 +1,8 @@
 #pragma once
 
-#include <glm\glm.hpp>
 namespace XRE
 {
-    class PhysicsConfig
+    class JoltPhysicsConfig
     {
     public:
         // scene setting
@@ -16,9 +15,5 @@ namespace XRE
         uint32_t m_MaxJobCount{ 1024 };
         uint32_t m_MaxBarrierCount{ 8 };
         uint32_t m_MaxConcurrentJobCount{ 4 };
-
-        glm::vec3 m_Gravity{ 0.f, 0.f, -9.8f };
-
-        float m_UpdateFrequency{ 60.f };
     };
 } 

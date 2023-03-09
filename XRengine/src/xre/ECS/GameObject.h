@@ -209,12 +209,15 @@ namespace XRE {
 		}
 		std::string GetName() { return GetComponent<NameComponent>(); }
 		void SetName(const std::string& name) { GetComponent<NameComponent>() = name; }
+		Scene* GetScene() const { return m_Scene; }
 
 	private:
 		//不要给GameObj加上除了Component以外的任何属性，因为GO的获取只是从ECS池中读取编号，其所有的属性由component决定
 		
+
 		entt::entity m_Entity{ entt::null };
 		Scene* m_Scene= nullptr;
+		
 	};
 	
 }

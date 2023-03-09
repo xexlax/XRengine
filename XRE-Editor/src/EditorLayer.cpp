@@ -226,6 +226,18 @@ void EditorLayer::OnImGuiRender(){
 			
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu(u8"±à¼­"))
+		{
+			if (ImGui::MenuItem(u8"³·Ïú")) {
+				CommandManager::Get().Undo();
+			}
+
+			if (ImGui::MenuItem(u8"ÖØ×ö")) {
+				CommandManager::Get().Redo();
+			}
+
+			ImGui::EndMenu();
+		}
 		ImGui::EndMenuBar();
 	}
 
@@ -341,11 +353,39 @@ void EditorLayer::OnImGuiRender(){
 	//ImGui::ShowDemoWindow();
 
 	ImGui::End();
+
+	if(m_ScenePanel.GetSelected()&&m_GizmoType!=-1)
+	DetectCommand();
 		
 
 }
 
+void EditorLayer::DetectCommand() {
+	
+	if (!m_GizmosUsing && ImGuizmo::IsUsing()) {
+		m_GizmosUsing = true;
+		glm::vec3* ptr;
+		if (m_GizmoType == ImGuizmo::OPERATION::TRANSLATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Translation;
+		if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Rotation;
+		if (m_GizmoType == ImGuizmo::OPERATION::SCALE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Scale;
 
+		CommandManager::Get().Begin_Command_Edit<glm::vec3>(ptr, *ptr);
+
+	}
+
+	if (m_GizmosUsing && !ImGuizmo::IsUsing()) {
+		m_GizmosUsing = false;
+
+		glm::vec3* ptr;
+
+
+		if (m_GizmoType == ImGuizmo::OPERATION::TRANSLATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Translation;
+		if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Rotation;
+		if (m_GizmoType == ImGuizmo::OPERATION::SCALE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Scale;
+
+		CommandManager::Get().End_Command_Edit<glm::vec3>(ptr, *ptr);
+	}
+}
 
 void EditorLayer::OnEvent(XRE::Event& e)
 {
@@ -361,18 +401,15 @@ bool EditorLayer::OnKeyReleased(KeyReleasedEvent& e)
 	
 	switch (e.GetKeyCode()) {
 		// Gizmos
-	case XRE_KEY_U:
-		m_GizmoType = -1;
+	case XRE_KEY_Z:
+		if (Input::IsKeyPressed(XRE_KEY_LEFT_CONTROL))
+			CommandManager::Get().Undo();
 		break;
-	case XRE_KEY_I:
-		m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+	case XRE_KEY_Y:
+		if (Input::IsKeyPressed(XRE_KEY_LEFT_CONTROL))
+			CommandManager::Get().Redo();
 		break;
-	case XRE_KEY_O:
-		m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-		break;
-	case XRE_KEY_P:
-		m_GizmoType = ImGuizmo::OPERATION::SCALE;
-		break;
+
 	}
 	return false;
 }

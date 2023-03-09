@@ -63,10 +63,10 @@ namespace XRE {
 	{
 
 		//std::stringstream ss;
-
+		std::stringstream fs;
 		//输入输出要将生命周期完成之后再切换
 		{
-			std::ofstream fs("../Assets/tmp");
+			
 			//auto ngo = GameObject(m_Entity, m_Scene);
 			cereal::JSONOutputArchive oarchive(fs);
 
@@ -74,8 +74,8 @@ namespace XRE {
 		}
 
 		{
-			std::ifstream ifs("../Assets/tmp");
-			cereal::JSONInputArchive iarchive(ifs);
+			
+			cereal::JSONInputArchive iarchive(fs);
 
 
 
