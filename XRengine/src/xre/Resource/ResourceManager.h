@@ -7,7 +7,7 @@
 namespace XRE {
 	//资源管理器负责获取各种资产，并保证其不被重复加载
 	enum Elemental_Model {
-		Cube,Plane,Sphere,Cone,Cylinder,Torus
+		Cube,Plane,Sphere,Cone,Cylinder,Capsule
 	};
 	class ResourceManager {
 

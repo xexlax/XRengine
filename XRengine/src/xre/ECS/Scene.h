@@ -60,6 +60,7 @@ namespace XRE {
 
 		void Serialize(const std::string& filepath);
 		void Save() { Serialize(m_FilePath); }
+		void Load() { Deserialize(m_FilePath); }
 		void Deserialize(const std::string& filepath);
 
 	private:

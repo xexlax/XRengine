@@ -50,54 +50,17 @@ namespace XRE {
 
 	uint32_t JoltPhysicsScene::CreateRigidBody(TransformComponent& tc, const RigidBodyComponent& rbc)
 	{
-		auto& BodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
-		ShapeRefC body_shape;
+		BodyInterface& BodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
+		ShapeRefC body_shape = CreateShape(tc,rbc);
 		RVec3 pos(tc.m_Translation.x, tc.m_Translation.y, tc.m_Translation.z);
-		if (rbc.m_UseIndependentShapeTransform) {
-			pos += RVec3(rbc.m_Shape.m_Offset.x, rbc.m_Shape.m_Offset.y, rbc.m_Shape.m_Offset.z);
-		}
+
+		pos += RVec3(rbc.m_Shape.m_Offset.x, rbc.m_Shape.m_Offset.y, rbc.m_Shape.m_Offset.z);
+
 		auto q = glm::quat(glm::radians(tc.m_Rotation));
-		if (rbc.m_UseIndependentShapeTransform) {
-			q *= glm::quat(glm::radians(rbc.m_Shape.m_Rotation));
-		}
+
+		q *= glm::quat(glm::radians(rbc.m_Shape.m_Rotation));
+
 		Quat rot(q.x, q.y, q.z, q.w);
-
-		if (rbc.m_Shape.m_Type == PhysicsShape::Box) {
-
-			if (rbc.m_UseIndependentShapeTransform) {
-				BoxShapeSettings box_shape_settings(Vec3(rbc.m_Shape.m_Size.x, rbc.m_Shape.m_Size.y, rbc.m_Shape.m_Size.z));
-				body_shape = box_shape_settings.Create().Get();
-			}
-			else {
-				BoxShapeSettings box_shape_settings(Vec3(abs(tc.m_Scale.x / 2),abs (tc.m_Scale.y / 2), abs(tc.m_Scale.z / 2)));
-				body_shape = box_shape_settings.Create().Get();
-			}
-			
-
-		}
-		else if (rbc.m_Shape.m_Type == PhysicsShape::Sphere) {
-
-			if (rbc.m_UseIndependentShapeTransform) {
-				SphereShapeSettings sphere_shape_settings(rbc.m_Shape.m_Size.x);
-				body_shape = sphere_shape_settings.Create().Get();
-			}
-			else {
-				SphereShapeSettings sphere_shape_settings(abs(tc.m_Scale.y / 2));
-				body_shape = sphere_shape_settings.Create().Get();
-			}
-
-		}
-		else if (rbc.m_Shape.m_Type == PhysicsShape::Capsule) {
-			if (rbc.m_UseIndependentShapeTransform) {
-				CapsuleShapeSettings capsule_shape_settings(rbc.m_Shape.m_Size.y, rbc.m_Shape.m_Size.x);
-				body_shape = capsule_shape_settings.Create().Get();
-			}
-			else {
-				CapsuleShapeSettings capsule_shape_settings(abs(tc.m_Scale.y / 2), abs(tc.m_Scale.x / 2));
-				body_shape = capsule_shape_settings.Create().Get();
-			}
-		}
-
 
 		EMotionType emotionType = EMotionType(rbc.m_MotionType);
 		uint8_t layer = 0;
@@ -105,7 +68,23 @@ namespace XRE {
 		else layer = Layers::MOVING;
 
 		BodyCreationSettings body_settings(body_shape, pos, rot, emotionType, layer);
-		JPH::BodyID objID = BodyInterface.CreateAndAddBody(body_settings, EActivation::Activate);
+		Body* body = BodyInterface.CreateBody(body_settings);
+		JPH::BodyID objID = body->GetID();
+
+		if (emotionType == EMotionType::Dynamic) {
+			body->GetMotionProperties()->SetAngularDamping(rbc.m_PhysicsMaterial.m_AngularDampling);
+			body->GetMotionProperties()->SetLinearDamping(rbc.m_PhysicsMaterial.m_LinearDampling);
+		}
+		
+
+		BodyInterface.AddBody(objID, EActivation::Activate);
+		BodyInterface.SetFriction(objID, rbc.m_PhysicsMaterial.m_Friction);
+		BodyInterface.SetGravityFactor(objID, rbc.m_PhysicsMaterial.m_GravityFactor);
+		BodyInterface.SetRestitution(objID, rbc.m_PhysicsMaterial.m_Restitution);
+
+		
+		
+		
 		uint32_t id = objID.GetIndexAndSequenceNumber();
 
 
@@ -127,6 +106,18 @@ namespace XRE {
 		if (bodyInterface.GetMotionType(id) != EMotionType(rbc.m_MotionType))
 			bodyInterface.SetMotionType(id, EMotionType(rbc.m_MotionType), EActivation::Activate);
 
+		if (rbc.m_PhysicsMaterial.changed) {
+			rbc.m_PhysicsMaterial.changed = false;
+			bodyInterface.SetFriction(id, rbc.m_PhysicsMaterial.m_Friction);
+			bodyInterface.SetGravityFactor(id, rbc.m_PhysicsMaterial.m_GravityFactor);
+			bodyInterface.SetRestitution(id, rbc.m_PhysicsMaterial.m_Restitution);
+		}
+
+		if (rbc.m_Shape.changed) {
+			rbc.m_Shape.changed = false;
+			bodyInterface.SetShape(id,CreateShape(tc, rbc),true, EActivation::Activate);
+		}
+		
 
 
 
@@ -152,7 +143,8 @@ namespace XRE {
 			glm::vec3 t(1.0f);
 			glm::vec3 rot(0.0f);
 			Math::DecomposeTransform(tr, tc.m_Translation, rot, t);
-			tc.m_Rotation = glm::degrees(rot);
+			tc.m_Translation -= rbc.m_Shape.m_Offset;
+			tc.m_Rotation = glm::degrees(rot) - rbc.m_Shape.m_Rotation;
 		}
 
 
@@ -184,5 +176,31 @@ namespace XRE {
 		m_PendingRemove.clear();
 
 
+	}
+	ShapeRefC JoltPhysicsScene::CreateShape(TransformComponent& tc,const RigidBodyComponent& rbc)
+	{
+		ShapeRefC body_shape;
+		
+
+		if (rbc.m_Shape.m_Type == PhysicsShape::Box) {
+			BoxShapeSettings box_shape_settings(Vec3(rbc.m_Shape.m_Size.x * tc.m_Scale.x, rbc.m_Shape.m_Size.y * tc.m_Scale.y, rbc.m_Shape.m_Size.z * tc.m_Scale.z));
+			body_shape = box_shape_settings.Create().Get();
+
+		}
+		else if (rbc.m_Shape.m_Type == PhysicsShape::Sphere) {
+
+
+			SphereShapeSettings sphere_shape_settings(rbc.m_Shape.m_Size.x * tc.m_Scale.x);
+			body_shape = sphere_shape_settings.Create().Get();
+
+
+		}
+		else if (rbc.m_Shape.m_Type == PhysicsShape::Capsule) {
+
+			CapsuleShapeSettings capsule_shape_settings(rbc.m_Shape.m_Size.y * tc.m_Scale.y, rbc.m_Shape.m_Size.x * tc.m_Scale.x);
+			body_shape = capsule_shape_settings.Create().Get();
+		}
+
+		return body_shape;
 	}
 }

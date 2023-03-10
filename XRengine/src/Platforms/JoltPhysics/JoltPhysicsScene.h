@@ -44,12 +44,14 @@ namespace XRE {
         void     ResetRigidBody(TransformComponent& tc, RigidBodyComponent& rbc);
         void     UpdateRigidBody(TransformComponent& tc, RigidBodyComponent& rbc);
 
-        static XRef<PhysicsScene> Create();
+        
 
         void OnUpdate(float dt);
     protected:
 
         JoltPhysics m_physics;
+
+        JPH::ShapeRefC CreateShape(TransformComponent& tc,const RigidBodyComponent& rbc);
 
         JoltPhysicsConfig m_Config;
 

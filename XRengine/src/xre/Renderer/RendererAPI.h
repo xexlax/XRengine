@@ -19,8 +19,11 @@ namespace XRE {
 		virtual void Init() = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) = 0;
+		virtual void DrawIndexedLine(const std::shared_ptr<VertexArray>& vertexArray) = 0;
+		virtual void DrawIndexedLineLoop(const std::shared_ptr<VertexArray>& vertexArray) = 0;
 		virtual void DrawSkyIndexed(const std::shared_ptr<VertexArray>& vertexArray,uint32_t cubemapTexture) = 0;
 		virtual void CullFace(bool b)=0;
+		virtual void SetDepthTest(bool b)= 0;
 		
 		inline static API GetAPI() { return s_API; }
 	private:

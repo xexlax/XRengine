@@ -23,6 +23,16 @@ namespace XRE {
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
 
+		inline static void DrawIndexedLines(const std::shared_ptr<VertexArray>& vertexArray)
+		{
+			s_RendererAPI->DrawIndexedLine(vertexArray);
+		}
+
+		inline static void DrawIndexedLineLoop(const std::shared_ptr<VertexArray>& vertexArray)
+		{
+			s_RendererAPI->DrawIndexedLineLoop(vertexArray);
+		}
+
 		inline static void DrawSkyIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t cubemapTexture)
 		{
 			s_RendererAPI->DrawSkyIndexed(vertexArray,cubemapTexture);
@@ -39,6 +49,10 @@ namespace XRE {
 
 		inline static void CullFace(bool b) {
 			s_RendererAPI->CullFace(b);
+		}
+
+		inline static void SetDepthTest(bool b) {
+			s_RendererAPI->SetDepthTest(b);
 		}
 
 

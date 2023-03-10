@@ -24,12 +24,12 @@ namespace XRE {
 			
 			DrawComponents(go);
 
-			if (ImGui::Button("Add Component"))
+			if (ImGui::Button(u8"添加组件"))
 				ImGui::OpenPopup("AddComponent");
 
 			if (ImGui::BeginPopup("AddComponent"))
 			{
-				if (ImGui::MenuItem("Camera"))
+				if (ImGui::MenuItem(u8"摄像机"))
 				{
 					if (!go.HasComponent<CameraComponent>())
 						CommandManager::Get().Command_Create_Component<CameraComponent>(go.AddComponent<CameraComponent>(CameraType::Perspective), go);
@@ -37,35 +37,35 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Mesh Renderer"))
+				if (ImGui::MenuItem(u8"几何渲染器"))
 				{
 					if (!go.HasComponent<MeshRendererComponent>())
 						CommandManager::Get().Command_Create_Component<MeshRendererComponent>(go.AddComponent<MeshRendererComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Point Light"))
+				if (ImGui::MenuItem(u8"点光源"))
 				{
 					if (!go.HasComponent<PointLightComponent>())
 						CommandManager::Get().Command_Create_Component<PointLightComponent>(go.AddComponent<PointLightComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Directional Light"))
+				if (ImGui::MenuItem(u8"平行光"))
 				{
 					if (!go.HasComponent<DirectionalLightComponent>())
 						CommandManager::Get().Command_Create_Component<DirectionalLightComponent>(go.AddComponent<DirectionalLightComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Easy Animator"))
+				if (ImGui::MenuItem(u8"运动"))
 				{
 					if (!go.HasComponent<AnimatorComponent>())
 						CommandManager::Get().Command_Create_Component<AnimatorComponent>(go.AddComponent<AnimatorComponent>(),go);
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem("Rigid Body"))
+				if (ImGui::MenuItem(u8"刚体"))
 				{
 					if (!go.HasComponent<RigidBodyComponent>())
 						CommandManager::Get().Command_Create_Component<RigidBodyComponent>(go.AddComponent<RigidBodyComponent>(),go);
@@ -363,6 +363,8 @@ namespace XRE {
 			ImGui::EndCombo();
 		}
 
+		ImGui::Checkbox(u8"显示碰撞体", &component.m_ShowShape);
+
 		if (ImGui::BeginCombo(u8"形状", currentShapeTypeString)) {
 			for (int i = 0; i < 3; i++)
 			{
@@ -380,8 +382,9 @@ namespace XRE {
 			ImGui::EndCombo();
 		}
 
-		ImGui::Checkbox(u8"使用独立变换", &component.m_UseIndependentShapeTransform);
-		if (component.m_UseIndependentShapeTransform == true) {
+		if (ImGui::TreeNodeEx(u8"碰撞体形状属性", ImGuiTreeNodeFlags_None))
+		{
+
 			if (component.m_Shape.m_Type == PhysicsShape::Box) {
 				DrawVec3Control(u8"半轴", component.m_Shape.m_Size);
 
@@ -390,23 +393,32 @@ namespace XRE {
 				XUI::DragFloat(u8"半径", &component.m_Shape.m_Size.x);
 			}
 			if (component.m_Shape.m_Type == PhysicsShape::Capsule) {
-				XUI::DragFloat(u8"半径", &component.m_Shape.m_Size.x,0.1f,0.0f,5.0f);
-				XUI::DragFloat(u8"半长轴", &component.m_Shape.m_Size.y,0.1f, 0.0f, 5.0f);
+				XUI::DragFloat(u8"半径", &component.m_Shape.m_Size.x, 0.1f, 0.0f, 5.0f);
+				XUI::DragFloat(u8"半长轴", &component.m_Shape.m_Size.y, 0.1f, 0.0f, 5.0f);
 			}
 
 			DrawVec3Control(u8"偏移", component.m_Shape.m_Offset);
 
 			if (component.m_Shape.m_Type != PhysicsShape::Sphere)
-			DrawVec3Control(u8"旋转", component.m_Shape.m_Rotation);
+				DrawVec3Control(u8"旋转", component.m_Shape.m_Rotation);
+
+
+
+			ImGui::TreePop();
 		}
+
+		if (ImGui::TreeNodeEx(u8"物理属性", ImGuiTreeNodeFlags_None))
+		{
+			XUI::DragFloat(u8"重力系数", &component.m_PhysicsMaterial.m_GravityFactor, 0.1f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"弹性系数", &component.m_PhysicsMaterial.m_Restitution, 0.1f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"摩擦系数", &component.m_PhysicsMaterial.m_Friction, 0.1f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"线速度阻尼", &component.m_PhysicsMaterial.m_LinearDampling, 0.1f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"角速度阻尼", &component.m_PhysicsMaterial.m_AngularDampling, 0.1f, 0.0f, 1.0f);
+
+			ImGui::TreePop();
+		}
+
 		
-
-
-
-		ImGui::Checkbox(u8"自动质量", &component.m_AutoMass);
-		if (component.m_AutoMass) ImGui::BeginDisabled();
-		XUI::DragFloat("质量", &component.m_Mass, 0.1f, 0.0f, 10.0f);
-		if (component.m_AutoMass) ImGui::EndDisabled();
 	}
 
 

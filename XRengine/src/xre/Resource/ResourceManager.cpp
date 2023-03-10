@@ -25,8 +25,8 @@ namespace XRE {
 			return m_ModelLib.Get("../Assets/models/cone.obj");
 		case Elemental_Model::Cylinder:
 			return m_ModelLib.Get("../Assets/models/cylinder.obj");
-		case Elemental_Model::Torus:
-			return m_ModelLib.Get("../Assets/models/torus.obj");
+		case Elemental_Model::Capsule:
+			return m_ModelLib.Get("../Assets/models/capsule.obj");
 		default:
 			XRE_ERROR("不存在的基本模型种类");
 			break;

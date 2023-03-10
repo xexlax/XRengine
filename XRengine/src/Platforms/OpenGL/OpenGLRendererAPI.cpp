@@ -21,9 +21,30 @@ namespace XRE {
 		else glCullFace(GL_BACK);
 	}
 
+	void OpenGLRendererAPI::SetDepthTest(bool b)
+	{
+		if(b) glDepthFunc(GL_LESS);
+		else glDepthFunc(GL_ALWAYS);
+	}
+
 	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	void OpenGLRendererAPI::DrawIndexedLine(const std::shared_ptr<VertexArray>& vertexArray)
+	{
+		/*glPolygonMode(GL_FRONT, GL_LINE);
+		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glPolygonMode(GL_FRONT, GL_FILL);*/
+
+		glDrawElements(GL_LINE_STRIP, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+	}	
+
+	void OpenGLRendererAPI::DrawIndexedLineLoop(const std::shared_ptr<VertexArray>& vertexArray)
+	{
+		glDrawElements(GL_LINE_LOOP, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRendererAPI::DrawSkyIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t cubemapTexture)

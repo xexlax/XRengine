@@ -25,7 +25,7 @@ namespace XRE {
 		float m_Intensity;
 
 
-		DirectionalLight(glm::vec3 dir, glm::vec3 color= glm::vec3(1.0f,1.0f,1.0f), float intensity = 2.0f) {
+		DirectionalLight(glm::vec3 dir, glm::vec3 color= glm::vec3(1.0f,1.0f,1.0f), float intensity = 1.0f) {
 
 			m_Direction = dir;
 			m_Color = color;

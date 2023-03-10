@@ -4,6 +4,7 @@
 #include "xre\Resource\Model.h"
 #include "xre\Renderer\Camera\Camera.h"
 #include "xre\Physics\PhysicsShape.h"
+#include "xre\Physics\PhysicsMaterial.h"
 
 #include <cereal/archives/json.hpp>
 #include <string>
@@ -274,9 +275,14 @@ namespace XRE {
 
 		uint32_t m_PhysicObj=0;
 
-		bool m_UseIndependentShapeTransform = false;
+		//bool m_UseIndependentShapeTransform = false;
 
 		PhysicsShape m_Shape;
+		PhysicsMaterial m_PhysicsMaterial;
+
+
+
+		bool m_ShowShape = false;
 
 		enum RigidBodyMotion
 		{
@@ -284,13 +290,13 @@ namespace XRE {
 		} 
 		m_MotionType = RigidBodyMotion::Static;
 
-		bool m_AutoMass = true;
-		float m_Mass = 1.0f;
+
+
 
 		template <class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(m_Active, m_UseIndependentShapeTransform, m_Shape, m_MotionType,m_AutoMass, m_Mass);
+			ar(m_Active, m_MotionType, m_Shape, m_PhysicsMaterial);
 		}
 
 		RigidBodyComponent() = default;

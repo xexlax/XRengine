@@ -90,9 +90,9 @@ namespace XRE{
 					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Cylinder));
 					CommandManager::Get().Command_CreateObj(go);
 				}
-				if (ImGui::MenuItem(u8"Monkey")) {
-					auto go = m_Scene->CreateGameObject(u8"Monkey");
-					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Torus));
+				if (ImGui::MenuItem(u8"╫╨др")) {
+					auto go = m_Scene->CreateGameObject(u8"╫╨др");
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Capsule));
 					CommandManager::Get().Command_CreateObj(go);
 				}
 				ImGui::EndMenu();

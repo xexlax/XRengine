@@ -2,12 +2,14 @@
 #include "pch.h"
 #include "Renderer3D.h"
 #include "RenderCommand.h"
+
 namespace XRE {
 
 	//Declaration of Static Variables
 	XRef<Shader> Renderer3D::defaultObjShader;
 	XRef<Shader> Renderer3D::defaultPBRShader;
 	XRef<Shader> Renderer3D::simpleDepthShader;
+	XRef<Shader> Renderer3D::flatColorShader;
 	XRef<Shader> Renderer3D::postShader;
 	XRef<Shader> Renderer3D::activeShader;
 	XRef<Texture2D> Renderer3D::defaultAlbedo;
@@ -29,6 +31,8 @@ namespace XRE {
 		defaultPBRShader = ResourceManager::GetShader("../Assets/shaders/pbr_object.glsl");
 		//	Shader::Create("assets/shaders/default.glsl");
 		simpleDepthShader = ResourceManager::GetShader("../Assets/shaders/depth.glsl");
+
+		flatColorShader = ResourceManager::GetShader("../Assets/shaders/flatColor.glsl");
 
 		postShader = ResourceManager::GetShader("../Assets/shaders/postprocessing.glsl");
 
@@ -104,6 +108,9 @@ namespace XRE {
 		m_VP = camera->GetProjectionMatrix() * glm::mat4(glm::mat3(camera->GetViewMatrix())) ;
 		activeShader->SetMat4("u_ViewProjection", camera->GetViewProjectionMatrix());
 		activeShader->SetFloat3("viewPos", camera->GetPosition());
+
+		flatColorShader->Bind();
+		flatColorShader->SetMat4("u_ViewProjection", camera->GetViewProjectionMatrix());
 	}
 
 
@@ -177,11 +184,12 @@ namespace XRE {
 	{
 		m_Light.Draw(activeShader);
 	}
-	void Renderer3D::DrawModel(const XRef<Model> model, glm::mat4 transform)
+	void Renderer3D::DrawModel(const XRef<Model> model,const glm::mat4& transform)
 	{
 		if(model)
 		for (auto mesh : model->m_Meshes) {
 			mesh.BindMaterial(activeShader);
+			
 			activeShader->Bind();
 			activeShader->SetMat4("u_Transform", transform);
 			mesh.GetVAO()->Bind();
@@ -200,5 +208,63 @@ namespace XRE {
 		m_SkyBox->GetVAO()->Bind();
 		RenderCommand::DrawSkyIndexed(m_SkyBox->GetVAO(), m_SkyBox->GetCubemapTexture());
 
+	}
+	void Renderer3D::DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform)
+	{
+		RenderCommand::SetDepthTest(false);
+
+		flatColorShader->Bind();
+		flatColorShader->SetFloat4("u_Color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
+
+		
+		
+		if (Shape.m_Type == PhysicsShape::Box) {
+			
+			glm::mat4 scale = glm::scale(Shape.GetLocalTransform(), Shape.m_Size);
+			flatColorShader->SetMat4("u_Transform",  transform*scale);
+			RenderCommand::DrawIndexedLines(VertexArray::GetCubeVA());
+
+		}
+		else if (Shape.m_Type == PhysicsShape::Sphere) {
+			
+			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(Shape.m_Size.x));
+			flatColorShader->SetMat4("u_Transform", Shape.GetLocalTransform()*  transform* scale);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCircleVA());
+
+			glm::mat4 rot =glm::toMat4(glm::quat(glm::radians(glm::vec3(90, 0, 0))));
+			flatColorShader->SetMat4("u_Transform",  Shape.GetLocalTransform() * transform * rot * scale);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCircleVA());
+
+			rot =  glm::toMat4(glm::quat(glm::radians(glm::vec3(0, 0, 90))));
+			flatColorShader->SetMat4("u_Transform", Shape.GetLocalTransform() * transform * rot * scale);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCircleVA());
+
+		}
+		else if (Shape.m_Type == PhysicsShape::Capsule) {
+			
+			glm::mat4 subrot = glm::toMat4(glm::quat(glm::radians(Shape.m_Rotation)));
+			glm::mat4 subtrans = glm::translate(glm::mat4(1.0f), Shape.m_Offset);
+			flatColorShader->SetMat4("u_Transform", transform*subtrans * subrot);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCapsuleVA(Shape.m_Size.x, Shape.m_Size.y));
+
+			 
+			glm::mat4 rot = glm::toMat4(glm::quat(glm::radians(glm::vec3(0, 90, 0))));
+			flatColorShader->SetMat4("u_Transform", transform *  subtrans *subrot *rot);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCapsuleVA(Shape.m_Size.x, Shape.m_Size.y));
+
+			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(Shape.m_Size.x));
+			glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(0, Shape.m_Size.y, 0));
+			
+			flatColorShader->SetMat4("u_Transform",  transform*subtrans*  subrot* trans   *scale);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCircleVA());
+
+			trans = glm::translate(glm::mat4(1.0f), glm::vec3(0, -Shape.m_Size.y, 0));
+			flatColorShader->SetMat4("u_Transform", transform *subtrans   * subrot * trans * scale);
+			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCircleVA());
+			
+		}
+
+		RenderCommand::SetDepthTest(true);
 	}
 }

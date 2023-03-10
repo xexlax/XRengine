@@ -12,6 +12,7 @@
 #include <xre\Renderer\Light.h>
 #include <xre\Renderer\SkyBox.h>
 #include "xre\ECS\Components.h"
+#include "xre\Physics\PhysicsShape.h"
 namespace XRE {
 	class Renderer3D {
 	public:
@@ -41,12 +42,15 @@ namespace XRE {
 		//将m_Light中的灯光数据绑定到activeShader
 		static void DrawLight();
 
-		static void DrawModel(const XRef<Model> model, glm::mat4 transform = glm::mat4(1.0f));
+		static void DrawModel(const XRef<Model> model,const glm::mat4& transform = glm::mat4(1.0f));
 		static void DrawSkybox();
+
+		static void DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform = glm::mat4(1.0f));
 
 		static XRef<Shader> defaultObjShader;
 		static XRef<Shader> defaultPBRShader;
 		static XRef<Shader> simpleDepthShader;
+		static XRef<Shader> flatColorShader;
 		static XRef<Shader> postShader;
 
 		static Light m_Light;

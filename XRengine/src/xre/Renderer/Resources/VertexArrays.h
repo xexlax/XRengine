@@ -21,8 +21,14 @@ namespace XRE {
 
 		static XRef<VertexArray> Create();
 
-	private:
+		static XRef<VertexArray> GetCubeVA();
+		static XRef<VertexArray> GetCircleVA();
+		static XRef<VertexArray> GetSquareVA();
+		static XRef<VertexArray> GetCapsuleVA(float r, float l);
 
+	private:
+		static XRef<VertexArray> CubeVA, CircleVA, SquareVA, CapsuleVA;
+		static float Capsule_r, Capsule_l;
 	};
 
 	

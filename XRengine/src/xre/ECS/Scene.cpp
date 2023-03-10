@@ -61,6 +61,9 @@ namespace XRE{
 		}
 		if(mainCamera)
 		UpdateRendering(mainCamera);
+		else {
+			Renderer3D::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+		}
 		
 	}
 
@@ -75,6 +78,10 @@ namespace XRE{
 		XRef<Camera> mainCamera = make_shared<Camera>(ec);
 
 		UpdateRendering(mainCamera);
+
+		
+
+
 
 	
 		
@@ -283,6 +290,19 @@ namespace XRE{
 					}
 
 				}
+				auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
+
+
+				for (auto entity : view) {
+					auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+
+					if (rbc.m_Active) {
+						if (rbc.m_ShowShape) {
+							Renderer3D::DrawShapeFrame(rbc.m_Shape, tc.GetTransform());
+						}
+					}
+
+				}
 
 				Renderer3D::DrawSkybox();
 			}
@@ -318,6 +338,7 @@ namespace XRE{
 
 	void Scene::OnRuntimeBegin()
 	{
+		this->Save();
 		{
 			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
 
@@ -326,6 +347,7 @@ namespace XRE{
 
 				if (rbc.m_Active) {
 					rbc.m_PhysicObj = m_PhysicsScene->CreateRigidBody(tc, rbc);
+					rbc.m_PhysicsMaterial.changed = false;
 				}
 
 			}
@@ -357,6 +379,7 @@ namespace XRE{
 
 			}
 		}
+		//Load();
 	}
 
 
