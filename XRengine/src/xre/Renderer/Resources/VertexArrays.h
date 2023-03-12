@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "xre\Renderer\Resources\Buffers.h"
+#include "glm/glm.hpp"
 
 
 namespace XRE {
@@ -25,6 +26,9 @@ namespace XRE {
 		static XRef<VertexArray> GetCircleVA();
 		static XRef<VertexArray> GetSquareVA();
 		static XRef<VertexArray> GetCapsuleVA(float r, float l);
+
+		static XRef<VertexArray> GetLinesVA(std::vector<glm::vec3>& points);
+		static XRef<VertexArray> GetRayVA(glm::vec3 origin, glm::vec3 dir, float length = 100.0f);
 
 	private:
 		static XRef<VertexArray> CubeVA, CircleVA, SquareVA, CapsuleVA;

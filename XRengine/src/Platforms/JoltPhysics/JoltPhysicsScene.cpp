@@ -1,8 +1,20 @@
 #include "JoltPhysicsScene.h"
 #include "xre/Physics/PhysicsShape.h"
-#include <Jolt/Physics/Collision/Shape/BoxShape.h>
-#include <Jolt/Physics/Collision/Shape/SphereShape.h>
-#include <Jolt/Physics/Collision/Shape/CapsuleShape.h>
+
+#include "Jolt/RegisterTypes.h"
+#include "Jolt/Physics/Body/BodyCreationSettings.h"
+#include "Jolt/Physics/Collision/CastResult.h"
+#include "Jolt/Physics/Collision/CollideShape.h"
+#include "Jolt/Physics/Collision/CollisionCollectorImpl.h"
+#include "Jolt/Physics/Collision/NarrowPhaseQuery.h"
+#include "Jolt/Physics/Collision/RayCast.h"
+#include "Jolt/Physics/Collision/Shape/BoxShape.h"
+#include "Jolt/Physics/Collision/Shape/CapsuleShape.h"
+#include "Jolt/Physics/Collision/Shape/CompoundShapeVisitors.h"
+#include "Jolt/Physics/Collision/Shape/SphereShape.h"
+#include "Jolt/Physics/Collision/Shape/StaticCompoundShape.h"
+#include "Jolt/Physics/Collision/ShapeCast.h"
+#include "Jolt/Physics/PhysicsSystem.h"
 #include "xre/Utils/Math.h"
 
 using namespace JPH;
@@ -117,6 +129,12 @@ namespace XRE {
 			rbc.m_Shape.changed = false;
 			bodyInterface.SetShape(id,CreateShape(tc, rbc),true, EActivation::Activate);
 		}
+
+		if (rbc.m_MotionType == RigidBodyComponent::Kinematic) {
+			bodyInterface.SetPosition(id,toVec3(tc.GetGlobalTranslation()),EActivation::Activate);
+			bodyInterface.SetRotation(id,toQuat(tc.GetGlobalRotation()), EActivation::Activate);
+			bodyInterface.SetLinearAndAngularVelocity(id, toVec3(rbc.m_Motion.linear_velocity), toVec3(rbc.m_Motion.angular_velocity));
+		}
 		
 
 
@@ -130,7 +148,7 @@ namespace XRE {
 
 		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
 
-		if (bodyInterface.IsActive(id) && bodyInterface.GetMotionType(id) != EMotionType::Static) {
+		if (bodyInterface.IsActive(id) && bodyInterface.GetMotionType(id) == EMotionType::Dynamic) {
 
 			JPH::RMat44 trans = bodyInterface.GetCenterOfMassTransform(id);
 			glm::mat4 tr;
@@ -148,6 +166,51 @@ namespace XRE {
 		}
 
 
+	}
+	bool JoltPhysicsScene::RayCast(glm::vec3 origin, glm::vec3 direction, float max_length, std::vector<PhysicsHitInfo>& output)
+	{
+		const JPH::NarrowPhaseQuery& scene_query = m_physics.m_PhysicsSystem ->GetNarrowPhaseQuery();
+
+		JPH::RRayCast ray;
+		ray.mOrigin = toVec3(origin);
+		ray.mDirection = toVec3(glm::normalize(direction) * max_length);
+
+		JPH::RayCastSettings raycast_setting;
+
+		JPH::AllHitCollisionCollector<JPH::CastRayCollector> collector;
+
+		scene_query.CastRay(ray,  raycast_setting, collector);
+
+		if (!collector.HadHit())
+		{
+			return false;
+		}
+
+		collector.Sort();
+
+		std::vector<JPH::RayCastResult> raycast_results(collector.mHits.begin(), collector.mHits.end());
+
+		output.clear();
+		output.resize(raycast_results.size());
+
+		for (size_t index = 0; index < raycast_results.size(); index++)
+		{
+			const JPH::RayCastResult& cast_result = raycast_results[index];
+
+			PhysicsHitInfo& hit = output[index];
+			hit.m_HitPos = toVec3(ray.mOrigin + cast_result.mFraction * ray.mDirection);
+			hit.m_Distance = cast_result.mFraction * max_length;
+			hit.m_HitBodyID = cast_result.mBodyID.GetIndexAndSequenceNumber();
+
+			// get hit normal
+			JPH::BodyLockRead body_lock(m_physics.m_PhysicsSystem->GetBodyLockInterface(), cast_result.mBodyID);
+			const JPH::Body& hit_body = body_lock.GetBody();
+
+			hit.m_HitNormal =
+				toVec3(hit_body.GetWorldSpaceSurfaceNormal(cast_result.mSubShapeID2, toVec3(hit.m_HitPos)));
+		}
+
+		return true;
 	}
 	void JoltPhysicsScene::OnUpdate(float dt)
 	{
@@ -170,6 +233,7 @@ namespace XRE {
 		for (uint32_t body_id : m_PendingRemove)
 		{
 			XRE_INFO("Remove Body {0}", body_id);
+
 			bodyInterface.RemoveBody(JPH::BodyID(body_id));
 			bodyInterface.DestroyBody(JPH::BodyID(body_id));
 		}
@@ -183,7 +247,7 @@ namespace XRE {
 		
 
 		if (rbc.m_Shape.m_Type == PhysicsShape::Box) {
-			BoxShapeSettings box_shape_settings(Vec3(rbc.m_Shape.m_Size.x * tc.m_Scale.x, rbc.m_Shape.m_Size.y * tc.m_Scale.y, rbc.m_Shape.m_Size.z * tc.m_Scale.z));
+			BoxShapeSettings box_shape_settings(Vec3(rbc.m_Shape.m_Size.x * abs(tc.m_Scale.x), rbc.m_Shape.m_Size.y * abs(tc.m_Scale.y), rbc.m_Shape.m_Size.z * abs(tc.m_Scale.z)));
 			body_shape = box_shape_settings.Create().Get();
 
 		}

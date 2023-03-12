@@ -37,7 +37,7 @@ namespace XRE {
 	
 	void Light::SetDirLight(TransformComponent t, DirectionalLightComponent l)
 	{		
-		m_DirectionalLight = { glm::vec4(0,0,-1,0) * t.GetTransform() ,l.m_Color,l.m_Intensity };
+		m_DirectionalLight = { t.GetGlobalDirection() ,l.m_Color,l.m_Intensity };
 		m_DirectionalLight.m_Rotation = t.m_Rotation;
 	}
 	void Light::ClearPLights()

@@ -43,6 +43,8 @@ namespace XRE {
         void     RemoveRigidBody(uint32_t body_id);
         void     ResetRigidBody(TransformComponent& tc, RigidBodyComponent& rbc);
         void     UpdateRigidBody(TransformComponent& tc, RigidBodyComponent& rbc);
+        bool     RayCast(glm::vec3 origin, glm::vec3 direction, float max_length, std::vector<PhysicsHitInfo>& output);
+
 
         
 

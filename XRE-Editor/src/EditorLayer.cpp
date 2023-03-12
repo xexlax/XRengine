@@ -26,6 +26,7 @@ void EditorLayer::OnAttach()
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
 	Renderer3D::Init();
 	m_ScenePanel.AttachToScene(m_Scene);
+	CommandManager::Get().SetPanel(&m_ScenePanel,&m_ActionPanel);
 	m_PropertiesPanel.SetReference(&m_ScenePanel);
 	m_PropertiesPanel.SetEC(&m_EditorCamera);
 	m_IconPlay = ResourceManager::GetTex2D(AssetsDirectory"textures/Play.png");
@@ -187,6 +188,11 @@ void EditorLayer::OnImGuiRender(){
 	{
 		if (ImGui::BeginMenu(u8"文件"))
 		{
+			if (ImGui::MenuItem(u8"新场景")) {
+
+				m_Scene = XMakeRef<Scene>();
+				OnSceneReload();
+			}
 
 			if (ImGui::MenuItem(u8"打开")) {
 
@@ -196,10 +202,11 @@ void EditorLayer::OnImGuiRender(){
 				}
 				m_Scene = make_shared<Scene>();
 				auto path = FileDialogs::OpenFile("Scene (*.scene)\0*.scene\0");
-				m_Scene->Deserialize(path);
-				m_ScenePanel.AttachToScene(m_Scene);
-				m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			
+				if (path != "") {
+					m_Scene->Deserialize(path);
+					OnSceneReload();
+				}
+				
 				
 			
 			}
@@ -313,7 +320,7 @@ void EditorLayer::OnImGuiRender(){
 
 				// Entity transform
 				auto& tc = selectedEntity.GetComponent<TransformComponent>();
-				glm::mat4 transform = tc.GetTransform();
+				glm::mat4 transform = tc.GetGlobalTransform();
 
 				// Snapping
 				bool snap = Input::IsKeyPressed(XRE_KEY_LEFT_CONTROL);
@@ -330,13 +337,18 @@ void EditorLayer::OnImGuiRender(){
 
 				if (ImGuizmo::IsUsing())
 				{
+					//auto p = tc.parent;
+					//selectedEntity.SetParent(nullptr);
 					glm::vec3 translation, rotation, scale;
 					Math::DecomposeTransform(transform, translation, rotation, scale);
 
-					glm::vec3 deltaRotation = glm::degrees(rotation) - tc.m_Rotation;
-					tc.m_Translation = translation;
-					tc.m_Rotation += deltaRotation;
-					tc.m_Scale = scale;
+					glm::vec3 deltaRotation = glm::degrees(rotation) - tc.GetGlobalEuler();
+					tc.SetGlobalTranslation(translation);
+					tc.SetGlobalRotation(tc.GetGlobalEuler() + deltaRotation);
+					tc.SetGlobalScale(scale);
+
+					//selectedEntity.SetParent(*p);
+					
 				}
 			}
 		
@@ -346,9 +358,10 @@ void EditorLayer::OnImGuiRender(){
 
 	m_ScenePanel.OnImGuiRender();
 	m_PropertiesPanel.OnImGuiRender();
+	m_ActionPanel.OnImGuiRender();
+	//m_AssetsPanel.OnImGuiRender();
 
-	ImGui::Begin(u8"资产管理器");
-	ImGui::End();
+
 
 	//ImGui::ShowDemoWindow();
 
@@ -356,6 +369,8 @@ void EditorLayer::OnImGuiRender(){
 
 	if(m_ScenePanel.GetSelected()&&m_GizmoType!=-1)
 	DetectCommand();
+
+	CommandManager::Get().OnUpdate();
 		
 
 }
@@ -394,6 +409,13 @@ void EditorLayer::OnEvent(XRE::Event& e)
 	dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyReleased));
 	dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	
+}
+
+void EditorLayer::OnSceneReload()
+{
+	m_ScenePanel.AttachToScene(m_Scene);
+	m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+	CommandManager::Get().Clear();
 }
 
 bool EditorLayer::OnKeyReleased(KeyReleasedEvent& e)

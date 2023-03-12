@@ -72,6 +72,13 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (ImGui::MenuItem(u8"射线"))
+				{
+					if (!go.HasComponent<RayComponent>())
+						CommandManager::Get().Command_Create_Component<RayComponent>(go.AddComponent<RayComponent>(), go);
+					ImGui::CloseCurrentPopup();
+				}
+
 
 				ImGui::EndPopup();
 			}
@@ -100,20 +107,15 @@ namespace XRE {
 
 			auto& tag = go.GetComponent<NameComponent>().m_ObjName;
 
-			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			strcpy_s(buffer, sizeof(buffer), tag.c_str());
-			if (ImGui::InputText(u8"名称", buffer, sizeof(buffer)))
-			{
-				tag = std::string(buffer);
-			}
+			XUI::InputText(u8"名称", &tag);
 		}
 
 		if (go.HasComponent<TransformComponent>())
 		{
+			auto& transform = go.GetComponent<TransformComponent>();
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
-				auto& transform = go.GetComponent<TransformComponent>();
+				
 				DrawVec3Control(u8"位置", transform.m_Translation);
 				DrawVec3Control(u8"旋转", transform.m_Rotation);
 				DrawVec3Control(u8"缩放", transform.m_Scale);
@@ -133,6 +135,35 @@ namespace XRE {
 
 
 
+			}
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("x"))
+			{
+				ImGui::OpenPopup(u8"组件选项");
+			}
+			if (ImGui::BeginPopup(u8"组件选项"))
+			{
+
+				if (ImGui::MenuItem(u8"复制组件属性")) {
+
+					m_Copied = &transform;
+				}
+				if (m_Copied != nullptr && m_Copied->m_Name == transform.m_Name)
+					if (ImGui::MenuItem(u8"粘贴组件属性")) {
+
+						stringstream ss;
+						{
+							cereal::JSONOutputArchive ar(ss);
+							ar(*(TransformComponent*)(m_Copied));
+						}
+						{
+							cereal::JSONInputArchive ar(ss);
+							ar(transform);
+						}
+
+					}
+
+				ImGui::EndPopup();
 			}
 		}
 
@@ -157,6 +188,9 @@ namespace XRE {
 
 		if (go.HasComponent<RigidBodyComponent>())
 			DrawComponent<RigidBodyComponent>(go);
+
+		if (go.HasComponent<RayComponent>())
+			DrawComponent<RayComponent>(go);
 	}
 
 	template<typename T>
@@ -166,7 +200,7 @@ namespace XRE {
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 		bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, c.m_Name.c_str());
 		ImGui::SameLine(ImGui::GetWindowWidth() - 120.0f);
-		ImGui::Checkbox(u8"激活", &c.m_Active);
+		XUI::CheckBox(u8"激活", &c.m_Active);
 		ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
 		if (ImGui::Button("x"))
 		{
@@ -179,6 +213,26 @@ namespace XRE {
 			if (ImGui::MenuItem(u8"删除组件")) {
 				CommandManager::Get().Command_Delete_Component(c, go);
 				removeComponent = true;
+			}
+
+			if (ImGui::MenuItem(u8"复制组件属性")) {
+				
+				m_Copied = &c;
+			}
+			if(m_Copied!=nullptr && m_Copied->m_Name == c.m_Name)
+			if (ImGui::MenuItem(u8"粘贴组件属性")) {
+
+				stringstream ss;
+				{
+					cereal::JSONOutputArchive ar(ss);
+					ar(*(T*)(m_Copied));
+				}
+
+				{
+					cereal::JSONInputArchive ar(ss);
+					ar(c);
+				}
+
 			}
 				
 			ImGui::EndPopup();
@@ -197,7 +251,7 @@ namespace XRE {
 	void PropertiesPanel::DrawComponentLayout<MeshRendererComponent>(MeshRendererComponent& component)
 	{
 		auto& model = component.m_Model;
-		ImGui::Checkbox(u8"阴影映射", &component.m_ShadowCasting);
+		XUI::CheckBox(u8"阴影映射", &component.m_ShadowCasting);
 		if (model) {
 			ImGui::Text(model->getPath().c_str());
 			if (ImGui::TreeNodeEx(u8"子网格", ImGuiTreeNodeFlags_None))
@@ -272,7 +326,7 @@ namespace XRE {
 
 		ImGui::ColorEdit3(u8"颜色", glm::value_ptr(component.m_Color));
 		XUI::DragFloat(u8"强度", &component.m_Intensity, 0.1f, 0.0f, 3.0f);
-		ImGui::Checkbox(u8"阴影", &component.m_ShadowCasting);
+		XUI::CheckBox(u8"阴影", &component.m_ShadowCasting);
 	}
 
 	template<>
@@ -280,7 +334,7 @@ namespace XRE {
 		auto& camera = component.m_Camera;
 
 
-		ImGui::Checkbox(u8"主摄像机", &component.m_Primary);
+		XUI::CheckBox(u8"主摄像机", &component.m_Primary);
 
 		
 		
@@ -335,7 +389,7 @@ namespace XRE {
 
 
 		}
-		ImGui::Checkbox(u8"固定长宽比", &component.m_FixedAspectRatio);
+		XUI::CheckBox(u8"固定长宽比", &component.m_FixedAspectRatio);
 	}
 
 	template<>
@@ -363,7 +417,7 @@ namespace XRE {
 			ImGui::EndCombo();
 		}
 
-		ImGui::Checkbox(u8"显示碰撞体", &component.m_ShowShape);
+		XUI::CheckBox(u8"显示碰撞体", &component.m_ShowShape);
 
 		if (ImGui::BeginCombo(u8"形状", currentShapeTypeString)) {
 			for (int i = 0; i < 3; i++)
@@ -420,6 +474,28 @@ namespace XRE {
 
 		
 	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<RayComponent>(RayComponent& component) {
+
+		XUI::DragFloat(u8"长度", & component.m_MaxLength);
+		XUI::CheckBox(u8"显示", &component.m_Display);
+		ImGui::BeginChild(u8"检测结果");
+
+
+		for (uint32_t x : component.m_HitObjs) {
+
+			
+			ImGui::Text(m_ReferenceScenePanel->m_Scene->GetObj(x).GetName().c_str());
+
+		}
+
+
+
+		ImGui::EndChild();
+
+	}
+
 
 
 

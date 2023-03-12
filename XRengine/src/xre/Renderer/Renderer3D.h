@@ -45,7 +45,8 @@ namespace XRE {
 		static void DrawModel(const XRef<Model> model,const glm::mat4& transform = glm::mat4(1.0f));
 		static void DrawSkybox();
 
-		static void DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform = glm::mat4(1.0f));
+		static void DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform = glm::mat4(1.0f), const glm::vec4& color = glm::vec4(0, 1, 0, 1));
+		static void DrawRay(const glm::vec3& origin, const glm::vec3& direction, float length, const glm::vec4& color=glm::vec4(1,0,0,1) );
 
 		static XRef<Shader> defaultObjShader;
 		static XRef<Shader> defaultPBRShader;

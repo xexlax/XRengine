@@ -60,8 +60,12 @@ namespace XRE {
 
 		void Serialize(const std::string& filepath);
 		void Save() { Serialize(m_FilePath); }
-		void Load() { Deserialize(m_FilePath); }
+		void Load() { m_Registry.clear(); Deserialize(m_FilePath); }
 		void Deserialize(const std::string& filepath);
+
+
+		GameObject FindGOByPhysicBodyID(uint32_t pid);
+		GameObject GetObj(uint32_t eid);
 
 	private:
 		template<typename T>

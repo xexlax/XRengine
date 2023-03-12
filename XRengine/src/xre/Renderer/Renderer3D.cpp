@@ -209,12 +209,15 @@ namespace XRE {
 		RenderCommand::DrawSkyIndexed(m_SkyBox->GetVAO(), m_SkyBox->GetCubemapTexture());
 
 	}
-	void Renderer3D::DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform)
+	void Renderer3D::DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform, const glm::vec4& color)
 	{
 		RenderCommand::SetDepthTest(false);
 
+		
 		flatColorShader->Bind();
-		flatColorShader->SetFloat4("u_Color", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+		
+
+		flatColorShader->SetFloat4("u_Color", color);
 
 
 		
@@ -264,6 +267,18 @@ namespace XRE {
 			RenderCommand::DrawIndexedLineLoop(VertexArray::GetCircleVA());
 			
 		}
+
+		RenderCommand::SetDepthTest(true);
+	}
+	void Renderer3D::DrawRay(const glm::vec3& origin, const glm::vec3& direction, float length, const glm::vec4& color)
+	{
+		RenderCommand::SetDepthTest(false);
+
+		flatColorShader->Bind();
+		flatColorShader->SetFloat4("u_Color", color);
+		flatColorShader->SetMat4("u_Transform",glm::mat4(1.0f));
+
+		RenderCommand::DrawIndexedLines(VertexArray::GetRayVA(origin, direction, length));
 
 		RenderCommand::SetDepthTest(true);
 	}

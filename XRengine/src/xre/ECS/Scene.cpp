@@ -168,6 +168,23 @@ namespace XRE{
 		}
 	}
 
+	GameObject Scene::FindGOByPhysicBodyID(uint32_t pid)
+	{
+		auto view = m_Registry.view<RigidBodyComponent>();
+
+		for (auto entity : view) {
+			auto rbc = view.get<RigidBodyComponent>(entity);
+
+			if (rbc.m_PhysicObj == pid) return GameObject(entity,this);
+
+		}
+	}
+
+	GameObject Scene::GetObj(uint32_t eid)
+	{
+		return GameObject(entt::entity(eid), this);
+	}
+
 	
 
 	void Scene::UpdateNativeScripting(TimeStep ts)
@@ -199,10 +216,33 @@ namespace XRE{
 				}
 			}
 		}
+		{
+
+			auto view = m_Registry.view<RigidBodyComponent, AnimatorComponent>();
+			for (auto entity : view) {
+				auto& [rbc, anm] = view.get<RigidBodyComponent, AnimatorComponent>(entity);
+				if (anm.m_Active && rbc.m_MotionType == RigidBodyComponent::Kinematic) {
+					rbc.m_Motion.linear_velocity = glm::cross(glm::vec3(0, 1, 0), glm::vec3(cos(anm.m_Phase), 0, sin(anm.m_Phase))) * anm.m_Radius;
+				}
+			}
+		}
 	}
 
 	void Scene::UpdatePhysics(TimeStep ts)
 	{
+		{
+			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
+
+			for (auto entity : view) {
+				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+
+				if (rbc.m_Active) {
+					m_PhysicsScene->ResetRigidBody(tc, rbc);
+				}
+
+			}
+		}
+
 		m_PhysicsScene->OnUpdate(ts);
 
 
@@ -218,6 +258,28 @@ namespace XRE{
 
 			}
 		}
+
+		{
+			auto view = m_Registry.view<TransformComponent,RayComponent>();
+
+			for (auto entity : view) {
+				auto [tc, rc] = view.get<TransformComponent, RayComponent>(entity);
+
+				if (rc.m_Active){
+					m_PhysicsScene->RayCast(tc.m_Translation, tc.GetGlobalDirection(), rc.m_MaxLength, rc.m_HitResults);
+					
+					//optional
+					rc.m_HitObjs.clear();
+					for (const PhysicsHitInfo& x : rc.m_HitResults) {
+						rc.m_HitObjs.push_back(FindGOByPhysicBodyID(x.m_HitBodyID));
+					}
+					
+
+				}
+
+			}
+		}
+
 	}
 
 	void Scene::UpdateRendering(XRef<Camera> c)
@@ -260,7 +322,7 @@ namespace XRE{
 				{
 					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
 					if (meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
-						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+						Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
 				}
 				Renderer3D::EndShadowPass();
 			}
@@ -286,23 +348,63 @@ namespace XRE{
 					if (meshrenderer.m_Active) {
 						//Renderer3D::activeShader->Bind();
 						Renderer3D::activeShader->SetInt("ObjID", int(obj));
-						Renderer3D::DrawModel(meshrenderer, transform.GetTransform());
+						Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
 					}
 
 				}
-				auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
+				{
+					auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
 
 
-				for (auto entity : view) {
-					auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+					for (auto entity : view) {
+						auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
 
-					if (rbc.m_Active) {
-						if (rbc.m_ShowShape) {
-							Renderer3D::DrawShapeFrame(rbc.m_Shape, tc.GetTransform());
+						if (rbc.m_Active) {
+							if (rbc.m_ShowShape) {
+
+
+								glm::vec4 color;
+								switch (rbc.m_MotionType)
+								{
+								case RigidBodyComponent::Dynamic:
+									color = glm::vec4(0, 1, 0, 1);
+									break;
+								case RigidBodyComponent::Kinematic:
+									color = glm::vec4(0, 0.75, 0.75, 1);
+									break;
+								case RigidBodyComponent::Static:
+									color = glm::vec4(0, 0, 1, 1);
+									break;
+
+								default:
+									break;
+								}
+
+								Renderer3D::DrawShapeFrame(rbc.m_Shape, tc.GetGlobalTransform(),color);
+							}
 						}
+
 					}
 
 				}
+
+				{
+					auto view = m_Registry.view<TransformComponent, RayComponent>();
+
+
+					for (auto entity : view) {
+						auto [tc, rc] = view.get<TransformComponent, RayComponent>(entity);
+
+						if (rc.m_Active) {
+							if (rc.m_Display) {
+								Renderer3D::DrawRay(tc.GetGlobalTranslation(),tc.GetGlobalDirection(),rc.m_MaxLength);
+							}
+						}
+
+					}
+
+				}
+				
 
 				Renderer3D::DrawSkybox();
 			}
@@ -338,7 +440,7 @@ namespace XRE{
 
 	void Scene::OnRuntimeBegin()
 	{
-		this->Save();
+		//this->Save();
 		{
 			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
 
@@ -431,6 +533,12 @@ namespace XRE{
 	void Scene::OnComponentAdded<RigidBodyComponent>(GameObject go, RigidBodyComponent& component)
 	{
 		
+	}
+
+	template<>
+	void Scene::OnComponentAdded<RayComponent>(GameObject go, RayComponent& component)
+	{
+
 	}
 
 

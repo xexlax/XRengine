@@ -159,6 +159,46 @@ namespace XRE {
 		CapsuleVA->Bind();
 		return CapsuleVA;
 	}
+
+	XRef<VertexArray> VertexArray::GetLinesVA(std::vector<glm::vec3>& points)
+	{
+		int num = points.size();
+		std::vector<uint32_t> indices(num);
+		for (int i = 0;i < num;i++) {
+			indices[i] = i;
+		}
+
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position" },
+		};
+
+		auto VA = VertexArray::Create();
+
+		//2.1 setup VBO
+		XRef<VertexBuffer> vertexBuffer;;
+		vertexBuffer.reset(VertexBuffer::Create((float*)&points[0], num * layout.GetStride()));
+		vertexBuffer->SetLayout(layout);
+		VA->AddVertexBuffer(vertexBuffer);
+
+
+
+		XRef<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create((uint32_t*)&indices[0], num));
+		VA->SetIndexBuffer(indexBuffer);
+		VA->Bind();
+		return VA;
+	}
+
+	XRef<VertexArray> VertexArray::GetRayVA(glm::vec3 origin, glm::vec3 dir, float length)
+	{
+		std::vector<glm::vec3> points;
+
+		points.push_back(origin);
+		points.push_back(length * dir + origin);
+
+		return GetLinesVA(points);
+
+	}
 	
 
 }

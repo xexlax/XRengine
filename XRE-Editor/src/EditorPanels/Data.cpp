@@ -23,13 +23,27 @@ namespace XRE::XUI{
 	bool CheckBox(const std::string& label, bool* value) {
 
 		if (ImGui::Checkbox(label.c_str(), value)) {
-			if (!CommandManager::Get().IsMakingCommand())
-				CommandManager::Get().Begin_Command_Edit<bool>(value, *value);
+			
+			CommandManager::Get().Command_Edit<bool>(value,!*value,*value);
 			return true;
 		}
 		else {
-			if (CommandManager::Get().IsMakingCommand() && !Input::IsMouseButtonPressed(XRE_MOUSE_BUTTON_LEFT))
-				CommandManager::Get().End_Command_Edit<bool>(value, *value);
+			return false;
+		}
+	}
+	bool InputText(const std::string& label,std::string* value)
+	{
+		std::string old_value = *value;
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		strcpy_s(buffer, sizeof(buffer), value->c_str());
+		if (ImGui::InputText(u8"Ãû³Æ", buffer, sizeof(buffer))) {
+			*value = std::string(buffer);
+			CommandManager::Get().Command_Edit<std::string>(value,old_value,*value);
+			return true;
+		}
+		else {
+			
 			return false;
 		}
 	}

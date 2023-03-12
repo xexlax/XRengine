@@ -16,7 +16,12 @@ namespace XRE{
 		GameObject go( entt::entity(ObjId) , m_Scene.get() );
 		m_Selected = go;
 	}
+	void ScenePanel::UnSelect()
+	{
+		m_Selected = GameObject(entt::null, m_Scene.get());
+	}
 	void ScenePanel::OnImGuiRender()
+
 	{
 		ImGui::Begin(u8"³¡¾°");
 		bool opened = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, m_Scene->m_Name.c_str());

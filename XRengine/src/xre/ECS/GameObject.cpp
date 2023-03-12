@@ -10,14 +10,17 @@ namespace XRE {
 		m_Entity(entityhandle),m_Scene(scene)
 	{
 	}
+
 	
 	void GameObject::SetParent(GameObject* parent) {
 		TransformComponent& sc = GetComponent<TransformComponent>();
 		if (parent == nullptr) {
 			if (sc.parent) {
 				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
-				Math::DecomposeTransform(sc.GetTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
-
+				//Math::DecomposeTransform(sc.GetGlobalTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
+				sc.m_Translation = sc.GetGlobalTranslation();
+				sc.m_Rotation = sc.GetGlobalEuler();
+				sc.m_Scale = sc.GetGlobalScale();
 			}
 			sc.parent = nullptr;
 			
@@ -29,10 +32,41 @@ namespace XRE {
 			if (sc.parent)
 				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
 			
-			Math::DecomposeTransform(glm::inverse(pc.GetTransform())*sc.GetTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
-
+			auto gt = sc.GetGlobalTranslation();
+			auto gr = sc.GetGlobalEuler();
+			auto gs = sc.GetGlobalScale();
+			//Math::DecomposeTransform(glm::inverse(pc.GetGlobalTransform())*sc.GetGlobalTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
+			
 			
 			sc.parent = &pc;
+			sc.SetGlobalTranslation(gt);
+			sc.SetGlobalRotation(gr);
+			sc.SetGlobalScale(gs);
+
+			pc.children.push_back(m_Entity);
+		}
+	}
+
+	void GameObject::SetParent(TransformComponent& pc)
+	{
+		
+		TransformComponent& sc = GetComponent<TransformComponent>();
+		
+		if (sc.parent != &pc) {
+			if (sc.parent)
+				sc.parent->children.erase(find(sc.parent->children.begin(), sc.parent->children.end(), m_Entity));
+
+			auto gt = sc.GetGlobalTranslation();
+			auto gr = sc.GetGlobalEuler();
+			auto gs = sc.GetGlobalScale();
+			//Math::DecomposeTransform(glm::inverse(pc.GetGlobalTransform())*sc.GetGlobalTransform(), sc.m_Translation, sc.m_Rotation, sc.m_Scale);
+
+
+			sc.parent = &pc;
+			sc.SetGlobalTranslation(gt);
+			sc.SetGlobalRotation(gr);
+			sc.SetGlobalScale(gs);
+
 			pc.children.push_back(m_Entity);
 		}
 	}

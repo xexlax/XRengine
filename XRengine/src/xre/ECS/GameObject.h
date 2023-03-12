@@ -4,7 +4,9 @@
 #include "Components.h"
 #include <cereal\archives\json.hpp>
 namespace XRE {
-
+	//不要给GameObj加上除了Component以外的任何属性，
+	//因为GO的获取只是从对象池中读取一个编号，其所有的属性由component决定，类似于关系型数据库
+	//GO的实际数据很少，可以直接作为临时储存对象或者传参
 	class GameObject {
 	public:
 		GameObject()=default;
@@ -64,6 +66,11 @@ namespace XRE {
 					ComponentType c("Rigid Body");
 					archive(c);
 					archive(ngo.GetComponent<RigidBodyComponent>());
+				}
+				if (ngo.HasComponent<RayComponent>()) {
+					ComponentType c("Ray");
+					archive(c);
+					archive(ngo.GetComponent<RayComponent>());
 				}
 
 				if (ngo.HasComponent<TransformComponent>()) {
@@ -133,6 +140,10 @@ namespace XRE {
 					RigidBodyComponent& tc = go.AddComponent<RigidBodyComponent>();
 					archive(tc);
 				}
+				if (n.m_Name == "Ray") {
+					RayComponent& tc = go.AddComponent<RayComponent>();
+					archive(tc);
+				}
 
 				if (n.m_Name == "PUSHSTACK") {
 
@@ -159,6 +170,7 @@ namespace XRE {
 		};
 
 		void SetParent(GameObject* parent);
+		void SetParent(TransformComponent& parent);
 		void SetParentAbs(GameObject* parent);
 		GameObject Duplicate();
 		
@@ -212,7 +224,7 @@ namespace XRE {
 		Scene* GetScene() const { return m_Scene; }
 
 	private:
-		//不要给GameObj加上除了Component以外的任何属性，因为GO的获取只是从ECS池中读取编号，其所有的属性由component决定
+
 		
 
 		entt::entity m_Entity{ entt::null };

@@ -5,19 +5,27 @@
 #include "xre\Renderer\Camera\Camera.h"
 #include "xre\Physics\PhysicsShape.h"
 #include "xre\Physics\PhysicsMaterial.h"
-
+#include "xre\Physics\PhysicsMotion.h"
+#include "xre\Physics\Collision.h"
 #include <cereal/archives/json.hpp>
+
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 #include <entt/entt.hpp>
 
+//添加一个新的Component之后：
+//1.添加序列化方法，在Scene中序列化函数中加入
+//2.在Editor-Propertypanel中编写DrawLayout
+//3.在Scene的Update函数中加入具体的功能
+
 using namespace entt;
 namespace XRE {
 
 	//ECS中的组件只包含数据不包含方法。
 	struct ComponentType {
+
 		std::string m_Name;
 		template <class Archive>
 		void serialize(Archive& ar)
@@ -79,12 +87,15 @@ namespace XRE {
 
 
 	class TransformComponent : public Component {
+		
 	public:
-		std::string m_Name= "Transform";
+		
+		
+		
+		
 		glm::vec3 m_Translation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_Rotation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_Scale = { 1.0f, 1.0f, 1.0f };
-
 
 
 		template <class Archive>
@@ -106,34 +117,108 @@ namespace XRE {
 		TransformComponent* parent=nullptr;
 		std::vector<entt::entity> children;
 
-		TransformComponent() = default;
+		TransformComponent() :Component("Transform") {};
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const glm::vec3& translation)
-			: m_Translation(translation) {}
+			:Component("Transform") , m_Translation(translation) {}
 
-		glm::mat4 GetTransform() const
+		glm::mat4 GetGlobalTransform() const
+		{
+			
+			if (parent) {
+				glm::mat4 result = parent->GetGlobalTransform() * glm::translate(glm::mat4(1.0f), m_Translation)
+					* glm::toMat4(glm::quat(glm::radians(m_Rotation)))
+					* glm::scale(glm::mat4(1.0f), m_Scale);
+					
+					
+					 
+				return result;
+			}
+			else {
+				glm::mat4 result = glm::translate(glm::mat4(1.0f), m_Translation)
+					* glm::toMat4(glm::quat(glm::radians(m_Rotation)))
+					* glm::scale(glm::mat4(1.0f), m_Scale);
+				return result;
+			}
+		}
+
+		glm::mat4 GetLocalTransform() const
 		{
 			glm::mat4 result = glm::translate(glm::mat4(1.0f), m_Translation)
-				* glm::toMat4(glm::quat(glm::radians(m_Rotation)))
+				*glm::toMat4(glm::quat(glm::radians(m_Rotation)))
 				* glm::scale(glm::mat4(1.0f), m_Scale);
-			if (parent)
-				return parent->GetTransform() * result;
-			else return result;
+				
+				
+			return result;
 		}
+
+		glm::vec3 GetGlobalTranslation() const {
+
+			if (parent) return parent->GetGlobalTranslation() + m_Translation;
+			else return m_Translation;
+
+		}
+
+		glm::quat GetGlobalRotation() const {
+
+			if (parent) return parent->GetGlobalRotation()* glm::quat(glm::radians(m_Rotation));
+			else return glm::quat(glm::radians(m_Rotation));
+
+		}
+		glm::vec3 GetGlobalEuler() const {
+			if (parent) return parent->GetGlobalEuler() + m_Rotation;
+			else return m_Rotation;
+		}
+
+		glm::vec3 GetGlobalDirection() const {
+			return glm::normalize(glm::vec4(0, 0, 1, 0) * glm::inverse(glm::toMat4(GetGlobalRotation())));
+		}
+
+		glm::vec3 GetGlobalScale() const {
+
+			if (parent) return parent->GetGlobalScale() * m_Scale;
+			else return m_Scale;
+
+		}
+
+		void SetGlobalTranslation(glm::vec3 trans) {
+			if (parent) {
+				m_Translation = trans - parent->GetGlobalTranslation();
+			}
+			else
+				m_Translation = trans;
+		}
+
+		void SetGlobalRotation(glm::vec3 rot) {
+			if (parent) {
+				m_Rotation = rot - parent->GetGlobalEuler();
+			}
+			else
+				m_Rotation = rot;
+		}
+
+		void SetGlobalScale(glm::vec3 scale) {
+			if (parent) {
+				m_Scale = scale / parent->GetGlobalScale();
+			}
+			else
+				m_Scale = scale;
+		}
+
+	
 
 
 	};
 
 	class MeshRendererComponent : public Component {
 	public:
-		std::string m_Name  = "Mesh Renderer";
 		std::string m_ModelPath;
 		bool m_ShadowCasting = true;
 		XRef<Model> m_Model;
-		MeshRendererComponent() = default;
+		MeshRendererComponent() :Component("Mesh Renderer") {};
 		MeshRendererComponent(const MeshRendererComponent&) = default;
 		MeshRendererComponent(XRef<Model> model)
-			: m_Model(model) {
+			:Component("Mesh Renderer"), m_Model(model) {
 			m_ModelPath = model->getPath();
 		}
 		MeshRendererComponent(const std::string& path)
@@ -160,15 +245,15 @@ namespace XRE {
 
 	class PointLightComponent : public Component {
 	public:
-		std::string m_Name = "Point Light";
+		
 		glm::vec3 m_Color = glm::vec3(1.0f);
 		float m_Intensity=1.0f;
 		bool m_ShadowCasting = false;
 
-		PointLightComponent() = default;
+		PointLightComponent() :Component("Point Light") {};
 		PointLightComponent(const PointLightComponent&) = default;
 		PointLightComponent(const glm::vec3& color, const float& intensity=1.0f)
-			:m_Color(color), m_Intensity(intensity) {}
+			:Component("Point Light"),m_Color(color), m_Intensity(intensity) {}
 
 		
 
@@ -183,15 +268,15 @@ namespace XRE {
 
 	class DirectionalLightComponent : public Component {
 	public:
-		std::string m_Name = "Directional Light";
+		
 
 		glm::vec3 m_Color=glm::vec3(1.0f);
 		float m_Intensity=1.0f;
 		bool m_ShadowCasting = true;
-		DirectionalLightComponent() = default;
+		DirectionalLightComponent() :Component("Directional Light") {};
 		DirectionalLightComponent(const DirectionalLightComponent&) = default;
 		DirectionalLightComponent(const glm::vec3 & color, const float& intensity = 1.0f)
-			:m_Color(color), m_Intensity(intensity) {}
+			:Component("Directional Light") ,m_Color(color), m_Intensity(intensity) {}
 	
 
 		template <class Archive>
@@ -206,18 +291,18 @@ namespace XRE {
 
 	class CameraComponent: public Component {
 	public:
-		std::string m_Name = "Camera";
+
 		XRef<Camera> m_Camera;
 		bool m_FixedAspectRatio=false;
 		bool m_Primary = true;
 		
 
-		CameraComponent() = default;
+		CameraComponent() :Component("Camera") {};
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(const glm::mat4& projection)
-			:m_Camera(XMakeRef<Camera>(projection)) {}
+			:Component("Camera"),m_Camera(XMakeRef<Camera>(projection)) {}
 		CameraComponent(const CameraType& type)
-			:m_Camera(XMakeRef<Camera>(type)) {}
+			:Component("Camera"), m_Camera(XMakeRef<Camera>(type)) {}
 
 
 		template <class Archive>
@@ -246,7 +331,7 @@ namespace XRE {
 
 	class AnimatorComponent : public Component {
 	public:
-		std::string m_Name = "Animator";
+		
 		glm::vec3 m_Pivot = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 m_Axis = { 0.0f, 1.0f, 0.0f };
 		float m_Radius = 1.0f;
@@ -261,8 +346,8 @@ namespace XRE {
 				, m_Radius,m_AngleSpeed,m_Phase);
 		}
 
-		AnimatorComponent() = default;
-		AnimatorComponent(float r, float s,float f=0) :m_Radius(r), m_AngleSpeed(s), m_Phase(f) {
+		AnimatorComponent():Component("Animator") {};
+		AnimatorComponent(float r, float s,float f=0) :Component("Animator"),m_Radius(r), m_AngleSpeed(s), m_Phase(f) {
 
 		};
 
@@ -271,7 +356,7 @@ namespace XRE {
 
 	class RigidBodyComponent : public Component {
 	public:
-		std::string m_Name = "Rigid Body";
+		
 
 		uint32_t m_PhysicObj=0;
 
@@ -279,6 +364,9 @@ namespace XRE {
 
 		PhysicsShape m_Shape;
 		PhysicsMaterial m_PhysicsMaterial;
+		PhysicsMotion m_Motion;
+
+
 
 
 
@@ -299,7 +387,7 @@ namespace XRE {
 			ar(m_Active, m_MotionType, m_Shape, m_PhysicsMaterial);
 		}
 
-		RigidBodyComponent() = default;
+		RigidBodyComponent() :Component("Rigid Body") {};
 		
 
 		
@@ -311,5 +399,27 @@ namespace XRE {
 	};
 
 
+	class RayComponent :public Component{
+	public:
+		float m_MaxLength = 10.0f;
+		bool m_Display = false;
+		bool m_ShapeSweep = false;
+
+		PhysicsShape m_SweepShape;
+
+		vector<PhysicsHitInfo> m_HitResults;
+		vector<uint32_t> m_HitObjs;
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active,m_MaxLength,m_Display,m_ShapeSweep);
+			if (m_ShapeSweep) {
+				ar(m_SweepShape);
+			}
+		}
+
+		RayComponent() :Component("Ray") {};
+	};
 }
 

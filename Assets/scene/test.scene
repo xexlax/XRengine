@@ -8,197 +8,35 @@
         },
         "value1": {
             "value0": true,
-            "value1": "立方体"
+            "value1": "平面"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": 0.0,
-            "value2": 0.6012483835220337,
-            "value3": -0.66218501329422,
-            "value4": 0.0,
+            "value1": -0.9280588030815125,
+            "value2": -0.05259951204061508,
+            "value3": -0.01663721166551113,
+            "value4": 17.552268981933595,
             "value5": 0.0,
             "value6": 0.0,
-            "value7": 1.0,
+            "value7": 2.7285616397857668,
             "value8": 1.0,
-            "value9": 1.0
+            "value9": 2.483405113220215
         },
         "value4": {
             "value0": "Mesh Renderer"
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets/models/cube.obj"
+            "value1": "../Assets/models/plane.obj"
         },
         "value6": {
-            "value0": "PUSHSTACK"
-        },
-        "value7": {
-            "value0": {
-                "value0": "Name"
-            },
-            "value1": {
-                "value0": true,
-                "value1": "圆锥"
-            },
-            "value2": {
-                "value0": "Transform"
-            },
-            "value3": {
-                "value0": true,
-                "value1": -1.5070114135742188,
-                "value2": -0.20784643292427064,
-                "value3": 0.0,
-                "value4": 0.0,
-                "value5": -0.0,
-                "value6": 0.0,
-                "value7": 1.0,
-                "value8": 1.0,
-                "value9": 1.0
-            },
-            "value4": {
-                "value0": "Mesh Renderer"
-            },
-            "value5": {
-                "value0": true,
-                "value1": "../Assets/models/cone.obj"
-            },
-            "value6": {
-                "value0": "EndObj"
-            }
-        },
-        "value8": {
-            "value0": {
-                "value0": "Name"
-            },
-            "value1": {
-                "value0": true,
-                "value1": "####ThePoper####"
-            },
-            "value2": {
-                "value0": "Transform"
-            },
-            "value3": {
-                "value0": true,
-                "value1": 0.0,
-                "value2": 0.0,
-                "value3": 0.0,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 1.0,
-                "value8": 1.0,
-                "value9": 1.0
-            },
-            "value4": {
-                "value0": "EndObj"
-            }
-        },
-        "value9": {
             "value0": "EndObj"
         }
     },
     "value2": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "立方体"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": 0.0,
-            "value2": 0.6012483835220337,
-            "value3": 0.98834228515625,
-            "value4": -180.0,
-            "value5": 75.87567138671875,
-            "value6": -180.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Mesh Renderer"
-        },
-        "value5": {
-            "value0": true,
-            "value1": "../Assets/models/cube.obj"
-        },
-        "value6": {
-            "value0": "PUSHSTACK"
-        },
-        "value7": {
-            "value0": {
-                "value0": "Name"
-            },
-            "value1": {
-                "value0": true,
-                "value1": "圆锥"
-            },
-            "value2": {
-                "value0": "Transform"
-            },
-            "value3": {
-                "value0": true,
-                "value1": -1.5070114135742188,
-                "value2": -0.20784643292427064,
-                "value3": 0.0,
-                "value4": 0.0,
-                "value5": -0.0,
-                "value6": 0.0,
-                "value7": 1.0,
-                "value8": 1.0,
-                "value9": 1.0
-            },
-            "value4": {
-                "value0": "Mesh Renderer"
-            },
-            "value5": {
-                "value0": true,
-                "value1": "../Assets/models/cone.obj"
-            },
-            "value6": {
-                "value0": "EndObj"
-            }
-        },
-        "value8": {
-            "value0": {
-                "value0": "Name"
-            },
-            "value1": {
-                "value0": true,
-                "value1": "####ThePoper####"
-            },
-            "value2": {
-                "value0": "Transform"
-            },
-            "value3": {
-                "value0": true,
-                "value1": 0.0,
-                "value2": 0.0,
-                "value3": 0.0,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 1.0,
-                "value8": 1.0,
-                "value9": 1.0
-            },
-            "value4": {
-                "value0": "EndObj"
-            }
-        },
-        "value9": {
-            "value0": "EndObj"
-        }
-    },
-    "value3": {
         "value0": {
             "value0": "Name"
         },
@@ -211,15 +49,15 @@
         },
         "value3": {
             "value0": true,
-            "value1": 0.0,
-            "value2": 0.0,
-            "value3": 0.0,
-            "value4": 65.39348602294922,
-            "value5": 21.424400329589845,
-            "value6": 38.575408935546878,
-            "value7": 0.9999999403953552,
+            "value1": -1.2435319263204293e-7,
+            "value2": 0.24692726135253907,
+            "value3": 0.3923930525779724,
+            "value4": 86.51238250732422,
+            "value5": 32.292724609375,
+            "value6": -19.844831466674806,
+            "value7": 0.9999996423721314,
             "value8": 0.9999997615814209,
-            "value9": 0.9999997615814209
+            "value9": 1.0
         },
         "value4": {
             "value0": "Directional Light"
@@ -236,41 +74,173 @@
             "value0": "EndObj"
         }
     },
-    "value4": {
+    "value3": {
         "value0": {
             "value0": "Name"
         },
         "value1": {
             "value0": true,
-            "value1": "平面"
+            "value1": "圆锥"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": 0.0,
-            "value2": 0.0,
-            "value3": 0.0,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 2.7285616397857668,
+            "value1": -1.4426697492599488,
+            "value2": 0.39340195059776308,
+            "value3": 0.49313873052597048,
+            "value4": 180.0,
+            "value5": 75.87567138671875,
+            "value6": 180.0,
+            "value7": 1.0,
             "value8": 1.0,
-            "value9": 2.4834041595458986
+            "value9": 1.0
         },
         "value4": {
             "value0": "Mesh Renderer"
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets/models/plane.obj"
+            "value1": "../Assets/models/cone.obj"
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value4": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 1.425614356994629,
+            "value2": 0.5022035837173462,
+            "value3": -0.7817178964614868,
+            "value4": -180.0,
+            "value5": 75.87567138671875,
+            "value6": -180.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj"
         },
         "value6": {
             "value0": "EndObj"
         }
     },
     "value5": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.34062767028808596,
+            "value2": 1.0789047479629517,
+            "value3": -1.7337887287139893,
+            "value4": 0.0000457763671875,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj"
+        },
+        "value6": {
+            "value0": "PUSHSTACK"
+        },
+        "value7": {
+            "value0": {
+                "value0": "Name"
+            },
+            "value1": {
+                "value0": true,
+                "value1": "圆锥"
+            },
+            "value2": {
+                "value0": "Transform"
+            },
+            "value3": {
+                "value0": true,
+                "value1": -3.1355056762695314,
+                "value2": -0.31331515312194826,
+                "value3": 0.27635180950164797,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 1.0,
+                "value8": 1.0,
+                "value9": 1.0
+            },
+            "value4": {
+                "value0": "Mesh Renderer"
+            },
+            "value5": {
+                "value0": true,
+                "value1": "../Assets/models/cone.obj"
+            },
+            "value6": {
+                "value0": "EndObj"
+            }
+        },
+        "value8": {
+            "value0": {
+                "value0": "Name"
+            },
+            "value1": {
+                "value0": true,
+                "value1": "####ThePoper####"
+            },
+            "value2": {
+                "value0": "Transform"
+            },
+            "value3": {
+                "value0": true,
+                "value1": 0.0,
+                "value2": 0.0,
+                "value3": 0.0,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 1.0,
+                "value8": 1.0,
+                "value9": 1.0
+            },
+            "value4": {
+                "value0": "EndObj"
+            }
+        },
+        "value9": {
+            "value0": "EndObj"
+        }
+    },
+    "value6": {
         "value0": {
             "value0": "Name"
         },
