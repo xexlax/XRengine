@@ -5,11 +5,30 @@
 #include "Platforms\OpenGL\OpenGLShader.h"
 
 namespace XRE {
-	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-		: m_vertices(vertices), m_indices(indices)
+	Mesh::Mesh(const std::vector<Vertex>& vertices,const std::vector<unsigned int>& indices)
 	{
 		m_Material = std::make_shared<Material>();
-		setupMesh();
+
+		BufferLayout layout = {
+				{ ShaderDataType::Float3, "a_Position" },
+				{ ShaderDataType::Float3, "a_Normal" },
+				{ ShaderDataType::Float3, "a_Tangent" },
+				{ ShaderDataType::Float2, "a_TexCoord" }
+		};
+
+		m_VertexArray = VertexArray::Create();
+
+		//2.1 setup VBO
+		XRef<VertexBuffer> vertexBuffer;
+		float* s = (float*)&vertices[0];
+		vertexBuffer.reset(VertexBuffer::Create((float*)&vertices[0], vertices.size() * layout.GetStride()));
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+
+		//2.2 setup IBO
+		XRef<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create((uint32_t*)&indices[0], indices.size()));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
 	
 	void Mesh::BindMaterial(XRef<Shader> shader)
@@ -48,26 +67,7 @@ namespace XRE {
 	}
 	void Mesh::setupMesh()
 	{
-		BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position" },
-				{ ShaderDataType::Float3, "a_Normal" },
-				{ ShaderDataType::Float3, "a_Tangent" },
-				{ ShaderDataType::Float2, "a_TexCoord" }
-		};
-
-		m_VertexArray = VertexArray::Create();
-
-		//2.1 setup VBO
-		XRef<VertexBuffer> vertexBuffer;
-		float *s = (float*)&m_vertices[0];
-		vertexBuffer.reset(VertexBuffer::Create( (float*) &m_vertices[0] ,m_vertices.size()* layout.GetStride()));
-		vertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(vertexBuffer);
-
-		//2.2 setup IBO
-		XRef<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create( (uint32_t*) &m_indices[0], m_indices.size()));
-		m_VertexArray->SetIndexBuffer(indexBuffer);
+		
 
 	}
 }

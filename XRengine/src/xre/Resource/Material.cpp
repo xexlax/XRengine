@@ -5,10 +5,15 @@
 namespace XRE {
 	Material::Material()
 	{
-		name = "default_material";
+		name = "material";
 		shininess = 64.0f;
 		metallic = 0.5f, roughness = 0.5f;
 		LoadAllTex();
+	}
+	Material::Material(std::string s)
+	{
+		name = "material";
+		Load(s);
 	}
 	void Material::LoadAllTex()
 	{
@@ -26,5 +31,31 @@ namespace XRE {
 			displacementTex.m_Tex = ResourceManager::GetTex2D(displacementTex);
 		if (alphaTex.m_enable) 
 			alphaTex.m_Tex = ResourceManager::GetTex2D(alphaTex);
-	}		
+		if (ambientOcclusionTex.m_enable)
+			ambientOcclusionTex.m_Tex = ResourceManager::GetTex2D(alphaTex);
+	}
+	
+	void Material::Save(const std::string& filepath)
+	{
+		m_FilePath = filepath;
+		std::ofstream fs(filepath);
+		if (fs.is_open()) {
+			cereal::JSONOutputArchive ar(fs);
+			ar(*this);
+		}
+		
+	}
+	void Material::Load(const std::string& filepath)
+	{
+		std::ifstream fs(filepath);
+		if (fs.is_open()) {
+			cereal::JSONInputArchive ar(fs);
+			ar(*this);
+		}
+		
+	}
+	XRef<Material> Material::Create(const std::string& filepath)
+	{
+		return XMakeRef<Material>(filepath);
+	}
 }

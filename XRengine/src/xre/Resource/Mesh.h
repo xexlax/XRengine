@@ -22,7 +22,7 @@ namespace XRE {
 	{
 	public:
 		
-		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+		Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 		
 		~Mesh() {};
 
@@ -36,8 +36,6 @@ namespace XRE {
 	private:
 		
 		XRef<VertexArray> m_VertexArray;
-		std::vector<Vertex> m_vertices;
-		std::vector<unsigned int> m_indices;
 		XRef<Material> m_Material;
 		glm::mat4 m_Transform;
 

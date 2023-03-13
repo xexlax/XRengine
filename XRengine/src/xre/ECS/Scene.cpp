@@ -322,7 +322,7 @@ namespace XRE{
 				{
 					auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
 					if (meshrenderer.m_Active && meshrenderer.m_ShadowCasting)
-						Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
+						Renderer3D::DrawMesh(meshrenderer.m_Model,transform.GetGlobalTransform());
 				}
 				Renderer3D::EndShadowPass();
 			}
@@ -348,7 +348,7 @@ namespace XRE{
 					if (meshrenderer.m_Active) {
 						//Renderer3D::activeShader->Bind();
 						Renderer3D::activeShader->SetInt("ObjID", int(obj));
-						Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
+						Renderer3D::DrawModel(meshrenderer, meshrenderer.m_Materials, transform.GetGlobalTransform());
 					}
 
 				}

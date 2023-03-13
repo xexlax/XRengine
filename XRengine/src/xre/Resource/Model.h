@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "Mesh.h"
 #include "Material.h"
+
 using namespace std;
 namespace XRE {
 	
@@ -23,7 +24,7 @@ namespace XRE {
         static XRef<Model> Create(const std::string& path);
     private:
         
-        vector<XRef<Material>> m_Materials;
+        
         /*  º¯Êý   */
         void LoadModel(string path,
             bool triangulate = true);

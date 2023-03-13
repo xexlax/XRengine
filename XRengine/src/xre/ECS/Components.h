@@ -8,6 +8,7 @@
 #include "xre\Physics\PhysicsMotion.h"
 #include "xre\Physics\Collision.h"
 #include <cereal/archives/json.hpp>
+#include <cereal/types/vector.hpp>
 
 #include <string>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -215,14 +216,27 @@ namespace XRE {
 		std::string m_ModelPath;
 		bool m_ShadowCasting = true;
 		XRef<Model> m_Model;
+
+		std::vector<XRef<Material>> m_Materials;
+
+		
 		MeshRendererComponent() :Component("Mesh Renderer") {};
 		MeshRendererComponent(const MeshRendererComponent&) = default;
 		MeshRendererComponent(XRef<Model> model)
 			:Component("Mesh Renderer"), m_Model(model) {
 			m_ModelPath = model->getPath();
+			for (auto x : model->m_Meshes) {
+				m_Materials.push_back(x.GetMaterial());
+			}
 		}
 		MeshRendererComponent(const std::string& path)
-			: m_Model(ResourceManager::GetModel(path)),m_ModelPath(path) {}
+			: m_Model(ResourceManager::GetModel(path)),m_ModelPath(path) {
+
+			for (auto x : m_Model->m_Meshes) {
+				m_Materials.push_back(x.GetMaterial());
+			}
+		
+		}
 
 		operator XRef<Model>& () { return m_Model; }
 		operator const XRef<Model>& () const { return m_Model; }
@@ -231,14 +245,29 @@ namespace XRE {
 		void save(Archive& ar)const
 		{
 			ar(m_Active, m_ModelPath);
+			std::vector<std::string> f;
+			for (auto x : m_Materials) {
+				f.push_back(x->GetPath());
+			}
+			ar(f);
 			
 		}
 
 		template <class Archive>
 		void load(Archive& ar)
 		{
-			ar(m_Active, m_ModelPath);
+			ar(m_Active, m_ModelPath );
 			m_Model = ResourceManager::GetModel(m_ModelPath);
+			std::vector<std::string> f;
+			ar(f);
+			int i = 0;
+			m_Materials.clear();
+
+			for (auto x : f) {
+				if(x!="")
+				m_Materials.push_back(ResourceManager::GetMaterial(x));
+			}
+		
 		}
 
 	};

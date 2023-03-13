@@ -51,6 +51,13 @@ namespace XRE {
 			return m_filepath;
 		}
 
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_enable,m_name, m_filepath);
+			m_Tex = ResourceManager::GetTex2D(m_filepath);
+		}
+
 
 	};
 

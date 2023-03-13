@@ -104,6 +104,7 @@ namespace XRE {
 	}
 	void Renderer3D::StartScene(const XRef<Camera> camera)
 	{
+	
 		activeShader->Bind();
 		m_VP = camera->GetProjectionMatrix() * glm::mat4(glm::mat3(camera->GetViewMatrix())) ;
 		activeShader->SetMat4("u_ViewProjection", camera->GetViewProjectionMatrix());
@@ -122,6 +123,7 @@ namespace XRE {
 	void Renderer3D::EndScene()
 	{
 
+	
 	}
 
 	void Renderer3D::Clear()
@@ -148,7 +150,7 @@ namespace XRE {
 		activeShader->SetMat4("lightSpaceMatrix", m_LVP);
 		StartScene(dirLight_Camera);
 		//Renderer3D::StartScene(camera);
-		CullFace(true);
+		//CullFace(true);
 	}
 
 	void Renderer3D::EndShadowPass()
@@ -184,12 +186,31 @@ namespace XRE {
 	{
 		m_Light.Draw(activeShader);
 	}
-	void Renderer3D::DrawModel(const XRef<Model> model,const glm::mat4& transform)
+	void Renderer3D::DrawMesh(const XRef<Model> model, const glm::mat4& transform)
 	{
+		
+		if (model)
+			for (auto mesh : model->m_Meshes) {
+
+				
+				activeShader->Bind();
+				activeShader->SetMat4("u_Transform", transform);
+				mesh.GetVAO()->Bind();
+				RenderCommand::DrawIndexed(mesh.GetVAO());
+
+
+			}
+		//model->Draw(defaultObjShader, transform);
+	}
+	void Renderer3D::DrawModel(const XRef<Model> model,const std::vector<XRef<Material>>& mats, const glm::mat4& transform)
+	{
+		int i = 0;
 		if(model)
 		for (auto mesh : model->m_Meshes) {
-			mesh.BindMaterial(activeShader);
 			
+			if(i<mats.size())
+			mesh.SetMaterial(mats[i++]);
+			mesh.BindMaterial(activeShader);
 			activeShader->Bind();
 			activeShader->SetMat4("u_Transform", transform);
 			mesh.GetVAO()->Bind();

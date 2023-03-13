@@ -2,6 +2,7 @@
 #include "xre/Renderer/Resources/Texture.h"
 #include "xre/Renderer/Resources/Shader.h"
 #include "Model.h"
+#include "Material.h"
 #include "Library.h"
 
 namespace XRE {
@@ -20,12 +21,15 @@ namespace XRE {
 		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(path); }
 		static XRef<Model> GetElementalModel(const Elemental_Model& em);
 
+		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(path); }
+
 
 	private:
 		
 		static Library<Shader> m_ShaderLib;
 		static Library<Texture2D> m_Texture2DLib;
 		static Library<Model> m_ModelLib;
+		static Library<Material> m_MaterialLib;
 		
 	};
 }

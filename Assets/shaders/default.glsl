@@ -57,6 +57,10 @@ struct PointLight {
 
 struct Material {
     vec3 baseColor;
+
+    vec3 ambient;
+    vec3 diffise;
+    vec3 specular;
     bool enable_diffuseTex;
     bool enable_specularTex;
     bool enable_bumpTex;
@@ -220,7 +224,7 @@ void main()
 
     for(int i=0;i<p_light_amount;i++){
         if(p_light[i].enable==1){
-            color+=CalcPointLight(p_light[i],N,FragPos,V,shadow);
+            color+=CalcPointLight(p_light[i],N,FragPos,V,0);
         }
     }
     

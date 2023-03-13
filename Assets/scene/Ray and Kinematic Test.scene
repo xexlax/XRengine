@@ -8,36 +8,39 @@
         },
         "value1": {
             "value0": true,
-            "value1": "Floor"
+            "value1": "立方体"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": 0.0,
-            "value2": -0.3992888927459717,
+            "value1": -3.288092613220215,
+            "value2": 0.0,
             "value3": 0.0,
             "value4": 0.0,
-            "value5": 0.0,
+            "value5": 8.842681884765625,
             "value6": 0.0,
-            "value7": 10.0,
-            "value8": 0.20000000298023225,
-            "value9": 10.0
+            "value7": 0.9999998807907105,
+            "value8": 1.0,
+            "value9": 0.9999998807907105
         },
         "value4": {
             "value0": "Mesh Renderer"
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets/models/cube.obj"
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
         },
         "value6": {
             "value0": "Rigid Body"
         },
         "value7": {
             "value0": true,
-            "value1": 0,
+            "value1": 2,
             "value2": {
                 "value0": 0,
                 "value1": 0.5,
@@ -52,7 +55,7 @@
             },
             "value3": {
                 "value0": 1.0,
-                "value1": 0.20000000298023225,
+                "value1": 0.0,
                 "value2": 0.20000000298023225,
                 "value3": 0.0,
                 "value4": 0.0
@@ -68,247 +71,7 @@
         },
         "value1": {
             "value0": true,
-            "value1": "Wall4"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": -0.22299408912658692,
-            "value2": 0.0,
-            "value3": -4.834985256195068,
-            "value4": 0.0,
-            "value5": -89.9720230102539,
-            "value6": 0.0,
-            "value7": 0.29999998211860659,
-            "value8": 1.399999976158142,
-            "value9": 10.09999942779541
-        },
-        "value4": {
-            "value0": "Mesh Renderer"
-        },
-        "value5": {
-            "value0": true,
-            "value1": "../Assets/models/cube.obj"
-        },
-        "value6": {
-            "value0": "Rigid Body"
-        },
-        "value7": {
-            "value0": true,
-            "value1": 0,
-            "value2": {
-                "value0": 0,
-                "value1": 0.5,
-                "value2": 0.5,
-                "value3": 0.5,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 0.0,
-                "value8": 0.0,
-                "value9": 0.0
-            },
-            "value3": {
-                "value0": 1.0,
-                "value1": 0.20000000298023225,
-                "value2": 0.20000000298023225,
-                "value3": 0.0,
-                "value4": 0.0
-            }
-        },
-        "value8": {
-            "value0": "EndObj"
-        }
-    },
-    "value3": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "Wall3"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": 4.816102027893066,
-            "value2": 0.0,
-            "value3": 0.0,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 0.30000001192092898,
-            "value8": 1.399999976158142,
-            "value9": 10.100000381469727
-        },
-        "value4": {
-            "value0": "Mesh Renderer"
-        },
-        "value5": {
-            "value0": true,
-            "value1": "../Assets/models/cube.obj"
-        },
-        "value6": {
-            "value0": "Rigid Body"
-        },
-        "value7": {
-            "value0": true,
-            "value1": 0,
-            "value2": {
-                "value0": 0,
-                "value1": 0.5,
-                "value2": 0.5,
-                "value3": 0.5,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 0.0,
-                "value8": 0.0,
-                "value9": 0.0
-            },
-            "value3": {
-                "value0": 1.0,
-                "value1": 0.20000000298023225,
-                "value2": 0.20000000298023225,
-                "value3": 0.0,
-                "value4": 0.0
-            }
-        },
-        "value8": {
-            "value0": "EndObj"
-        }
-    },
-    "value4": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "Wall2"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": -5.159245014190674,
-            "value2": 0.0,
-            "value3": 2.9802322387695315e-8,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 0.30000001192092898,
-            "value8": 1.399999976158142,
-            "value9": 10.100000381469727
-        },
-        "value4": {
-            "value0": "Mesh Renderer"
-        },
-        "value5": {
-            "value0": true,
-            "value1": "../Assets/models/cube.obj"
-        },
-        "value6": {
-            "value0": "Rigid Body"
-        },
-        "value7": {
-            "value0": true,
-            "value1": 0,
-            "value2": {
-                "value0": 0,
-                "value1": 0.5,
-                "value2": 0.5,
-                "value3": 0.5,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 0.0,
-                "value8": 0.0,
-                "value9": 0.0
-            },
-            "value3": {
-                "value0": 1.0,
-                "value1": 0.20000000298023225,
-                "value2": 0.20000000298023225,
-                "value3": 0.0,
-                "value4": 0.0
-            }
-        },
-        "value8": {
-            "value0": "EndObj"
-        }
-    },
-    "value5": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "Wall1"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": -0.2181929498910904,
-            "value2": 0.0,
-            "value3": 4.995460510253906,
-            "value4": 0.0,
-            "value5": -89.9720230102539,
-            "value6": 0.0,
-            "value7": 0.29999998211860659,
-            "value8": 1.399999976158142,
-            "value9": 10.09999942779541
-        },
-        "value4": {
-            "value0": "Mesh Renderer"
-        },
-        "value5": {
-            "value0": true,
-            "value1": "../Assets/models/cube.obj"
-        },
-        "value6": {
-            "value0": "Rigid Body"
-        },
-        "value7": {
-            "value0": true,
-            "value1": 0,
-            "value2": {
-                "value0": 0,
-                "value1": 0.5,
-                "value2": 0.5,
-                "value3": 0.5,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 0.0,
-                "value8": 0.0,
-                "value9": 0.0
-            },
-            "value3": {
-                "value0": 1.0,
-                "value1": 0.20000000298023225,
-                "value2": 0.20000000298023225,
-                "value3": 0.0,
-                "value4": 0.0
-            }
-        },
-        "value8": {
-            "value0": "EndObj"
-        }
-    },
-    "value6": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "射线"
+            "value1": "平行光"
         },
         "value2": {
             "value0": "Transform"
@@ -318,6 +81,44 @@
             "value1": 0.0,
             "value2": 0.0,
             "value3": 0.0,
+            "value4": 40.34479522705078,
+            "value5": 22.425039291381837,
+            "value6": 15.648777961730957,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Directional Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 0.2770934998989105,
+            "value2": 0.4586805999279022,
+            "value3": 0.8338461518287659,
+            "value4": 0.800000011920929,
+            "value5": true
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value3": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "光源"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 4.555948734283447,
+            "value2": 1.6249401569366456,
+            "value3": -6.001259803771973,
             "value4": 0.0,
             "value5": 0.0,
             "value6": 0.0,
@@ -326,19 +127,199 @@
             "value9": 1.0
         },
         "value4": {
-            "value0": "Ray"
+            "value0": "Point Light"
         },
         "value5": {
             "value0": true,
-            "value1": 37.0,
-            "value2": true,
-            "value3": false
+            "value1": 0.17571598291397096,
+            "value2": 0.8592341542243958,
+            "value3": 0.892307698726654,
+            "value4": 2.200000047683716
         },
         "value6": {
             "value0": "EndObj"
         }
     },
+    "value4": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "光源"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 1.1425405740737916,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Point Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 1.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 1.2999999523162842
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value5": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "光源"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.9964887499809265,
+            "value2": 1.0236685276031495,
+            "value3": 4.654428482055664,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Point Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 0.8892307877540588,
+            "value2": 0.24077634513378144,
+            "value3": 0.24077634513378144,
+            "value4": 1.0
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value6": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "胶囊"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.30925533175468447,
+            "value2": 1.6782485246658326,
+            "value3": 3.3530378341674806,
+            "value4": -41.203033447265628,
+            "value5": -22.642074584960939,
+            "value6": 76.62957000732422,
+            "value7": 0.7199989557266235,
+            "value8": 0.7199993133544922,
+            "value9": 0.7200000286102295
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/capsule.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 2,
+            "value2": {
+                "value0": 2,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.10000000149011612,
+                "value2": 0.30000001192092898,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
     "value7": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "摄像机"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -6.667084217071533,
+            "value2": 6.963804244995117,
+            "value3": 5.714256286621094,
+            "value4": 38.41688919067383,
+            "value5": 49.4006233215332,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Camera"
+        },
+        "value5": {
+            "value0": true,
+            "value1": false,
+            "value2": true,
+            "value3": 1,
+            "value4": 20.0,
+            "value5": -20.0,
+            "value6": 20.0,
+            "value7": 100.0,
+            "value8": 0.10000000149011612,
+            "value9": 45.0
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value8": {
         "value0": {
             "value0": "Name"
         },
@@ -366,7 +347,10 @@
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets/models/sphere.obj"
+            "value1": "../Assets/models/sphere.obj",
+            "value2": [
+                ""
+            ]
         },
         "value6": {
             "value0": "Animator"
@@ -413,105 +397,39 @@
             "value0": "EndObj"
         }
     },
-    "value8": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "摄像机"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": -6.667084217071533,
-            "value2": 6.963804244995117,
-            "value3": 5.714256286621094,
-            "value4": 38.41688919067383,
-            "value5": 49.4006233215332,
-            "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Camera"
-        },
-        "value5": {
-            "value0": true,
-            "value1": false,
-            "value2": true,
-            "value3": 1,
-            "value4": 20.0,
-            "value5": -20.0,
-            "value6": 20.0,
-            "value7": 100.0,
-            "value8": 0.10000000149011612,
-            "value9": 45.0
-        },
-        "value6": {
-            "value0": "EndObj"
-        }
-    },
     "value9": {
         "value0": {
             "value0": "Name"
         },
         "value1": {
             "value0": true,
-            "value1": "胶囊"
+            "value1": "射线"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": -0.30925533175468447,
-            "value2": 1.6782485246658326,
-            "value3": 3.3530378341674806,
-            "value4": -41.203033447265628,
-            "value5": -22.642074584960939,
-            "value6": 76.62957000732422,
-            "value7": 0.7199989557266235,
-            "value8": 0.7199993133544922,
-            "value9": 0.7200000286102295
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
         },
         "value4": {
-            "value0": "Mesh Renderer"
+            "value0": "Ray"
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets/models/capsule.obj"
+            "value1": 37.0,
+            "value2": true,
+            "value3": false
         },
         "value6": {
-            "value0": "Rigid Body"
-        },
-        "value7": {
-            "value0": true,
-            "value1": 2,
-            "value2": {
-                "value0": 2,
-                "value1": 0.5,
-                "value2": 0.5,
-                "value3": 0.5,
-                "value4": 0.0,
-                "value5": 0.0,
-                "value6": 0.0,
-                "value7": 0.0,
-                "value8": 0.0,
-                "value9": 0.0
-            },
-            "value3": {
-                "value0": 1.0,
-                "value1": 0.10000000149011612,
-                "value2": 0.30000001192092898,
-                "value3": 0.0,
-                "value4": 0.0
-            }
-        },
-        "value8": {
             "value0": "EndObj"
         }
     },
@@ -521,185 +439,39 @@
         },
         "value1": {
             "value0": true,
-            "value1": "光源"
+            "value1": "Wall1"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": 0.9964887499809265,
-            "value2": 1.0236685276031495,
-            "value3": 4.654428482055664,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Point Light"
-        },
-        "value5": {
-            "value0": true,
-            "value1": 0.8892307877540588,
-            "value2": 0.24077634513378144,
-            "value3": 0.24077634513378144,
-            "value4": 1.0
-        },
-        "value6": {
-            "value0": "EndObj"
-        }
-    },
-    "value11": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "光源"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": 0.0,
-            "value2": 1.1425405740737916,
-            "value3": 0.0,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Point Light"
-        },
-        "value5": {
-            "value0": true,
-            "value1": 1.0,
+            "value1": -0.2181929498910904,
             "value2": 0.0,
-            "value3": 0.0,
-            "value4": 1.2999999523162842
-        },
-        "value6": {
-            "value0": "EndObj"
-        }
-    },
-    "value12": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "光源"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": 4.555948734283447,
-            "value2": 1.6249401569366456,
-            "value3": -6.001259803771973,
+            "value3": 4.995460510253906,
             "value4": 0.0,
-            "value5": 0.0,
+            "value5": -89.9720230102539,
             "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Point Light"
-        },
-        "value5": {
-            "value0": true,
-            "value1": 0.17571598291397096,
-            "value2": 0.8592341542243958,
-            "value3": 0.892307698726654,
-            "value4": 2.200000047683716
-        },
-        "value6": {
-            "value0": "EndObj"
-        }
-    },
-    "value13": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "平行光"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": 0.0,
-            "value2": 0.0,
-            "value3": 0.0,
-            "value4": 40.34479522705078,
-            "value5": 22.425039291381837,
-            "value6": 15.648777961730957,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Directional Light"
-        },
-        "value5": {
-            "value0": true,
-            "value1": 0.2770934998989105,
-            "value2": 0.4586805999279022,
-            "value3": 0.8338461518287659,
-            "value4": 0.800000011920929,
-            "value5": true
-        },
-        "value6": {
-            "value0": "EndObj"
-        }
-    },
-    "value14": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "立方体"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": -3.288092613220215,
-            "value2": 0.0,
-            "value3": 0.0,
-            "value4": 0.0,
-            "value5": 8.842681884765625,
-            "value6": 0.0,
-            "value7": 0.9999998807907105,
-            "value8": 1.0,
-            "value9": 0.9999998807907105
+            "value7": 0.29999998211860659,
+            "value8": 1.399999976158142,
+            "value9": 10.09999942779541
         },
         "value4": {
             "value0": "Mesh Renderer"
         },
         "value5": {
             "value0": true,
-            "value1": "..\\Assets\\models\\cube.obj"
+            "value1": "../Assets/models/cube.obj",
+            "value2": [
+                ""
+            ]
         },
         "value6": {
             "value0": "Rigid Body"
         },
         "value7": {
             "value0": true,
-            "value1": 2,
+            "value1": 0,
             "value2": {
                 "value0": 0,
                 "value1": 0.5,
@@ -714,7 +486,259 @@
             },
             "value3": {
                 "value0": 1.0,
-                "value1": 0.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value11": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Wall2"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -5.159245014190674,
+            "value2": 0.0,
+            "value3": 2.9802322387695315e-8,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 0.30000001192092898,
+            "value8": 1.399999976158142,
+            "value9": 10.100000381469727
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value12": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Wall3"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 4.816102027893066,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 0.30000001192092898,
+            "value8": 1.399999976158142,
+            "value9": 10.100000381469727
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value13": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Wall4"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.22299408912658692,
+            "value2": 0.0,
+            "value3": -4.834985256195068,
+            "value4": 0.0,
+            "value5": -89.9720230102539,
+            "value6": 0.0,
+            "value7": 0.29999998211860659,
+            "value8": 1.399999976158142,
+            "value9": 10.09999942779541
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value14": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Floor"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": -0.3992888927459717,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 10.0,
+            "value8": 0.20000000298023225,
+            "value9": 10.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "../Assets/models/cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
                 "value2": 0.20000000298023225,
                 "value3": 0.0,
                 "value4": 0.0

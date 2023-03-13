@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Model.h"
 #include "xre\Renderer\Resources\Texture.h"
+#include "xre\Resource\ResourceManager.h"
 #include "xre\Core\Macros.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -53,17 +54,18 @@ namespace XRE {
 		return std::make_shared<Model>(path);
 	}
 
+	
+
 	void Model::LoadModel(string path,bool triangulate)
 	{
 		std::string basepath;
+		vector<XRef<Material>> m_Materials;
+
 
 		size_t pos = path.find_last_of('\\');
 		if (pos != std::string::npos) {
 			basepath = path.substr(0, pos);
 		}
-
-	
-		
 		
 		//XRE_CORE_TRACE("正在加载模型 {0},从目录{1}", path, basepath);
 		
@@ -130,7 +132,7 @@ namespace XRE {
 				m->emission.b = tm.emission[2];
 
 				m->shininess = tm.shininess;
-				//XRE_CORE_INFO("shininess {0}", m->shininess );
+				m->roughness = ShininessToRoughness(tm.shininess);
 				m->ior = tm.ior;
 				m->dissolve = tm.dissolve;
 				m->illum = tm.illum;
@@ -185,35 +187,7 @@ namespace XRE {
 			
 #endif // MODEL_DEBUG
 
-				/*
-				for (const auto& index: shapes[i].mesh.indices) {
-					Vertex vertex={};
-					vertex.Position = {
-						attrib.vertices[3 * index.vertex_index + 0],
-						attrib.vertices[3 * index.vertex_index + 1],
-						attrib.vertices[3 * index.vertex_index + 2]
-					};
-
-					vertex.Normal = {
-						attrib.vertices[3 * index.normal_index + 0],
-						attrib.vertices[3 * index.normal_index + 1],
-						attrib.vertices[3 * index.normal_index + 2]
-					};
-
-					vertex.TexCoords = {
-						attrib.texcoords[2 * index.texcoord_index + 0],
-						attrib.texcoords[2 * index.texcoord_index + 1]
-					};
-
-					if (uniqueVertices.count(index) == 0) {
-						uniqueVertices[index] = static_cast<uint32_t>(vertices.size());
-						vertices.push_back(vertex);
-					}
-					indices.push_back(uniqueVertices[index]);
-
-
-				}
-				*/
+				
 				size_t index_offset = 0;
 				for (size_t f = 0; f < shapes[i].mesh.num_face_vertices.size(); f++) {
 					size_t fnum = shapes[i].mesh.num_face_vertices[f];

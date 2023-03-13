@@ -254,17 +254,40 @@ namespace XRE {
 		XUI::CheckBox(u8"阴影映射", &component.m_ShadowCasting);
 		if (model) {
 			ImGui::Text(model->getPath().c_str());
-			if (ImGui::TreeNodeEx(u8"子网格", ImGuiTreeNodeFlags_None))
+			if (ImGui::TreeNodeEx(u8"材质", ImGuiTreeNodeFlags_None))
 			{
 				int i = 0;
-				for (auto& m : model->m_Meshes) {
+				for (auto& mat :component.m_Materials) {
 
-					std::string meshname = "Mesh" + std::to_string(i++);
-					if (ImGui::TreeNodeEx(meshname.c_str(), ImGuiTreeNodeFlags_None))
-					{
-						auto& mat = m.GetMaterial();
+						if (ImGui::Button(mat->name.c_str())) {
+							ImGui::OpenPopup(u8"材质选项");
+						}
+						/*if (ImGui::BeginDragDropSource) {
 
-						ImGui::Text(mat->name.c_str());
+							ImGui::EndDragDropSource();
+						}
+						if (ImGui::BeginDragDropTarget) {
+
+							ImGui::EndDragDropTarget();
+						}*/
+
+						if (ImGui::BeginPopup(u8"材质选项"))
+						{
+							if (ImGui::MenuItem(u8"新材质")) {
+								XRef<Material> newMat = XMakeRef<Material>();
+								newMat->name = u8"新材质";
+								mat = newMat;
+								newMat->Save("../Assets/materials/newMaterial.mat");
+							}		
+
+							if (ImGui::MenuItem(u8"保存")){
+								mat->Save();
+							}
+
+							ImGui::EndPopup();
+						}
+
+					/*
 						ImGui::ColorEdit3(u8"基础色", glm::value_ptr(mat->baseColor));
 						XUI::DragFloat("Shininess", &mat->shininess);
 						XUI::DragFloat("Metallic", &mat->metallic);
@@ -286,12 +309,11 @@ namespace XRE {
 
 							ImGui::Text("NormalMap");
 							ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-						}
+						}*/
 
 
-						ImGui::TreePop();
 					}
-				}
+				
 
 
 				ImGui::TreePop();
