@@ -34,6 +34,8 @@ void EditorLayer::OnAttach()
 	m_IconPause = ResourceManager::GetTex2D(AssetsDirectory"textures/Pause.png");
 	m_IconSimulate = ResourceManager::GetTex2D(AssetsDirectory"textures/Simulate.png");
 	
+	
+	
 }
 
 
@@ -302,6 +304,50 @@ void EditorLayer::OnImGuiRender(){
 		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment(0);
 		ImGui::Image((ImTextureID)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+			{
+				std::string path = *(std::string*)payload->Data;
+
+				if (path.find(".scene") != string::npos) {
+
+					if (m_Status == SceneStatus::Runtime || m_Status == SceneStatus::Paused) {
+						m_Status = SceneStatus::Editing;
+						m_Scene->OnRuntimeEnd();
+					}
+					m_Scene = make_shared<Scene>();
+
+
+					m_Scene->Deserialize(path);
+					OnSceneReload();
+				}
+
+				if (path.find(".obj") != string::npos) {
+
+					std::string name;
+					size_t pos1 = path.find_last_of('\\');
+					size_t pos2 = path.find_last_of('.');
+					if (pos1 != std::string::npos) {
+						if(pos2!= string::npos)
+							name = path.substr( pos1+1,pos2 - pos1-1);
+						else
+						name = path.substr(pos1+1);
+					}
+
+					auto go = m_Scene->CreateGameObject(name);
+					go.AddComponent<MeshRendererComponent>(ResourceManager::GetModel(path));
+					CommandManager::Get().Command_CreateObj(go);
+
+				}
+
+				
+				
+				
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		//Draw Gizmo
 		if (m_Status != SceneStatus::Runtime) {
 
@@ -359,7 +405,7 @@ void EditorLayer::OnImGuiRender(){
 	m_ScenePanel.OnImGuiRender();
 	m_PropertiesPanel.OnImGuiRender();
 	m_ActionPanel.OnImGuiRender();
-	//m_AssetsPanel.OnImGuiRender();
+	m_AssetsPanel.OnImGuiRender();
 
 
 

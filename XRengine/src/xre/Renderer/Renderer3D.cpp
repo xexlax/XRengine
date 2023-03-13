@@ -272,7 +272,7 @@ namespace XRE {
 	}
 	void Renderer3D::DrawRay(const glm::vec3& origin, const glm::vec3& direction, float length, const glm::vec4& color)
 	{
-		RenderCommand::SetDepthTest(false);
+		//RenderCommand::SetDepthTest(false);
 
 		flatColorShader->Bind();
 		flatColorShader->SetFloat4("u_Color", color);
@@ -280,6 +280,6 @@ namespace XRE {
 
 		RenderCommand::DrawIndexedLines(VertexArray::GetRayVA(origin, direction, length));
 
-		RenderCommand::SetDepthTest(true);
+		//RenderCommand::SetDepthTest(true);
 	}
 }

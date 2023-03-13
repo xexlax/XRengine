@@ -105,7 +105,7 @@ namespace XRE{
 				
 			if (ImGui::MenuItem(u8"点光源")) {
 				auto go = m_Scene->CreateGameObject(u8"光源");
-				m_Scene->CreateGameObject(u8"光源").AddComponent<PointLightComponent>();
+				go.AddComponent<PointLightComponent>();
 				CommandManager::Get().Command_CreateObj(go);
 			}
 			if (ImGui::MenuItem(u8"摄像机")) {

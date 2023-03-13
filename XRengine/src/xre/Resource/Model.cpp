@@ -56,10 +56,13 @@ namespace XRE {
 	void Model::LoadModel(string path,bool triangulate)
 	{
 		std::string basepath;
-		size_t pos = path.find_last_of('/');
+
+		size_t pos = path.find_last_of('\\');
 		if (pos != std::string::npos) {
 			basepath = path.substr(0, pos);
 		}
+
+	
 		
 		
 		//XRE_CORE_TRACE("正在加载模型 {0},从目录{1}", path, basepath);
