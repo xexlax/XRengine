@@ -33,10 +33,7 @@ private:
 private:
 	//Editor Panels
 
-	ScenePanel m_ScenePanel;
-	ActionPanel m_ActionPanel;
-	AssetsPanel m_AssetsPanel;
-	PropertiesPanel m_PropertiesPanel;
+	
 	XRef<Texture2D> m_IconPlay, m_IconStop, m_IconPause, m_IconSimulate;
 	
 

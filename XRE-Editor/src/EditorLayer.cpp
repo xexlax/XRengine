@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
+#include "EditorPanels\PanelsManager.h"
 
 //temperory
 
@@ -25,10 +25,9 @@ void EditorLayer::OnAttach()
 	m_Scene = make_shared<Scene>();
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
 	Renderer3D::Init();
-	m_ScenePanel.AttachToScene(m_Scene);
-	CommandManager::Get().SetPanel(&m_ScenePanel,&m_ActionPanel);
-	m_PropertiesPanel.SetReference(&m_ScenePanel);
-	m_PropertiesPanel.SetEC(&m_EditorCamera);
+	PanelsManager::Init();
+	PanelsManager::GetScenePanel()->AttachToScene(m_Scene);
+	PanelsManager::GetPropertiesPanel()->SetEC(&m_EditorCamera);
 	m_IconPlay = ResourceManager::GetTex2D(AssetsDirectory"textures/Play.png");
 	m_IconStop = ResourceManager::GetTex2D(AssetsDirectory"textures/Stop.png");
 	m_IconPause = ResourceManager::GetTex2D(AssetsDirectory"textures/Pause.png");
@@ -342,6 +341,33 @@ void EditorLayer::OnImGuiRender(){
 				}
 
 				
+				if (path.find(".mat") != string::npos) {
+
+					auto [mx, my] = ImGui::GetMousePos();
+					mx -= m_ViewportBounds[0].x;
+					my -= m_ViewportBounds[0].y;
+					glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+					my = viewportSize.y - my;
+					int mouseX = (int)mx;
+					int mouseY = (int)my;
+
+					if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+					{
+						int pixelData;
+						
+						Renderer3D::m_FrameBuffer->ReadPixel(1, mouseX, mouseY, &pixelData);
+						PanelsManager::GetScenePanel()->Select(pixelData);
+						if (PanelsManager::GetScenePanel()->GetSelected().HasComponent<MeshRendererComponent>()) {
+							PanelsManager::GetScenePanel()->GetSelected().GetComponent<MeshRendererComponent>().m_Materials[0]= ResourceManager::GetMaterial(path);
+						}
+						
+
+					}
+						
+
+				}
+
+				
 				
 				
 			}
@@ -351,7 +377,7 @@ void EditorLayer::OnImGuiRender(){
 		//Draw Gizmo
 		if (m_Status != SceneStatus::Runtime) {
 
-			GameObject selectedEntity = m_ScenePanel.GetSelected();
+			GameObject selectedEntity = PanelsManager::GetScenePanel()->GetSelected();
 			if (selectedEntity && m_GizmoType != -1 && m_ShowGizmos)
 			{
 				ImGuizmo::SetOrthographic(false);
@@ -402,10 +428,7 @@ void EditorLayer::OnImGuiRender(){
 	ImGui::End();
 	ImGui::PopStyleVar();
 
-	m_ScenePanel.OnImGuiRender();
-	m_PropertiesPanel.OnImGuiRender();
-	m_ActionPanel.OnImGuiRender();
-	m_AssetsPanel.OnImGuiRender();
+	PanelsManager::OnImGuiRender();
 
 
 
@@ -413,7 +436,7 @@ void EditorLayer::OnImGuiRender(){
 
 	ImGui::End();
 
-	if(m_ScenePanel.GetSelected()&&m_GizmoType!=-1)
+	if(PanelsManager::GetScenePanel()->GetSelected()&&m_GizmoType!=-1)
 	DetectCommand();
 
 	CommandManager::Get().OnUpdate();
@@ -426,9 +449,9 @@ void EditorLayer::DetectCommand() {
 	if (!m_GizmosUsing && ImGuizmo::IsUsing()) {
 		m_GizmosUsing = true;
 		glm::vec3* ptr;
-		if (m_GizmoType == ImGuizmo::OPERATION::TRANSLATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Translation;
-		if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Rotation;
-		if (m_GizmoType == ImGuizmo::OPERATION::SCALE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Scale;
+		if (m_GizmoType == ImGuizmo::OPERATION::TRANSLATE) ptr = &PanelsManager::GetScenePanel()->GetSelected().GetComponent<TransformComponent>().m_Translation;
+		if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ptr = &PanelsManager::GetScenePanel()->GetSelected().GetComponent<TransformComponent>().m_Rotation;
+		if (m_GizmoType == ImGuizmo::OPERATION::SCALE) ptr = &PanelsManager::GetScenePanel()->GetSelected().GetComponent<TransformComponent>().m_Scale;
 
 		CommandManager::Get().Begin_Command_Edit<glm::vec3>(ptr, *ptr);
 
@@ -440,9 +463,9 @@ void EditorLayer::DetectCommand() {
 		glm::vec3* ptr;
 
 
-		if (m_GizmoType == ImGuizmo::OPERATION::TRANSLATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Translation;
-		if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Rotation;
-		if (m_GizmoType == ImGuizmo::OPERATION::SCALE) ptr = &m_ScenePanel.GetSelected().GetComponent<TransformComponent>().m_Scale;
+		if (m_GizmoType == ImGuizmo::OPERATION::TRANSLATE) ptr = &PanelsManager::GetScenePanel()->GetSelected().GetComponent<TransformComponent>().m_Translation;
+		if (m_GizmoType == ImGuizmo::OPERATION::ROTATE) ptr = &PanelsManager::GetScenePanel()->GetSelected().GetComponent<TransformComponent>().m_Rotation;
+		if (m_GizmoType == ImGuizmo::OPERATION::SCALE) ptr = &PanelsManager::GetScenePanel()->GetSelected().GetComponent<TransformComponent>().m_Scale;
 
 		CommandManager::Get().End_Command_Edit<glm::vec3>(ptr, *ptr);
 	}
@@ -459,7 +482,7 @@ void EditorLayer::OnEvent(XRE::Event& e)
 
 void EditorLayer::OnSceneReload()
 {
-	m_ScenePanel.AttachToScene(m_Scene);
+	PanelsManager::GetScenePanel()->AttachToScene(m_Scene);
 	m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 	CommandManager::Get().Clear();
 }
@@ -498,7 +521,7 @@ bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 		{
 			int pixelData;
 			Renderer3D::m_FrameBuffer->ReadPixel(1, mouseX, mouseY,&pixelData);
-			m_ScenePanel.Select(pixelData);
+			PanelsManager::GetScenePanel()->Select(pixelData);
 
 		}
 	}

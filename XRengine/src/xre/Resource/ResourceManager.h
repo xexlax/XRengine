@@ -17,12 +17,17 @@ namespace XRE {
 		static void Init();
 		
 		static XRef<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
+		
+		
 		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
+		static XRef<Texture2D> GetNoTex2D() { return GetTex2D("../Assets/textures/No_Texture.png"); }
+		
+		
 		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(path); }
 		static XRef<Model> GetElementalModel(const Elemental_Model& em);
 
 		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(path); }
-
+		static XRef<Material> GetDefaultMaterial() { return GetMaterial("../Assets/materials/default.mat"); }
 
 	private:
 		

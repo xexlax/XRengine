@@ -1,0 +1,55 @@
+{
+    "value0": {
+        "value0": "Body",
+        "value1": 1.0,
+        "value2": 1.0,
+        "value3": 1.0,
+        "value4": 96.07843017578125,
+        "value5": 1.0,
+        "value6": 1.0,
+        "value7": -107374176.0,
+        "value8": 0.5,
+        "value9": 0.019803941249847413,
+        "value10": 2,
+        "value11": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value12": {
+            "value0": true,
+            "value1": "body_dif.png",
+            "value2": "../Assets\\models\\nanosuit/body_dif.png"
+        },
+        "value13": {
+            "value0": true,
+            "value1": "body_showroom_spec.png",
+            "value2": "../Assets\\models\\nanosuit/body_showroom_spec.png"
+        },
+        "value14": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value15": {
+            "value0": true,
+            "value1": "body_showroom_ddn.png",
+            "value2": "../Assets\\models\\nanosuit/body_showroom_ddn.png"
+        },
+        "value16": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value17": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value18": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        }
+    }
+}

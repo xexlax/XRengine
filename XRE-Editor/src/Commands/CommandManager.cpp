@@ -1,6 +1,6 @@
 
 #include "CommandManager.h"
-
+#include "../EditorPanels/PanelsManager.h"
 namespace XRE {
 	CommandManager  CommandManager::instance;
 	
@@ -38,8 +38,8 @@ namespace XRE {
 	void CommandManager::OnUpdate()
 	{
 		for (auto go : PendingToDestroy) {
-			if (scenePanel->GetSelected() == go) {
-				scenePanel->UnSelect();
+			if (PanelsManager::GetScenePanel()->GetSelected() == go) {
+				PanelsManager::GetScenePanel()->UnSelect();
 			}
 			go.GetScene()->Destroy(go);
 		}
@@ -48,7 +48,7 @@ namespace XRE {
 
 	void CommandManager::OnCommandAdd(XRef<EditorCommand> command)
 	{
-		actionPanel->m_updated = true;
+		PanelsManager::GetActionPanel()->m_updated = true;
 		UndoStack.push_back(command);
 		if (UndoStack.size() > MaxStackSize) UndoStack.pop_front();
 		RedoStack.clear();

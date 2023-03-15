@@ -7,11 +7,11 @@ namespace XRE {
 	EditorCamera::EditorCamera():
 		Camera(CameraType::Perspective)
 	{
-		
+		m_PerspectiveFar = 1000.0f;
 	}
 	void EditorCamera::OnUpdate(TimeStep ts)
 	{
-		if (Input::IsMouseButtonPressed(XRE_MOUSE_BUTTON_MIDDLE))
+		if (Input::IsMouseButtonPressed(XRE_MOUSE_BUTTON_RIGHT))
 		{
 			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;

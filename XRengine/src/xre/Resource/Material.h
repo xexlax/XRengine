@@ -48,7 +48,7 @@ namespace XRE{
 		template <class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(name, baseColor.x, baseColor.y, baseColor.z,
+			ar(name,m_FilePath, baseColor.x, baseColor.y, baseColor.z,
 				shininess, ior, dissolve, pad0, metallic, roughness, illum,
 				ambientTex, diffuseTex, specularTex, specularHighlightTex,
 				bumpTex, displacementTex, alphaTex, ambientOcclusionTex);
@@ -58,10 +58,12 @@ namespace XRE{
 		void Save(const std::string& filepath);
 		void Load(const std::string& filepath);
 
-		std::string GetPath() const { return m_FilePath; }
+		std::string& GetPath() { return m_FilePath; }
+		std::string m_FilePath = "";
+		void SetPath(std::string& s) { m_FilePath = s; }
 	private:
 		
-		std::string m_FilePath = "";
+		
 		
 	};
 

@@ -1,5 +1,6 @@
 #include "ScenePanel.h"
 #include "../Commands/CommandManager.h"
+#include "PanelsManager.h"
 #include <ImGui\imgui.h>
 namespace XRE{
 	ScenePanel::ScenePanel(const XRef<Scene>& scene)
@@ -15,6 +16,8 @@ namespace XRE{
 	{
 		GameObject go( entt::entity(ObjId) , m_Scene.get() );
 		m_Selected = go;
+		PanelsManager::GetPropertiesPanel()->Switch();
+		
 	}
 	void ScenePanel::UnSelect()
 	{

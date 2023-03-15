@@ -223,20 +223,27 @@ namespace XRE {
 		MeshRendererComponent() :Component("Mesh Renderer") {};
 		MeshRendererComponent(const MeshRendererComponent&) = default;
 		MeshRendererComponent(XRef<Model> model)
-			:Component("Mesh Renderer"), m_Model(model) {
+			:Component("Mesh Renderer"), m_Model(model), m_Materials(model->m_defaultMaterials) {
 			m_ModelPath = model->getPath();
-			for (auto x : model->m_Meshes) {
-				m_Materials.push_back(x.GetMaterial());
-			}
-		}
+			if (m_Materials.empty())m_Materials.push_back(nullptr);
+		};
 		MeshRendererComponent(const std::string& path)
-			: m_Model(ResourceManager::GetModel(path)),m_ModelPath(path) {
+			:m_Model(ResourceManager::GetModel(path))
+			, m_ModelPath(path)
+		{
+			m_Materials = m_Model->m_defaultMaterials;
+			if (m_Materials.empty())m_Materials.push_back(nullptr);
+		};
 
-			for (auto x : m_Model->m_Meshes) {
-				m_Materials.push_back(x.GetMaterial());
+		XRef<Material> GetMaterial(uint32_t i = 0) const {
+			if (i >= m_Materials.size() || m_Materials[i] == nullptr) {
+				if (i >= m_Model->m_defaultMaterials.size()) {
+					return nullptr;
+				}
+				return m_Model->m_defaultMaterials[i];
 			}
-		
-		}
+			return m_Materials[i];
+		};
 
 		operator XRef<Model>& () { return m_Model; }
 		operator const XRef<Model>& () const { return m_Model; }
@@ -247,7 +254,9 @@ namespace XRE {
 			ar(m_Active, m_ModelPath);
 			std::vector<std::string> f;
 			for (auto x : m_Materials) {
+				if(x)
 				f.push_back(x->GetPath());
+				else f.push_back("");
 			}
 			ar(f);
 			
@@ -263,10 +272,13 @@ namespace XRE {
 			int i = 0;
 			m_Materials.clear();
 
-			for (auto x : f) {
-				if(x!="")
-				m_Materials.push_back(ResourceManager::GetMaterial(x));
+			for (auto x : f){
+				if (x != "")
+					m_Materials.push_back(ResourceManager::GetMaterial(x));
+				else
+					m_Materials.push_back(nullptr);
 			}
+			//m_Materials.std::resize(max(m_Materials.size(), m_Model->m_defaultMaterials.size());
 		
 		}
 

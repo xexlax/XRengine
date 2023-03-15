@@ -22,13 +22,16 @@ namespace XRE {
         std::string m_Path;
 
         static XRef<Model> Create(const std::string& path);
+       
+
+        vector<XRef<Material>> m_defaultMaterials;
     private:
+
+        void LoadModel(string path, bool triangulate = true);
         
         
         /*  º¯Êý   */
-        void LoadModel(string path,
-            bool triangulate = true);
-
+      
 
 	};
 }

@@ -59,7 +59,6 @@ namespace XRE {
 	void Model::LoadModel(string path,bool triangulate)
 	{
 		std::string basepath;
-		vector<XRef<Material>> m_Materials;
 
 
 		size_t pos = path.find_last_of('\\');
@@ -105,9 +104,11 @@ namespace XRE {
 		{
 			for (int i = 0; i < materials.size(); i++) {
 				XRef<Material> m = make_shared<Material>();
+			
 				tinyobj::material_t tm = materials[i];
 				
 				string name = tm.name;
+				m->SetPath(basepath + "\\" + name + ".mat");
 				if (name.size()) {
 					m->name = name;
 				}
@@ -157,7 +158,7 @@ namespace XRE {
 					//XRE_CORE_INFO("specular_Tex {0}", specular_path);
 				}
 				m->LoadAllTex();
-				m_Materials.push_back(m);
+				m_defaultMaterials.push_back(m);
 			}
 
 		}
@@ -257,9 +258,9 @@ namespace XRE {
 				}
 				Mesh cur_mesh(vertices, indices);
 				auto& m = shapes[i].mesh.material_ids;
-				if(m[0]>=0)
-				cur_mesh.SetMaterial(m_Materials[m[0]]);
-				
+				if(m[0]==-1) cur_mesh.MatID = 0;
+				else
+				cur_mesh.MatID = m[0];
 				//XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes ря╪сть",i, vertices.size(), indices.size());
 
 				m_Meshes.push_back(cur_mesh);

@@ -35,6 +35,7 @@
 
 #include "xre\Utils\Math.h"
 #include "xre\Utils\PlatformUtils.h"
+#include "xre\Utils\address.h"
 
 
 #include "xre\Physics\PhysicsScene.h"

@@ -8,7 +8,7 @@
         },
         "value1": {
             "value0": true,
-            "value1": "cube"
+            "value1": "nanosuit"
         },
         "value2": {
             "value0": "Transform"
@@ -16,7 +16,7 @@
         "value3": {
             "value0": true,
             "value1": 0.0,
-            "value2": -2.9802322387695315e-8,
+            "value2": 0.0,
             "value3": 0.0,
             "value4": 0.0,
             "value5": 0.0,
@@ -30,9 +30,14 @@
         },
         "value5": {
             "value0": true,
-            "value1": "../Assets\\models\\cube.obj",
+            "value1": "../Assets\\models\\nanosuit\\nanosuit.obj",
             "value2": [
-                ""
+                "../Assets\\models\\nanosuit\\Arm.mat",
+                "../Assets\\models\\nanosuit\\Body.mat",
+                "../Assets\\models\\nanosuit\\Glass.mat",
+                "../Assets\\models\\nanosuit\\Hand.mat",
+                "../Assets\\models\\nanosuit\\Helmet.mat",
+                "../Assets\\models\\nanosuit\\Leg.mat"
             ]
         },
         "value6": {

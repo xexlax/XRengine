@@ -77,7 +77,7 @@ namespace XRE {
 
 		//²ÎÊý
 		float m_OrthographicSize=20.0f, m_OrthographicNear=-20.0f, m_OrthographicFar=20.0f;
-		float m_PerspectiveFovy=45.0f, m_PerspectiveNear = 0.1f, m_PerspectiveFar = 100.0f;
+		float m_PerspectiveFovy=45.0f, m_PerspectiveNear = 0.1f, m_PerspectiveFar = 200.0f;
 		float m_AspectRatio=1.0f;
 		
 		

@@ -1,21 +1,25 @@
 {
     "value0": {
-        "value0": "新材质",
-        "value1": "../Assets/materials/newMaterial.mat",
+        "value0": "Glass",
+        "value1": 1.0,
         "value2": 1.0,
         "value3": 1.0,
-        "value4": 1.0,
-        "value5": 64.0,
-        "value6": -431602080.0,
-        "value7": -431602080.0,
-        "value8": -431602080.0,
-        "value9": 0.5,
-        "value10": 0.5,
-        "value11": -842150451,
-        "value12": {
+        "value4": 96.07843017578125,
+        "value5": 1.0,
+        "value6": 1.0,
+        "value7": -107374176.0,
+        "value8": 0.5,
+        "value9": 0.019803941249847413,
+        "value10": 2,
+        "value11": {
             "value0": false,
             "value1": "",
             "value2": ""
+        },
+        "value12": {
+            "value0": true,
+            "value1": "glass_dif.png",
+            "value2": "../Assets\\models\\nanosuit/glass_dif.png"
         },
         "value13": {
             "value0": false,
@@ -28,9 +32,9 @@
             "value2": ""
         },
         "value15": {
-            "value0": false,
-            "value1": "",
-            "value2": ""
+            "value0": true,
+            "value1": "glass_ddn.png",
+            "value2": "../Assets\\models\\nanosuit/glass_ddn.png"
         },
         "value16": {
             "value0": false,
@@ -43,11 +47,6 @@
             "value2": ""
         },
         "value18": {
-            "value0": false,
-            "value1": "",
-            "value2": ""
-        },
-        "value19": {
             "value0": false,
             "value1": "",
             "value2": ""

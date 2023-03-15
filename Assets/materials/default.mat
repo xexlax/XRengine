@@ -1,6 +1,6 @@
 {
     "value0": {
-        "value0": "新材质",
+        "value0": "../Assets/materials/newMaterial.mat",
         "value1": "../Assets/materials/newMaterial.mat",
         "value2": 1.0,
         "value3": 1.0,

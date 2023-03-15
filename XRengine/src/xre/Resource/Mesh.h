@@ -26,21 +26,19 @@ namespace XRE {
 		
 		~Mesh() {};
 
-		void SetMaterial(XRef<Material> mat) { m_Material = mat; };
-		XRef<Material> GetMaterial()const { return m_Material; };
-		void BindMaterial(XRef<Shader> shader);
+		void BindMaterial(XRef<Material> mat, XRef<Shader> shader);
 		void UnBindMatarial(XRef<Shader> shader);
 
 		XRef<VertexArray> GetVAO()const { return m_VertexArray; }
-		
+		uint32_t MatID = 0;
 	private:
 		
 		XRef<VertexArray> m_VertexArray;
-		XRef<Material> m_Material;
 		glm::mat4 m_Transform;
 
 		//void BindMaterial(XRef<Shader> shader);
 		void setupMesh();
+		
 
 	};
 

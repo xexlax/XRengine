@@ -1,13 +1,11 @@
 #pragma once
 #include <XRE.h>
-#include "ScenePanel.h"
+
 namespace XRE {
 	class PropertiesPanel {
 	public:
 		PropertiesPanel()=default;
-		PropertiesPanel(ScenePanel* sp);
 
-		void SetReference(ScenePanel* sp);
 		void SetEC(EditorCamera* ec) {
 			m_EditorCamera = ec;
 		}
@@ -16,6 +14,9 @@ namespace XRE {
 
 		//绘制go所有的Component
 		void DrawComponents(GameObject go);
+		void Switch() {
+			m_Switch = true;
+		}
 	private:
 
 		ScenePanel* m_ReferenceScenePanel;
@@ -31,6 +32,7 @@ namespace XRE {
 		void DrawComponentLayout(T& component);
 
 		Component* m_Copied = nullptr;
+		bool m_Switch = false;
 
 	};
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue=0.0f, float columnWidth=110.0f);

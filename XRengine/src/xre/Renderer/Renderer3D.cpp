@@ -202,20 +202,18 @@ namespace XRE {
 			}
 		//model->Draw(defaultObjShader, transform);
 	}
-	void Renderer3D::DrawModel(const XRef<Model> model,const std::vector<XRef<Material>>& mats, const glm::mat4& transform)
+	void Renderer3D::DrawModel(const MeshRendererComponent& mrc, const glm::mat4& transform)
 	{
-		int i = 0;
+		auto model = mrc.m_Model;
 		if(model)
 		for (auto mesh : model->m_Meshes) {
 			
-			if(i<mats.size())
-			mesh.SetMaterial(mats[i++]);
-			mesh.BindMaterial(activeShader);
+			mesh.BindMaterial(mrc.GetMaterial(mesh.MatID), activeShader);
 			activeShader->Bind();
 			activeShader->SetMat4("u_Transform", transform);
 			mesh.GetVAO()->Bind();
 			RenderCommand::DrawIndexed(mesh.GetVAO());
-
+			
 
 		}
 		//model->Draw(defaultObjShader, transform);

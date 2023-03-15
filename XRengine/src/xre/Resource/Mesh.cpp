@@ -3,11 +3,11 @@
 
 #include "xre/Renderer/Renderer.h"
 #include "Platforms\OpenGL\OpenGLShader.h"
+#include "xre\Resource\ResourceManager.h"
 
 namespace XRE {
 	Mesh::Mesh(const std::vector<Vertex>& vertices,const std::vector<unsigned int>& indices)
 	{
-		m_Material = std::make_shared<Material>();
 
 		BufferLayout layout = {
 				{ ShaderDataType::Float3, "a_Position" },
@@ -31,36 +31,41 @@ namespace XRE {
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
 	
-	void Mesh::BindMaterial(XRef<Shader> shader)
+	void Mesh::BindMaterial(XRef<Material> mat, XRef<Shader> shader)
 	{
-		shader->Bind();
+		if (mat == nullptr) {
+			BindMaterial(ResourceManager::GetDefaultMaterial(),shader);
+			return;
+		}
+			
 	
-		shader->SetFloat3("material.baseColor", m_Material->baseColor);
-		shader->SetFloat("material.shininess", m_Material->shininess);
-		shader->SetFloat("material.metallic", m_Material->metallic);
-		shader->SetFloat("material.roughness", m_Material->roughness);
+		shader->Bind();
+
+		shader->SetFloat3("material.baseColor", mat->baseColor);
+		shader->SetFloat("material.shininess", mat->shininess);
+		shader->SetFloat("material.metallic", mat->metallic);
+		shader->SetFloat("material.roughness", mat->roughness);
 		int textureID = 1;
 		//
-		shader->SetBool("material.enable_diffuseTex", m_Material->diffuseTex.m_enable);
-		if (m_Material->diffuseTex.m_enable) {
-			m_Material->diffuseTex.m_Tex->Bind(textureID);
-			
+		shader->SetBool("material.enable_diffuseTex", mat->diffuseTex.m_enable);
+		if (mat->diffuseTex.m_enable) {
+			mat->diffuseTex.m_Tex->Bind(textureID);
+
 			shader->SetInt("material.diffuseTex", textureID++);
 		}
 		//
-		shader->SetBool("material.enable_specularTex", m_Material->specularTex.m_enable);
-		if (m_Material->specularTex.m_enable) {
-			m_Material->specularTex.m_Tex->Bind(textureID);
+		shader->SetBool("material.enable_specularTex", mat->specularTex.m_enable);
+		if (mat->specularTex.m_enable) {
+			mat->specularTex.m_Tex->Bind(textureID);
 			shader->SetInt("material.specularTex", textureID++);
 		}
 		//
-		shader->SetBool("material.enable_bumpTex", m_Material->bumpTex.m_enable);
-		if (m_Material->bumpTex.m_enable) {
-			m_Material->bumpTex.m_Tex->Bind(textureID);
+		shader->SetBool("material.enable_bumpTex", mat->bumpTex.m_enable);
+		if (mat->bumpTex.m_enable) {
+			mat->bumpTex.m_Tex->Bind(textureID);
 			shader->SetInt("material.bumpTex", textureID++);
 		}
-			
-		
+
 	}
 	void Mesh::UnBindMatarial(XRef<Shader> shader)
 	{

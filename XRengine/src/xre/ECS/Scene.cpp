@@ -348,7 +348,7 @@ namespace XRE{
 					if (meshrenderer.m_Active) {
 						//Renderer3D::activeShader->Bind();
 						Renderer3D::activeShader->SetInt("ObjID", int(obj));
-						Renderer3D::DrawModel(meshrenderer, meshrenderer.m_Materials, transform.GetGlobalTransform());
+						Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
 					}
 
 				}

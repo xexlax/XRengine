@@ -37,6 +37,11 @@ namespace XRE {
 	
 	void Material::Save(const std::string& filepath)
 	{
+		size_t pos = filepath.find_last_of('\\');
+		if (pos != std::string::npos) {
+			name = filepath.substr(pos+1);
+		}
+		//name = filepath;
 		m_FilePath = filepath;
 		std::ofstream fs(filepath);
 		if (fs.is_open()) {

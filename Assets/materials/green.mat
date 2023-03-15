@@ -1,10 +1,10 @@
 {
     "value0": {
-        "value0": "新材质",
-        "value1": "../Assets/materials/newMaterial.mat",
-        "value2": 1.0,
-        "value3": 1.0,
-        "value4": 1.0,
+        "value0": "../Assets/materials/green.mat",
+        "value1": "../Assets/materials/green.mat",
+        "value2": 0.14326156675815583,
+        "value3": 0.8953846096992493,
+        "value4": 0.16640372574329377,
         "value5": 64.0,
         "value6": -431602080.0,
         "value7": -431602080.0,

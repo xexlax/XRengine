@@ -91,7 +91,7 @@ vec3 GetAlbedo()
 {
     vec3 albedo;
     if(material.enable_diffuseTex)
-       albedo= vec3(texture(material.diffuseTex, TexCoords));
+       albedo= vec3(texture(material.diffuseTex, TexCoords)) * material.baseColor;
     else{
        albedo= material.baseColor;
     }

@@ -17,6 +17,7 @@ namespace XRE {
 		m_SceneIcon = ResourceManager::GetTex2D("../Assets/textures/scene_logo.png");
 		m_ShaderIcon = ResourceManager::GetTex2D("../Assets/textures/shader_logo.png");
 		m_TexIcon = ResourceManager::GetTex2D("../Assets/textures/tex_logo.png");
+		m_MaterialIcon = ResourceManager::GetTex2D("../Assets/textures/mat_logo.png");
 	}
 
 	void AssetsPanel::OnImGuiRender()
@@ -25,7 +26,7 @@ namespace XRE {
 
 		if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
 		{
-			if (ImGui::Button("<-"))
+			if (ImGui::Button(u8"·µ»Ø"))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 			}
@@ -54,6 +55,8 @@ namespace XRE {
 			if (filenameString.find(".scene") != string::npos) iconid = m_SceneIcon->GetRendererId();
 			if (filenameString.find(".glsl") != string::npos) iconid = m_ShaderIcon->GetRendererId();
 			if (filenameString.find(".png") != string::npos || filenameString.find(".jpg") != string::npos) iconid = m_TexIcon->GetRendererId();
+			if (filenameString.find(".mat") != string::npos) iconid = m_MaterialIcon->GetRendererId();
+			
 			ImGui::PushID(filenameString.c_str());
 			
 			ImGui::ImageButton(ImTextureID(iconid), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });

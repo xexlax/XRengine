@@ -1,25 +1,23 @@
 #include <ImGui\imgui.h>
 #include "PropertiesPanel.h"
+#include "PanelsManager.h"
 #include "Data.h"
 #include <glm\glm\gtc\type_ptr.hpp>
 #include <ImGui\imgui_internal.h>
 
 using namespace entt;
 namespace XRE {
-	PropertiesPanel::PropertiesPanel(ScenePanel* sp)
-	{
-		SetReference(sp);
-	}
-	void PropertiesPanel::SetReference(ScenePanel* sp)
-	{
-		m_ReferenceScenePanel = sp;
-	}
+	
 	void PropertiesPanel::OnImGuiRender()
 	{
 		ImGui::ShowDemoWindow();
 		ImGui::Begin(u8"属性");
+		if (m_Switch == true) {
+			ImGui::SetWindowFocus();
+			m_Switch = false;
+		}
 
-		GameObject go = m_ReferenceScenePanel->m_Selected;
+		GameObject go = PanelsManager::GetScenePanel()->m_Selected;
 		if (go) {
 			
 			DrawComponents(go);
@@ -256,20 +254,60 @@ namespace XRE {
 			ImGui::Text(model->getPath().c_str());
 			if (ImGui::TreeNodeEx(u8"材质", ImGuiTreeNodeFlags_None))
 			{
+				if (ImGui::Button(u8"全部保存")) {
+					for (auto& mat : component.m_Materials) mat->Save();
+				}
 				int i = 0;
+				
 				for (auto& mat :component.m_Materials) {
-
-						if (ImGui::Button(mat->name.c_str())) {
+					
+					
+					if (mat == nullptr) {
+						if (ImGui::Button(u8"空材质")) {
 							ImGui::OpenPopup(u8"材质选项");
 						}
-						/*if (ImGui::BeginDragDropSource) {
 
-							ImGui::EndDragDropSource();
-						}
-						if (ImGui::BeginDragDropTarget) {
+						if (ImGui::BeginDragDropTarget()) {
 
+
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+							{
+								std::string path = *(std::string*)payload->Data;
+
+								if (path.find(".mat") != string::npos) {
+
+									mat = ResourceManager::GetMaterial(path);
+
+								}
+
+							}
 							ImGui::EndDragDropTarget();
-						}*/
+						}
+					}
+					else
+						if (ImGui::Button(mat->name.c_str())) {
+							PanelsManager::GetMaterialPanel()->Select(mat,&component);
+						}
+						
+
+						if (ImGui::BeginDragDropTarget()) {
+
+
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+							{
+								std::string path = *(std::string*)payload->Data;
+
+								if (path.find(".mat") != string::npos) {
+
+									mat = ResourceManager::GetMaterial(path);
+									
+								}
+
+							}
+							ImGui::EndDragDropTarget();
+						}
+						
+						
 
 						if (ImGui::BeginPopup(u8"材质选项"))
 						{
@@ -287,29 +325,7 @@ namespace XRE {
 							ImGui::EndPopup();
 						}
 
-					/*
-						ImGui::ColorEdit3(u8"基础色", glm::value_ptr(mat->baseColor));
-						XUI::DragFloat("Shininess", &mat->shininess);
-						XUI::DragFloat("Metallic", &mat->metallic);
-						XUI::DragFloat("Roughness", &mat->roughness);
-						if (mat->diffuseTex.m_enable) {
-							auto tex = mat->diffuseTex.m_Tex->GetRendererId();
-
-							ImGui::Text("AlbedoMap");
-							ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-						}
-						if (mat->specularTex.m_enable) {
-							auto tex = mat->specularTex.m_Tex->GetRendererId();
-
-							ImGui::Text("SpecularMap");
-							ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-						}
-						if (mat->bumpTex.m_enable) {
-							auto tex = mat->bumpTex.m_Tex->GetRendererId();
-
-							ImGui::Text("NormalMap");
-							ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-						}*/
+					
 
 
 					}
@@ -508,7 +524,7 @@ namespace XRE {
 		for (uint32_t x : component.m_HitObjs) {
 
 			
-			ImGui::Text(m_ReferenceScenePanel->m_Scene->GetObj(x).GetName().c_str());
+			ImGui::Text(PanelsManager::GetScenePanel()->m_Scene->GetObj(x).GetName().c_str());
 
 		}
 

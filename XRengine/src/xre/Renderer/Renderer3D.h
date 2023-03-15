@@ -44,7 +44,7 @@ namespace XRE {
 
 		static void DrawMesh(const XRef<Model> model, const glm::mat4& transform);
 
-		static void DrawModel(const XRef<Model> model, const std::vector<XRef<Material>>& mats, const glm::mat4& transform = glm::mat4(1.0f));
+		static void DrawModel(const MeshRendererComponent& mrc, const glm::mat4& transform = glm::mat4(1.0f));
 		static void DrawSkybox();
 
 		static void DrawShapeFrame(const PhysicsShape& Shape, const glm::mat4& transform = glm::mat4(1.0f), const glm::vec4& color = glm::vec4(0, 1, 0, 1));

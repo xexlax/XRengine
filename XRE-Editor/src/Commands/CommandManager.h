@@ -1,7 +1,6 @@
 #pragma once
 #include "EditorCommand.h"
-#include "../EditorPanels/ScenePanel.h"
-#include "../EditorPanels/ActionPanel.h"
+
 #include <XRE.h>
 #include <deque>
 
@@ -67,12 +66,9 @@ namespace XRE {
 		bool CanUndo() const { return !UndoStack.empty(); }
 		bool CanRedo() const { return !RedoStack.empty(); }
 
-		void SetPanel(ScenePanel* s, ActionPanel* a) { scenePanel = s;actionPanel = a; }
 
 	protected:
 
-		ScenePanel* scenePanel;
-		ActionPanel* actionPanel;
 		uint32_t MaxStackSize = 30;
 
 		XRef<EditorCommand> Pending = nullptr;

@@ -1,11 +1,11 @@
 {
     "value0": {
-        "value0": "新材质",
-        "value1": "../Assets/materials/newMaterial.mat",
+        "value0": "../Assets/materials/green.mat",
+        "value1": "../Assets/materials/dice.mat",
         "value2": 1.0,
         "value3": 1.0,
         "value4": 1.0,
-        "value5": 64.0,
+        "value5": 49.0,
         "value6": -431602080.0,
         "value7": -431602080.0,
         "value8": -431602080.0,
@@ -18,14 +18,14 @@
             "value2": ""
         },
         "value13": {
-            "value0": false,
-            "value1": "",
-            "value2": ""
+            "value0": true,
+            "value1": "Dice.png",
+            "value2": "../Assets\\textures\\Dice.png"
         },
         "value14": {
-            "value0": false,
-            "value1": "",
-            "value2": ""
+            "value0": true,
+            "value1": "Dice_Spec.png",
+            "value2": "../Assets\\textures\\Dice_Spec.png"
         },
         "value15": {
             "value0": false,
