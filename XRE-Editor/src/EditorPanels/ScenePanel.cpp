@@ -18,6 +18,7 @@ namespace XRE{
 		m_Selected = go;
 		PanelsManager::GetPropertiesPanel()->Switch();
 		
+		
 	}
 	void ScenePanel::UnSelect()
 	{

@@ -13,7 +13,6 @@ namespace XRE {
 			return XMakeRef<Prefab>(fp);
 		};
 
-		void Instantiate();
 
 		std::string m_FilePath;
 	};

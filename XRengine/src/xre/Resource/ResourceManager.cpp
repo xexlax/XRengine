@@ -7,6 +7,7 @@ namespace XRE {
 	Library<Texture2D> ResourceManager::m_Texture2DLib;
 	Library<Model> ResourceManager::m_ModelLib;
 	Library<Material> ResourceManager::m_MaterialLib;
+	//Library<Prefab> ResourceManager::m_PrefabLib;
 
 	void ResourceManager::Init()
 	{
@@ -29,7 +30,7 @@ namespace XRE {
 		case Elemental_Model::Capsule:
 			return m_ModelLib.Get("..\\Assets\\models\\capsule.obj");
 		default:
-			XRE_ERROR("不存在的基本模型种类");
+			XRE_ERROR(u8"涓嶅瓨鍦ㄧ殑鍩虹妯″瀷");
 			break;
 		}
 	}

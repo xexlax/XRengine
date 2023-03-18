@@ -4,9 +4,10 @@
 #include "Model.h"
 #include "Material.h"
 #include "Library.h"
+//#include "Prefab.h"
 
 namespace XRE {
-	//×ÊÔ´¹ÜÀíÆ÷¸ºÔğ»ñÈ¡¸÷ÖÖ×Ê²ú£¬²¢±£Ö¤Æä²»±»ÖØ¸´¼ÓÔØ
+	//èµ„æºç®¡ç†å™¨ï¼Œé€šè¿‡è·¯å¾„è·å–èµ„æºï¼Œç¡®ä¿èµ„æºä¸ä¼šé‡å¤åŠ è½½
 	enum Elemental_Model {
 		Cube,Plane,Sphere,Cone,Cylinder,Capsule
 	};
@@ -29,12 +30,16 @@ namespace XRE {
 		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(path); }
 		static XRef<Material> GetDefaultMaterial() { return GetMaterial("../Assets/materials/default.mat"); }
 
+		// æ·»åŠ å¯¹Prefabç±»çš„ç®¡ç†
+		//static XRef<Prefab> GetPrefab(const std::string& path) { return m_PrefabLib.Get(path); }
+
 	private:
 		
 		static Library<Shader> m_ShaderLib;
 		static Library<Texture2D> m_Texture2DLib;
 		static Library<Model> m_ModelLib;
 		static Library<Material> m_MaterialLib;
+		//static Library<Prefab> m_PrefabLib; // æ·»åŠ Prefabåº“
 		
 	};
 }

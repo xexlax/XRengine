@@ -16,6 +16,10 @@ namespace XRE {
 		glm::vec3 Tangent;
 		glm::vec2 TexCoords;
 	};
+
+	struct AABB {
+		glm::vec3 LowerBorder, HigherBorder;
+	};
 	
 
 	class Mesh
@@ -31,11 +35,12 @@ namespace XRE {
 
 		XRef<VertexArray> GetVAO()const { return m_VertexArray; }
 		uint32_t MatID = 0;
+		AABB m_AABB;
 	private:
 		
 		XRef<VertexArray> m_VertexArray;
 		glm::mat4 m_Transform;
-
+		
 		//void BindMaterial(XRef<Shader> shader);
 		void setupMesh();
 		

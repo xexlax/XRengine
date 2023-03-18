@@ -4,8 +4,7 @@
 namespace XRE {
 	void Prefab::Save(GameObject prototype, std::string filepath)
 	{
+        
 	}
-	void Prefab::Instantiate()
-	{
-	}
+
 }

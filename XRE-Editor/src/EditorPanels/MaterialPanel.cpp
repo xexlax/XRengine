@@ -1,5 +1,7 @@
 #include "MaterialPanel.h"
+#include "PanelsManager.h"
 #include <ImGui\imgui.h>
+#include "imnodes\imnodes.h"
 #include "Data.h"
 #include <glm\glm\gtc\type_ptr.hpp>
 namespace XRE {
@@ -8,6 +10,30 @@ namespace XRE {
 	}
 	void MaterialPanel::OnImGuiRender()
 	{
+		ImGui::Begin("node editor");
+		const int hardcoded_node_id = 1;
+
+		ImNodes::BeginNodeEditor();
+
+		ImNodes::BeginNode(hardcoded_node_id);
+		ImGui::Dummy(ImVec2(80.0f, 45.0f));
+		ImNodes::EndNode();
+
+		ImNodes::BeginNode(hardcoded_node_id);
+
+		const int output_attr_id = 2;
+		ImNodes::BeginOutputAttribute(output_attr_id);
+		// in between Begin|EndAttribute calls, you can call ImGui
+		// UI functions
+		ImGui::Text("output pin");
+		ImNodes::EndOutputAttribute();
+
+		ImNodes::EndNode();
+
+		ImNodes::EndNodeEditor();
+
+		ImGui::End();
+
 		ImGui::Begin(u8"²ÄÖÊ");
 		if (m_Switch) {
 			ImGui::SetWindowFocus();
@@ -28,101 +54,51 @@ namespace XRE {
 			
 			ImGui::Text("Albedo");
 			{
-				uint32_t tex;
-				if (m_Selected->diffuseTex.m_enable) {
-					tex = m_Selected->diffuseTex.m_Tex->GetRendererId();
-					if (ImGui::Button(u8"delete")) {
-						m_Selected->diffuseTex.m_enable = false;
-					}
-				}
-				else tex = ResourceManager::GetNoTex2D()->GetRendererId();
-
-				ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-				if (ImGui::BeginDragDropTarget()) {
-
-
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
-					{
-						std::string path = *(std::string*)payload->Data;
-
-						if (path.find(".png") != string::npos || path.find(".jpg") != string::npos) {
-							m_Selected->diffuseTex.m_enable = true;
-							m_Selected->diffuseTex.m_filepath = path;
-							m_Selected->diffuseTex.m_name = Utils::GetFileName(path);
-							m_Selected->diffuseTex.m_Tex = ResourceManager::GetTex2D(path);
-						}
-
-					}
-					ImGui::EndDragDropTarget();
-				}
+				DrawTextureSlot(&m_Selected->diffuseTex);
 			}
 			ImGui::Text("SpecularMap");
 			{
-				uint32_t tex;
-				if (m_Selected->specularTex.m_enable) {
-					tex = m_Selected->specularTex.m_Tex->GetRendererId();
-					if (ImGui::Button(u8"delete")) {
-						m_Selected->specularTex.m_enable = false;
-					}
-				}
-				else tex = ResourceManager::GetNoTex2D()->GetRendererId();
-
-				ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-				if (ImGui::BeginDragDropTarget()) {
-
-
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
-					{
-						std::string path = *(std::string*)payload->Data;
-
-						if (path.find(".png") != string::npos || path.find(".jpg") != string::npos) {
-
-							m_Selected->specularTex.m_enable = true;
-							m_Selected->specularTex.m_filepath = path;
-							m_Selected->specularTex.m_name = Utils::GetFileName(path);
-							m_Selected->specularTex.m_Tex = ResourceManager::GetTex2D(path);
-						}
-
-					}
-					ImGui::EndDragDropTarget();
-				}
+				DrawTextureSlot(&m_Selected->specularTex);
 			}
 			ImGui::Text("NormalMap");
 			{
-				uint32_t tex;
-				if (m_Selected->bumpTex.m_enable) {
-					tex = m_Selected->bumpTex.m_Tex->GetRendererId();
-					if (ImGui::Button(u8"delete")) {
-						m_Selected->bumpTex.m_enable = false;
-					}
-				}
-				else tex = ResourceManager::GetNoTex2D()->GetRendererId();
-
-				ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-				if (ImGui::BeginDragDropTarget()) {
-
-
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
-					{
-						std::string path = *(std::string*)payload->Data;
-
-						if (path.find(".png") != string::npos || path.find(".jpg") != string::npos) {
-
-							m_Selected->bumpTex.m_enable = true;
-							m_Selected->bumpTex.m_filepath = path;
-							m_Selected->bumpTex.m_name = Utils::GetFileName(path);
-							m_Selected->bumpTex.m_Tex = ResourceManager::GetTex2D(path);
-						}
-
-					}
-					ImGui::EndDragDropTarget();
-				}
+				DrawTextureSlot(&m_Selected->diffuseTex);
 			}
 			
 		}
 		
 
 		ImGui::End();
+	}
+	void MaterialPanel::DrawTextureSlot(MaterialTex* MatTex)
+	{
+		uint32_t tex;
+		if (MatTex->m_enable) {
+			tex = MatTex->m_Tex->GetRendererId();
+			if (ImGui::Button(u8"delete")) {
+				MatTex->m_enable = false;
+			}
+		}
+		else tex = ResourceManager::GetNoTex2D()->GetRendererId();
+
+		ImGui::Image((void*)tex, ImVec2{ 200, 200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		if (ImGui::BeginDragDropTarget()) {
+
+
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+			{
+				std::string path = *(std::string*)payload->Data;
+
+				if (path.find(".png") != string::npos || path.find(".jpg") != string::npos) {
+					MatTex->m_enable = true;
+					MatTex->m_filepath = path;
+					MatTex->m_name = Utils::GetFileName(path);
+					MatTex->m_Tex = ResourceManager::GetTex2D(path);
+				}
+
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
 	void MaterialPanel::Select(XRef<Material> s,MeshRendererComponent *c)
 	{
@@ -133,5 +109,10 @@ namespace XRE {
 	void MaterialPanel::Switch()
 	{
 		m_Switch = true;
+
+		if (PanelsManager::GetScenePanel()->GetSelected().HasComponent<MeshRendererComponent>()) {
+			m_Selected =
+			PanelsManager::GetScenePanel()->GetSelected().GetComponent<MeshRendererComponent>().GetMaterial();
+		}
 	}
 }

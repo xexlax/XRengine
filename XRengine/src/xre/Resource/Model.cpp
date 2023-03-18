@@ -66,7 +66,7 @@ namespace XRE {
 			basepath = path.substr(0, pos);
 		}
 		
-		//XRE_CORE_TRACE("ÕýÔÚ¼ÓÔØÄ£ÐÍ {0},´ÓÄ¿Â¼{1}", path, basepath);
+		//XRE_CORE_TRACE("ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ {0},ï¿½ï¿½Ä¿Â¼{1}", path, basepath);
 		
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
@@ -87,7 +87,7 @@ namespace XRE {
 		}
 
 		if (!ret) {
-			XRE_CORE_ERROR("½âÎöÊ§°Ü .obj. ");
+			XRE_CORE_ERROR("ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ .obj. ");
 		}
 
 #ifdef MODEL_DEBUG
@@ -100,7 +100,7 @@ namespace XRE {
 
 		
 
-		///1. »ñÈ¡¸÷ÖÖ²ÄÖÊºÍÎÆÀí
+		///1. ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ö²ï¿½ï¿½Êºï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			for (int i = 0; i < materials.size(); i++) {
 				XRef<Material> m = make_shared<Material>();
@@ -167,16 +167,16 @@ namespace XRE {
 		
 
 
-		/// 2.¶¥µãÊý¾Ý
+		/// 2.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 
 			
 			
-			// For each shape ±éÀúÃ¿Ò»¸ö²¿·Ö
+			// For each shape ï¿½ï¿½ï¿½ï¿½Ã¿Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			for (size_t i = 0; i < shapes.size(); i++) {
 				
 				std::unordered_map<tinyobj::index_t, uint32_t, hash_idx, equal_idx > uniqueVertices = {};
-				// ¿ª±Ù¿Õ¼ä
+				// ï¿½ï¿½ï¿½Ù¿Õ¼ï¿½
 				vector<Vertex> vertices;
 				vector<uint32_t> indices;
 				
@@ -188,11 +188,13 @@ namespace XRE {
 			
 #endif // MODEL_DEBUG
 
+				glm::vec3 HigherBorder;
+				glm::vec3 LowerBorder;
 				
 				size_t index_offset = 0;
 				for (size_t f = 0; f < shapes[i].mesh.num_face_vertices.size(); f++) {
 					size_t fnum = shapes[i].mesh.num_face_vertices[f];
-					// »ñµÃËùË÷ÒýÏÂ±ê
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½
 					tinyobj::index_t index;
 					Vertex vertex[3];
 					for (size_t v = 0; v < fnum; v++) {
@@ -205,6 +207,21 @@ namespace XRE {
 							attrib.vertices[3 * index.vertex_index + 1],
 							attrib.vertices[3 * index.vertex_index + 2]
 						};
+
+
+						// Update HigherBorder and LowerBorder with the maximum and minimum position values
+						if (v == 0 && f == 0) {
+						    HigherBorder = vertex[v].Position;
+						    LowerBorder = vertex[v].Position;
+						} else {
+						    HigherBorder.x = glm::max(HigherBorder.x, vertex[v].Position.x);
+						    HigherBorder.y = glm::max(HigherBorder.y, vertex[v].Position.y);
+						    HigherBorder.z = glm::max(HigherBorder.z, vertex[v].Position.z);
+						    LowerBorder.x = glm::min(LowerBorder.x, vertex[v].Position.x);
+						    LowerBorder.y = glm::min(LowerBorder.y, vertex[v].Position.y);
+						    LowerBorder.z = glm::min(LowerBorder.z, vertex[v].Position.z);
+						}
+						
 						if (index.normal_index >= 0)
 						vertex[v].Normal = {
 							attrib.normals[3 * index.normal_index + 0],
@@ -252,7 +269,7 @@ namespace XRE {
 						indices.push_back(uniqueVertices[index]);
 					}					
 
-					// Æ«ÒÆ
+					// Æ«ï¿½ï¿½
 					index_offset += fnum;
 
 				}
@@ -261,14 +278,15 @@ namespace XRE {
 				if(m[0]==-1) cur_mesh.MatID = 0;
 				else
 				cur_mesh.MatID = m[0];
-				//XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes ÒÑ¼ÓÔØ",i, vertices.size(), indices.size());
-
+				//XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes ï¿½Ñ¼ï¿½ï¿½ï¿½",i, vertices.size(), indices.size());
+				cur_mesh.m_AABB.HigherBorder = HigherBorder;
+				cur_mesh.m_AABB.LowerBorder = LowerBorder;
 				m_Meshes.push_back(cur_mesh);
 				
 			}
 			
 
-			XRE_CORE_INFO("ÒÑÍê³ÉÄ£ÐÍ {0} µÄ¼ÓÔØ",path);
+			XRE_CORE_INFO("å·²åŠ è½½æ¨¡åž‹{0}",path);
 		}
 	}
 	

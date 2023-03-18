@@ -76,7 +76,7 @@ namespace XRE {
 		glm::vec3 m_WorldUp = { 0.0f, 1.0f, 0.0f };
 
 		//²ÎÊý
-		float m_OrthographicSize=20.0f, m_OrthographicNear=-20.0f, m_OrthographicFar=20.0f;
+		float m_OrthographicSize=20.0f, m_OrthographicNear=-30.0f, m_OrthographicFar=30.0f;
 		float m_PerspectiveFovy=45.0f, m_PerspectiveNear = 0.1f, m_PerspectiveFar = 200.0f;
 		float m_AspectRatio=1.0f;
 		

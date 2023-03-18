@@ -33,7 +33,7 @@ ${THIRD_PARTY_DIR}/json11
 ${THIRD_PARTY_DIR}/Entt/single_include
 ${THIRD_PARTY_DIR}/ImGuizmo
 ${THIRD_PARTY_DIR}/cereal/include
-${THIRD_PARTY_DIR}/JoltPhysicss
+${THIRD_PARTY_DIR}/imnodes
 )
 
 
@@ -48,6 +48,8 @@ file(GLOB_RECURSE HEADER_FILES
 "${THIRD_PARTY_DIR}/Entt/single_include/*.hpp"
 "${THIRD_PARTY_DIR}/ImGuizmo/ImGuizmo.h"
 "${THIRD_PARTY_DIR}/cereal/include/*.hpp"
+"${THIRD_PARTY_DIR}/imnodes/imnodes_internal.h"
+"${THIRD_PARTY_DIR}/imnodes/imnodes.h"
 
 
 
@@ -56,6 +58,7 @@ file(GLOB_RECURSE SOURCE_FILES
 "${ENGINE_SRC_DIR}/*.cpp"
 "${THIRD_PARTY_DIR}/stb_img/stb_image.cpp"
 "${THIRD_PARTY_DIR}/ImGuizmo/ImGuizmo.cpp"
+"${THIRD_PARTY_DIR}/imnodes/imnodes.cpp"
 
 )
 

@@ -33,3 +33,6 @@
 [submodule "XRengine/3rdparty/Entt"]
 	path = XRengine/3rdparty/Entt
 	url = https://github.com/skypjack/entt.git
+[submodule ".\\XRengine\\3rdparty\\imnodes"]
+	path = .\\XRengine\\3rdparty\\imnodes
+	url = https://github.com/Nelarius/imnodes.git

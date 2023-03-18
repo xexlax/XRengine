@@ -8,6 +8,8 @@ namespace XRE {
 
 		void OnImGuiRender();
 
+		void DrawTextureSlot(MaterialTex* tex);
+
 		void Select(XRef<Material> s, MeshRendererComponent* c);
 		void Switch();
 	private:

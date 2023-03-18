@@ -4,6 +4,8 @@
 #include "xre\Core\application.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "imnodes.h"
+
 
 #include "ImGuizmo.h"
 
@@ -58,12 +60,14 @@ namespace XRE {
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
+		ImNodes::CreateContext();
 
 	}
 	void ImGuiLayer::OnDetach()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
+		ImNodes::DestroyContext();
 		ImGui::DestroyContext();
 	}
 
