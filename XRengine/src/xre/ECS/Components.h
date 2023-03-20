@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "xre\Core\Macros.h"
 #include "xre\Resource\ResourceManager.h"
 #include "xre\Resource\Model.h"
@@ -7,6 +7,8 @@
 #include "xre\Physics\PhysicsMaterial.h"
 #include "xre\Physics\PhysicsMotion.h"
 #include "xre\Physics\Collision.h"
+
+#include "xre\BluePrint\BluePrint.h"
 #include <cereal/archives/json.hpp>
 #include <cereal/types/vector.hpp>
 
@@ -16,15 +18,15 @@
 
 #include <entt/entt.hpp>
 
-//Ìí¼ÓÒ»¸öĞÂµÄComponentÖ®ºó£º
-//1.Ìí¼ÓĞòÁĞ»¯·½·¨£¬ÔÚSceneÖĞĞòÁĞ»¯º¯ÊıÖĞ¼ÓÈë
-//2.ÔÚEditor-PropertypanelÖĞ±àĞ´DrawLayout
-//3.ÔÚSceneµÄUpdateº¯ÊıÖĞ¼ÓÈë¾ßÌåµÄ¹¦ÄÜ
+//æ·»åŠ ä¸€ä¸ªæ–°çš„Componentä¹‹åï¼š
+//1.æ·»åŠ åºåˆ—åŒ–æ–¹æ³•ï¼Œåœ¨Sceneä¸­åºåˆ—åŒ–å‡½æ•°ä¸­åŠ å…¥
+//2.åœ¨Editor-Propertypanelä¸­ç¼–å†™DrawLayout
+//3.åœ¨Sceneçš„Updateå‡½æ•°ä¸­åŠ å…¥å…·ä½“çš„åŠŸèƒ½
 
 using namespace entt;
 namespace XRE {
 
-	//ECSÖĞµÄ×é¼şÖ»°üº¬Êı¾İ²»°üº¬·½·¨¡£
+	//ECSä¸­çš„ç»„ä»¶åªåŒ…å«æ•°æ®ä¸åŒ…å«æ–¹æ³•ã€‚
 	struct ComponentType {
 
 		std::string m_Name;
@@ -461,6 +463,32 @@ namespace XRE {
 		}
 
 		RayComponent() :Component("Ray") {};
+	};
+
+	class BluePrintComponent :public Component{
+	public:
+		XRef<BluePrint> m_BluePrint;
+		BluePrintProperties m_BluePrintProperties;
+		std::string m_BluePrintPath;
+
+		
+
+		template <class Archive>
+		void save(Archive& ar) const
+		{
+			//ar(m_BluePrintPath,m_BluePrintProperties);
+
+		}
+		template <class Archive>
+		void load(Archive& ar) 
+		{
+
+			ar(m_BluePrintPath);
+			m_BluePrint = ResourceManager::GetBluePrint(m_BluePrintPath);
+			//ar(m_BluePrintProperties);
+		}
+
+		BluePrintComponent() :Component("BluePrint") {};
 	};
 }
 

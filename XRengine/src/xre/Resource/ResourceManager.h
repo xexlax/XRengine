@@ -1,6 +1,7 @@
 #pragma once
 #include "xre/Renderer/Resources/Texture.h"
 #include "xre/Renderer/Resources/Shader.h"
+#include "xre/BluePrint/BluePrint.h"
 #include "Model.h"
 #include "Material.h"
 #include "Library.h"
@@ -30,6 +31,7 @@ namespace XRE {
 		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(path); }
 		static XRef<Material> GetDefaultMaterial() { return GetMaterial("../Assets/materials/default.mat"); }
 
+		static XRef<BluePrint> GetBluePrint(const std::string& path) { return  m_BluePrintLib.Get(path); }
 		// 添加对Prefab类的管理
 		//static XRef<Prefab> GetPrefab(const std::string& path) { return m_PrefabLib.Get(path); }
 
@@ -39,6 +41,7 @@ namespace XRE {
 		static Library<Texture2D> m_Texture2DLib;
 		static Library<Model> m_ModelLib;
 		static Library<Material> m_MaterialLib;
+		static Library<BluePrint> m_BluePrintLib;
 		//static Library<Prefab> m_PrefabLib; // 添加Prefab库
 		
 	};

@@ -6,6 +6,7 @@
 #include "xre\ECS\GameObject.h"
 #include "xre\Renderer\Renderer3D.h"
 #include "xre\ECS\NativeScript.h"
+#include "xre\BluePrint\BluePrint.h"
 
 
 
@@ -413,6 +414,22 @@ namespace XRE{
 		}
 	}
 
+	void Scene::UpdateLogic(TimeStep ts)
+	{
+		auto view = m_Registry.view<BluePrintComponent>();
+
+
+		for (auto entity : view) {
+			auto bpc = view.get<BluePrintComponent>(entity);
+
+			if (bpc.m_Active) {
+				
+				bpc.m_BluePrint->OnUpdate(entity, this ,ts, bpc.m_BluePrintProperties);
+			}
+
+		}
+	}
+
 	
 
 	void Scene::Destroy(GameObject go)
@@ -441,6 +458,12 @@ namespace XRE{
 	void Scene::OnRuntimeBegin()
 	{
 		//this->Save();
+		
+		//Logic
+		{
+			
+		}
+		//Physics
 		{
 			auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
 
@@ -454,6 +477,7 @@ namespace XRE{
 
 			}
 		}
+		//Rendering
 		{
 			
 			auto view = m_Registry.view<CameraComponent>();
@@ -537,6 +561,12 @@ namespace XRE{
 
 	template<>
 	void Scene::OnComponentAdded<RayComponent>(GameObject go, RayComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<BluePrintComponent>(GameObject go, BluePrintComponent& component)
 	{
 
 	}

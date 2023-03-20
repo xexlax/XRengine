@@ -72,6 +72,11 @@ namespace XRE {
 					archive(c);
 					archive(ngo.GetComponent<RayComponent>());
 				}
+				if (ngo.HasComponent<BluePrintComponent>()) {
+					ComponentType c("BluePrint");
+					archive(c);
+					archive(ngo.GetComponent<BluePrintComponent>());
+				}
 
 				if (ngo.HasComponent<TransformComponent>()) {
 					TransformComponent tc = ngo.GetComponent<TransformComponent>();
@@ -142,6 +147,10 @@ namespace XRE {
 				}
 				if (n.m_Name == "Ray") {
 					RayComponent& tc = go.AddComponent<RayComponent>();
+					archive(tc);
+				}
+				if (n.m_Name == "BluePrint") {
+					BluePrintComponent& tc = go.AddComponent<BluePrintComponent>();
 					archive(tc);
 				}
 

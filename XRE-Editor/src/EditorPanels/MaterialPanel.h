@@ -7,6 +7,7 @@ namespace XRE {
 		MaterialPanel();
 
 		void OnImGuiRender();
+		void DrawNodeEditor();
 
 		void DrawTextureSlot(MaterialTex* tex);
 

@@ -10,30 +10,7 @@ namespace XRE {
 	}
 	void MaterialPanel::OnImGuiRender()
 	{
-		ImGui::Begin("node editor");
-		const int hardcoded_node_id = 1;
-
-		ImNodes::BeginNodeEditor();
-
-		ImNodes::BeginNode(hardcoded_node_id);
-		ImGui::Dummy(ImVec2(80.0f, 45.0f));
-		ImNodes::EndNode();
-
-		ImNodes::BeginNode(hardcoded_node_id);
-
-		const int output_attr_id = 2;
-		ImNodes::BeginOutputAttribute(output_attr_id);
-		// in between Begin|EndAttribute calls, you can call ImGui
-		// UI functions
-		ImGui::Text("output pin");
-		ImNodes::EndOutputAttribute();
-
-		ImNodes::EndNode();
-
-		ImNodes::EndNodeEditor();
-
-		ImGui::End();
-
+		DrawNodeEditor();
 		ImGui::Begin(u8"²ÄÖÊ");
 		if (m_Switch) {
 			ImGui::SetWindowFocus();
@@ -53,20 +30,89 @@ namespace XRE {
 			XUI::DragFloat("Roughness", &m_Selected->roughness);
 			
 			ImGui::Text("Albedo");
-			{
-				DrawTextureSlot(&m_Selected->diffuseTex);
-			}
+			DrawTextureSlot(&m_Selected->diffuseTex);
 			ImGui::Text("SpecularMap");
-			{
-				DrawTextureSlot(&m_Selected->specularTex);
-			}
+			DrawTextureSlot(&m_Selected->specularTex);
 			ImGui::Text("NormalMap");
-			{
-				DrawTextureSlot(&m_Selected->diffuseTex);
-			}
+			DrawTextureSlot(&m_Selected->diffuseTex);
 			
 		}
 		
+
+		ImGui::End();
+	}
+	void MaterialPanel::DrawNodeEditor()
+	{
+
+		ImGui::Begin("node editor");
+		const int hardcoded_node_id = 1;
+		static glm::vec4 color;
+		static std::vector<std::pair<int, int>> links;
+		ImNodes::BeginNodeEditor();
+		ImNodes::PushAttributeFlag(ImNodesAttributeFlags_EnableLinkDetachWithDragClick);
+
+		ImNodes::BeginNode(10);
+		ImNodes::BeginNodeTitleBar();
+		ImGui::TextUnformatted(u8"Pure Color");
+		ImNodes::EndNodeTitleBar();
+		ImGui::ColorEdit4("MyColor##3", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+		ImNodes::BeginOutputAttribute(11);
+		ImGui::Text(u8"OutPut");
+		ImNodes::EndOutputAttribute();
+
+		ImNodes::EndNode();
+
+		ImNodes::BeginNode(hardcoded_node_id);
+		ImNodes::BeginNodeTitleBar();
+		ImGui::TextUnformatted(u8"Êä³ö");
+		ImNodes::EndNodeTitleBar();
+
+
+		ImNodes::BeginInputAttribute(5);
+		ImGui::Text(u8"BaseColor");
+
+		ImNodes::EndInputAttribute();
+
+		ImNodes::BeginInputAttribute(2);
+		ImGui::Text(u8"Albedo");
+		ImNodes::EndInputAttribute();
+
+		ImNodes::BeginInputAttribute(3);
+		ImGui::Text(u8"Specular");
+		ImNodes::EndInputAttribute();
+
+		ImNodes::BeginInputAttribute(4);
+		ImGui::Text(u8"Bump");
+		ImNodes::EndInputAttribute();
+
+		ImNodes::EndNode();
+
+
+		// elsewhere in the code...
+		for (int i = 0; i < links.size(); ++i)
+		{
+			const std::pair<int, int> p = links[i];
+			// in this case, we just use the array index of the link
+			// as the unique identifier
+			
+			ImNodes::Link(i, p.first, p.second);
+			
+
+		}
+
+		ImNodes::EndNodeEditor();
+		int start_attr, end_attr;
+		if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
+		{
+
+			links.push_back(std::make_pair(start_attr, end_attr));
+		}
+		int i;
+		if (ImNodes::IsLinkDestroyed(&i)) {
+			links.erase(links.begin() + i);
+		}
+
 
 		ImGui::End();
 	}

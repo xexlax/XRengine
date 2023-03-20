@@ -386,7 +386,7 @@ void EditorLayer::OnImGuiRender(){
 			
 				ImGuizmo::SetRect(m_ViewportBounds[0].x,m_ViewportBounds[0].y, 
 					m_ViewportBounds[1].x- m_ViewportBounds[0].x, m_ViewportBounds[1].y- m_ViewportBounds[0].y);
-
+				 
 				const glm::mat4& cameraProjection = m_EditorCamera.GetProjectionMatrix();
 				glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 

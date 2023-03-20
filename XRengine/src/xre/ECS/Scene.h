@@ -84,6 +84,7 @@ namespace XRE {
 		void UpdateNativeScripting(TimeStep ts);
 		void UpdatePhysics(TimeStep ts);
 		void UpdateRendering(XRef<Camera> c);
+		void UpdateLogic(TimeStep ts);
 
 		
 

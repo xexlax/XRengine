@@ -7,6 +7,7 @@ namespace XRE {
 	Library<Texture2D> ResourceManager::m_Texture2DLib;
 	Library<Model> ResourceManager::m_ModelLib;
 	Library<Material> ResourceManager::m_MaterialLib;
+	Library<BluePrint> ResourceManager::m_BluePrintLib;
 	//Library<Prefab> ResourceManager::m_PrefabLib;
 
 	void ResourceManager::Init()
