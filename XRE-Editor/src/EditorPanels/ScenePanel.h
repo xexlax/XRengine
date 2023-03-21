@@ -11,6 +11,7 @@ namespace XRE {
 		void Select(int ObjId);
 		void UnSelect();
 		GameObject GetSelected() const { return m_Selected; }
+		XRef<Scene> GetScene() { return m_Scene; }
 		void OnImGuiRender();
 	private:
 		void DrawGONode(GameObject gameObj);

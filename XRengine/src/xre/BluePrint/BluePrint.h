@@ -16,18 +16,24 @@ namespace XRE {
 	};
 
 	class BluePrint {
+		friend class BluePrintNode;
 
 
 	public:
-		BluePrint() = default;
+		BluePrint() {};
 		~BluePrint();
 
 		template <typename T>
 		XRef<BluePrintNode> MakeNode() {
 			XRef<BluePrintNode> x = XMakeRef<T>();
 			x->NodeID = NodeIDCounter++;
+			x->m_BluePrint = this;
+			x->Initialize();
 			m_Nodes.push_back(x);
+			return x;
 		}
+
+		void RemoveNode(XRef<BluePrintNode> n);
 
 		XRef<InputPin> MakeInput(FieldType field, std::string name = "Input");
 		XRef<OutputPin> MakeOutput(FieldType field, std::string name = "Output");
@@ -59,7 +65,17 @@ namespace XRE {
 
 		static XRef<BluePrint> Create(std::string m_FileName);
 		uint32_t PinIDCounter = 0;
-	private:
+
+		std::vector<XRef<BluePrintField>> m_Fields;
+		std::vector<XRef<BluePrintNode>> m_Nodes;
+
+		//temp
+		entt::entity m_ent;
+		Scene* m_sc;
+		float m_ts;
+		BluePrintProperties* m_prop;
+		std::vector<pair<int, int>> m_Links;
+	protected:
 		
 		//离线。 确定节点的执行顺序，并检查不需要更新的节点
 		void SortAndActiveNodes();
@@ -68,11 +84,8 @@ namespace XRE {
 
 		uint32_t NodeIDCounter = 0;
 		
-		//temp
-		entt::entity m_ent;
-		Scene* m_sc;
-		float m_ts;
-		BluePrintProperties& m_prop;
+		
+		
 
 
 		std::string m_Name;
@@ -80,8 +93,7 @@ namespace XRE {
 
 		BluePrintProperties m_DefaultProperties;
 
-		std::vector<XRef<BluePrintField>> m_Fields;
-		std::vector<XRef<BluePrintNode>> m_Nodes;
+		
 
 		unordered_map<uint32_t, XRef<InputPin>> m_InputPins;
 		unordered_map<uint32_t, XRef<OutputPin>> m_OutputPins;

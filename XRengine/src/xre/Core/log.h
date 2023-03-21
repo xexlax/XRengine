@@ -17,6 +17,8 @@
 #define XRE_TRACE(...) ::XRE::Log::getClientLogger()->trace(__VA_ARGS__)
 #define XRE_FATAL(...) ::XRE::Log::getClientLogger()->fatal(__VA_ARGS__)
 
+
+
 namespace XRE {
 	class Log
 	{

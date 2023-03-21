@@ -6,6 +6,7 @@
 #include <xre\Renderer\Camera\EditorCamera.h>
 #include "xre\Physics\PhysicsScene.h"
 #include <cereal\archives\json.hpp>
+#include "xre\BluePrint\BluePrint.h"
 
 namespace XRE {
 
@@ -67,6 +68,7 @@ namespace XRE {
 		GameObject FindGOByPhysicBodyID(uint32_t pid);
 		GameObject GetObj(uint32_t eid);
 
+		XRef<BluePrint> GetGlobalBluePrint() { return m_GlobalBluePrint; }
 	private:
 		template<typename T>
 		void OnComponentAdded(GameObject go, T& component);
@@ -79,6 +81,8 @@ namespace XRE {
 
 
 		XRef<PhysicsScene> m_PhysicsScene;
+		XRef<BluePrint> m_GlobalBluePrint;
+		BluePrintProperties m_GlobalProperties;
 		
 
 		void UpdateNativeScripting(TimeStep ts);

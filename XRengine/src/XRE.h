@@ -39,5 +39,10 @@
 
 
 #include "xre\Physics\PhysicsScene.h"
-
+#include "xre\BluePrint\BluePrint.h"
+#include "xre\BluePrint\Nodes_Basic.h"
+#include "xre\BluePrint\Nodes_ComponentUtils.h"
+#include "xre\BluePrint\Nodes_ControlFlow.h"
+#include "xre\BluePrint\Nodes_IO.h"
+#include "xre\BluePrint\Nodes_Math.h"
 

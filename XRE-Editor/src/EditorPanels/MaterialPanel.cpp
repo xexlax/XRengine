@@ -10,7 +10,7 @@ namespace XRE {
 	}
 	void MaterialPanel::OnImGuiRender()
 	{
-		DrawNodeEditor();
+		//DrawNodeEditor();
 		ImGui::Begin(u8"²ÄÖÊ");
 		if (m_Switch) {
 			ImGui::SetWindowFocus();

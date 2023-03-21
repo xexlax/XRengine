@@ -12,8 +12,13 @@ namespace XRE {
 	public: 
 		
 		Node_Debug() {
-			m_Title = u8"调试";
+			m_Title = u8"调试输出";
+			m_Color = Grey;
+			
+		}
+		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			CreateControlFlow();
 		}
 
 		void Process() override {
@@ -22,32 +27,57 @@ namespace XRE {
 
 	};
 
+	class Node_DeltaTime: public BluePrintNode {
+	public:
+
+		Node_DeltaTime() {
+			m_Title = u8"时间差";
+			m_Color = Grey;
+		}
+
+		void Initialize() override {
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+		}
+
+		void Process() override {
+			m_Outputs[0]->ValueFloat = m_BluePrint->m_ts;
+		}
+
+	};
+
 	class Node_ConstInt : public BluePrintNode {
 	public:
 		Node_ConstInt() {
 			m_Title = u8"整数常量";
+			m_Color = Red;
+		}
+		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Int));
+			m_Variants.push_back(NodeVariant(Field_Int, &value));
 		}
 
 		void Process() override {
 			m_Outputs[0]->ValueInt = value;
 		}
 
-		int value;
+		int value=0;
 	};
 
 	class Node_ConstBool : public BluePrintNode {
 	public:
 		Node_ConstBool() {
 			m_Title = u8"布尔常量";
-			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Bool));
+			m_Color = Red;
 		}
-
+		void Initialize() override {
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Bool));
+			m_Variants.push_back(NodeVariant(Field_Bool, &value));
+		}
 		void Process() override {
 			m_Outputs[0]->ValueBool = value;
 		}
 
-		bool value;
+		bool value=false;
 	};
 
 	class Node_ConstFloat : public BluePrintNode {
@@ -55,14 +85,19 @@ namespace XRE {
 		
 		Node_ConstFloat() {
 			m_Title = u8"浮点常量";
+			m_Color = Red;
+		}
+
+		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+			m_Variants.push_back(NodeVariant(Field_Float, &value));
 		}
 
 		void Process() override {
 			m_Outputs[0]->ValueFloat = value;
 		}
 
-		float value;
+		float value=0;
 	};
 
 
@@ -70,14 +105,18 @@ namespace XRE {
 	public:
 		Node_ConstString() {
 			m_Title = u8"字符串常量";
+			m_Color = Red;
+		}
+		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_String));
+			m_Variants.push_back(NodeVariant(Field_String, &value));
 		}
 
 		void Process() override {
 			m_Outputs[0]->ValueString = value;
 		}
 
-		std::string value;
+		std::string value="";
 	};
 
 
@@ -85,7 +124,13 @@ namespace XRE {
 	public:
 		Node_GetField() {
 			m_Title = u8"获取变量";
+			m_Color = Purple;
+		}
+
+		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Blank));
+			m_Variants.push_back(NodeVariant(Field_Field, &m_field));
+			CreateControlFlow();
 		}
 
 		void SetField(BluePrintField field) {
@@ -119,10 +164,17 @@ namespace XRE {
 	};
 
 	class Node_SetField : public BluePrintNode {
-
+	public:
 		Node_SetField(){
 			m_Title = u8"设置变量";
+			m_Color = Purple;
+			
+		}
+
+		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Blank));
+			m_Variants.push_back(NodeVariant(Field_Field, &m_field));
+			CreateControlFlow();
 		}
 
 		void SetField(BluePrintField field) {

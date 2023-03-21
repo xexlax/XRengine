@@ -15,6 +15,7 @@ namespace XRE{
 	Scene::Scene()
 	{
 		m_PhysicsScene = PhysicsScene::Create();
+		m_GlobalBluePrint = XMakeRef<BluePrint>();
 		//Create Floor For Testing
 		//m_PhysicsScene->Init();
 	}
@@ -30,12 +31,15 @@ namespace XRE{
 	
 	void Scene::OnUpdateRuntime(TimeStep ts)
 	{
+		
 
 		//Physics
 
 		UpdatePhysics(ts);
 
-		UpdateNativeScripting(ts);
+
+		UpdateLogic(ts);
+		//UpdateNativeScripting(ts);
 		
 		XRef<Camera> mainCamera = nullptr;
 
@@ -418,7 +422,7 @@ namespace XRE{
 	{
 		auto view = m_Registry.view<BluePrintComponent>();
 
-
+		m_GlobalBluePrint->OnUpdate(entt::null, this, ts, m_GlobalProperties);
 		for (auto entity : view) {
 			auto bpc = view.get<BluePrintComponent>(entity);
 
@@ -461,7 +465,18 @@ namespace XRE{
 		
 		//Logic
 		{
-			
+			auto view = m_Registry.view<BluePrintComponent>();
+
+			m_GlobalBluePrint->OnRuntimeBegin();
+			for (auto entity : view) {
+				auto bpc = view.get<BluePrintComponent>(entity);
+
+				if (bpc.m_Active) {
+
+					bpc.m_BluePrint->OnRuntimeBegin();
+				}
+
+			}
 		}
 		//Physics
 		{

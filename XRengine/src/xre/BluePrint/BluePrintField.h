@@ -3,7 +3,7 @@
 namespace XRE {
 
 	enum FieldType {
-		Field_Blank, Field_Int, Field_Float, Field_Bool, Field_String
+		Field_Blank, Field_Int, Field_Float, Field_Bool, Field_String, Field_Field
 	};
 
 

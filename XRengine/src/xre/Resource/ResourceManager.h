@@ -34,7 +34,7 @@ namespace XRE {
 		static XRef<BluePrint> GetBluePrint(const std::string& path) { return  m_BluePrintLib.Get(path); }
 		// 添加对Prefab类的管理
 		//static XRef<Prefab> GetPrefab(const std::string& path) { return m_PrefabLib.Get(path); }
-
+		
 	private:
 		
 		static Library<Shader> m_ShaderLib;
