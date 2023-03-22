@@ -68,7 +68,7 @@ namespace XRE {
 		FieldType m_Type;
 		void* m_Handle;
 
-		NodeVariant(FieldType ft, void* handle,std::string name= u8"ֵ") {
+		NodeVariant(FieldType ft, void* handle,std::string name= u8"##") {
 			m_Type = ft;
 			m_Handle = handle;
 			m_Name = name;
@@ -91,6 +91,9 @@ namespace XRE {
 		void ResetReady();
 		virtual void Process() = 0;
 		virtual void Initialize() = 0;
+		virtual void SetField(XRef<BluePrintField> field) {};
+
+		virtual XRef<BluePrintField> GetField() { return nullptr; };
 		bool m_Active = true;
 		uint32_t NodeID;
 

@@ -69,6 +69,7 @@ namespace XRE {
 		GameObject GetObj(uint32_t eid);
 
 		XRef<BluePrint> GetGlobalBluePrint() { return m_GlobalBluePrint; }
+		XRef<BluePrintProperties> GetGlobalProperties() { return m_GlobalProperties; }
 	private:
 		template<typename T>
 		void OnComponentAdded(GameObject go, T& component);
@@ -82,7 +83,7 @@ namespace XRE {
 
 		XRef<PhysicsScene> m_PhysicsScene;
 		XRef<BluePrint> m_GlobalBluePrint;
-		BluePrintProperties m_GlobalProperties;
+		XRef<BluePrintProperties> m_GlobalProperties;
 		
 
 		void UpdateNativeScripting(TimeStep ts);

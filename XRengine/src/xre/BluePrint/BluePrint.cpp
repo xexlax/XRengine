@@ -35,6 +35,35 @@ namespace XRE {
 		return out;
 	}
 
+	XRef<BluePrintField> BluePrint::MakeField( FieldType t, std::string name)
+	{
+		XRef<BluePrintField> result = XMakeRef<BluePrintField>();
+		result->m_FieldName = name;
+		result->m_Type = t;
+		result->id = FieldIDCounter++;
+		switch (t)
+		{
+		case XRE::Field_Int:
+			m_DefaultProperties->IntDatas[result->id]=0;
+			break;
+		case XRE::Field_Float:
+			m_DefaultProperties->BoolDatas[result->id] =false;
+			break;
+		case XRE::Field_Bool:
+			m_DefaultProperties->FloatDatas[result->id] = 0;
+			break;
+		case XRE::Field_String:
+			m_DefaultProperties->StringDatas[result->id] = "";
+			break;
+		default:
+			break;
+		}
+
+		m_Fields.push_back(result);
+
+		return result;
+	}
+
 	void BluePrint::Link(uint32_t src, uint32_t target)
 	{
 		m_InputPins[target]->m_Connection = m_OutputPins[src].get();
@@ -57,8 +86,9 @@ namespace XRE {
 
 	}
 
-	void BluePrint::GetDefaultProperties(BluePrintProperties& bp)
+	XRef<BluePrintProperties> BluePrint::GetDefaultProperties()
 	{
+		return m_DefaultProperties;
 	}
 
 	void BluePrint::OnRuntimeBegin()
@@ -66,12 +96,12 @@ namespace XRE {
 		SortAndActiveNodes();
 	}
 
-	void BluePrint::OnUpdate(entt::entity e, Scene* sc, float ts, BluePrintProperties& properties)
+	void BluePrint::OnUpdate(entt::entity e, Scene* sc, float ts, XRef<BluePrintProperties> properties)
 	{
 		m_ent = e;
 		m_sc = sc;
 		m_ts = ts;
-		m_prop = &properties;
+		m_ActiveProperties = properties;
 		for (auto x : m_Nodes) {
 			if (x->m_Active == false) break;
 			if(x->ControlFlowTest())
@@ -131,42 +161,102 @@ namespace XRE {
 	}
 
 	template<>
-	int BluePrint::GetFieldValue<int>(const BluePrintField& field) {
-		return m_prop->IntDatas[field.id];
+	int BluePrint::GetFieldValue<int>(XRef<BluePrintField> field) {
+		return m_ActiveProperties->IntDatas[field->id];
 	}
 
 	
 	template<>
-	bool BluePrint::GetFieldValue<bool>(const BluePrintField& field) {
-		return m_prop->BoolDatas[field.id];
+	bool BluePrint::GetFieldValue<bool>(XRef<BluePrintField> field) {
+		return m_ActiveProperties->BoolDatas[field->id];
 	}
 	template<>
-	float BluePrint::GetFieldValue<float>(const BluePrintField& field) {
-		return m_prop->FloatDatas[field.id];
+	float BluePrint::GetFieldValue<float>(XRef<BluePrintField> field) {
+		return m_ActiveProperties->FloatDatas[field->id];
 	}
 	template<>
-	std::string BluePrint::GetFieldValue<std::string>(const BluePrintField& field) {
-		return m_prop->StringDatas[field.id];
+	std::string BluePrint::GetFieldValue<std::string>(XRef<BluePrintField> field) {
+		return m_ActiveProperties->StringDatas[field->id];
 	}
 	
 
 	template<>
-	void BluePrint::SetFieldValue<int>(const BluePrintField& field,int v) {
-		m_prop->IntDatas[field.id] = v;
+	void BluePrint::SetFieldValue<int>(XRef<BluePrintField> field,int v) {
+		m_ActiveProperties->IntDatas[field->id] = v;
 	}
 
 	template<>
-	void BluePrint::SetFieldValue<bool>(const BluePrintField& field, bool v) {
-		m_prop->BoolDatas[field.id] = v;
+	void BluePrint::SetFieldValue<bool>(XRef<BluePrintField> field, bool v) {
+		m_ActiveProperties->BoolDatas[field->id] = v;
 	}
 
 	template<>
-	void BluePrint::SetFieldValue<float>(const BluePrintField& field, float v) {
-		m_prop->FloatDatas[field.id] = v;
+	void BluePrint::SetFieldValue<float>(XRef<BluePrintField> field, float v) {
+		m_ActiveProperties->FloatDatas[field->id] = v;
 	}
 
 	template<>
-	void BluePrint::SetFieldValue<std::string>(const BluePrintField& field, std::string v) {
-		m_prop->StringDatas[field.id] = v;
+	void BluePrint::SetFieldValue<std::string>(XRef<BluePrintField> field, std::string v) {
+		m_ActiveProperties->StringDatas[field->id] = v;
+	}
+	void* BluePrintProperties::GetFieldValuePointer(XRef<BluePrintField> f)
+	{
+		switch (f->m_Type) {
+		case  FieldType::Field_Bool:
+			return &BoolDatas[f->id];
+		case  FieldType::Field_Int:
+			return &IntDatas[f->id];
+		case  FieldType::Field_Float:
+			return &FloatDatas[f->id];
+		case  FieldType::Field_String:
+			return &StringDatas[f->id];
+		}
+	}
+	void BluePrintProperties::Update(XRef<BluePrintProperties> src)
+	{
+
+		for (auto x : IntDatas) {
+			if (src->IntDatas.find(x.first) == src->IntDatas.end()) {
+				IntDatas.erase(x.first);
+			}
+		}
+		for (auto x : src->IntDatas) {
+			if (IntDatas.find(x.first) == IntDatas.end()) {
+				IntDatas[x.first] = x.second;
+			}
+		}
+
+		for (auto x : BoolDatas) {
+			if (src->BoolDatas.find(x.first) == src->BoolDatas.end()) {
+				BoolDatas.erase(x.first);
+			}
+		}
+		for (auto x : src->BoolDatas) {
+			if (BoolDatas.find(x.first) == BoolDatas.end()) {
+				BoolDatas[x.first] = x.second;
+			}
+		}
+
+		for (auto x : FloatDatas) {
+			if (src->FloatDatas.find(x.first) == src->FloatDatas.end()) {
+				FloatDatas.erase(x.first);
+			}
+		}
+		for (auto x : src->FloatDatas) {
+			if (FloatDatas.find(x.first) == FloatDatas.end()) {
+				FloatDatas[x.first] = x.second;
+			}
+		}
+
+		for (auto x : StringDatas) {
+			if (src->StringDatas.find(x.first) == src->StringDatas.end()) {
+				StringDatas.erase(x.first);
+			}
+		}
+		for (auto x : src->StringDatas) {
+			if (StringDatas.find(x.first) == StringDatas.end()) {
+				StringDatas[x.first] = x.second;
+			}
+		}
 	}
 }

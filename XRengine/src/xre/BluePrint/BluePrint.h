@@ -4,15 +4,20 @@
 #include <entt/entt.hpp>
 #include "BluePrintNode.h"
 #include "BluePrintField.h"
+
 using namespace std;
 namespace XRE {
 	class Scene;
 	struct BluePrintProperties {
 		
-		vector<int> IntDatas;
-		vector<bool> BoolDatas;
-		vector<float> FloatDatas;
-		vector<string> StringDatas;
+		unordered_map<int,int> IntDatas;
+		unordered_map<int,bool> BoolDatas;
+		unordered_map<int,float> FloatDatas;
+		unordered_map<int,string> StringDatas;
+
+		void* GetFieldValuePointer(XRef<BluePrintField> f);
+
+		void Update(XRef<BluePrintProperties> src);
 	};
 
 	class BluePrint {
@@ -20,7 +25,9 @@ namespace XRE {
 
 
 	public:
-		BluePrint() {};
+		BluePrint() {
+			m_DefaultProperties = XMakeRef<BluePrintProperties>();
+		};
 		~BluePrint();
 
 		template <typename T>
@@ -38,6 +45,7 @@ namespace XRE {
 		XRef<InputPin> MakeInput(FieldType field, std::string name = "Input");
 		XRef<OutputPin> MakeOutput(FieldType field, std::string name = "Output");
 
+		XRef<BluePrintField> MakeField(FieldType t ,std::string name = "Var");
 
 		XRef<BluePrintNode> GetNodeByID(uint32_t id) {
 			for (auto x : m_Nodes) {
@@ -48,17 +56,17 @@ namespace XRE {
 		void Link(uint32_t src, uint32_t target);
 		void UnLink(uint32_t src, uint32_t target);
 
-		void GetDefaultProperties(BluePrintProperties & bp);
+		XRef<BluePrintProperties> GetDefaultProperties();
 
 		template <typename T>
-		T GetFieldValue(const BluePrintField& field);
+		T GetFieldValue(XRef<BluePrintField> field);
 
 		template <typename T>
-		void SetFieldValue(const BluePrintField& field, T value);
+		void SetFieldValue(XRef<BluePrintField> field, T value);
 
 		void OnRuntimeBegin();
 		//传入脚本所要更新的上下文
-		void OnUpdate(entt::entity e,Scene* sc, float ts,BluePrintProperties& properties);
+		void OnUpdate(entt::entity e,Scene* sc, float ts,XRef<BluePrintProperties> properties);
 
 		void Save();
 		
@@ -67,13 +75,14 @@ namespace XRE {
 		uint32_t PinIDCounter = 0;
 
 		std::vector<XRef<BluePrintField>> m_Fields;
+
 		std::vector<XRef<BluePrintNode>> m_Nodes;
 
 		//temp
 		entt::entity m_ent;
 		Scene* m_sc;
 		float m_ts;
-		BluePrintProperties* m_prop;
+		XRef<BluePrintProperties> m_ActiveProperties;
 		std::vector<pair<int, int>> m_Links;
 	protected:
 		
@@ -83,6 +92,7 @@ namespace XRE {
 		bool Global = true;
 
 		uint32_t NodeIDCounter = 0;
+		uint32_t FieldIDCounter = 0;
 		
 		
 		
@@ -91,7 +101,7 @@ namespace XRE {
 		std::string m_Name;
 		std::string m_FileName;
 
-		BluePrintProperties m_DefaultProperties;
+		XRef<BluePrintProperties> m_DefaultProperties;
 
 		
 

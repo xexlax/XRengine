@@ -16,6 +16,7 @@ namespace XRE{
 	{
 		m_PhysicsScene = PhysicsScene::Create();
 		m_GlobalBluePrint = XMakeRef<BluePrint>();
+		m_GlobalProperties = XMakeRef<BluePrintProperties>();
 		//Create Floor For Testing
 		//m_PhysicsScene->Init();
 	}
@@ -468,12 +469,14 @@ namespace XRE{
 			auto view = m_Registry.view<BluePrintComponent>();
 
 			m_GlobalBluePrint->OnRuntimeBegin();
+			m_GlobalProperties->Update(m_GlobalBluePrint->GetDefaultProperties());
 			for (auto entity : view) {
 				auto bpc = view.get<BluePrintComponent>(entity);
 
 				if (bpc.m_Active) {
 
 					bpc.m_BluePrint->OnRuntimeBegin();
+					bpc.m_BluePrintProperties->Update(bpc.m_BluePrint->GetDefaultProperties());
 				}
 
 			}

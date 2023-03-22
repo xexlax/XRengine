@@ -468,7 +468,7 @@ namespace XRE {
 	class BluePrintComponent :public Component{
 	public:
 		XRef<BluePrint> m_BluePrint;
-		BluePrintProperties m_BluePrintProperties;
+		XRef<BluePrintProperties> m_BluePrintProperties;
 		std::string m_BluePrintPath;
 
 		
@@ -488,7 +488,9 @@ namespace XRE {
 			//ar(m_BluePrintProperties);
 		}
 
-		BluePrintComponent() :Component("BluePrint") {};
+		BluePrintComponent() :Component("BluePrint") {
+			m_BluePrintProperties = XMakeRef<BluePrintProperties>();
+		};
 	};
 }
 

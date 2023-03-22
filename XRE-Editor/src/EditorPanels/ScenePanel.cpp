@@ -12,6 +12,7 @@ namespace XRE{
 		m_Scene = scene;
 		m_Selected = GameObject(entt::null ,m_Scene.get());
 		PanelsManager::GetBluePrintEditor()->m_BluePrint = scene->GetGlobalBluePrint();
+		PanelsManager::GetBluePrintEditor()->m_Properties = scene->GetGlobalBluePrint()->GetDefaultProperties();
 	}
 	void ScenePanel::Select(int ObjId)
 	{

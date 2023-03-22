@@ -132,34 +132,39 @@ namespace XRE {
 			m_Variants.push_back(NodeVariant(Field_Field, &m_field));
 			CreateControlFlow();
 		}
+		XRef<BluePrintField> GetField() override {
+			return m_field;
+		}
 
-		void SetField(BluePrintField field) {
+		void SetField(XRef<BluePrintField> field) override{
 			m_field = field;
-			m_Outputs[0]->m_FieldType = field.m_Type;
+			m_Outputs[0]->m_FieldType = field->m_Type;
 		}
 
 		void Process() override {
-			
-			switch (m_Outputs[0]->m_FieldType)
-			{
-			case Field_Int:
-				m_Outputs[0]->ValueInt = m_BluePrint->GetFieldValue<int>(m_field);
-				break;
-			case Field_Bool:
-				m_Outputs[0]->ValueBool = m_BluePrint->GetFieldValue<bool>(m_field);
-				break;
-			case Field_Float:
-				m_Outputs[0]->ValueFloat = m_BluePrint->GetFieldValue<float>(m_field);
-				break;
-			case Field_String:
-				m_Outputs[0]->ValueString = m_BluePrint->GetFieldValue<string>(m_field);
-				break;
-			default:
-				break;
+			if (m_field!=nullptr) {
+				switch (m_Outputs[0]->m_FieldType)
+				{
+				case Field_Int:
+					m_Outputs[0]->ValueInt = m_BluePrint->GetFieldValue<int>(m_field);
+					break;
+				case Field_Bool:
+					m_Outputs[0]->ValueBool = m_BluePrint->GetFieldValue<bool>(m_field);
+					break;
+				case Field_Float:
+					m_Outputs[0]->ValueFloat = m_BluePrint->GetFieldValue<float>(m_field);
+					break;
+				case Field_String:
+					m_Outputs[0]->ValueString = m_BluePrint->GetFieldValue<string>(m_field);
+					break;
+				default:
+					break;
+				}
 			}
+			
 		}
 
-		BluePrintField m_field;
+		XRef<BluePrintField> m_field= nullptr;
 		
 	};
 
@@ -177,14 +182,17 @@ namespace XRE {
 			CreateControlFlow();
 		}
 
-		void SetField(BluePrintField field) {
+		XRef<BluePrintField> GetField() override {
+			return m_field;
+		}
+		void SetField(XRef<BluePrintField> field) override {
 			m_field = field;
-			m_Inputs[0]->m_FieldType = field.m_Type;
+			m_Inputs[0]->m_FieldType = field->m_Type;
 		}
 
 		void Process() override {
 
-			switch (m_Outputs[0]->m_FieldType)
+			switch (m_Inputs[0]->m_FieldType)
 			{
 			case Field_Int:
 				ivalue = m_Inputs[0]->GetValue<int>();
@@ -207,7 +215,7 @@ namespace XRE {
 			}
 		}
 
-		BluePrintField m_field;
+		XRef<BluePrintField> m_field = nullptr;
 		int ivalue;
 		bool bvalue;
 		float fvalue;

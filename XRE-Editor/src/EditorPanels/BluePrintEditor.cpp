@@ -75,7 +75,57 @@ namespace XRE {
 		}
 		
 		const int hardcoded_node_id = 1;
-		
+		ImGui::BeginChild(u8"Variants",ImVec2(200,400));
+		for (auto v : m_BluePrint->m_Fields) {
+			ImGui::PushItemWidth(80);
+
+			//Imgui need different name to identify
+			string s="##Text" + to_string(v->id);
+			string f = "##Value" + to_string(v->id);
+			XUI::InputText(s.c_str(),& v->m_FieldName);
+			ImGui::PopItemWidth();
+			ImGui::SameLine();
+			switch (v->m_Type)
+			{
+			case FieldType::Field_Bool:
+
+				XUI::CheckBox(f.c_str(), (bool*) m_Properties->GetFieldValuePointer(v));
+				break;
+			case FieldType::Field_Int:
+				XUI::DragInt(f.c_str(), (int*)m_Properties->GetFieldValuePointer(v));
+				break;
+			case FieldType::Field_Float:
+				XUI::DragFloat(f.c_str(), (float*)m_Properties->GetFieldValuePointer(v));
+				break;
+			case FieldType::Field_String:
+				XUI::InputText(f.c_str(), (string*)m_Properties->GetFieldValuePointer(v));
+				break;
+			default:
+				break;
+			}
+			
+		}
+
+		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
+		{
+			if(ImGui::MenuItem("Int") ){
+				m_BluePrint->MakeField(FieldType::Field_Int, "New Int");
+			}
+			if (ImGui::MenuItem("Bool")) {
+				m_BluePrint->MakeField(FieldType::Field_Bool, "New Bool");
+			}
+			if (ImGui::MenuItem("Float")) {
+				m_BluePrint->MakeField(FieldType::Field_Float, "New Float");
+			}
+			if (ImGui::MenuItem("String")) {
+				m_BluePrint->MakeField(FieldType::Field_String, "New String");
+			}
+			ImGui::EndPopup();
+		}
+
+		ImGui::EndChild();
+		ImGui::SameLine();
+
 		ImNodes::BeginNodeEditor();
 
 		for (auto x : m_selectedNodes) {
@@ -334,6 +384,7 @@ namespace XRE {
 		}
 
 		ImGui::PushItemWidth(150);
+		
 		for (auto v : n->m_Variants) {
 			switch (v.m_Type)
 			{
@@ -349,7 +400,39 @@ namespace XRE {
 			case FieldType::Field_Float:
 				XUI::DragFloat(v.m_Name, (float*)v.m_Handle);
 				break;
-			case FieldType::Field_Field:
+			case FieldType::Field_Field: {
+				vector<std::string> fields;
+				
+				fields.push_back("##");
+				std::string current = n->GetField() == nullptr ? "##" : n->GetField()->m_FieldName;
+				for (auto x : m_BluePrint->m_Fields) {
+					fields.push_back(x->m_FieldName);
+				}
+
+				if (ImGui::BeginCombo(u8"±‰¡ø", current.c_str())) {
+					for (int i = 0; i < fields.size(); i++)
+					{
+						bool isSelected = current == fields[i];
+						if (ImGui::Selectable(fields[i].c_str(), isSelected))
+						{
+							current = fields[i];
+							if (i > 0) {
+								n->SetField(m_BluePrint->m_Fields[i - 1]);
+							}
+							else v.m_Handle = nullptr;
+						}
+
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+			}
+				
+				
+
+
 				break;
 
 			default:
