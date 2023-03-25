@@ -2,6 +2,7 @@
 #pragma once
 #include "BluePrintNode.h"
 #include "BluePrint.h"
+#include <glm\trigonometric.hpp>
 
 namespace XRE {
 
@@ -10,6 +11,7 @@ namespace XRE {
 		Node_Plus() {
 			m_Title = u8"+";
 			m_Color = Red;
+			m_NodeTypeID = 21;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -27,6 +29,7 @@ namespace XRE {
 		Node_Minus() {
 			m_Title = u8"-";
 			m_Color = Red;
+			m_NodeTypeID = 22;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -44,6 +47,7 @@ namespace XRE {
 		Node_Multiply() {
 			m_Title = u8"*";
 			m_Color = Red;
+			m_NodeTypeID = 23;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -61,6 +65,7 @@ namespace XRE {
 		Node_Division() {
 			m_Title = u8"/";
 			m_Color = Red;
+			m_NodeTypeID = 24;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -78,6 +83,7 @@ namespace XRE {
 		Node_Mod(){
 			m_Title = u8"Mod";
 			m_Color = Red;
+			m_NodeTypeID = 25;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Int));
@@ -97,6 +103,7 @@ namespace XRE {
 		Node_Sin() {
 			m_Title = u8"sin";
 			m_Color = Red;
+			m_NodeTypeID = 26;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -115,6 +122,7 @@ namespace XRE {
 		Node_Cos() {
 			m_Title = u8"cos";
 			m_Color = Red;
+			m_NodeTypeID = 27;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -133,6 +141,7 @@ namespace XRE {
 		Node_Tan() {
 			m_Title = u8"tan";
 			m_Color = Red;
+			m_NodeTypeID = 28;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -151,6 +160,7 @@ namespace XRE {
 		Node_RadToDegree(){
 			m_Title = u8"RadToDegree";
 			m_Color = Red;
+			m_NodeTypeID = 29;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -169,6 +179,7 @@ namespace XRE {
 		Node_DegreeToRad() {
 			m_Title = u8"DegreeToRad";
 			m_Color = Red;
+			m_NodeTypeID = 30;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -187,6 +198,7 @@ namespace XRE {
 		Node_And() {
 			m_Title = u8"and";
 			m_Color = Red;
+			m_NodeTypeID = 41;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Bool));
@@ -204,6 +216,7 @@ namespace XRE {
 		Node_Or() {
 			m_Title = u8"or";
 			m_Color = Red;
+			m_NodeTypeID = 42;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Bool));
@@ -221,6 +234,7 @@ namespace XRE {
 		Node_Not() {
 			m_Title = u8"not";
 			m_Color = Red;
+			m_NodeTypeID = 43;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Bool));
@@ -237,6 +251,7 @@ namespace XRE {
 		Node_Equal() {
 			m_Title = u8"==";
 			m_Color = Red;
+			m_NodeTypeID = 44;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -254,6 +269,7 @@ namespace XRE {
 		Node_Compare() {
 			m_Title = u8">";
 			m_Color = Red;
+			m_NodeTypeID = 45;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -271,6 +287,7 @@ namespace XRE {
 		Node_EqualOrCompare() {
 			m_Title = u8">=";
 			m_Color = Red;
+			m_NodeTypeID = 46;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -289,6 +306,7 @@ namespace XRE {
 		Node_UnEqual() {
 			m_Title = u8"!=";
 			m_Color = Red;
+			m_NodeTypeID = 47;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));

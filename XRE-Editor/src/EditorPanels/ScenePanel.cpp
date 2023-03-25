@@ -11,6 +11,7 @@ namespace XRE{
 	{
 		m_Scene = scene;
 		m_Selected = GameObject(entt::null ,m_Scene.get());
+		PanelsManager::GetBluePrintEditor()->m_Info = u8"全局";
 		PanelsManager::GetBluePrintEditor()->m_BluePrint = scene->GetGlobalBluePrint();
 		PanelsManager::GetBluePrintEditor()->m_Properties = scene->GetGlobalBluePrint()->GetDefaultProperties();
 	}
@@ -19,12 +20,24 @@ namespace XRE{
 		GameObject go( entt::entity(ObjId) , m_Scene.get() );
 		m_Selected = go;
 		PanelsManager::GetPropertiesPanel()->Switch();
+		if (go.HasComponent<BluePrintComponent>()) {
+			auto& c = go.GetComponent<BluePrintComponent>();
+			PanelsManager::GetBluePrintEditor()->m_Info = go.GetName();
+			PanelsManager::GetBluePrintEditor()->m_BluePrint = c.m_BluePrint;
+			PanelsManager::GetBluePrintEditor()->m_Properties = c.m_BluePrint->GetDefaultProperties();
+
+		}
+		
 		
 		
 	}
 	void ScenePanel::UnSelect()
 	{
 		m_Selected = GameObject(entt::null, m_Scene.get());
+		PanelsManager::GetBluePrintEditor()->m_Info = u8"全局";
+		PanelsManager::GetBluePrintEditor()->m_BluePrint = m_Scene->GetGlobalBluePrint();
+		PanelsManager::GetBluePrintEditor()->m_Properties = m_Scene->GetGlobalBluePrint()->GetDefaultProperties();
+
 	}
 	void ScenePanel::OnImGuiRender()
 

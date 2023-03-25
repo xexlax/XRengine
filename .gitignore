@@ -10,7 +10,8 @@ vendor/
 CMakeFiles/
 x64/
 PCH
-
+job/
+XRE-SANDBOX/
 
 *.sln
 *.vcxproj

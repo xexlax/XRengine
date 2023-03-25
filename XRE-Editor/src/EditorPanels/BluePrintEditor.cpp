@@ -47,11 +47,17 @@ namespace XRE {
 		case BluePrintNode::NodeColor::Red:
 			return IM_COL32(250, 50, 50, 255);
 			break;
+		case BluePrintNode::NodeColor::Pink:
+			return IM_COL32(250, 50, 150, 255);
+			break;
 		case BluePrintNode::NodeColor::Purple:
 			return IM_COL32(150, 50, 200, 255);
 			break;
 		case BluePrintNode::NodeColor::Orange:
-			return IM_COL32(150, 100, 50, 255);
+			return IM_COL32(200, 100, 50, 255);
+			break;
+		case BluePrintNode::NodeColor::Yellow:
+			return IM_COL32(150, 150, 0, 255);
 			break;
 		default:
 			break;
@@ -66,6 +72,14 @@ namespace XRE {
 	{
 		static glm::vec4 color;
 		ImGui::Begin(u8"蓝图编辑器");
+
+		if (m_switch == true) {
+			ImGui::SetWindowFocus();
+			m_switch = false;
+		}
+		std::string s = u8"当前:" + m_Info + "," + m_BluePrint->GetFileName();
+		ImGui::Text(s.c_str());
+		
 		if (ImGui::Button(u8"删除所选")) {
 			
 			for (auto i : m_selectedNodes) {
@@ -73,12 +87,35 @@ namespace XRE {
 				m_BluePrint->RemoveNode(m_BluePrint->GetNodeByID(i));
 			}
 		}
+		ImGui::SameLine();
+		if (ImGui::Button(u8"保存")) {
+			
+				m_BluePrint->Save();
+			
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button(u8"保存为")) {
+			auto path = FileDialogs::SaveFile("BluePrint (*.bp)\0*.bp\0");
+			if (path != "") {
+				m_BluePrint->Save(path);
+			}
+			
+		}
+		ImGui::SameLine();
+		if (ImGui::Button(u8"打开")) {
+			auto path = FileDialogs::OpenFile("BluePrint (*.bp)\0*.bp\0");
+			if (path != "") {
+				m_BluePrint->LoadFromFile(path);
+			}
+			
+		}
 		
 		const int hardcoded_node_id = 1;
 		ImGui::BeginChild(u8"Variants",ImVec2(200,400));
-		for (auto v : m_BluePrint->m_Fields) {
+		for (auto vv : m_BluePrint->m_Fields) {
 			ImGui::PushItemWidth(80);
-
+			auto v = vv.second;
 			//Imgui need different name to identify
 			string s="##Text" + to_string(v->id);
 			string f = "##Value" + to_string(v->id);
@@ -109,16 +146,16 @@ namespace XRE {
 		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
 		{
 			if(ImGui::MenuItem("Int") ){
-				m_BluePrint->MakeField(FieldType::Field_Int, "New Int");
+				m_BluePrint->MakeField(FieldType::Field_Int, "val_i");
 			}
 			if (ImGui::MenuItem("Bool")) {
-				m_BluePrint->MakeField(FieldType::Field_Bool, "New Bool");
+				m_BluePrint->MakeField(FieldType::Field_Bool, "val_b");
 			}
 			if (ImGui::MenuItem("Float")) {
-				m_BluePrint->MakeField(FieldType::Field_Float, "New Float");
+				m_BluePrint->MakeField(FieldType::Field_Float, "val_f");
 			}
 			if (ImGui::MenuItem("String")) {
-				m_BluePrint->MakeField(FieldType::Field_String, "New String");
+				m_BluePrint->MakeField(FieldType::Field_String, "val_s");
 			}
 			ImGui::EndPopup();
 		}
@@ -156,23 +193,25 @@ namespace XRE {
 				if (ImGui::MenuItem(u8"字符串")) {
 					m_BluePrint->MakeNode<Node_ConstString>();
 				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu(u8"变量")) {
-
 				if (ImGui::MenuItem(u8"读取变量")) {
 					m_BluePrint->MakeNode<Node_GetField>();
 				}
 				if (ImGui::MenuItem(u8"写入变量")) {
 					m_BluePrint->MakeNode<Node_SetField>();
 				}
-				
+				if (ImGui::MenuItem(u8"时间差")) {
+					m_BluePrint->MakeNode<Node_DeltaTime>();
+				}
 				ImGui::EndMenu();
 			}
+			
 			if (ImGui::BeginMenu(u8"控制流")) {
 
 				if (ImGui::MenuItem(u8"分支")) {
 					m_BluePrint->MakeNode<Node_Branch>();
+				}
+				if (ImGui::MenuItem(u8"开始时")) {
+					m_BluePrint->MakeNode<Node_OnSceneBegin>();
 				}
 				
 				ImGui::EndMenu();
@@ -264,6 +303,12 @@ namespace XRE {
 
 			if (ImGui::BeginMenu(u8"组件")) {
 				if (ImGui::BeginMenu(u8"变换")) {
+					if (ImGui::MenuItem(u8"获取位置")) {
+						m_BluePrint->MakeNode<Node_GetPosition>();
+					}
+					if (ImGui::MenuItem(u8"设置位置")) {
+						m_BluePrint->MakeNode<Node_SetPosition>();
+					}
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"几何渲染")) {
@@ -406,7 +451,7 @@ namespace XRE {
 				fields.push_back("##");
 				std::string current = n->GetField() == nullptr ? "##" : n->GetField()->m_FieldName;
 				for (auto x : m_BluePrint->m_Fields) {
-					fields.push_back(x->m_FieldName);
+					fields.push_back(x.second->m_FieldName);
 				}
 
 				if (ImGui::BeginCombo(u8"变量", current.c_str())) {
@@ -444,6 +489,11 @@ namespace XRE {
 		
 		ImNodes::EndNode();
 
+	}
+
+	void BluePrintEditor::Switch()
+	{
+		m_switch = true;
 	}
 	
 }

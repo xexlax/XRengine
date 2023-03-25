@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BluePrintField.h"
+#include "cereal\archives\json.hpp"
 
 namespace XRE {
 	class BluePrint;
@@ -9,9 +10,12 @@ namespace XRE {
 	
 	struct InputPin {
 
+		int parent;
+		int order;
 
 		uint32_t PinID;
 		bool m_Necessary=true;
+		
 		bool m_Ready=false;
 		std::string m_Name;
 		InputPin(FieldType field = FieldType::Field_Blank, std::string name = u8" ‰»Î") {
@@ -21,7 +25,7 @@ namespace XRE {
 		~InputPin();
 		template <typename T>
 		T GetValue() {
-			T v;
+			T v= T();
 			if (m_Connection != nullptr) {
 				return m_Connection->GetValue<T>();
 			}
@@ -35,6 +39,10 @@ namespace XRE {
 	};
 
 	struct OutputPin {
+
+		int parent;
+		int order;
+
 		uint32_t PinID;
 		bool m_Necessary;
 		std::string m_Name;
@@ -66,12 +74,101 @@ namespace XRE {
 	struct NodeVariant {
 		std::string m_Name;
 		FieldType m_Type;
-		void* m_Handle;
+		int order;
+		int parent;
+		int field_ptr;
+		void* m_Handle=nullptr;
+
+		NodeVariant() = default;
 
 		NodeVariant(FieldType ft, void* handle,std::string name= u8"##") {
 			m_Type = ft;
 			m_Handle = handle;
 			m_Name = name;
+		}
+
+		template <typename Archive>
+		void save(Archive& ar) const{
+			ar(order,parent,m_Name,m_Type);
+			switch (m_Type)
+			{
+			case Field_Bool: {
+				bool b = *(bool*)m_Handle;
+				ar(b);
+				break;
+			}
+				
+			case Field_Int: {
+				int b = *(int*)m_Handle;
+				ar(b);
+				break;
+			}
+				
+			case Field_Float:
+			{
+				float b = *(float*)m_Handle;
+				ar(b);
+				break;
+			}
+			case Field_String:
+			{
+				string b = *(string*)m_Handle;
+				ar(b);
+				break;
+			}
+
+			case Field_Field:
+			{
+				ar(field_ptr);
+				//ar(**(XRef<BluePrintField>*)(m_Handle));
+				break;
+			}
+
+			default:
+				break;
+			}
+		}
+
+
+		template <typename Archive>
+		void load(Archive& ar) {
+			ar(order, parent, m_Name, m_Type);
+			switch (m_Type)
+			{
+			case Field_Bool: {
+				m_Handle = (void*)( new bool());
+				ar(*(bool*)m_Handle);
+				break;
+			}
+
+			case Field_Int: {
+				m_Handle = (void*)(new int());
+				ar(*(int*)m_Handle);
+				break;
+			}
+
+			case Field_Float:
+			{
+				m_Handle = (void*) (new float());
+				ar(*(float*)m_Handle);
+				break;
+			}
+			case Field_String:
+			{
+				m_Handle = static_cast<void*>(new std::string(""));
+				ar(*(std::string*)m_Handle);
+				break;
+			}
+			case Field_Field:
+			{
+				ar(field_ptr);
+				//ar(**(XRef<BluePrintField>*)m_Handle);
+				break;
+			}
+
+			default:
+				break;
+			}
 		}
 	};
 
@@ -86,9 +183,11 @@ namespace XRE {
 		
 		bool NeedProcess();
 		bool CanProcess();
+		bool CanFullyProcess();
 		bool ControlFlowTest();
 		void GetReady();
 		void ResetReady();
+		virtual void Start() {};
 		virtual void Process() = 0;
 		virtual void Initialize() = 0;
 		virtual void SetField(XRef<BluePrintField> field) {};
@@ -99,6 +198,7 @@ namespace XRE {
 
 
 		std::string m_Title = "Node";
+		int m_NodeTypeID;
 		XRef<InputPin> m_FlowPrev = nullptr;
 		XRef<OutputPin> m_FlowProc = nullptr;
 		std::vector<XRef<InputPin>> m_Inputs;

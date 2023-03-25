@@ -5,7 +5,7 @@
 #include <glm\gtc\type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "PhysicsLayer.h"
+#include "EditorLayer.h"
 //#include "Sandbox2D.h"
 using namespace XRE;
 
@@ -27,7 +27,7 @@ EditorApp::EditorApp()
 
 	//PushLayer(new Sandbox2D());
 
-	PushLayer(new PhysicsLayer());
+	PushLayer(new EditorLayer());
 	
 }
 

@@ -14,6 +14,11 @@ namespace XRE {
 		bool m_Visible;
 		FieldType m_Type;
 
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_FieldName, m_Type, m_Visible);
+		}
 
 	};
 }

@@ -13,6 +13,7 @@ namespace XRE {
 
 		virtual void CullFace(bool b) override;
 		virtual void SetDepthTest(bool b) override;
+		
 	
 		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
 		virtual void DrawIndexedLine(const std::shared_ptr<VertexArray>& vertexArray) override;

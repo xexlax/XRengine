@@ -16,7 +16,7 @@ namespace XRE {
 		std::string m_DragSource;
 
 		XRef<Texture2D> 
-			m_DirectoryIcon, m_FileIcon, m_ModelIcon, 
+			m_DirectoryIcon, m_FileIcon, m_ModelIcon,m_BluePrintIcon, 
 			m_SceneIcon,m_ShaderIcon ,m_TexIcon, m_MaterialIcon;
 	};
 

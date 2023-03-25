@@ -6,6 +6,8 @@
 // 01~04 ConstInt~ConstString 常量
 
 
+//函数过程类节点：需要加上create controlflow 和 m_FlowProc->ValueBool = true;
+
 namespace XRE {
 
 	class Node_Debug :public BluePrintNode {
@@ -14,7 +16,7 @@ namespace XRE {
 		Node_Debug() {
 			m_Title = u8"调试输出";
 			m_Color = Grey;
-			
+			m_NodeTypeID = 1;
 		}
 		void Initialize() override {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
@@ -22,6 +24,7 @@ namespace XRE {
 		}
 
 		void Process() override {
+			m_FlowProc->ValueBool = true;
 			XRE_INFO(m_Inputs[0]->GetValue<std::string>());
 		}
 
@@ -33,6 +36,7 @@ namespace XRE {
 		Node_DeltaTime() {
 			m_Title = u8"时间差";
 			m_Color = Grey;
+			m_NodeTypeID = 2;
 		}
 
 		void Initialize() override {
@@ -49,7 +53,8 @@ namespace XRE {
 	public:
 		Node_ConstInt() {
 			m_Title = u8"整数常量";
-			m_Color = Red;
+			m_Color = Pink;
+			m_NodeTypeID = 3;
 		}
 		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Int));
@@ -67,7 +72,8 @@ namespace XRE {
 	public:
 		Node_ConstBool() {
 			m_Title = u8"布尔常量";
-			m_Color = Red;
+			m_Color = Pink;
+			m_NodeTypeID = 4;
 		}
 		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Bool));
@@ -85,7 +91,8 @@ namespace XRE {
 		
 		Node_ConstFloat() {
 			m_Title = u8"浮点常量";
-			m_Color = Red;
+			m_Color = Pink;
+			m_NodeTypeID = 5;
 		}
 
 		void Initialize() override {
@@ -105,7 +112,8 @@ namespace XRE {
 	public:
 		Node_ConstString() {
 			m_Title = u8"字符串常量";
-			m_Color = Red;
+			m_Color = Pink;
+			m_NodeTypeID = 6;
 		}
 		void Initialize() override {
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_String));
@@ -125,6 +133,7 @@ namespace XRE {
 		Node_GetField() {
 			m_Title = u8"获取变量";
 			m_Color = Purple;
+			m_NodeTypeID = 11;
 		}
 
 		void Initialize() override {
@@ -142,6 +151,7 @@ namespace XRE {
 		}
 
 		void Process() override {
+			m_FlowProc->ValueBool = true;
 			if (m_field!=nullptr) {
 				switch (m_Outputs[0]->m_FieldType)
 				{
@@ -173,6 +183,7 @@ namespace XRE {
 		Node_SetField(){
 			m_Title = u8"设置变量";
 			m_Color = Purple;
+			m_NodeTypeID = 12;
 			
 		}
 
@@ -191,7 +202,7 @@ namespace XRE {
 		}
 
 		void Process() override {
-
+			m_FlowProc->ValueBool = true;
 			switch (m_Inputs[0]->m_FieldType)
 			{
 			case Field_Int:

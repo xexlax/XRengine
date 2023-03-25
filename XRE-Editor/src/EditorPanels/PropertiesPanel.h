@@ -34,6 +34,9 @@ namespace XRE {
 		Component* m_Copied = nullptr;
 		bool m_Switch = false;
 
+		template<>
+		void DrawComponentLayout(BluePrintComponent& component);
+
 	};
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue=0.0f, float columnWidth=110.0f);
 }

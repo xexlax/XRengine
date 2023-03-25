@@ -66,8 +66,6 @@ namespace XRE {
 			basepath = path.substr(0, pos);
 		}
 		
-		//XRE_CORE_TRACE("���ڼ���ģ�� {0},��Ŀ¼{1}", path, basepath);
-		
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
@@ -100,7 +98,6 @@ namespace XRE {
 
 		
 
-		///1. ��ȡ���ֲ��ʺ�����
 		{
 			for (int i = 0; i < materials.size(); i++) {
 				XRef<Material> m = make_shared<Material>();
@@ -172,11 +169,11 @@ namespace XRE {
 
 			
 			
-			// For each shape ����ÿһ������
+			// For each shape 
 			for (size_t i = 0; i < shapes.size(); i++) {
 				
 				std::unordered_map<tinyobj::index_t, uint32_t, hash_idx, equal_idx > uniqueVertices = {};
-				// ���ٿռ�
+	
 				vector<Vertex> vertices;
 				vector<uint32_t> indices;
 				
@@ -194,7 +191,6 @@ namespace XRE {
 				size_t index_offset = 0;
 				for (size_t f = 0; f < shapes[i].mesh.num_face_vertices.size(); f++) {
 					size_t fnum = shapes[i].mesh.num_face_vertices[f];
-					// ����������±�
 					tinyobj::index_t index;
 					Vertex vertex[3];
 					for (size_t v = 0; v < fnum; v++) {
@@ -285,8 +281,6 @@ namespace XRE {
 				
 			}
 			
-
-			XRE_CORE_INFO("已加载模型{0}",path);
 		}
 	}
 	

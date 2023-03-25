@@ -1,0 +1,211 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [
+            {
+                "value0": "time",
+                "value1": 2,
+                "value2": false
+            },
+            {
+                "value0": "r",
+                "value1": 1,
+                "value2": false
+            },
+            {
+                "value0": "speed",
+                "value1": 2,
+                "value2": false
+            }
+        ],
+        "value2": {
+            "value0": [
+                {
+                    "key": 1,
+                    "value": 1
+                }
+            ],
+            "value1": [
+                {
+                    "key": 0,
+                    "value": false
+                },
+                {
+                    "key": 2,
+                    "value": false
+                }
+            ],
+            "value2": [
+                {
+                    "key": 0,
+                    "value": 0.0
+                },
+                {
+                    "key": 2,
+                    "value": 1.0
+                }
+            ],
+            "value3": []
+        },
+        "value3": [
+            2,
+            60,
+            61,
+            60,
+            11,
+            11,
+            11,
+            23,
+            21,
+            12,
+            27,
+            23,
+            62,
+            26,
+            21,
+            3,
+            23
+        ],
+        "value4": [
+            {
+                "value0": 12,
+                "value1": 11,
+                "value2": 3,
+                "value3": 0
+            },
+            {
+                "value0": 2,
+                "value1": 1,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 12,
+                "value1": 3,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 12,
+                "value1": 16,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 12,
+                "value1": 14,
+                "value2": 2,
+                "value3": 0
+            },
+            {
+                "value0": 7,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 7,
+                "value1": 6,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 4,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 7,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 9,
+                "value1": 8,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 13,
+                "value1": 8,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 10,
+                "value1": 8,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 11,
+                "value1": 10,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 11,
+                "value1": 5,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 14,
+                "value1": 2,
+                "value2": 0,
+                "value3": 1
+            },
+            {
+                "value0": 16,
+                "value1": 13,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 16,
+                "value1": 5,
+                "value2": 1,
+                "value3": 0
+            }
+        ],
+        "value5": [
+            {
+                "value0": 0,
+                "value1": 4,
+                "value2": "##",
+                "value3": 5,
+                "value4": 0
+            },
+            {
+                "value0": 0,
+                "value1": 5,
+                "value2": "##",
+                "value3": 5,
+                "value4": 1
+            },
+            {
+                "value0": 0,
+                "value1": 6,
+                "value2": "##",
+                "value3": 5,
+                "value4": 2
+            },
+            {
+                "value0": 0,
+                "value1": 9,
+                "value2": "##",
+                "value3": 5,
+                "value4": 0
+            },
+            {
+                "value0": 0,
+                "value1": 15,
+                "value2": "##",
+                "value3": 1,
+                "value4": 0
+            }
+        ]
+    }
+}

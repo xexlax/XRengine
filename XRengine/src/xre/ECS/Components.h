@@ -471,12 +471,16 @@ namespace XRE {
 		XRef<BluePrintProperties> m_BluePrintProperties;
 		std::string m_BluePrintPath;
 
-		
+		void SetBP(XRef<BluePrint> bp) {
+			m_BluePrint = bp;
+			m_BluePrintProperties->Update(bp->GetDefaultProperties());
+			m_BluePrintPath = m_BluePrint->GetFileName();
+		}
 
 		template <class Archive>
 		void save(Archive& ar) const
 		{
-			//ar(m_BluePrintPath,m_BluePrintProperties);
+			ar(m_BluePrintPath,*m_BluePrintProperties);
 
 		}
 		template <class Archive>
@@ -485,7 +489,7 @@ namespace XRE {
 
 			ar(m_BluePrintPath);
 			m_BluePrint = ResourceManager::GetBluePrint(m_BluePrintPath);
-			//ar(m_BluePrintProperties);
+			ar(*m_BluePrintProperties);
 		}
 
 		BluePrintComponent() :Component("BluePrint") {

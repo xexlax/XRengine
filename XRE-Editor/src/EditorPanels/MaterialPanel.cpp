@@ -34,7 +34,7 @@ namespace XRE {
 			ImGui::Text("SpecularMap");
 			DrawTextureSlot(&m_Selected->specularTex);
 			ImGui::Text("NormalMap");
-			DrawTextureSlot(&m_Selected->diffuseTex);
+			DrawTextureSlot(&m_Selected->bumpTex);
 			
 		}
 		

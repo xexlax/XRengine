@@ -56,13 +56,6 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
-				if (ImGui::MenuItem(u8"运动"))
-				{
-					if (!go.HasComponent<AnimatorComponent>())
-						CommandManager::Get().Command_Create_Component<AnimatorComponent>(go.AddComponent<AnimatorComponent>(),go);
-					ImGui::CloseCurrentPopup();
-				}
-
 				if (ImGui::MenuItem(u8"刚体"))
 				{
 					if (!go.HasComponent<RigidBodyComponent>())
@@ -76,6 +69,14 @@ namespace XRE {
 						CommandManager::Get().Command_Create_Component<RayComponent>(go.AddComponent<RayComponent>(), go);
 					ImGui::CloseCurrentPopup();
 				}
+
+				if (ImGui::MenuItem(u8"蓝图脚本"))
+				{
+					if (!go.HasComponent<BluePrintComponent>())
+						CommandManager::Get().Command_Create_Component<BluePrintComponent>(go.AddComponent<BluePrintComponent>(), go);
+					ImGui::CloseCurrentPopup();
+				}
+
 
 
 				ImGui::EndPopup();
@@ -189,6 +190,9 @@ namespace XRE {
 
 		if (go.HasComponent<RayComponent>())
 			DrawComponent<RayComponent>(go);
+
+		if (go.HasComponent<BluePrintComponent>())
+			DrawComponent<BluePrintComponent>(go);
 	}
 
 	template<typename T>
@@ -532,6 +536,89 @@ namespace XRE {
 
 		ImGui::EndChild();
 
+	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<BluePrintComponent>(BluePrintComponent& component) {
+		if (component.m_BluePrint == nullptr) {
+			if (ImGui::Button(u8"New BluePrint")) {
+				component.m_BluePrint = XMakeRef<BluePrint>();
+				auto path = FileDialogs::SaveFile("BluePrint (*.bp)\0*.bp\0");
+
+				if (path != "") {
+					if (path.find(".bp") == string::npos) path += ".bp";
+					component.m_BluePrint->Save(path);
+					component.SetBP(ResourceManager::GetBluePrint(path));
+				}
+
+			}
+			
+		}
+		else
+			if (ImGui::Button(component.m_BluePrintPath.c_str())) {
+				PanelsManager::GetBluePrintEditor()->m_Info = u8"对象";
+				PanelsManager::GetBluePrintEditor()->m_BluePrint = component.m_BluePrint;
+				PanelsManager::GetBluePrintEditor()->m_Properties = component.m_BluePrint->GetDefaultProperties();
+				PanelsManager::GetBluePrintEditor()->Switch();
+			}
+			
+		if (ImGui::BeginDragDropTarget()) {
+
+
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+			{
+				std::string path = *(std::string*)payload->Data;
+
+				if (path.find(".bp") != string::npos ) {
+					component.SetBP(ResourceManager::GetBluePrint(path));
+				}
+
+			}
+			ImGui::EndDragDropTarget();
+		}
+		
+	
+		
+		if (component.m_BluePrint == nullptr) return;
+		
+		ImGui::BeginChild(u8"自定义属性");
+		if (ImGui::Button(u8"Refresh")) {
+			component.m_BluePrintProperties->Update(component.m_BluePrint->GetDefaultProperties());
+		}
+		
+		for (auto vv : component.m_BluePrint->m_Fields) {
+			ImGui::PushItemWidth(80);
+			auto v = vv.second;
+			//Imgui need different name to identify
+			string s = "##Text" + to_string(v->id);
+			string f = "##Value" + to_string(v->id);
+			XUI::InputText(s.c_str(), &v->m_FieldName);
+			ImGui::PopItemWidth();
+			ImGui::SameLine();
+
+			auto& m_Properties = component.m_BluePrintProperties;
+			switch (v->m_Type)
+			{
+			case FieldType::Field_Bool:
+
+				XUI::CheckBox(f.c_str(), (bool*)m_Properties->GetFieldValuePointer(v));
+				break;
+			case FieldType::Field_Int:
+				XUI::DragInt(f.c_str(), (int*)m_Properties->GetFieldValuePointer(v));
+				break;
+			case FieldType::Field_Float:
+				XUI::DragFloat(f.c_str(), (float*)m_Properties->GetFieldValuePointer(v));
+				break;
+			case FieldType::Field_String:
+				XUI::InputText(f.c_str(), (string*)m_Properties->GetFieldValuePointer(v));
+				break;
+			default:
+				break;
+			}
+
+		}
+
+		ImGui::EndChild();
 	}
 
 

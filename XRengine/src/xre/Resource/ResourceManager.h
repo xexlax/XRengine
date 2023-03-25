@@ -8,23 +8,23 @@
 //#include "Prefab.h"
 
 namespace XRE {
-	//èµ„æºç®¡ç†å™¨ï¼Œé€šè¿‡è·¯å¾„è·å–èµ„æºï¼Œç¡®ä¿èµ„æºä¸ä¼šé‡å¤åŠ è½½
+	//×ÊÔ´¹ÜÀíÆ÷£¬Í¨¹ıÂ·¾¶»ñÈ¡×ÊÔ´£¬È·±£×ÊÔ´²»»áÖØ¸´¼ÓÔØ
 	enum Elemental_Model {
-		Cube,Plane,Sphere,Cone,Cylinder,Capsule
+		Cube, Plane, Sphere, Cone, Cylinder, Capsule
 	};
 	class ResourceManager {
 
 
 	public:
 		static void Init();
-		
+
 		static XRef<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
-		
-		
+
+
 		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
 		static XRef<Texture2D> GetNoTex2D() { return GetTex2D("../Assets/textures/No_Texture.png"); }
-		
-		
+
+
 		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(path); }
 		static XRef<Model> GetElementalModel(const Elemental_Model& em);
 
@@ -32,17 +32,17 @@ namespace XRE {
 		static XRef<Material> GetDefaultMaterial() { return GetMaterial("../Assets/materials/default.mat"); }
 
 		static XRef<BluePrint> GetBluePrint(const std::string& path) { return  m_BluePrintLib.Get(path); }
-		// æ·»åŠ å¯¹Prefabç±»çš„ç®¡ç†
+		// Ìí¼Ó¶ÔPrefabÀàµÄ¹ÜÀí
 		//static XRef<Prefab> GetPrefab(const std::string& path) { return m_PrefabLib.Get(path); }
-		
+
 	private:
-		
+
 		static Library<Shader> m_ShaderLib;
 		static Library<Texture2D> m_Texture2DLib;
 		static Library<Model> m_ModelLib;
 		static Library<Material> m_MaterialLib;
 		static Library<BluePrint> m_BluePrintLib;
-		//static Library<Prefab> m_PrefabLib; // æ·»åŠ Prefabåº“
-		
+		//static Library<Prefab> m_PrefabLib; // Ìí¼ÓPrefab¿â
+
 	};
 }

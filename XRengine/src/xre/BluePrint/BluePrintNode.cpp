@@ -87,9 +87,11 @@ namespace XRE {
 	bool BluePrintNode::NeedProcess()
 	{
 		for (auto x : m_Inputs) {
+			
 			if (x->m_Necessary && x->m_Connection == nullptr) return false;
 		}
 		for (auto x : m_Outputs) {
+			
 			if (x->m_Necessary && x->m_Connections.empty()) return false;
 		}
 		return true;
@@ -101,6 +103,17 @@ namespace XRE {
 		}
 		for (auto x : m_Inputs) {
 			if (x->m_Necessary && !x->m_Ready ) return false;
+		}
+		return true;
+	}
+
+	bool BluePrintNode::CanFullyProcess()
+	{
+		if (m_FlowPrev != nullptr && m_FlowPrev->m_Connection != nullptr) {
+			if (m_FlowPrev->m_Ready == false) return false;
+		}
+		for (auto x : m_Inputs) {
+			if (!x->m_Ready) return false;
 		}
 		return true;
 	}
@@ -125,7 +138,7 @@ namespace XRE {
 			
 		}
 		if (m_FlowPrev != nullptr) {
-			m_FlowPrev->m_Ready == false;
+			m_FlowPrev->m_Ready = false;
 		}
 	}
 	bool BluePrintNode::ControlFlowTest()

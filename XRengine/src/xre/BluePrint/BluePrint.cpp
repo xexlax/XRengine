@@ -1,9 +1,22 @@
 #include "BluePrint.h"
 #include "xre\ECS\GameObject.h"
-
+#include "NodesDictionary.h"
+#include "cereal\cereal.hpp"
+#include "cereal\archives\json.hpp"
 namespace XRE {
 	BluePrint::~BluePrint()
 	{
+	}
+
+	XRef<BluePrintNode> BluePrint::MakeNode(int id)
+	{
+		auto x = Nodes::MakeNode(id);
+		x->NodeID = NodeIDCounter++;
+		x->m_BluePrint = this;
+		x->Initialize();
+		m_Nodes.push_back(x);
+		return x;
+		
 	}
 
 	void BluePrint::RemoveNode(XRef<BluePrintNode> n)
@@ -59,7 +72,7 @@ namespace XRE {
 			break;
 		}
 
-		m_Fields.push_back(result);
+		m_Fields[result->id]=result;
 
 		return result;
 	}
@@ -94,6 +107,11 @@ namespace XRE {
 	void BluePrint::OnRuntimeBegin()
 	{
 		SortAndActiveNodes();
+		for (auto x : m_Nodes) {
+			if (x->m_Active) {
+				x->Start();
+			}
+		}
 	}
 
 	void BluePrint::OnUpdate(entt::entity e, Scene* sc, float ts, XRef<BluePrintProperties> properties)
@@ -108,12 +126,36 @@ namespace XRE {
 			x->Process();
 		}
 	}
-	void BluePrint::Save()
+	void BluePrint::Save(std::string path)
 	{
+		if (path == "") path = m_FileName;
+		m_FileName = path;
+		ofstream fs(path);
+
+		cereal::JSONOutputArchive ar(fs);
+		ar(*this);
+
+	}
+	
+
+	void BluePrint::LoadFromFile(std::string path)
+	{
+		m_Nodes.clear();
+		m_Fields.clear();
+		m_InputPins.clear();
+		m_OutputPins.clear();
+		m_DefaultProperties = XMakeRef<BluePrintProperties>();
+
+		ifstream fs(path);
+		m_FileName = path;
+		cereal::JSONInputArchive ar(fs);
+		ar(*this);
 	}
 	XRef<BluePrint> BluePrint::Create(std::string m_FileName)
 	{
-		return XRef<BluePrint>();
+		XRef<BluePrint> r = XMakeRef<BluePrint>();
+		r->LoadFromFile(m_FileName);
+		return r;
 	}
 	void BluePrint::SortAndActiveNodes()
 	{
@@ -136,7 +178,7 @@ namespace XRE {
 			findActive = false;
 			for (auto x : m_Nodes) {
 				if (x->m_Active && !visited[x] ) {
-					if (x->CanProcess()) {
+					if (x->CanFullyProcess()) {
 						findActive = true;
 						x->GetReady();
 						if(std::find(result.begin(),result.end(),x)== result.end())
@@ -145,12 +187,28 @@ namespace XRE {
 					}
 				}
 			}
+			if(!findActive)
+			for (auto x : m_Nodes) {
+				if (x->m_Active && !visited[x]) {
+					if (x->CanProcess()) {
+						findActive = true;
+						x->GetReady();
+						if (std::find(result.begin(), result.end(), x) == result.end())
+							result.push_back(x);
+						visited[x] = true;
+					}
+				}
+			}
+			
 		}
 
 		for (auto x : result) {
 			x->ResetReady();
 		}
-
+		for (auto x : m_Nodes) {
+			if (visited[x] == false)
+				result.push_back(x);
+		}
 		for(auto x:unactive){
 			result.push_back(x);
 		}
@@ -214,11 +272,16 @@ namespace XRE {
 	}
 	void BluePrintProperties::Update(XRef<BluePrintProperties> src)
 	{
-
+		{
+		vector<int> eraselist;
 		for (auto x : IntDatas) {
 			if (src->IntDatas.find(x.first) == src->IntDatas.end()) {
-				IntDatas.erase(x.first);
+				eraselist.push_back(x.first);
 			}
+		}
+		for (auto x : eraselist) {
+			IntDatas.erase(x);
+		}
 		}
 		for (auto x : src->IntDatas) {
 			if (IntDatas.find(x.first) == IntDatas.end()) {
@@ -226,9 +289,16 @@ namespace XRE {
 			}
 		}
 
-		for (auto x : BoolDatas) {
-			if (src->BoolDatas.find(x.first) == src->BoolDatas.end()) {
-				BoolDatas.erase(x.first);
+		
+		{
+			vector<int> eraselist;
+			for (auto x : BoolDatas) {
+				if (src->BoolDatas.find(x.first) == src->BoolDatas.end()) {
+					eraselist.push_back(x.first);
+				}
+			}
+			for (auto x : eraselist) {
+				IntDatas.erase(x);
 			}
 		}
 		for (auto x : src->BoolDatas) {
@@ -236,21 +306,33 @@ namespace XRE {
 				BoolDatas[x.first] = x.second;
 			}
 		}
-
-		for (auto x : FloatDatas) {
-			if (src->FloatDatas.find(x.first) == src->FloatDatas.end()) {
-				FloatDatas.erase(x.first);
+		{
+			vector<int> eraselist;
+			for (auto x : FloatDatas) {
+				if (src->FloatDatas.find(x.first) == src->FloatDatas.end()) {
+					eraselist.push_back(x.first);
+				}
+			}
+			for (auto x : eraselist) {
+				FloatDatas.erase(x);
 			}
 		}
+		
 		for (auto x : src->FloatDatas) {
 			if (FloatDatas.find(x.first) == FloatDatas.end()) {
 				FloatDatas[x.first] = x.second;
 			}
 		}
 
-		for (auto x : StringDatas) {
-			if (src->StringDatas.find(x.first) == src->StringDatas.end()) {
-				StringDatas.erase(x.first);
+		{
+			vector<int> eraselist;
+			for (auto x : StringDatas) {
+				if (src->StringDatas.find(x.first) == src->StringDatas.end()) {
+					eraselist.push_back(x.first);
+				}
+			}
+			for (auto x : eraselist) {
+				StringDatas.erase(x);
 			}
 		}
 		for (auto x : src->StringDatas) {

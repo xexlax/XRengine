@@ -1,0 +1,146 @@
+{
+    "value0": {
+        "value0": "New Scene"
+    },
+    "value1": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "摄像机"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 18.097822189331056,
+            "value2": 11.034817695617676,
+            "value3": -2.1271543502807619,
+            "value4": 31.19755744934082,
+            "value5": -96.7035903930664,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Camera"
+        },
+        "value5": {
+            "value0": true,
+            "value1": false,
+            "value2": true,
+            "value3": 1,
+            "value4": 30.0,
+            "value5": -30.0,
+            "value6": 20.0,
+            "value7": 200.0,
+            "value8": 0.10000000149011612,
+            "value9": 45.0
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value2": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 3.942791700363159,
+            "value2": 0.0,
+            "value3": -5.783977508544922,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "BluePrint"
+        },
+        "value7": {
+            "value0": "../Assets\\blueprint\\move.bp",
+            "value1": {
+                "value0": [
+                    {
+                        "key": 1,
+                        "value": 7
+                    }
+                ],
+                "value1": [
+                    {
+                        "key": 0,
+                        "value": false
+                    },
+                    {
+                        "key": 2,
+                        "value": false
+                    }
+                ],
+                "value2": [
+                    {
+                        "key": 0,
+                        "value": 109.357421875
+                    },
+                    {
+                        "key": 2,
+                        "value": 3.0
+                    }
+                ],
+                "value3": []
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value3": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "####TheEnder####"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "EndObj"
+        }
+    }
+}

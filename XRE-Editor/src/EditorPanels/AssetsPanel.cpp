@@ -18,6 +18,7 @@ namespace XRE {
 		m_ShaderIcon = ResourceManager::GetTex2D("../Assets/textures/shader_logo.png");
 		m_TexIcon = ResourceManager::GetTex2D("../Assets/textures/tex_logo.png");
 		m_MaterialIcon = ResourceManager::GetTex2D("../Assets/textures/mat_logo.png");
+		m_BluePrintIcon = ResourceManager::GetTex2D("../Assets/textures/bp_logo.png");
 	}
 
 	void AssetsPanel::OnImGuiRender()
@@ -56,7 +57,7 @@ namespace XRE {
 			if (filenameString.find(".glsl") != string::npos) iconid = m_ShaderIcon->GetRendererId();
 			if (filenameString.find(".png") != string::npos || filenameString.find(".jpg") != string::npos) iconid = m_TexIcon->GetRendererId();
 			if (filenameString.find(".mat") != string::npos) iconid = m_MaterialIcon->GetRendererId();
-			
+			if (filenameString.find(".bp") != string::npos) iconid = m_BluePrintIcon->GetRendererId();
 			ImGui::PushID(filenameString.c_str());
 			
 			ImGui::ImageButton(ImTextureID(iconid), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
