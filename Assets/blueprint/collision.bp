@@ -1,0 +1,33 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [
+            {
+                "value0": "val_i",
+                "value1": 1,
+                "value2": false
+            }
+        ],
+        "value2": {
+            "value0": [
+                {
+                    "key": 0,
+                    "value": 0
+                }
+            ],
+            "value1": [],
+            "value2": [],
+            "value3": []
+        },
+        "value3": [],
+        "value4": [
+            {
+                "value0": -842150451,
+                "value1": -842150451,
+                "value2": -842150451,
+                "value3": -842150451
+            }
+        ],
+        "value5": []
+    }
+}

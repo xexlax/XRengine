@@ -320,4 +320,66 @@ namespace XRE {
 	};
 
 
+	class Node_StrCat : public BluePrintNode {
+	public:
+		Node_StrCat() {
+			m_Title = u8"字符串拼接";
+			m_Color = Red;
+			m_NodeTypeID = 36;
+		}
+		void Initialize() override {
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			m_Inputs[0]->m_Name = u8"a";
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			m_Inputs[1]->m_Name = u8"b";
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_String));
+		}
+
+		void Process() override {
+			m_Outputs[0]->ValueString = m_Inputs[0]->GetValue<string>() + m_Inputs[1]->GetValue<string>();
+		}
+	};
+
+	class Node_StrCmp : public BluePrintNode {
+	public:
+		Node_StrCmp() {
+			m_Title = u8"字符串比较";
+			m_Color = Red;
+			m_NodeTypeID = 37;
+		}
+		void Initialize() override {
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			m_Inputs[0]->m_Name = u8"a";
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			m_Inputs[1]->m_Name = u8"b";
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Bool));
+		}
+
+		void Process() override {
+			m_Outputs[0]->ValueBool = m_Inputs[0]->GetValue<string>() == m_Inputs[1]->GetValue<string>();
+		}
+	};
+
+
+	class Node_StrFind : public BluePrintNode {
+	public:
+		Node_StrFind() {
+			m_Title = u8"在a中查找b";
+			m_Color = Red;
+			m_NodeTypeID = 38;
+		}
+		void Initialize() override {
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			m_Inputs[0]->m_Name = u8"a";
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_String));
+			m_Inputs[1]->m_Name = u8"b";
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Bool));
+		}
+
+		void Process() override {
+			m_Outputs[0]->ValueBool = m_Inputs[0]->GetValue<string>().find( m_Inputs[1]->GetValue<string>()) != string::npos;
+		}
+	};
+
+
 }

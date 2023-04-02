@@ -107,6 +107,16 @@ namespace XRE {
 		return true;
 	}
 
+	void BluePrintNode::AddInput(FieldType t)
+	{
+		m_Inputs.push_back(m_BluePrint->MakeInput(t));
+	}
+
+	void BluePrintNode::AddOutput(FieldType t)
+	{
+		m_Outputs.push_back(m_BluePrint->MakeOutput(t));
+	}
+
 	bool BluePrintNode::CanFullyProcess()
 	{
 		if (m_FlowPrev != nullptr && m_FlowPrev->m_Connection != nullptr) {

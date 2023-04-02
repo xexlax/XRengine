@@ -207,6 +207,11 @@ namespace XRE {
 		BluePrint* m_BluePrint;
 	protected:
 
+		void AddInput(FieldType t);
+		void AddOutput(FieldType t);
+		void AddVar(FieldType t,void* r) {
+			m_Variants.push_back(NodeVariant(t,r));
+		}
 		void CreateControlFlow();
 
 		

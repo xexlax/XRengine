@@ -42,7 +42,7 @@ namespace XRE {
 			return IM_COL32(50, 50, 250, 255);
 			break;
 		case BluePrintNode::NodeColor::Green:
-			return IM_COL32(50, 250, 50, 255);
+			return IM_COL32(50, 150, 50, 255);
 			break;
 		case BluePrintNode::NodeColor::Red:
 			return IM_COL32(250, 50, 50, 255);
@@ -179,7 +179,7 @@ namespace XRE {
 		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
 		{
 			
-			if (ImGui::BeginMenu(u8"常量")) {
+			if (ImGui::BeginMenu(u8"基础")) {
 				
 				if (ImGui::MenuItem(u8"整数")) {
 					m_BluePrint->MakeNode<Node_ConstInt>();
@@ -213,23 +213,27 @@ namespace XRE {
 				if (ImGui::MenuItem(u8"开始时")) {
 					m_BluePrint->MakeNode<Node_OnSceneBegin>();
 				}
+				if (ImGui::MenuItem(u8"碰撞")) {
+					m_BluePrint->MakeNode<Node_OnCollision>();
+				}
 				
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu(u8"运算")) {
+				if (ImGui::MenuItem(u8"+")) {
+					m_BluePrint->MakeNode<Node_Plus>();
+				}
+				if (ImGui::MenuItem(u8"-")) {
+					m_BluePrint->MakeNode<Node_Minus>();
+				}
+				if (ImGui::MenuItem(u8"*")) {
+					m_BluePrint->MakeNode<Node_Multiply>();
+				}
+				if (ImGui::MenuItem(u8"/")) {
+					m_BluePrint->MakeNode<Node_Division>();
+				}
 				if (ImGui::BeginMenu(u8"基础")) {
-					if (ImGui::MenuItem(u8"+")) {
-						m_BluePrint->MakeNode<Node_Plus>();
-					}
-					if (ImGui::MenuItem(u8"-")) {
-						m_BluePrint->MakeNode<Node_Minus>();
-					}
-					if (ImGui::MenuItem(u8"*")) {
-						m_BluePrint->MakeNode<Node_Multiply>();
-					}
-					if (ImGui::MenuItem(u8"/")) {
-						m_BluePrint->MakeNode<Node_Division>();
-					}
+					
 					if (ImGui::MenuItem(u8"Mod")) {
 						m_BluePrint->MakeNode<Node_Mod>();
 					}
@@ -281,6 +285,15 @@ namespace XRE {
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"字符串")) {
+					if (ImGui::MenuItem(u8"拼接")) {
+						m_BluePrint->MakeNode<Node_StrCat>();
+					}
+					if (ImGui::MenuItem(u8"比较")) {
+						m_BluePrint->MakeNode<Node_StrCmp>();
+					}
+					if (ImGui::MenuItem(u8"查找")) {
+						m_BluePrint->MakeNode<Node_StrFind>();
+					}
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
@@ -290,13 +303,15 @@ namespace XRE {
 				if (ImGui::MenuItem(u8"本对象")) {
 					m_BluePrint->MakeNode<Node_Self>();
 				}
-				if (ImGui::MenuItem(u8"根据ID获取")) {
-				}
+				
 				if (ImGui::MenuItem(u8"根据名称获取")) {
+					m_BluePrint->MakeNode<Node_GetByName>();
 				}
 				if (ImGui::MenuItem(u8"创建对象")) {
+					m_BluePrint->MakeNode<Node_Create>();
 				}
 				if (ImGui::MenuItem(u8"删除对象")) {
+					m_BluePrint->MakeNode<Node_Destroy>();
 				}
 				ImGui::EndMenu();
 			}
@@ -309,24 +324,43 @@ namespace XRE {
 					if (ImGui::MenuItem(u8"设置位置")) {
 						m_BluePrint->MakeNode<Node_SetPosition>();
 					}
+					if (ImGui::MenuItem(u8"获取旋转")) {
+						m_BluePrint->MakeNode<Node_GetRotation>();
+					}
+					if (ImGui::MenuItem(u8"设置旋转")) {
+						m_BluePrint->MakeNode<Node_SetRotation>();
+					}
+					if (ImGui::MenuItem(u8"获取缩放")) {
+						m_BluePrint->MakeNode<Node_GetScale>();
+					}
+					if (ImGui::MenuItem(u8"设置缩放")) {
+						m_BluePrint->MakeNode<Node_SetScale>();
+					}
+
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"几何渲染")) {
 					ImGui::EndMenu();
 				}
-				if (ImGui::BeginMenu(u8"刚体")) {
+				if (ImGui::BeginMenu(u8"刚体与物理")) {
+					if (ImGui::MenuItem(u8"设置线速度")) {
+						m_BluePrint->MakeNode<Node_SetLinearVelocity>();
+					}
+
+					if (ImGui::MenuItem(u8"设置角速度")) {
+						m_BluePrint->MakeNode<Node_SetAngularVelocity>();
+					}
+
+					if (ImGui::MenuItem(u8"设置状态")) {
+						
+						//m_BluePrint->MakeNode<Node_SetAngularVelocity>();
+					}
 					ImGui::EndMenu();
 				}
-				if (ImGui::BeginMenu(u8"点光源")) {
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"平行光")) {
+				if (ImGui::BeginMenu(u8"光源")) {
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"摄像机")) {
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"射线")) {
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"蓝图")) {
@@ -340,6 +374,11 @@ namespace XRE {
 				if (ImGui::MenuItem(u8"调试输出")) {
 					m_BluePrint->MakeNode<Node_Debug>();
 				}
+
+				if (ImGui::MenuItem(u8"键盘输入")) {
+					m_BluePrint->MakeNode<Node_OnKeyEvent>();
+				}
+
 
 				ImGui::EndMenu();
 			}
@@ -440,6 +479,10 @@ namespace XRE {
 				XUI::CheckBox(v.m_Name, (bool*)v.m_Handle);
 				break;
 			case FieldType::Field_Int:
+				if (v.m_Name == u8"##Key") {
+					XUI::SelectKey("##key", (int*)v.m_Handle);
+				}
+				else
 				XUI::DragInt(v.m_Name, (int*)v.m_Handle);
 				break;
 			case FieldType::Field_Float:

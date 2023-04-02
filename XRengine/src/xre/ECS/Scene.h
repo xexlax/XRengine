@@ -66,7 +66,9 @@ namespace XRE {
 
 
 		GameObject FindGOByPhysicBodyID(uint32_t pid);
+		vector<GameObject> FindGOByName(std::string str);
 		GameObject GetObj(uint32_t eid);
+
 
 		XRef<BluePrint> GetGlobalBluePrint() { return m_GlobalBluePrint; }
 		XRef<BluePrintProperties> GetGlobalProperties() { return m_GlobalProperties; }

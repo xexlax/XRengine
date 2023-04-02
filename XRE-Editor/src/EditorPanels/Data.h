@@ -13,5 +13,7 @@ namespace XRE::XUI{
 
 	bool InputText(const std::string& label, std::string* value);
 
+	void SelectKey(const std::string& label, int* value);
+
 	
 }

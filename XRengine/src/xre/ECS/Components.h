@@ -408,8 +408,8 @@ namespace XRE {
 		PhysicsShape m_Shape;
 		PhysicsMaterial m_PhysicsMaterial;
 		PhysicsMotion m_Motion;
-
-
+		vector<uint32_t> m_HitObjs;
+		vector<PhysicsHitInfo> m_HitResults;
 
 
 
@@ -449,7 +449,7 @@ namespace XRE {
 		bool m_ShapeSweep = false;
 
 		PhysicsShape m_SweepShape;
-
+		
 		vector<PhysicsHitInfo> m_HitResults;
 		vector<uint32_t> m_HitObjs;
 

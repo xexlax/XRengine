@@ -130,6 +130,35 @@ namespace JPH {
 		}
 	};
 
+	// An example contact listener
+	class MyContactListener : public ContactListener
+	{
+	public:
+		// See: ContactListener
+		virtual ValidateResult	OnContactValidate(const Body& inBody1, const Body& inBody2, RVec3Arg inBaseOffset, const CollideShapeResult& inCollisionResult) override
+		{
+			XRE_INFO("Contact validate callback:{0},{1}", inBody1.GetID().GetIndexAndSequenceNumber(), inBody2.GetID().GetIndexAndSequenceNumber());
+
+			// Allows you to ignore a contact before it is created (using layers to not make objects collide is cheaper!)
+			return ValidateResult::AcceptAllContactsForThisBodyPair;
+		}
+
+		virtual void			OnContactAdded(const Body& inBody1, const Body& inBody2, const ContactManifold& inManifold, ContactSettings& ioSettings) override
+		{
+			XRE_INFO("Contact Added:{0},{1}", inBody1.GetID().GetIndexAndSequenceNumber(), inBody2.GetID().GetIndexAndSequenceNumber());
+		}
+
+		virtual void			OnContactPersisted(const Body& inBody1, const Body& inBody2, const ContactManifold& inManifold, ContactSettings& ioSettings) override
+		{
+			XRE_INFO("Contact Persisted:{0},{1}", inBody1.GetID().GetIndexAndSequenceNumber(),inBody2.GetID().GetIndexAndSequenceNumber());
+		}
+
+		virtual void			OnContactRemoved(const SubShapeIDPair& inSubShapePair) override
+		{
+			XRE_INFO("Contact Removed:{0},{1}", inSubShapePair.GetBody1ID().GetIndexAndSequenceNumber(), inSubShapePair.GetBody2ID().GetIndexAndSequenceNumber());
+		}
+	};
+
 }
 
 namespace XRE {
@@ -142,25 +171,9 @@ namespace XRE {
 	inline JPH::Quat  toQuat(glm::quat q) { return { q.x, q.y, q.z, q.w }; }
 	inline glm::quat toQuat(JPH::Quat q) { return { q.GetW(), q.GetX(), q.GetY(), q.GetZ() }; }
 
-	/*JPH::Mat44 toMat44(const glm::mat4& m)
-	{
-		JPH::Vec4 cols[4];
-		for (int i = 0; i < 4; i++)
-		{
-			cols[i] = JPH::Vec4(m[0][i], m[1][i], m[2][i], m[3][i]);
-		}
+	JPH::Mat44 toMat44(const glm::mat4& m);
+	
 
-		return { cols[0], cols[1], cols[2], cols[3] };
-	}
-
-	glm::mat4 toMat44(const JPH::Mat44& m)
-	{
-		glm::vec4 cols[4];
-		for (int i = 0; i < 4; i++)
-		{
-			cols[i] = toVec4(m.GetColumn4(i));
-		}
-
-		return glm::transpose(glm::mat4(cols[0], cols[1], cols[2], cols[3]));
-	}*/
+	glm::mat4 toMat44(const JPH::Mat44& m);
+	
 }

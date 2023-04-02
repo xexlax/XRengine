@@ -514,6 +514,12 @@ namespace XRE {
 			ImGui::TreePop();
 		}
 
+
+		for (auto x : component.m_HitObjs ) {
+
+
+			ImGui::Text(PanelsManager::GetScenePanel()->m_Scene->GetObj(x).GetName().c_str());
+		}
 		
 	}
 

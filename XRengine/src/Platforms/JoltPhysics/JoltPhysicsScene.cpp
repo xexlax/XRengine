@@ -45,6 +45,8 @@ namespace XRE {
 		// We simulate the physics world in discrete time steps. 60 Hz is a good rate to update the physics system.
 		m_physics.m_PhysicsSystem->OptimizeBroadPhase();
 
+		//m_physics.m_PhysicsSystem->SetContactListener(&m_contact_listener);
+
 	}
 	JoltPhysicsScene::~JoltPhysicsScene()
 	{
@@ -130,10 +132,14 @@ namespace XRE {
 			bodyInterface.SetShape(id,CreateShape(tc, rbc),true, EActivation::Activate);
 		}
 
-		if (rbc.m_MotionType == RigidBodyComponent::Kinematic) {
-			bodyInterface.SetPosition(id,toVec3(tc.GetGlobalTranslation()),EActivation::Activate);
-			bodyInterface.SetRotation(id,toQuat(tc.GetGlobalRotation()), EActivation::Activate);
+		
+		bodyInterface.SetPosition(id,toVec3(tc.GetGlobalTranslation()),EActivation::Activate);
+		bodyInterface.SetRotation(id,toQuat(tc.GetGlobalRotation()), EActivation::Activate);
+			
+		
+		if (rbc.m_Motion.needUpdate && rbc.m_MotionType!= RigidBodyComponent::Static) {
 			bodyInterface.SetLinearAndAngularVelocity(id, toVec3(rbc.m_Motion.linear_velocity), toVec3(rbc.m_Motion.angular_velocity));
+			rbc.m_Motion.needUpdate = false;
 		}
 		
 
@@ -148,7 +154,7 @@ namespace XRE {
 
 		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
 
-		if (bodyInterface.IsActive(id) && bodyInterface.GetMotionType(id) == EMotionType::Dynamic) {
+		if (bodyInterface.IsActive(id) && bodyInterface.GetMotionType(id) != EMotionType::Static) {
 
 			JPH::RMat44 trans = bodyInterface.GetCenterOfMassTransform(id);
 			glm::mat4 tr;
@@ -164,6 +170,10 @@ namespace XRE {
 			tc.m_Translation -= rbc.m_Shape.m_Offset;
 			tc.m_Rotation = glm::degrees(rot) - rbc.m_Shape.m_Rotation;
 		}
+
+		
+
+		
 
 
 	}
@@ -212,6 +222,46 @@ namespace XRE {
 
 		return true;
 	}
+	void JoltPhysicsScene::UpdateCollision(TransformComponent& tc, RigidBodyComponent& rbc)
+	{
+		BodyID id(rbc.m_PhysicObj);
+
+		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
+
+		const JPH::NarrowPhaseQuery& scene_query = m_physics.m_PhysicsSystem->GetNarrowPhaseQuery();
+
+		JPH::AllHitCollisionCollector<JPH::CollideShapeCollector> collector;
+		JPH::CollideShapeSettings collideShapeSettings;
+
+		scene_query.CollideShape(bodyInterface.GetShape(BodyID(id)), bodyInterface.GetTransformedShape(id).GetShapeScale(),
+			bodyInterface.GetTransformedShape(id).GetCenterOfMassTransform(), collideShapeSettings, toVec3(glm::vec3(0, 0, 0)), collector);
+		rbc.m_HitResults.clear();
+		if (collector.HadHit())
+		{
+			collector.Sort();
+
+			std::vector<JPH::CollideShapeResult> results(collector.mHits.begin(), collector.mHits.end());
+
+
+			rbc.m_HitResults.resize(results.size());
+
+			for (size_t index = 0; index < results.size(); index++)
+			{
+				const JPH::CollideShapeResult& cast_result = results[index];
+
+				PhysicsHitInfo& hit = rbc.m_HitResults[index];
+				hit.m_HitBodyID = cast_result.mBodyID2.GetIndexAndSequenceNumber();
+
+				// get hit normal
+				JPH::BodyLockRead body_lock(m_physics.m_PhysicsSystem->GetBodyLockInterface(), cast_result.mBodyID2);
+				const JPH::Body& hit_body = body_lock.GetBody();
+
+				hit.m_HitNormal =
+					toVec3(hit_body.GetWorldSpaceSurfaceNormal(cast_result.mSubShapeID2, toVec3(hit.m_HitPos)));
+			}
+
+		}
+	}
 	void JoltPhysicsScene::OnUpdate(float dt)
 	{
 		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
@@ -239,8 +289,15 @@ namespace XRE {
 		}
 		m_PendingRemove.clear();
 
+		
+
+
+		
+
+
 
 	}
+	
 	ShapeRefC JoltPhysicsScene::CreateShape(TransformComponent& tc,const RigidBodyComponent& rbc)
 	{
 		ShapeRefC body_shape;

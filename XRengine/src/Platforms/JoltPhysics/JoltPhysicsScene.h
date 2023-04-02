@@ -44,7 +44,7 @@ namespace XRE {
         void     ResetRigidBody(TransformComponent& tc, RigidBodyComponent& rbc);
         void     UpdateRigidBody(TransformComponent& tc, RigidBodyComponent& rbc);
         bool     RayCast(glm::vec3 origin, glm::vec3 direction, float max_length, std::vector<PhysicsHitInfo>& output);
-
+        void     UpdateCollision(TransformComponent& tc, RigidBodyComponent& rbc);
 
         
 
@@ -52,7 +52,9 @@ namespace XRE {
     protected:
 
         JoltPhysics m_physics;
-
+        JPH::MyContactListener m_contact_listener;
+        
+      
         JPH::ShapeRefC CreateShape(TransformComponent& tc,const RigidBodyComponent& rbc);
 
         JoltPhysicsConfig m_Config;

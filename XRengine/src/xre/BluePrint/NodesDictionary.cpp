@@ -51,6 +51,14 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_RadToDegree>();
 		case 30:
 			return XMakeRef<Node_DegreeToRad>();
+		//String
+		case 36:
+			return XMakeRef<Node_StrCat>();
+		case 37:
+			return XMakeRef<Node_StrCmp>();
+		case 38:
+			return XMakeRef<Node_StrFind>();
+		//Logic
 		case 41:
 			return XMakeRef<Node_And>();
 		case 42:
@@ -70,13 +78,40 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_Branch>();
 		case 52:
 			return XMakeRef<Node_OnSceneBegin>();
+		case 53:
+			return XMakeRef<Node_OnCollision>();
+		case 59:
+			return XMakeRef<Node_GetByName>();
 		case 60:
 			return XMakeRef<Node_Self>();
+		//Transform
 		case 61:
 			return XMakeRef<Node_GetPosition>();
 		case 62:
 			return XMakeRef<Node_SetPosition>();
-		
+		case 63:
+			return XMakeRef<Node_GetPosition>();
+		case 64:
+			return XMakeRef<Node_SetPosition>();
+		case 65:
+			return XMakeRef<Node_GetPosition>();
+		case 66:
+			return XMakeRef<Node_SetPosition>();
+		case 67:
+			return XMakeRef<Node_SetLinearVelocity>();
+		case 68:
+			return XMakeRef<Node_SetAngularVelocity>();
+
+		case 69:
+			return XMakeRef<Node_Create>();
+		case 70:
+			return XMakeRef<Node_Destroy>();
+
+		//Input
+		case 81:
+			return XMakeRef<Node_OnKeyEvent>();
+		case 82:
+			return XMakeRef<Node_OnMouseEvent>();
 		default:
 			return nullptr;
 		}

@@ -186,6 +186,18 @@ namespace XRE{
 		}
 	}
 
+	vector<GameObject> Scene::FindGOByName(std::string str)
+	{
+		vector<GameObject> ans;
+		auto view = m_Registry.view<NameComponent>();
+			
+		for (auto entity : view) {
+			ans.push_back(GameObject(entity, this));
+		}
+		
+		return ans;
+	}
+
 	GameObject Scene::GetObj(uint32_t eid)
 	{
 		return GameObject(entt::entity(eid), this);
@@ -260,10 +272,28 @@ namespace XRE{
 
 				if (rbc.m_Active) {
 					m_PhysicsScene->UpdateRigidBody(tc, rbc);
+					
+				}
+
+			}
+			for (auto entity : view) {
+				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
+
+				if (rbc.m_Active) {
+					
+					m_PhysicsScene->UpdateCollision(tc, rbc);
+					rbc.m_HitObjs.clear();
+					for (auto x : rbc.m_HitResults) {
+						if (x.m_HitBodyID != rbc.m_PhysicObj) {
+							rbc.m_HitObjs.push_back(FindGOByPhysicBodyID(x.m_HitBodyID));
+						}
+					}
 				}
 
 			}
 		}
+
+		
 
 		{
 			auto view = m_Registry.view<TransformComponent,RayComponent>();
@@ -519,6 +549,7 @@ namespace XRE{
 
 				if (rbc.m_Active) {
 					m_PhysicsScene->RemoveRigidBody(rbc.m_PhysicObj);
+					rbc.m_HitResults.clear();
 				}
 
 			}

@@ -25,9 +25,9 @@ namespace XRE {
         virtual void     ResetRigidBody(TransformComponent& tc, RigidBodyComponent& rbc)=0;
         //每一步模拟后更新Transform的状态
         virtual void     UpdateRigidBody(TransformComponent& tc, RigidBodyComponent& rbc)=0;
-
+        virtual void     UpdateCollision(TransformComponent& tc, RigidBodyComponent& rbc) = 0;
         virtual bool     RayCast(glm::vec3 origin, glm::vec3 direction, float max_length, std::vector<PhysicsHitInfo>& output)=0;
-
+        
         static XRef<PhysicsScene> Create();
         
         virtual void OnUpdate(float dt)=0;
