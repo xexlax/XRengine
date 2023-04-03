@@ -14,13 +14,21 @@ namespace XRE {
 			m_NodeTypeID = 21;
 		}
 		void Initialize() override {
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+			AddInput(FieldType::Field_Float);
+			AddInput(FieldType::Field_Float);
+			AddOutput(FieldType::Field_Float);
 		}
 
 		void Process() override {
-			m_Outputs[0]->ValueFloat = m_Inputs[0]->GetValue<float>() + m_Inputs[1]->GetValue<float>();
+			if (m_Inputs[0]->m_Connection->m_FieldType == Field_String || m_Inputs[1]->m_Connection->m_FieldType == Field_String) {
+				m_Outputs[0]->m_FieldType = Field_String;
+				m_Outputs[0]->ValueString = m_Inputs[0]->GetValue<string>() + m_Inputs[1]->GetValue<string>();
+			}
+			else {
+				m_Outputs[0]->m_FieldType = Field_Float;
+				m_Outputs[0]->ValueFloat = m_Inputs[0]->GetValue<float>() + m_Inputs[1]->GetValue<float>();
+			}
+			
 		}
 	};
 
@@ -32,9 +40,9 @@ namespace XRE {
 			m_NodeTypeID = 22;
 		}
 		void Initialize() override {
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+			AddInput(FieldType::Field_Float);
+			AddInput(FieldType::Field_Float);
+			AddOutput(FieldType::Field_Float);
 		}
 
 		void Process() override {
@@ -50,9 +58,9 @@ namespace XRE {
 			m_NodeTypeID = 23;
 		}
 		void Initialize() override {
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+			AddInput(FieldType::Field_Float);
+			AddInput(FieldType::Field_Float);
+			AddOutput(FieldType::Field_Float);
 		}
 
 		void Process() override {
@@ -68,9 +76,9 @@ namespace XRE {
 			m_NodeTypeID = 24;
 		}
 		void Initialize() override {
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
-			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+			AddInput(FieldType::Field_Float);
+			AddInput(FieldType::Field_Float);
+			AddOutput(FieldType::Field_Float);
 		}
 
 		void Process() override {

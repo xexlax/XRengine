@@ -196,6 +196,8 @@ namespace XRE {
 		bool m_Active = true;
 		uint32_t NodeID;
 
+		float editorPosX=0 , editorPosY = 0;
+
 
 		std::string m_Title = "Node";
 		int m_NodeTypeID;

@@ -417,7 +417,7 @@ namespace XRE {
 
 		enum RigidBodyMotion
 		{
-			Static, Kinematic, Dynamic
+			Static, Kinematic, Dynamic, Trigger
 		} 
 		m_MotionType = RigidBodyMotion::Static;
 

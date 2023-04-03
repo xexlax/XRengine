@@ -437,13 +437,13 @@ namespace XRE {
 	template<>
 	void PropertiesPanel::DrawComponentLayout<RigidBodyComponent>(RigidBodyComponent& component) {
 
-		const char* MotionTypeStrings[] = { u8"静止",u8"运动学",u8"动力学"};
+		const char* MotionTypeStrings[] = { u8"静止",u8"运动学",u8"动力学",u8"触发器"};
 		const char* ShapeTypeStrings[] = { u8"方形",u8"球形",u8"胶囊" };
 
 		const char* currentMotionTypeString = MotionTypeStrings[component.m_MotionType];
 		const char* currentShapeTypeString = ShapeTypeStrings[component.m_Shape.m_Type];
 		if (ImGui::BeginCombo(u8"运动形式", currentMotionTypeString)) {
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				bool isSelected = currentMotionTypeString == MotionTypeStrings[i];
 				if (ImGui::Selectable(MotionTypeStrings[i], isSelected))

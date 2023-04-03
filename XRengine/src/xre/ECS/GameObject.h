@@ -178,6 +178,8 @@ namespace XRE {
 			
 		};
 
+		
+
 		void SetParent(GameObject* parent);
 		void SetParent(TransformComponent& parent);
 		void SetParentAbs(GameObject* parent);

@@ -26,7 +26,7 @@
 
 #include "xre/Resource/ResourceManager.h"
 #include "xre/Resource/Model.h"
-
+#include "xre\Resource\Prefab.h"
 
 #include "xre\ECS\Scene.h"
 #include "xre\ECS\Components.h"

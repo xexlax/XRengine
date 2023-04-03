@@ -22,9 +22,11 @@ namespace XRE {
 
 		void Process() override {
 
-			auto obj = m_BluePrint->m_sc->FindGOByName(m_Inputs[0]->GetValue<string>())[0];
-			m_Outputs[0]->ValueInt = uint32_t(obj);
-
+			auto objs = m_BluePrint->m_sc->FindGOByName(m_Inputs[0]->GetValue<string>());
+			if (objs.size() > 0)
+				m_Outputs[0]->ValueInt = uint32_t(objs[0]);
+			else
+				m_Outputs[0]->ValueInt = -2;
 		}
 
 	};
@@ -277,6 +279,7 @@ namespace XRE {
 
 		}
 		void Initialize() override {
+			CreateControlFlow();
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Int));
 
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -318,6 +321,7 @@ namespace XRE {
 
 		}
 		void Initialize() override {
+			CreateControlFlow();
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Int));
 
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
@@ -363,6 +367,7 @@ namespace XRE {
 			m_Inputs[1]->m_Necessary = false;
 			m_Inputs[1]->m_Name = u8"Ãû³Æ";
 			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Int));
+			CreateControlFlow();
 		}
 
 		void Process() override {
@@ -389,12 +394,15 @@ namespace XRE {
 		}
 		void Initialize() override {
 			AddInput(FieldType::Field_Int);
+			CreateControlFlow();
 			
 		}
 
 		void Process() override {
-			if (m_BluePrint->m_sc->GetObj(m_Inputs[0]->GetValue<int>()) ) {
-				GameObject go(entt::entity(m_Inputs[0]->GetValue<int>()), m_BluePrint->m_sc);
+			if (m_Inputs[0]->GetValue<int>()>=0 && m_BluePrint->m_sc->GetObj(m_Inputs[0]->GetValue<int>()) ) {
+				auto ent = entt::entity(m_Inputs[0]->GetValue<int>());
+				GameObject go(ent, m_BluePrint->m_sc);
+				if (ent == m_BluePrint->m_ent) m_BluePrint->m_ent = entt::null;
 				m_BluePrint->m_sc->Destroy(go);
 			}
 			

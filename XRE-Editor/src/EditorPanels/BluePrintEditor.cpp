@@ -42,22 +42,22 @@ namespace XRE {
 			return IM_COL32(50, 50, 250, 255);
 			break;
 		case BluePrintNode::NodeColor::Green:
-			return IM_COL32(50, 150, 50, 255);
+			return IM_COL32(50, 150, 0, 255);
 			break;
 		case BluePrintNode::NodeColor::Red:
-			return IM_COL32(250, 50, 50, 255);
+			return IM_COL32(200, 60, 0, 255);
 			break;
 		case BluePrintNode::NodeColor::Pink:
 			return IM_COL32(250, 50, 150, 255);
 			break;
 		case BluePrintNode::NodeColor::Purple:
-			return IM_COL32(150, 50, 200, 255);
+			return IM_COL32(100, 30, 200, 255);
 			break;
 		case BluePrintNode::NodeColor::Orange:
-			return IM_COL32(200, 100, 50, 255);
+			return IM_COL32(200, 100, 0, 255);
 			break;
 		case BluePrintNode::NodeColor::Yellow:
-			return IM_COL32(150, 150, 0, 255);
+			return IM_COL32(180, 100, 0, 255);
 			break;
 		default:
 			break;
@@ -83,14 +83,23 @@ namespace XRE {
 		if (ImGui::Button(u8"删除所选")) {
 			
 			for (auto i : m_selectedNodes) {
+				auto node = m_BluePrint->GetNodeByID(i);
+				for (auto in : node->m_Inputs) {
+					if (in->m_Connection != nullptr) {
+
+					}
+				}
+					m_BluePrint->UnLink(m_BluePrint->m_Links[i].first, m_BluePrint->m_Links[i].second);
 				if(i>=0)
-				m_BluePrint->RemoveNode(m_BluePrint->GetNodeByID(i));
+				m_BluePrint->RemoveNode(node);
+				
 			}
 		}
 		ImGui::SameLine();
 		if (ImGui::Button(u8"保存")) {
 			
-				m_BluePrint->Save();
+			SaveNodesLayout();
+			m_BluePrint->Save();
 			
 
 		}
@@ -108,6 +117,7 @@ namespace XRE {
 			if (path != "") {
 				m_BluePrint->LoadFromFile(path);
 			}
+			
 			
 		}
 		
@@ -164,43 +174,46 @@ namespace XRE {
 		ImGui::SameLine();
 
 		ImNodes::BeginNodeEditor();
+		
 
 		for (auto x : m_selectedNodes) {
 			x = -1;
 		}
 		ImNodes::GetSelectedNodes(m_selectedNodes);
 		ImNodes::PushAttributeFlag(ImNodesAttributeFlags_EnableLinkDetachWithDragClick);
+		ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(200, 200, 200, 255));
 
 		for (auto node : m_BluePrint->m_Nodes) {
 			DrawNode(node);
 		}
-
-
+		
+		
 		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
 		{
+			
 			
 			if (ImGui::BeginMenu(u8"基础")) {
 				
 				if (ImGui::MenuItem(u8"整数")) {
-					m_BluePrint->MakeNode<Node_ConstInt>();
+					AddNode<Node_ConstInt>();
 				}
 				if (ImGui::MenuItem(u8"布尔")) {
-					m_BluePrint->MakeNode<Node_ConstBool>();
+					AddNode<Node_ConstBool>();
 				}
 				if (ImGui::MenuItem(u8"浮点数")) {
-					m_BluePrint->MakeNode<Node_ConstFloat>();
+					AddNode<Node_ConstFloat>();
 				}
 				if (ImGui::MenuItem(u8"字符串")) {
-					m_BluePrint->MakeNode<Node_ConstString>();
+					AddNode<Node_ConstString>();
 				}
 				if (ImGui::MenuItem(u8"读取变量")) {
-					m_BluePrint->MakeNode<Node_GetField>();
+					AddNode<Node_GetField>();
 				}
 				if (ImGui::MenuItem(u8"写入变量")) {
-					m_BluePrint->MakeNode<Node_SetField>();
+					AddNode<Node_SetField>();
 				}
 				if (ImGui::MenuItem(u8"时间差")) {
-					m_BluePrint->MakeNode<Node_DeltaTime>();
+					AddNode<Node_DeltaTime>();
 				}
 				ImGui::EndMenu();
 			}
@@ -208,76 +221,76 @@ namespace XRE {
 			if (ImGui::BeginMenu(u8"控制流")) {
 
 				if (ImGui::MenuItem(u8"分支")) {
-					m_BluePrint->MakeNode<Node_Branch>();
+					AddNode<Node_Branch>();
 				}
 				if (ImGui::MenuItem(u8"开始时")) {
-					m_BluePrint->MakeNode<Node_OnSceneBegin>();
+					AddNode<Node_OnSceneBegin>();
 				}
 				if (ImGui::MenuItem(u8"碰撞")) {
-					m_BluePrint->MakeNode<Node_OnCollision>();
+					AddNode<Node_OnCollision>();
 				}
 				
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu(u8"运算")) {
 				if (ImGui::MenuItem(u8"+")) {
-					m_BluePrint->MakeNode<Node_Plus>();
+					AddNode<Node_Plus>();
 				}
 				if (ImGui::MenuItem(u8"-")) {
-					m_BluePrint->MakeNode<Node_Minus>();
+					AddNode<Node_Minus>();
 				}
 				if (ImGui::MenuItem(u8"*")) {
-					m_BluePrint->MakeNode<Node_Multiply>();
+					AddNode<Node_Multiply>();
 				}
 				if (ImGui::MenuItem(u8"/")) {
-					m_BluePrint->MakeNode<Node_Division>();
+					AddNode<Node_Division>();
 				}
 				if (ImGui::BeginMenu(u8"基础")) {
 					
 					if (ImGui::MenuItem(u8"Mod")) {
-						m_BluePrint->MakeNode<Node_Mod>();
+						AddNode<Node_Mod>();
 					}
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"逻辑")) {
 					if (ImGui::MenuItem(u8"与")) {
-						m_BluePrint->MakeNode<Node_And>();
+						AddNode<Node_And>();
 					}
 					if (ImGui::MenuItem(u8"或")) {
-						m_BluePrint->MakeNode<Node_Or>();
+						AddNode<Node_Or>();
 					}
 					if (ImGui::MenuItem(u8"非")) {
-						m_BluePrint->MakeNode<Node_Not>();
+						AddNode<Node_Not>();
 					}
 					if (ImGui::MenuItem(u8"等于")) {
-						m_BluePrint->MakeNode<Node_Equal>();
+						AddNode<Node_Equal>();
 					}
 					if (ImGui::MenuItem(u8"大于等于")) {
-						m_BluePrint->MakeNode<Node_EqualOrCompare>();
+						AddNode<Node_EqualOrCompare>();
 					}
 					if (ImGui::MenuItem(u8"大于")) {
-						m_BluePrint->MakeNode<Node_Compare>();
+						AddNode<Node_Compare>();
 					}
 					if (ImGui::MenuItem(u8"不等于")) {
-						m_BluePrint->MakeNode<Node_UnEqual>();
+						AddNode<Node_UnEqual>();
 					}
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"三角")){
 					if (ImGui::MenuItem(u8"sin")) {
-						m_BluePrint->MakeNode<Node_Sin>();
+						AddNode<Node_Sin>();
 					}
 					if (ImGui::MenuItem(u8"cos")) {
-						m_BluePrint->MakeNode<Node_Cos>();
+						AddNode<Node_Cos>();
 					}
 					if (ImGui::MenuItem(u8"tan")) {
-						m_BluePrint->MakeNode<Node_Tan>();
+						AddNode<Node_Tan>();
 					}
 					if (ImGui::MenuItem(u8"角度转弧度")) {
-						m_BluePrint->MakeNode<Node_DegreeToRad>();
+						AddNode<Node_DegreeToRad>();
 					}
 					if (ImGui::MenuItem(u8"弧度转角度")) {
-						m_BluePrint->MakeNode<Node_RadToDegree>();
+						AddNode<Node_RadToDegree>();
 					}
 					ImGui::EndMenu();
 				}
@@ -286,13 +299,13 @@ namespace XRE {
 				}
 				if (ImGui::BeginMenu(u8"字符串")) {
 					if (ImGui::MenuItem(u8"拼接")) {
-						m_BluePrint->MakeNode<Node_StrCat>();
+						AddNode<Node_StrCat>();
 					}
 					if (ImGui::MenuItem(u8"比较")) {
-						m_BluePrint->MakeNode<Node_StrCmp>();
+						AddNode<Node_StrCmp>();
 					}
 					if (ImGui::MenuItem(u8"查找")) {
-						m_BluePrint->MakeNode<Node_StrFind>();
+						AddNode<Node_StrFind>();
 					}
 					ImGui::EndMenu();
 				}
@@ -301,17 +314,17 @@ namespace XRE {
 
 			if (ImGui::BeginMenu(u8"对象")) {
 				if (ImGui::MenuItem(u8"本对象")) {
-					m_BluePrint->MakeNode<Node_Self>();
+					AddNode<Node_Self>();
 				}
 				
 				if (ImGui::MenuItem(u8"根据名称获取")) {
-					m_BluePrint->MakeNode<Node_GetByName>();
+					AddNode<Node_GetByName>();
 				}
 				if (ImGui::MenuItem(u8"创建对象")) {
-					m_BluePrint->MakeNode<Node_Create>();
+					AddNode<Node_Create>();
 				}
 				if (ImGui::MenuItem(u8"删除对象")) {
-					m_BluePrint->MakeNode<Node_Destroy>();
+					AddNode<Node_Destroy>();
 				}
 				ImGui::EndMenu();
 			}
@@ -319,22 +332,22 @@ namespace XRE {
 			if (ImGui::BeginMenu(u8"组件")) {
 				if (ImGui::BeginMenu(u8"变换")) {
 					if (ImGui::MenuItem(u8"获取位置")) {
-						m_BluePrint->MakeNode<Node_GetPosition>();
+						AddNode<Node_GetPosition>();
 					}
 					if (ImGui::MenuItem(u8"设置位置")) {
-						m_BluePrint->MakeNode<Node_SetPosition>();
+						AddNode<Node_SetPosition>();
 					}
 					if (ImGui::MenuItem(u8"获取旋转")) {
-						m_BluePrint->MakeNode<Node_GetRotation>();
+						AddNode<Node_GetRotation>();
 					}
 					if (ImGui::MenuItem(u8"设置旋转")) {
-						m_BluePrint->MakeNode<Node_SetRotation>();
+						AddNode<Node_SetRotation>();
 					}
 					if (ImGui::MenuItem(u8"获取缩放")) {
-						m_BluePrint->MakeNode<Node_GetScale>();
+						AddNode<Node_GetScale>();
 					}
 					if (ImGui::MenuItem(u8"设置缩放")) {
-						m_BluePrint->MakeNode<Node_SetScale>();
+						AddNode<Node_SetScale>();
 					}
 
 					ImGui::EndMenu();
@@ -344,16 +357,16 @@ namespace XRE {
 				}
 				if (ImGui::BeginMenu(u8"刚体与物理")) {
 					if (ImGui::MenuItem(u8"设置线速度")) {
-						m_BluePrint->MakeNode<Node_SetLinearVelocity>();
+						AddNode<Node_SetLinearVelocity>();
 					}
 
 					if (ImGui::MenuItem(u8"设置角速度")) {
-						m_BluePrint->MakeNode<Node_SetAngularVelocity>();
+						AddNode<Node_SetAngularVelocity>();
 					}
 
 					if (ImGui::MenuItem(u8"设置状态")) {
 						
-						//m_BluePrint->MakeNode<Node_SetAngularVelocity>();
+						//AddNode<Node_SetAngularVelocity>();
 					}
 					ImGui::EndMenu();
 				}
@@ -372,11 +385,11 @@ namespace XRE {
 
 
 				if (ImGui::MenuItem(u8"调试输出")) {
-					m_BluePrint->MakeNode<Node_Debug>();
+					AddNode<Node_Debug>();
 				}
 
 				if (ImGui::MenuItem(u8"键盘输入")) {
-					m_BluePrint->MakeNode<Node_OnKeyEvent>();
+					AddNode<Node_OnKeyEvent>();
 				}
 
 
@@ -388,7 +401,7 @@ namespace XRE {
 		}
 
 
-	
+		
 
 		// elsewhere in the code...
 		for (int i = 0; i < m_BluePrint->m_Links.size(); ++i)
@@ -401,6 +414,9 @@ namespace XRE {
 
 
 		}
+
+		//SaveNodesLayout();
+		ImNodes::PopColorStyle();
 
 		ImNodes::EndNodeEditor();
 		int start_attr, end_attr;
@@ -422,11 +438,14 @@ namespace XRE {
 	void BluePrintEditor::DrawNode(XRef<BluePrintNode> n)
 	{
 
-		
+
+
 
 		ImNodes::PushColorStyle(ImNodesCol_TitleBar, GetNodeColor(n->m_Color));
 		ImNodes::PushColorStyle(ImNodesCol_TitleBarHovered, GetNodeColor(n->m_Color));
 		ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected, GetNodeColor(n->m_Color));
+		
+		
 		ImNodes::BeginNode(n->NodeID); 
 
 		
@@ -529,14 +548,32 @@ namespace XRE {
 		}
 		ImGui::PopItemWidth();
 
-		
+		if (ImNodes::IsNodeSelected(n->NodeID) && Input::IsMouseButtonPressed(XRE_MOUSE_BUTTON_LEFT)) {
+
+		}
+		else
+		ImNodes::SetNodeGridSpacePos(n->NodeID, ImVec2(n->editorPosX, n->editorPosY));
 		ImNodes::EndNode();
+		auto pos = ImNodes::GetNodeGridSpacePos(n->NodeID);
+
+		n->editorPosX = pos.x;
+		n->editorPosY = pos.y;
 
 	}
 
 	void BluePrintEditor::Switch()
 	{
 		m_switch = true;
+	}
+
+	void BluePrintEditor::SaveNodesLayout()
+	{
+		for (auto n : m_BluePrint->m_Nodes) {
+			auto pos = ImNodes::GetNodeEditorSpacePos(n->NodeID);
+
+			n->editorPosX = pos.x;
+			n->editorPosY = pos.y;
+		}
 	}
 	
 }

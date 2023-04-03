@@ -9,11 +9,7 @@ namespace XRE {
 		Prefab(std::string s) :m_FilePath(s) {};
 		static void Save(GameObject prototype, std::string filepath);
 
-		static XRef<Prefab> Create(std::string fp) {
-			return XMakeRef<Prefab>(fp);
-		};
-
-
+		
 		std::string m_FilePath;
 	};
 }

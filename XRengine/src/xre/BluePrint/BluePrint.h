@@ -42,6 +42,20 @@ namespace XRE {
 		}
 	};
 
+	struct NodeSerializer {
+		
+		int NodeType;
+		float X, Y;
+
+		NodeSerializer() = default;
+		NodeSerializer(XRef<BluePrintNode> n) :
+			NodeType(n->m_NodeTypeID), X(n->editorPosX), Y(n->editorPosY) {};
+
+		template <class Archive>
+		void serialize(Archive& ar) {
+			ar(NodeType,X,Y);
+		}
+	};
 	
 
 	class BluePrint {
@@ -71,7 +85,7 @@ namespace XRE {
 			return x;
 		}
 
-		XRef<BluePrintNode> MakeNode(int id);
+		XRef<BluePrintNode> MakeNode(NodeSerializer ns);
 
 		void RemoveNode(XRef<BluePrintNode> n);
 
@@ -117,7 +131,7 @@ namespace XRE {
 			archive(*m_DefaultProperties);
 
 
-			vector<int> nodetypes;
+			vector<NodeSerializer> nodes;
 
 			vector<NodeVariant> nodevariants;
 			
@@ -154,10 +168,10 @@ namespace XRE {
 					o++;
 					
 				}
-
-				nodetypes.push_back(x->m_NodeTypeID);
+				NodeSerializer n(x);
+				nodes.push_back(n);
 			}
-			archive(nodetypes);
+			archive(nodes);
 
 			//SaveLink
 			vector<BluePrintLink> links;
@@ -183,7 +197,7 @@ namespace XRE {
 		template <class Archive>
 		void load(Archive& archive) {
 			archive(m_Name);
-			vector<int> nodetypes;
+			vector<NodeSerializer> nodes;
 
 			vector<BluePrintField> fields;
 			archive(fields);
@@ -196,8 +210,8 @@ namespace XRE {
 
 
 			
-			archive(nodetypes);
-			for (auto x : nodetypes) {
+			archive(nodes);
+			for (auto x : nodes) {
 				MakeNode(x);
 			}
 

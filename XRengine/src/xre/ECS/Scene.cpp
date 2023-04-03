@@ -28,6 +28,17 @@ namespace XRE{
 		return go;
 	}
 
+	GameObject Scene::CreateFromFile(std::string fp)
+	{
+		ifstream fs(fp);
+		cereal::JSONInputArchive ar(fs);
+
+		GameObject go = CreateGameObject("1");
+		ar(go);
+		return go;
+		
+	}
+
 	
 	
 	void Scene::OnUpdateRuntime(TimeStep ts)
@@ -192,7 +203,9 @@ namespace XRE{
 		auto view = m_Registry.view<NameComponent>();
 			
 		for (auto entity : view) {
-			ans.push_back(GameObject(entity, this));
+			GameObject go(entity, this);
+			if(go.GetName()==str)
+			ans.push_back(go);
 		}
 		
 		return ans;
@@ -254,7 +267,7 @@ namespace XRE{
 			for (auto entity : view) {
 				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
 
-				if (rbc.m_Active) {
+				if (rbc.m_Active && rbc.m_MotionType != RigidBodyComponent::RigidBodyMotion::Trigger) {
 					m_PhysicsScene->ResetRigidBody(tc, rbc);
 				}
 
@@ -270,7 +283,7 @@ namespace XRE{
 			for (auto entity : view) {
 				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
 
-				if (rbc.m_Active) {
+				if (rbc.m_Active && rbc.m_MotionType != RigidBodyComponent::RigidBodyMotion::Trigger) {
 					m_PhysicsScene->UpdateRigidBody(tc, rbc);
 					
 				}
@@ -411,6 +424,9 @@ namespace XRE{
 								case RigidBodyComponent::Static:
 									color = glm::vec4(0, 0, 1, 1);
 									break;
+								case RigidBodyComponent::Trigger:
+									color = glm::vec4(0.7f, 1, 0, 1);
+									break;
 
 								default:
 									break;
@@ -518,7 +534,8 @@ namespace XRE{
 			for (auto entity : view) {
 				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
 
-				if (rbc.m_Active) {
+				if (rbc.m_Active && rbc.m_MotionType!= RigidBodyComponent::RigidBodyMotion::Trigger) {
+					
 					rbc.m_PhysicObj = m_PhysicsScene->CreateRigidBody(tc, rbc);
 					rbc.m_PhysicsMaterial.changed = false;
 				}
@@ -547,7 +564,7 @@ namespace XRE{
 			for (auto entity : view) {
 				auto [tc, rbc] = view.get<TransformComponent, RigidBodyComponent>(entity);
 
-				if (rbc.m_Active) {
+				if (rbc.m_Active && rbc.m_MotionType != RigidBodyComponent::RigidBodyMotion::Trigger) {
 					m_PhysicsScene->RemoveRigidBody(rbc.m_PhysicObj);
 					rbc.m_HitResults.clear();
 				}

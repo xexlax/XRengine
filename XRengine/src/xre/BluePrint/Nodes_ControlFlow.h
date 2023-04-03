@@ -76,7 +76,7 @@ namespace XRE {
 			m_Outputs[0]->m_Name = u8"发生碰撞";
 			AddOutput(Field_Int);
 			m_Outputs[1]->m_Name = u8"对象2";
-			m_Inputs[1]->m_Necessary = false;
+			m_Outputs[1]->m_Necessary = false;
 		}
 
 		

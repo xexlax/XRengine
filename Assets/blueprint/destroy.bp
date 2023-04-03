@@ -10,20 +10,31 @@
         },
         "value3": [
             {
-                "value0": 3,
-                "value1": 40.0,
-                "value2": -95.0
+                "value0": 6,
+                "value1": 74.0,
+                "value2": 155.0
             },
             {
-                "value0": 1,
-                "value1": 450.0,
-                "value2": 165.0
+                "value0": 59,
+                "value1": 330.0,
+                "value2": 142.0
+            },
+            {
+                "value0": 70,
+                "value1": 647.0,
+                "value2": 164.0
             }
         ],
         "value4": [
             {
                 "value0": 1,
                 "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 2,
+                "value1": 1,
                 "value2": 0,
                 "value3": 0
             }
@@ -33,8 +44,8 @@
                 "value0": 0,
                 "value1": 0,
                 "value2": "##",
-                "value3": 1,
-                "value4": 0
+                "value3": 4,
+                "value4": "1"
             }
         ]
     }

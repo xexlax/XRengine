@@ -29,6 +29,8 @@ namespace XRE {
 		~Scene() = default;
 		//在场景中新建物体
 		GameObject CreateGameObject(const std::string& Name);
+
+		GameObject CreateFromFile(std::string fp);
 		//删除物体
 		void Destroy(GameObject go);
 		void OnViewportResize(uint32_t width, uint32_t height);

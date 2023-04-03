@@ -8,15 +8,16 @@ namespace XRE {
 	{
 	}
 
-	XRef<BluePrintNode> BluePrint::MakeNode(int id)
+	XRef<BluePrintNode> BluePrint::MakeNode(NodeSerializer ns)
 	{
-		auto x = Nodes::MakeNode(id);
+		auto x = Nodes::MakeNode(ns.NodeType);
+		x->editorPosX = ns.X;
+		x->editorPosY = ns.Y;
 		x->NodeID = NodeIDCounter++;
 		x->m_BluePrint = this;
 		x->Initialize();
 		m_Nodes.push_back(x);
 		return x;
-		
 	}
 
 	void BluePrint::RemoveNode(XRef<BluePrintNode> n)
@@ -121,9 +122,12 @@ namespace XRE {
 		m_ts = ts;
 		m_ActiveProperties = properties;
 		for (auto x : m_Nodes) {
+			
 			if (x->m_Active == false) break;
 			if(x->ControlFlowTest())
 			x->Process();
+
+			if (m_ent == entt::null) break;
 		}
 	}
 	void BluePrint::Save(std::string path)

@@ -1,11 +1,11 @@
 {
     "value0": {
-        "value0": "../Assets/materials/red.mat",
-        "value1": "../Assets/materials/red.mat",
-        "value2": 0.8984615206718445,
-        "value3": 0.14375387132167817,
-        "value4": 0.35274991393089297,
-        "value5": 567.0,
+        "value0": "新材质",
+        "value1": "../Assets/materials/yellow.mat",
+        "value2": 1.0,
+        "value3": 0.8676922917366028,
+        "value4": 0.0,
+        "value5": 64.0,
         "value6": -431602080.0,
         "value7": -431602080.0,
         "value8": -431602080.0,
@@ -18,9 +18,9 @@
             "value2": ""
         },
         "value13": {
-            "value0": true,
-            "value1": "Checkerboard.png",
-            "value2": "../Assets\\textures\\Checkerboard.png"
+            "value0": false,
+            "value1": "",
+            "value2": ""
         },
         "value14": {
             "value0": false,

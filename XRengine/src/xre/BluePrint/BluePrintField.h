@@ -3,7 +3,8 @@
 namespace XRE {
 
 	enum FieldType {
-		Field_Blank, Field_Int, Field_Float, Field_Bool, Field_String, Field_Field
+		Field_Blank, Field_Int, Field_Float, Field_Bool, Field_String, Field_Field,
+		Field_Array, Field_Array_Int, Field_Array_Float, Field_Array_Bool, Field_Array_String,
 	};
 
 
@@ -21,4 +22,5 @@ namespace XRE {
 		}
 
 	};
+
 }

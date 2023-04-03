@@ -10,14 +10,19 @@
         },
         "value3": [
             {
-                "value0": 3,
-                "value1": 40.0,
-                "value2": -95.0
+                "value0": 60,
+                "value1": 86.0,
+                "value2": 305.0
             },
             {
-                "value0": 1,
-                "value1": 450.0,
-                "value2": 165.0
+                "value0": 70,
+                "value1": 424.0,
+                "value2": 231.0
+            },
+            {
+                "value0": 81,
+                "value1": 26.0,
+                "value2": 121.0
             }
         ],
         "value4": [
@@ -26,15 +31,21 @@
                 "value1": 0,
                 "value2": 0,
                 "value3": 0
+            },
+            {
+                "value0": 1,
+                "value1": 2,
+                "value2": -1,
+                "value3": 0
             }
         ],
         "value5": [
             {
                 "value0": 0,
-                "value1": 0,
-                "value2": "##",
+                "value1": 2,
+                "value2": "##Key",
                 "value3": 1,
-                "value4": 0
+                "value4": 32
             }
         ]
     }

@@ -12,6 +12,8 @@ namespace XRE {
 	}
 
 	
+	
+
 	void GameObject::SetParent(GameObject* parent) {
 		TransformComponent& sc = GetComponent<TransformComponent>();
 		if (parent == nullptr) {

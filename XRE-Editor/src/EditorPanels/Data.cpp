@@ -53,15 +53,28 @@ namespace XRE::XUI{
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strcpy_s(buffer, sizeof(buffer), value->c_str());
-		if (ImGui::InputText(label.c_str(), buffer, sizeof(buffer))) {
+		bool ans;
+		if (ans = ImGui::InputText(label.c_str(), buffer, sizeof(buffer))) {
+
+			
 			*value = std::string(buffer);
 			CommandManager::Get().Command_Edit<std::string>(value,old_value,*value);
-			return true;
-		}
-		else {
 			
-			return false;
 		}
+
+		if (ImGui::BeginDragDropTarget()) {
+
+
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+			{
+				*value = *(std::string*)payload->Data;
+
+			}
+			else {}
+			ImGui::EndDragDropTarget();
+		}
+
+		return ans;
 	}
 
 

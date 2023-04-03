@@ -1,0 +1,118 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [],
+        "value2": {
+            "value0": [],
+            "value1": [],
+            "value2": [],
+            "value3": []
+        },
+        "value3": [
+            {
+                "value0": 53,
+                "value1": 203.0,
+                "value2": 73.0
+            },
+            {
+                "value0": 59,
+                "value1": 267.0,
+                "value2": 265.0
+            },
+            {
+                "value0": 6,
+                "value1": 63.0,
+                "value2": 267.0
+            },
+            {
+                "value0": 44,
+                "value1": 1038.0,
+                "value2": 78.0
+            },
+            {
+                "value0": 37,
+                "value1": 469.0,
+                "value2": 168.0
+            },
+            {
+                "value0": 60,
+                "value1": 62.0,
+                "value2": 73.0
+            },
+            {
+                "value0": 70,
+                "value1": 860.0,
+                "value2": 215.0
+            },
+            {
+                "value0": 60,
+                "value1": 786.0,
+                "value2": 65.0
+            },
+            {
+                "value0": 41,
+                "value1": 654.0,
+                "value2": 137.0
+            }
+        ],
+        "value4": [
+            {
+                "value0": 0,
+                "value1": 5,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 1,
+                "value1": 2,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            },
+            {
+                "value0": 4,
+                "value1": 1,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 6,
+                "value1": 7,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 6,
+                "value1": 8,
+                "value2": -1,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 4,
+                "value2": 1,
+                "value3": 0
+            }
+        ],
+        "value5": [
+            {
+                "value0": 0,
+                "value1": 2,
+                "value2": "##",
+                "value3": 4,
+                "value4": "Pawn"
+            }
+        ]
+    }
+}

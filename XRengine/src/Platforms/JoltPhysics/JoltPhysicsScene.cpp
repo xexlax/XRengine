@@ -224,18 +224,40 @@ namespace XRE {
 	}
 	void JoltPhysicsScene::UpdateCollision(TransformComponent& tc, RigidBodyComponent& rbc)
 	{
-		BodyID id(rbc.m_PhysicObj);
-
-		auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
-
 		const JPH::NarrowPhaseQuery& scene_query = m_physics.m_PhysicsSystem->GetNarrowPhaseQuery();
 
 		JPH::AllHitCollisionCollector<JPH::CollideShapeCollector> collector;
 		JPH::CollideShapeSettings collideShapeSettings;
 
-		scene_query.CollideShape(bodyInterface.GetShape(BodyID(id)), bodyInterface.GetTransformedShape(id).GetShapeScale(),
-			bodyInterface.GetTransformedShape(id).GetCenterOfMassTransform(), collideShapeSettings, toVec3(glm::vec3(0, 0, 0)), collector);
-		rbc.m_HitResults.clear();
+		if (rbc.m_MotionType == RigidBodyComponent::RigidBodyMotion::Trigger) {
+			
+			
+			auto shape = CreateShape(tc, rbc);
+			RVec3 pos(tc.m_Translation.x, tc.m_Translation.y, tc.m_Translation.z);
+			pos += RVec3(rbc.m_Shape.m_Offset.x, rbc.m_Shape.m_Offset.y, rbc.m_Shape.m_Offset.z);
+			auto q = glm::quat(glm::radians(tc.m_Rotation));
+			q *= glm::quat(glm::radians(rbc.m_Shape.m_Rotation));
+			
+			
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), toVec3(pos));
+
+			scene_query.CollideShape(shape,toVec3(glm::vec3(1.0f)) ,
+				toMat44(transform), collideShapeSettings, toVec3(glm::vec3(0, 0, 0)), collector);
+			rbc.m_HitResults.clear();
+			
+
+			
+		}
+		else {
+			BodyID id(rbc.m_PhysicObj);
+
+			auto& bodyInterface = m_physics.m_PhysicsSystem->GetBodyInterface();
+			scene_query.CollideShape(bodyInterface.GetShape(BodyID(id)), bodyInterface.GetTransformedShape(id).GetShapeScale(),
+				bodyInterface.GetTransformedShape(id).GetCenterOfMassTransform(), collideShapeSettings, toVec3(glm::vec3(0, 0, 0)), collector);
+			rbc.m_HitResults.clear();
+			
+		}
+
 		if (collector.HadHit())
 		{
 			collector.Sort();
@@ -261,6 +283,7 @@ namespace XRE {
 			}
 
 		}
+		
 	}
 	void JoltPhysicsScene::OnUpdate(float dt)
 	{

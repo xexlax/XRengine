@@ -24,6 +24,16 @@ namespace XRE {
 	void AssetsPanel::OnImGuiRender()
 	{
 		ImGui::Begin(u8"资产管理器");
+	
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DragNodeObj"))
+			{
+				GameObject go = *(GameObject*)payload->Data;
+				Prefab::Save(go, m_CurrentDirectory.string()+ "\\" + go.GetName() + ".go");
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
 		{
@@ -32,6 +42,9 @@ namespace XRE {
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 			}
 		}
+
+		
+
 
 		static float padding = 2.0f;
 		static float thumbnailSize = 160.0f;
@@ -70,6 +83,7 @@ namespace XRE {
 			}
 
 			
+			
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
 
@@ -89,7 +103,7 @@ namespace XRE {
 		ImGui::Columns(1);
 
 		
-
+		
 		ImGui::End();
 	}
 

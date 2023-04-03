@@ -340,6 +340,10 @@ void EditorLayer::OnImGuiRender(){
 
 				}
 
+				if (path.find(".go") != string::npos) {	
+					m_Scene->CreateFromFile(path);
+				}
+
 				
 				if (path.find(".mat") != string::npos) {
 
