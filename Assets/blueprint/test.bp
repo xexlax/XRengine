@@ -8,34 +8,8 @@
             "value2": [],
             "value3": []
         },
-        "value3": [
-            {
-                "value0": 3,
-                "value1": 40.0,
-                "value2": -95.0
-            },
-            {
-                "value0": 1,
-                "value1": 450.0,
-                "value2": 165.0
-            }
-        ],
-        "value4": [
-            {
-                "value0": 1,
-                "value1": 0,
-                "value2": 0,
-                "value3": 0
-            }
-        ],
-        "value5": [
-            {
-                "value0": 0,
-                "value1": 0,
-                "value2": "##",
-                "value3": 1,
-                "value4": 0
-            }
-        ]
+        "value3": [],
+        "value4": [],
+        "value5": []
     }
 }

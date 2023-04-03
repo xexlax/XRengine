@@ -11,10 +11,20 @@
                 "value0": "JumpSpeed",
                 "value1": 2,
                 "value2": false
+            },
+            {
+                "value0": "score",
+                "value1": 1,
+                "value2": false
             }
         ],
         "value2": {
-            "value0": [],
+            "value0": [
+                {
+                    "key": 2,
+                    "value": 0
+                }
+            ],
             "value1": [
                 {
                     "key": 0,
@@ -40,143 +50,158 @@
         "value3": [
             {
                 "value0": 60,
-                "value1": 798.0,
-                "value2": 635.0
+                "value1": 887.0,
+                "value2": 856.0
             },
             {
                 "value0": 2,
-                "value1": 302.0,
-                "value2": 744.0
+                "value1": 391.0,
+                "value2": 965.0
             },
             {
                 "value0": 61,
-                "value1": 962.0,
-                "value2": 629.0
+                "value1": 1051.0,
+                "value2": 850.0
             },
             {
                 "value0": 81,
-                "value1": 313.0,
-                "value2": 905.0
+                "value1": 402.0,
+                "value2": 1126.0
             },
             {
                 "value0": 81,
-                "value1": 300.0,
-                "value2": 1207.0
+                "value1": 69.0,
+                "value2": 324.0
             },
             {
                 "value0": 81,
-                "value1": 309.0,
-                "value2": 1058.0
+                "value1": 398.0,
+                "value2": 1279.0
             },
             {
                 "value0": 81,
-                "value1": 304.0,
-                "value2": 1353.0
+                "value1": 393.0,
+                "value2": 1574.0
             },
             {
                 "value0": 60,
-                "value1": 1204.0,
-                "value2": 624.0
+                "value1": 1293.0,
+                "value2": 845.0
             },
             {
                 "value0": 11,
-                "value1": 301.0,
-                "value2": 609.0
+                "value1": 390.0,
+                "value2": 830.0
             },
             {
                 "value0": 23,
-                "value1": 592.0,
-                "value2": 742.0
+                "value1": 681.0,
+                "value2": 963.0
             },
             {
                 "value0": 23,
-                "value1": 762.0,
-                "value2": 868.0
+                "value1": 851.0,
+                "value2": 1089.0
             },
             {
                 "value0": 23,
-                "value1": 772.0,
-                "value2": 1153.0
+                "value1": 861.0,
+                "value2": 1374.0
             },
             {
                 "value0": 23,
-                "value1": 773.0,
-                "value2": 1002.0
+                "value1": 862.0,
+                "value2": 1223.0
             },
             {
                 "value0": 23,
-                "value1": 774.0,
-                "value2": 1311.0
+                "value1": 863.0,
+                "value2": 1532.0
             },
             {
                 "value0": 22,
-                "value1": 979.0,
-                "value2": 883.0
+                "value1": 1068.0,
+                "value2": 1104.0
             },
             {
                 "value0": 22,
-                "value1": 999.0,
-                "value2": 1189.0
+                "value1": 1088.0,
+                "value2": 1410.0
             },
             {
                 "value0": 21,
-                "value1": 1245.0,
-                "value2": 979.0
+                "value1": 1334.0,
+                "value2": 1200.0
             },
             {
                 "value0": 21,
-                "value1": 1236.0,
-                "value2": 800.0
+                "value1": 1325.0,
+                "value2": 1021.0
             },
             {
                 "value0": 60,
-                "value1": 1175.0,
-                "value2": 222.0
+                "value1": 1264.0,
+                "value2": 443.0
             },
             {
                 "value0": 62,
-                "value1": 1416.0,
-                "value2": 623.0
+                "value1": 1505.0,
+                "value2": 844.0
             },
             {
                 "value0": 60,
-                "value1": 497.0,
-                "value2": 155.0
+                "value1": 586.0,
+                "value2": 376.0
             },
             {
                 "value0": 6,
-                "value1": 84.0,
-                "value2": 262.0
+                "value1": 173.0,
+                "value2": 483.0
             },
             {
                 "value0": 81,
-                "value1": 313.0,
-                "value2": 438.0
+                "value1": 402.0,
+                "value2": 659.0
             },
             {
                 "value0": 11,
-                "value1": 815.0,
-                "value2": 439.0
+                "value1": 904.0,
+                "value2": 660.0
             },
             {
                 "value0": 53,
-                "value1": 717.0,
-                "value2": 135.0
+                "value1": 806.0,
+                "value2": 356.0
             },
             {
                 "value0": 41,
-                "value1": 983.0,
-                "value2": 240.0
+                "value1": 1072.0,
+                "value2": 461.0
             },
             {
                 "value0": 67,
-                "value1": 1383.0,
-                "value2": 380.0
+                "value1": 1472.0,
+                "value2": 601.0
             },
             {
                 "value0": 59,
-                "value1": 292.0,
-                "value2": 255.0
+                "value1": 381.0,
+                "value2": 476.0
+            },
+            {
+                "value0": 52,
+                "value1": 92.0,
+                "value2": 111.0
+            },
+            {
+                "value0": 12,
+                "value1": 319.0,
+                "value2": 140.0
+            },
+            {
+                "value0": 3,
+                "value1": 131.0,
+                "value2": 198.0
             }
         ],
         "value4": [
@@ -359,6 +384,18 @@
                 "value1": 21,
                 "value2": 0,
                 "value3": 0
+            },
+            {
+                "value0": 29,
+                "value1": 30,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 29,
+                "value1": 28,
+                "value2": -1,
+                "value3": 0
             }
         ],
         "value5": [
@@ -417,6 +454,20 @@
                 "value2": "##",
                 "value3": 5,
                 "value4": 1
+            },
+            {
+                "value0": 0,
+                "value1": 29,
+                "value2": "##",
+                "value3": 5,
+                "value4": 2
+            },
+            {
+                "value0": 0,
+                "value1": 30,
+                "value2": "##",
+                "value3": 1,
+                "value4": 0
             }
         ]
     }

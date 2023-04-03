@@ -294,12 +294,13 @@ namespace XRE {
 		float m_ts;
 		XRef<BluePrintProperties> m_ActiveProperties;
 		std::vector<pair<int, int>> m_Links;
+		bool Global = false;
 	protected:
 		
 		//离线。 确定节点的执行顺序，并检查不需要更新的节点
 		void SortAndActiveNodes();
 
-		bool Global = true;
+		
 
 		uint32_t NodeIDCounter = 0;
 		uint32_t FieldIDCounter = 0;

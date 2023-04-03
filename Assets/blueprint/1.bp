@@ -1,66 +1,52 @@
 {
     "value0": {
         "value0": "",
-        "value1": [
-            {
-                "value0": "val_b",
-                "value1": 3,
-                "value2": false
-            }
-        ],
+        "value1": [],
         "value2": {
             "value0": [],
-            "value1": [
-                {
-                    "key": 0,
-                    "value": false
-                }
-            ],
-            "value2": [
-                {
-                    "key": 0,
-                    "value": 0.0
-                }
-            ],
+            "value1": [],
+            "value2": [],
             "value3": []
         },
         "value3": [
-            11,
-            12,
-            1,
-            51,
-            4,
-            6
+            {
+                "value0": 6,
+                "value1": 9.0,
+                "value2": 67.0
+            },
+            {
+                "value0": 59,
+                "value1": 255.0,
+                "value2": 65.0
+            },
+            {
+                "value0": 71,
+                "value1": 141.0,
+                "value2": 227.0
+            },
+            {
+                "value0": 1,
+                "value1": 450.0,
+                "value2": 296.0
+            }
         ],
         "value4": [
             {
-                "value0": 3,
+                "value0": 1,
                 "value1": 0,
                 "value2": 0,
                 "value3": 0
             },
             {
-                "value0": 1,
-                "value1": 4,
+                "value0": 2,
+                "value1": 1,
                 "value2": 0,
                 "value3": 0
             },
             {
-                "value0": 1,
+                "value0": 3,
                 "value1": 2,
-                "value2": -1,
-                "value3": -2
-            },
-            {
-                "value0": 2,
-                "value1": 5,
                 "value2": 0,
-                "value3": 0
-            },
-            {
-                "value0": 2,
-                "value1": 3,
-                "value2": -1,
                 "value3": 0
             }
         ],
@@ -69,29 +55,15 @@
                 "value0": 0,
                 "value1": 0,
                 "value2": "##",
-                "value3": 5,
-                "value4": 0
-            },
-            {
-                "value0": 0,
-                "value1": 1,
-                "value2": "##",
-                "value3": 5,
-                "value4": 0
-            },
-            {
-                "value0": 0,
-                "value1": 4,
-                "value2": "##",
-                "value3": 3,
-                "value4": false
-            },
-            {
-                "value0": 0,
-                "value1": 5,
-                "value2": "##",
                 "value3": 4,
-                "value4": "hell"
+                "value4": "ball"
+            },
+            {
+                "value0": 0,
+                "value1": 2,
+                "value2": "##ExternVar",
+                "value3": 1,
+                "value4": 201
             }
         ]
     }

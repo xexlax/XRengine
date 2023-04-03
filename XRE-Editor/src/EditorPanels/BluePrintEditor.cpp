@@ -377,6 +377,14 @@ namespace XRE {
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"蓝图")) {
+					if (ImGui::MenuItem(u8"获取外部变量")) {
+						AddNode<Node_GetBluePrintField>();
+					}
+
+					if (ImGui::MenuItem(u8"设置外部变量")) {
+						AddNode<Node_SetBluePrintField>();
+					}
+
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
@@ -500,6 +508,41 @@ namespace XRE {
 			case FieldType::Field_Int:
 				if (v.m_Name == u8"##Key") {
 					XUI::SelectKey("##key", (int*)v.m_Handle);
+				}
+				else 
+				if(v.m_Name == u8"##ExternVar") {
+					map<int,string> selection;
+					selection[0]="##";
+					if (n->m_Inputs[0]->m_Connection != nullptr) {
+						auto go = PanelsManager::GetScenePanel()->GetScene()->GetObj(n->m_Inputs[0]->m_Connection->GetValue<int>());
+
+						
+						if (go.HasComponent<BluePrintComponent>()) {
+							for (auto x : go.GetComponent<BluePrintComponent>().m_BluePrint->m_Fields) {
+								selection[int(x.second->m_Type) * 100 + x.second->id] = x.second->m_FieldName;
+							}
+						}
+					}
+					string current = (selection.find(*(int*)v.m_Handle) != selection.end()) ? selection[*(int*)v.m_Handle] : "##";
+					if (ImGui::BeginCombo(u8"变量", current.c_str())) {
+						for (auto x : selection)
+						{
+
+							bool isSelected = current == x.second;
+							if (ImGui::Selectable(x.second.c_str(), isSelected))
+							{
+								current = x.second;
+								*(int*)(v.m_Handle) = x.first;
+							}
+
+							if (isSelected)
+								ImGui::SetItemDefaultFocus();
+						}
+
+						ImGui::EndCombo();
+					}
+
+
 				}
 				else
 				XUI::DragInt(v.m_Name, (int*)v.m_Handle);

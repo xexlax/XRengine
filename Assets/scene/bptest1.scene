@@ -8,16 +8,16 @@
         },
         "value1": {
             "value0": true,
-            "value1": "球"
+            "value1": "ball"
         },
         "value2": {
             "value0": "Transform"
         },
         "value3": {
             "value0": true,
-            "value1": -2.999706983566284,
+            "value1": 0.0,
             "value2": 0.0,
-            "value3": -0.041935186833143237,
+            "value3": 0.0,
             "value4": 0.0,
             "value5": 0.0,
             "value6": 0.0,
@@ -39,7 +39,7 @@
             "value0": "BluePrint"
         },
         "value7": {
-            "value0": "D:\\Study\\bishe2023.1\\dev\\XRengine\\Assets\\blueprint\\move1.bp",
+            "value0": "../Assets\\blueprint\\PawnController.bp",
             "value1": {
                 "value0": [],
                 "value1": [
@@ -50,24 +50,16 @@
                     {
                         "key": 1,
                         "value": false
-                    },
-                    {
-                        "key": 2,
-                        "value": false
                     }
                 ],
                 "value2": [
                     {
                         "key": 0,
-                        "value": 42.39752197265625
+                        "value": 1.0
                     },
                     {
                         "key": 1,
-                        "value": 3.0
-                    },
-                    {
-                        "key": 2,
-                        "value": 3.0
+                        "value": 5.0
                     }
                 ],
                 "value3": []
@@ -78,123 +70,6 @@
         }
     },
     "value2": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "摄像机"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": 7.920680522918701,
-            "value2": 5.566183567047119,
-            "value3": -0.9791854023933411,
-            "value4": 34.893131256103519,
-            "value5": -97.04737091064453,
-            "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Camera"
-        },
-        "value5": {
-            "value0": true,
-            "value1": false,
-            "value2": true,
-            "value3": 1,
-            "value4": 30.0,
-            "value5": -30.0,
-            "value6": 20.0,
-            "value7": 200.0,
-            "value8": 0.10000000149011612,
-            "value9": 45.0
-        },
-        "value6": {
-            "value0": "EndObj"
-        }
-    },
-    "value3": {
-        "value0": {
-            "value0": "Name"
-        },
-        "value1": {
-            "value0": true,
-            "value1": "球"
-        },
-        "value2": {
-            "value0": "Transform"
-        },
-        "value3": {
-            "value0": true,
-            "value1": -5.51470947265625,
-            "value2": 0.0,
-            "value3": -2.363891124725342,
-            "value4": 0.0,
-            "value5": 0.0,
-            "value6": 0.0,
-            "value7": 1.0,
-            "value8": 1.0,
-            "value9": 1.0
-        },
-        "value4": {
-            "value0": "Mesh Renderer"
-        },
-        "value5": {
-            "value0": true,
-            "value1": "..\\Assets\\models\\sphere.obj",
-            "value2": [
-                ""
-            ]
-        },
-        "value6": {
-            "value0": "BluePrint"
-        },
-        "value7": {
-            "value0": "D:\\Study\\bishe2023.1\\dev\\XRengine\\Assets\\blueprint\\move1.bp",
-            "value1": {
-                "value0": [],
-                "value1": [
-                    {
-                        "key": 0,
-                        "value": false
-                    },
-                    {
-                        "key": 1,
-                        "value": false
-                    },
-                    {
-                        "key": 2,
-                        "value": false
-                    }
-                ],
-                "value2": [
-                    {
-                        "key": 0,
-                        "value": 67.1392822265625
-                    },
-                    {
-                        "key": 1,
-                        "value": 6.0
-                    },
-                    {
-                        "key": 2,
-                        "value": 6.0
-                    }
-                ],
-                "value3": []
-            }
-        },
-        "value8": {
-            "value0": "EndObj"
-        }
-    },
-    "value4": {
         "value0": {
             "value0": "Name"
         },

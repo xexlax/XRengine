@@ -83,6 +83,7 @@ namespace XRE {
 		std::string m_Name= "New Scene";
 		std::string m_FilePath = "";
 
+		bool m_Runtime = false;
 
 
 		XRef<PhysicsScene> m_PhysicsScene;

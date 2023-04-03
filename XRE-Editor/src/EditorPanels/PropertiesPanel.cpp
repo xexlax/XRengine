@@ -515,11 +515,6 @@ namespace XRE {
 		}
 
 
-		for (auto x : component.m_HitObjs ) {
-
-
-			ImGui::Text(PanelsManager::GetScenePanel()->m_Scene->GetObj(x).GetName().c_str());
-		}
 		
 	}
 

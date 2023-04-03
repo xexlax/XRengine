@@ -106,6 +106,10 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_Create>();
 		case 70:
 			return XMakeRef<Node_Destroy>();
+		case 71:
+			return XMakeRef<Node_GetBluePrintField>();
+		case 72:
+			return XMakeRef<Node_SetBluePrintField>();
 
 		//Input
 		case 81:

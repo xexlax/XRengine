@@ -36,3 +36,6 @@
 [submodule ".\\XRengine\\3rdparty\\imnodes"]
 	path = .\\XRengine\\3rdparty\\imnodes
 	url = https://github.com/Nelarius/imnodes.git
+[submodule ".\\XRengine\\3rdparty\\openal-soft"]
+	path = .\\XRengine\\3rdparty\\openal-soft
+	url = https://github.com/kcat/openal-soft.git

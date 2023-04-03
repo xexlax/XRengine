@@ -111,6 +111,7 @@ void EditorLayer::ToolBar()
 	{
 		if (m_Status == SceneStatus::Editing) {
 			m_Status = SceneStatus::Runtime;
+			PanelsManager::GetScenePanel()->UnSelect();
 			m_Scene->OnRuntimeBegin();
 		}
 

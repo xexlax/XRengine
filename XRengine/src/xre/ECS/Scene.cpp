@@ -16,6 +16,7 @@ namespace XRE{
 	{
 		m_PhysicsScene = PhysicsScene::Create();
 		m_GlobalBluePrint = XMakeRef<BluePrint>();
+		m_GlobalBluePrint->Global = true;
 		m_GlobalProperties = XMakeRef<BluePrintProperties>();
 		//Create Floor For Testing
 		//m_PhysicsScene->Init();
@@ -485,8 +486,16 @@ namespace XRE{
 
 	void Scene::Destroy(GameObject go)
 	{
-		
+		if (m_Runtime == true) {
+			if (go.HasComponent<RigidBodyComponent>()) {
+				auto& rbc = go.GetComponent<RigidBodyComponent>();
+				if(rbc.m_MotionType != RigidBodyComponent::Trigger)
+				m_PhysicsScene->RemoveRigidBody(rbc.m_PhysicObj);
+			}
+			
+		}
 		m_Registry.destroy(go);
+
 		
 	}
 
@@ -508,7 +517,8 @@ namespace XRE{
 
 	void Scene::OnRuntimeBegin()
 	{
-		//this->Save();
+		m_Runtime = true;
+		this->Save();
 		
 		//Logic
 		{
@@ -571,6 +581,7 @@ namespace XRE{
 
 			}
 		}
+		m_Runtime = false;
 		//Load();
 	}
 

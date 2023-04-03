@@ -124,10 +124,22 @@ namespace XRE {
 		for (auto x : m_Nodes) {
 			
 			if (x->m_Active == false) break;
-			if(x->ControlFlowTest())
-			x->Process();
+			if (x->ControlFlowTest())
+			{
+				if (x->m_FlowProc != nullptr) {
+					x->m_FlowProc->ValueBool = true;
+				}
+				x->Process();
+				
+			}
+			else {
+				if (x->m_FlowProc != nullptr) {
+					x->m_FlowProc->ValueBool = false;
+				}
+			}
+			
 
-			if (m_ent == entt::null) break;
+			if (m_ent == entt::null && Global==false) break;
 		}
 	}
 	void BluePrint::Save(std::string path)

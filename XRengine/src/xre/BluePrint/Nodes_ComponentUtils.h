@@ -376,8 +376,16 @@ namespace XRE {
 				name = m_Inputs[1]->GetValue<string>();
 			}
 
-			auto obj = m_BluePrint->m_sc->CreateGameObject(name);
-			m_Outputs[0]->ValueInt = uint32_t(obj);
+			if (m_Inputs[0]->m_Connection != nullptr) {
+				auto obj = m_BluePrint->m_sc->CreateFromFile(m_Inputs[0]->GetValue<string>());
+				m_Outputs[0]->ValueInt = uint32_t(obj);
+			}
+			else {
+				auto obj = m_BluePrint->m_sc->CreateGameObject(name);
+				m_Outputs[0]->ValueInt = uint32_t(obj);
+			}
+
+			
 
 		}
 
@@ -407,6 +415,127 @@ namespace XRE {
 			}
 			
 		}
+
+	};
+
+
+	class Node_GetBluePrintField :public BluePrintNode {
+	public:
+
+		
+		int m_VarTypeAndIdx;
+
+		Node_GetBluePrintField() {
+			m_Title = u8"获取外部变量";
+			m_Color = Blue;
+			m_NodeTypeID = 71;
+
+		}
+		void Initialize() override {
+			AddInput(FieldType::Field_Int);
+			m_Inputs[0]->m_Name = u8"对象";
+
+			AddOutput(FieldType::Field_Blank);
+			AddVar(FieldType::Field_Int, &m_VarTypeAndIdx);
+			m_Variants[0].m_Name = u8"##ExternVar";
+			CreateControlFlow();
+
+		}
+
+		void Process() override {
+			GameObject go(entt::entity(m_Inputs[0]->GetValue<int>()), m_BluePrint->m_sc);
+			if (go.HasComponent<BluePrintComponent>()) {
+				auto bp = go.GetComponent<BluePrintComponent>();
+				FieldType t =FieldType( m_VarTypeAndIdx / 100);
+				int idx = m_VarTypeAndIdx - t * 100;
+				switch (t)
+				{
+				case XRE::Field_Int:
+					m_Outputs[0]->m_FieldType = FieldType::Field_Int;
+					m_Outputs[0]->ValueInt = bp.m_BluePrintProperties->IntDatas[idx];
+					break;
+				case XRE::Field_Float:
+					m_Outputs[0]->m_FieldType = FieldType::Field_Float;
+					m_Outputs[0]->ValueFloat = bp.m_BluePrintProperties->FloatDatas[idx];
+					break;
+				case XRE::Field_Bool:
+					m_Outputs[0]->m_FieldType = FieldType::Field_Bool;
+					m_Outputs[0]->ValueBool = bp.m_BluePrintProperties->BoolDatas[idx];
+					break;
+				case XRE::Field_String:
+					m_Outputs[0]->m_FieldType = FieldType::Field_String;
+					m_Outputs[0]->ValueString = bp.m_BluePrintProperties->StringDatas[idx];
+					break;
+				
+				default:
+					break;
+				}
+
+			}
+
+		}
+		
+
+
+	};
+
+	class Node_SetBluePrintField :public BluePrintNode {
+	public:
+
+
+		int m_VarTypeAndIdx;
+
+		Node_SetBluePrintField() {
+			m_Title = u8"设置外部变量";
+			m_Color = Blue;
+			m_NodeTypeID = 72;
+
+		}
+		void Initialize() override {
+			AddInput(FieldType::Field_Int);
+			m_Inputs[0]->m_Name = u8"对象";
+
+			AddInput(FieldType::Field_Blank);
+			AddVar(FieldType::Field_Int, &m_VarTypeAndIdx);
+			m_Variants[0].m_Name = u8"##ExternVar";
+			CreateControlFlow();
+
+		}
+
+		void Process() override {
+
+			GameObject go(entt::entity(m_Inputs[0]->GetValue<int>()), m_BluePrint->m_sc);
+			if (go.HasComponent<BluePrintComponent>()) {
+				auto bp = go.GetComponent<BluePrintComponent>();
+				FieldType t = FieldType(m_VarTypeAndIdx / 100);
+				int idx = m_VarTypeAndIdx - t * 100;
+				switch (t)
+				{
+				case XRE::Field_Int:
+					m_Inputs[1]->m_FieldType = FieldType::Field_Int;
+					bp.m_BluePrintProperties->IntDatas[idx] = m_Inputs[1]->GetValue<int>();
+					break;
+				case XRE::Field_Float:
+					m_Inputs[1]->m_FieldType = FieldType::Field_Float;
+					bp.m_BluePrintProperties->FloatDatas[idx] = m_Inputs[1]->GetValue<float>();
+					break;
+				case XRE::Field_Bool:
+					m_Inputs[1]->m_FieldType = FieldType::Field_Bool;
+					bp.m_BluePrintProperties->BoolDatas[idx] = m_Inputs[1]->GetValue<bool>();
+					break;
+				case XRE::Field_String:
+					m_Inputs[1]->m_FieldType = FieldType::Field_String;
+					bp.m_BluePrintProperties->StringDatas[idx] = m_Inputs[1]->GetValue<string>();
+					break;
+
+				default:
+					break;
+				}
+
+			}
+
+		}
+
 
 	};
 

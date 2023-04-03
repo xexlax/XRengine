@@ -189,7 +189,7 @@ namespace XRE {
 		//重载：强制类型转换和逻辑
 		operator bool() const { return m_Entity != entt::null; }
 		operator entt::entity() const { return m_Entity; }
-		operator uint32_t() const { return (uint32_t)m_Entity; }
+ 		operator uint32_t() const { return (uint32_t)m_Entity; }
 
 		bool operator==(const GameObject& other) const
 		{
