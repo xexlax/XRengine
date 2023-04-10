@@ -49,4 +49,9 @@ namespace XRE {
 		return std::string();
 	}
 
+	void FileDialogs::mCopyFile(const char* src, const char* dest)
+	{
+		CopyFile(src, dest, FALSE);
+	}
+
 }

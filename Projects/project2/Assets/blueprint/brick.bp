@@ -1,0 +1,151 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [],
+        "value2": {
+            "value0": [],
+            "value1": [],
+            "value2": [],
+            "value3": []
+        },
+        "value3": [
+            {
+                "value0": 60,
+                "value1": 320.76837158203127,
+                "value2": 515.7015380859375
+            },
+            {
+                "value0": 6,
+                "value1": 52.768310546875,
+                "value2": 248.7015380859375
+            },
+            {
+                "value0": 59,
+                "value1": 209.768310546875,
+                "value2": 106.7015380859375
+            },
+            {
+                "value0": 53,
+                "value1": 503.76837158203127,
+                "value2": 601.7015380859375
+            },
+            {
+                "value0": 70,
+                "value1": 1028.768310546875,
+                "value2": 626.7015380859375
+            },
+            {
+                "value0": 72,
+                "value1": 725.768310546875,
+                "value2": 210.7015380859375
+            },
+            {
+                "value0": 71,
+                "value1": 299.768310546875,
+                "value2": 294.7015380859375
+            },
+            {
+                "value0": 21,
+                "value1": 580.7683715820313,
+                "value2": 89.7015380859375
+            },
+            {
+                "value0": 3,
+                "value1": 314.76837158203127,
+                "value2": 18.7015380859375
+            }
+        ],
+        "value4": [
+            {
+                "value0": 3,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 2,
+                "value1": 1,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 5,
+                "value1": 3,
+                "value2": -1,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 5,
+                "value2": -1,
+                "value3": -2
+            },
+            {
+                "value0": 5,
+                "value1": 2,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 5,
+                "value1": 7,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 6,
+                "value1": 2,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 7,
+                "value1": 8,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 7,
+                "value1": 6,
+                "value2": 1,
+                "value3": 0
+            }
+        ],
+        "value5": [
+            {
+                "value0": 0,
+                "value1": 1,
+                "value2": "##",
+                "value3": 4,
+                "value4": "Pawn"
+            },
+            {
+                "value0": 0,
+                "value1": 5,
+                "value2": "##ExternVar",
+                "value3": 1,
+                "value4": 102
+            },
+            {
+                "value0": 0,
+                "value1": 6,
+                "value2": "##ExternVar",
+                "value3": 1,
+                "value4": 102
+            },
+            {
+                "value0": 0,
+                "value1": 8,
+                "value2": "##",
+                "value3": 1,
+                "value4": 5
+            }
+        ]
+    }
+}

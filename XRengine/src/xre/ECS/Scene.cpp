@@ -1,6 +1,7 @@
 
 #include "pch.h"
 #include "Scene.h"
+#include "xre\Utils\address.h"
 
 #include "xre\ECS\Components.h"
 #include "xre\ECS\GameObject.h"
@@ -160,6 +161,7 @@ namespace XRE{
 	void Scene::Deserialize(const std::string& filepath)
 	{
 		m_FilePath = filepath;
+		//m_Name = Utils::GetPureFileName(filepath);
 		std::ifstream is(filepath);
 		if (is.is_open()) {
 			cereal::JSONInputArchive archive(is);
@@ -184,6 +186,7 @@ namespace XRE{
 			
 			 
 		}
+		m_Name = Utils::GetPureFileName(filepath);
 	}
 
 	GameObject Scene::FindGOByPhysicBodyID(uint32_t pid)
@@ -518,7 +521,7 @@ namespace XRE{
 	void Scene::OnRuntimeBegin()
 	{
 		m_Runtime = true;
-		this->Save();
+		//this->Save();
 		
 		//Logic
 		{

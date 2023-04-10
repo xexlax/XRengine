@@ -1,0 +1,56 @@
+{
+    "value0": {
+        "value0": "../Assets/materials/newMaterial.mat",
+        "value1": "../Assets/materials/newMaterial.mat",
+        "value2": 1.0,
+        "value3": 1.0,
+        "value4": 1.0,
+        "value5": 64.0,
+        "value6": -431602080.0,
+        "value7": -431602080.0,
+        "value8": -431602080.0,
+        "value9": 0.5,
+        "value10": 0.5,
+        "value11": -842150451,
+        "value12": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value13": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value14": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value15": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value16": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value17": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value18": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        },
+        "value19": {
+            "value0": false,
+            "value1": "",
+            "value2": ""
+        }
+    }
+}

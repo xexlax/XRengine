@@ -1,0 +1,189 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [],
+        "value2": {
+            "value0": [],
+            "value1": [],
+            "value2": [],
+            "value3": []
+        },
+        "value3": [
+            {
+                "value0": 60,
+                "value1": -114.3111572265625,
+                "value2": 370.3121337890625
+            },
+            {
+                "value0": 6,
+                "value1": -30.843505859375,
+                "value2": 540.3409423828125
+            },
+            {
+                "value0": 59,
+                "value1": 316.6888427734375,
+                "value2": 542.3121337890625
+            },
+            {
+                "value0": 3,
+                "value1": 298.688720703125,
+                "value2": 16.3121337890625
+            },
+            {
+                "value0": 60,
+                "value1": 1086.156494140625,
+                "value2": 515.3409423828125
+            },
+            {
+                "value0": 53,
+                "value1": 108.6888427734375,
+                "value2": 338.3121337890625
+            },
+            {
+                "value0": 71,
+                "value1": 537.156494140625,
+                "value2": 277.3409423828125
+            },
+            {
+                "value0": 21,
+                "value1": 810.6888427734375,
+                "value2": 134.3121337890625
+            },
+            {
+                "value0": 72,
+                "value1": 833.156494140625,
+                "value2": 340.3409423828125
+            },
+            {
+                "value0": 1,
+                "value1": 1111.156494140625,
+                "value2": 280.3409423828125
+            },
+            {
+                "value0": 70,
+                "value1": 1293.156494140625,
+                "value2": 303.3409423828125
+            },
+            {
+                "value0": 44,
+                "value1": 105.688720703125,
+                "value2": 91.3121337890625
+            },
+            {
+                "value0": 37,
+                "value1": 270.32879638671877,
+                "value2": 810.7911987304688
+            }
+        ],
+        "value4": [
+            {
+                "value0": 2,
+                "value1": 1,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 10,
+                "value1": 4,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 6,
+                "value1": 5,
+                "value2": -1,
+                "value3": 0
+            },
+            {
+                "value0": 10,
+                "value1": 9,
+                "value2": -1,
+                "value3": -2
+            },
+            {
+                "value0": 7,
+                "value1": 3,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 5,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 6,
+                "value1": 2,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 7,
+                "value1": 6,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 2,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 7,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 8,
+                "value1": 6,
+                "value2": -1,
+                "value3": -2
+            },
+            {
+                "value0": 9,
+                "value1": 7,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 9,
+                "value1": 8,
+                "value2": -1,
+                "value3": -2
+            }
+        ],
+        "value5": [
+            {
+                "value0": 0,
+                "value1": 1,
+                "value2": "##",
+                "value3": 4,
+                "value4": "Pawn"
+            },
+            {
+                "value0": 0,
+                "value1": 3,
+                "value2": "##",
+                "value3": 1,
+                "value4": 5
+            },
+            {
+                "value0": 0,
+                "value1": 6,
+                "value2": "##ExternVar",
+                "value3": 1,
+                "value4": 102
+            },
+            {
+                "value0": 0,
+                "value1": 8,
+                "value2": "##ExternVar",
+                "value3": 1,
+                "value4": 102
+            }
+        ]
+    }
+}

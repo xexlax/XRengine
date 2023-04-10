@@ -23,7 +23,7 @@ public:
 
 
 private:
-
+	void OnProjectReload();
 	void OnSceneReload();
 	bool OnKeyReleased(KeyReleasedEvent& e);
 	bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
@@ -33,13 +33,14 @@ private:
 private:
 	//Editor Panels
 
-	
-	XRef<Texture2D> m_IconPlay, m_IconStop, m_IconPause, m_IconSimulate;
+	ImFont* FontLarge;
+	XRef<Texture2D> m_IconPlay, m_IconStop, m_IconPause, m_IconSimulate,m_ProjectIcon;
 	
 
 	//Test Scene
 	SceneStatus m_Status = Editing;
 	XRef<Scene> m_Scene;
+	XRef<Project> m_Project;
 	EditorCamera m_EditorCamera;
 	
 

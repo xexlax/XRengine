@@ -1,6 +1,6 @@
 #pragma once
 
-#define AssetsDirectory "../Assets/"
+#define AssetsDirectory "../Assets"
 
 #include "EditorPanels\ScenePanel.h"
 #include "EditorPanels\PropertiesPanel.h"

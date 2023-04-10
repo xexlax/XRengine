@@ -5,20 +5,25 @@
 
 namespace XRE {
 
-	// Once we have projects, change this
-	static const std::filesystem::path s_AssetPath = "../Assets";
+	
 
 	AssetsPanel::AssetsPanel()
-		: m_CurrentDirectory(s_AssetPath)
+		: m_CurrentDirectory("../Assets"),m_Assets("../Assets")
 	{
-		m_DirectoryIcon = ResourceManager::GetTex2D("../Assets/textures/dir_logo.png");
-		m_FileIcon = ResourceManager::GetTex2D("../Assets/textures/file_logo.png");
-		m_ModelIcon = ResourceManager::GetTex2D("../Assets/textures/model_logo.png");
-		m_SceneIcon = ResourceManager::GetTex2D("../Assets/textures/scene_logo.png");
-		m_ShaderIcon = ResourceManager::GetTex2D("../Assets/textures/shader_logo.png");
-		m_TexIcon = ResourceManager::GetTex2D("../Assets/textures/tex_logo.png");
-		m_MaterialIcon = ResourceManager::GetTex2D("../Assets/textures/mat_logo.png");
-		m_BluePrintIcon = ResourceManager::GetTex2D("../Assets/textures/bp_logo.png");
+		m_DirectoryIcon = ResourceManager::GetEditorTex2D("../Assets/textures/dir_logo.png");
+		m_FileIcon = ResourceManager::GetEditorTex2D("../Assets/textures/file_logo.png");
+		m_ModelIcon = ResourceManager::GetEditorTex2D("../Assets/textures/model_logo.png");
+		m_SceneIcon = ResourceManager::GetEditorTex2D("../Assets/textures/scene_logo.png");
+		m_ShaderIcon = ResourceManager::GetEditorTex2D("../Assets/textures/shader_logo.png");
+		m_TexIcon = ResourceManager::GetEditorTex2D("../Assets/textures/tex_logo.png");
+		m_MaterialIcon = ResourceManager::GetEditorTex2D("../Assets/textures/mat_logo.png");
+		m_BluePrintIcon = ResourceManager::GetEditorTex2D("../Assets/textures/bp_logo.png");
+	}
+
+	void AssetsPanel::SetRootDir(std::string assetpath)
+	{
+		m_Assets = assetpath;
+		m_CurrentDirectory = filesystem::path(m_Assets);
 	}
 
 	void AssetsPanel::OnImGuiRender()
@@ -35,7 +40,7 @@ namespace XRE {
 			ImGui::EndDragDropTarget();
 		}
 
-		if (m_CurrentDirectory != std::filesystem::path(s_AssetPath))
+		if (m_CurrentDirectory != std::filesystem::path(m_Assets))
 		{
 			if (ImGui::Button(u8"·µ»Ø"))
 			{
@@ -60,7 +65,7 @@ namespace XRE {
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
 			const auto& path = directoryEntry.path();
-			auto relativePath = std::filesystem::relative(path, s_AssetPath);
+			auto relativePath = std::filesystem::relative(path,m_Assets);
 			std::string filenameString = relativePath.filename().string();
 			if (directoryEntry.is_directory())
 
@@ -77,7 +82,7 @@ namespace XRE {
 			
 			if (ImGui::BeginDragDropSource())
 			{
-				m_DragSource = (m_CurrentDirectory / path.filename()).string();
+				m_DragSource = (std::filesystem::relative(m_CurrentDirectory, m_Assets) / path.filename()).string();
 				ImGui::SetDragDropPayload("AssetItem", &m_DragSource, sizeof(m_DragSource));
 				ImGui::EndDragDropSource();
 			}

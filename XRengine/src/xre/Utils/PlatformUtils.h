@@ -8,6 +8,7 @@ namespace XRE {
 	public:
 		// These return empty strings if cancelled
 		static std::string OpenFile(const char* filter);
+		static void mCopyFile(const char* src, const char* dest);
 		static std::string SaveFile(const char* filter);
 	};
 

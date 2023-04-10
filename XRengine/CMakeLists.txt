@@ -34,6 +34,7 @@ ${THIRD_PARTY_DIR}/Entt/single_include
 ${THIRD_PARTY_DIR}/ImGuizmo
 ${THIRD_PARTY_DIR}/cereal/include
 ${THIRD_PARTY_DIR}/imnodes
+${THIRD_PARTY_DIR}/openal-soft/include
 )
 
 
@@ -50,7 +51,7 @@ file(GLOB_RECURSE HEADER_FILES
 "${THIRD_PARTY_DIR}/cereal/include/*.hpp"
 "${THIRD_PARTY_DIR}/imnodes/imnodes_internal.h"
 "${THIRD_PARTY_DIR}/imnodes/imnodes.h"
-
+"${THIRD_PARTY_DIR}/openal-soft/include/*.h"
 
 
 )

@@ -1,0 +1,1220 @@
+{
+    "value0": {
+        "value0": "MyGame2"
+    },
+    "value1": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -6.4995927810668949,
+            "value2": 1.0,
+            "value3": -4.581521987915039,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value2": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -6.439235687255859,
+            "value2": 1.0,
+            "value3": -1.591505527496338,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value3": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -4.050397872924805,
+            "value2": 1.0,
+            "value3": 2.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value4": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -6.193724632263184,
+            "value2": 1.0,
+            "value3": 1.9441258907318116,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value5": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -4.050397872924805,
+            "value2": 1.0,
+            "value3": 4.84511137008667,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value6": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -6.277883529663086,
+            "value2": 1.0,
+            "value3": 4.812314033508301,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value7": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -4.0503973960876469,
+            "value2": 0.9999998211860657,
+            "value3": -4.566616058349609,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value8": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "球"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 3.7133231163024904,
+            "value2": 1.1021260023117066,
+            "value3": -3.1869401931762697,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 0.9999993443489075,
+            "value8": 0.9999993443489075,
+            "value9": 0.9999986290931702
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\sphere.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Point Light"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0.10461539030075073,
+            "value2": 0.462769091129303,
+            "value3": 1.0,
+            "value4": 0.6000000238418579
+        },
+        "value8": {
+            "value0": "Rigid Body"
+        },
+        "value9": {
+            "value0": true,
+            "value1": 2,
+            "value2": {
+                "value0": 1,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 1.0,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value10": {
+            "value0": "BluePrint"
+        },
+        "value11": {
+            "value0": "D:\\Study\\bishe2023.1\\dev\\XRengine\\Assets\\blueprint\\ball.bp",
+            "value1": {
+                "value0": [],
+                "value1": [
+                    {
+                        "key": 0,
+                        "value": false
+                    }
+                ],
+                "value2": [
+                    {
+                        "key": 0,
+                        "value": 8.0
+                    }
+                ],
+                "value3": []
+            }
+        },
+        "value12": {
+            "value0": "EndObj"
+        }
+    },
+    "value9": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Pawn"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 6.2167510986328129,
+            "value2": 0.9981327056884766,
+            "value3": -0.09749829769134522,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 3.799999952316284
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                "../Assets/materials/blue.mat"
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 1,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\PawnController.bp",
+            "value1": {
+                "value0": [
+                    {
+                        "key": 2,
+                        "value": 5
+                    }
+                ],
+                "value1": [
+                    {
+                        "key": 0,
+                        "value": false
+                    },
+                    {
+                        "key": 1,
+                        "value": false
+                    }
+                ],
+                "value2": [
+                    {
+                        "key": 0,
+                        "value": 10.0
+                    },
+                    {
+                        "key": 1,
+                        "value": 5.0
+                    }
+                ],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value10": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "摄像机"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 4.203079700469971,
+            "value2": 26.162046432495118,
+            "value3": 0.01261218823492527,
+            "value4": 80.87306213378906,
+            "value5": -89.82807159423828,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Camera"
+        },
+        "value5": {
+            "value0": true,
+            "value1": false,
+            "value2": true,
+            "value3": 1,
+            "value4": 30.0,
+            "value5": -30.0,
+            "value6": 20.0,
+            "value7": 200.0,
+            "value8": 0.10000000149011612,
+            "value9": 45.0
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value11": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "sun"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 58.492427825927737,
+            "value5": 0.4674883484840393,
+            "value6": 0.7624756097793579,
+            "value7": 1.0,
+            "value8": 0.9999997615814209,
+            "value9": 0.9999997615814209
+        },
+        "value4": {
+            "value0": "Directional Light"
+        },
+        "value5": {
+            "value0": true,
+            "value1": 1.0,
+            "value2": 0.8905845880508423,
+            "value3": 0.6092307567596436,
+            "value4": 0.800000011920929,
+            "value5": true
+        },
+        "value6": {
+            "value0": "EndObj"
+        }
+    },
+    "value12": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "Brick"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -4.035993576049805,
+            "value2": 1.0311890840530396,
+            "value3": -1.7624543905258179,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 2.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                ""
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "BluePrint"
+        },
+        "value9": {
+            "value0": "../Assets\\blueprint\\brick.bp",
+            "value1": {
+                "value0": [],
+                "value1": [],
+                "value2": [],
+                "value3": []
+            }
+        },
+        "value10": {
+            "value0": "EndObj"
+        }
+    },
+    "value13": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "floor"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.05448928475379944,
+            "value2": -0.009999999776482582,
+            "value3": -0.053237736225128177,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 20.0,
+            "value8": 1.0,
+            "value9": 20.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                "../Assets/materials/red.mat"
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value14": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -10.187467575073243,
+            "value2": 1.2033066749572755,
+            "value3": 0.2626674175262451,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 2.0,
+            "value9": 22.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                "../Assets/materials/red.mat"
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value15": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.39362430572509768,
+            "value2": 1.2033066749572755,
+            "value3": 9.92612075805664,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 22.0,
+            "value8": 2.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                "../Assets/materials/red.mat"
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value16": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 9.612541198730469,
+            "value2": 1.2033066749572755,
+            "value3": 0.2626674175262451,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 2.0,
+            "value9": 20.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                "../Assets/materials/red.mat"
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value17": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "立方体"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": -0.39362430572509768,
+            "value2": 1.2033066749572755,
+            "value3": -9.564346313476563,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 22.0,
+            "value8": 2.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "Mesh Renderer"
+        },
+        "value5": {
+            "value0": true,
+            "value1": "..\\Assets\\models\\cube.obj",
+            "value2": [
+                "../Assets/materials/red.mat"
+            ]
+        },
+        "value6": {
+            "value0": "Rigid Body"
+        },
+        "value7": {
+            "value0": true,
+            "value1": 0,
+            "value2": {
+                "value0": 0,
+                "value1": 0.5,
+                "value2": 0.5,
+                "value3": 0.5,
+                "value4": 0.0,
+                "value5": 0.0,
+                "value6": 0.0,
+                "value7": 0.0,
+                "value8": 0.0,
+                "value9": 0.0
+            },
+            "value3": {
+                "value0": 1.0,
+                "value1": 0.20000000298023225,
+                "value2": 0.20000000298023225,
+                "value3": 0.0,
+                "value4": 0.0
+            }
+        },
+        "value8": {
+            "value0": "EndObj"
+        }
+    },
+    "value18": {
+        "value0": {
+            "value0": "Name"
+        },
+        "value1": {
+            "value0": true,
+            "value1": "####TheEnder####"
+        },
+        "value2": {
+            "value0": "Transform"
+        },
+        "value3": {
+            "value0": true,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.0,
+            "value4": 0.0,
+            "value5": 0.0,
+            "value6": 0.0,
+            "value7": 1.0,
+            "value8": 1.0,
+            "value9": 1.0
+        },
+        "value4": {
+            "value0": "EndObj"
+        }
+    }
+}

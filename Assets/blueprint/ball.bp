@@ -1,0 +1,120 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [
+            {
+                "value0": "speed",
+                "value1": 2,
+                "value2": false
+            }
+        ],
+        "value2": {
+            "value0": [],
+            "value1": [
+                {
+                    "key": 0,
+                    "value": false
+                }
+            ],
+            "value2": [
+                {
+                    "key": 0,
+                    "value": 5.0
+                }
+            ],
+            "value3": []
+        },
+        "value3": [
+            {
+                "value0": 52,
+                "value1": 175.0,
+                "value2": 358.0
+            },
+            {
+                "value0": 60,
+                "value1": 179.0,
+                "value2": 71.0
+            },
+            {
+                "value0": 11,
+                "value1": 47.0,
+                "value2": 188.0
+            },
+            {
+                "value0": 68,
+                "value1": 736.0,
+                "value2": 451.0
+            },
+            {
+                "value0": 67,
+                "value1": 748.0,
+                "value2": 117.0
+            },
+            {
+                "value0": 3,
+                "value1": 993.0,
+                "value2": 447.0
+            },
+            {
+                "value0": 3,
+                "value1": 411.0,
+                "value2": 305.0
+            }
+        ],
+        "value4": [
+            {
+                "value0": 4,
+                "value1": 0,
+                "value2": -1,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 1,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 2,
+                "value2": 1,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 6,
+                "value2": 2,
+                "value3": 0
+            },
+            {
+                "value0": 4,
+                "value1": 2,
+                "value2": 3,
+                "value3": 0
+            }
+        ],
+        "value5": [
+            {
+                "value0": 0,
+                "value1": 2,
+                "value2": "##",
+                "value3": 5,
+                "value4": 0
+            },
+            {
+                "value0": 0,
+                "value1": 5,
+                "value2": "##",
+                "value3": 1,
+                "value4": 0
+            },
+            {
+                "value0": 0,
+                "value1": 6,
+                "value2": "##",
+                "value3": 1,
+                "value4": 0
+            }
+        ]
+    }
+}

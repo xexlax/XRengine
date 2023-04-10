@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ResourceManager.h"
 
+
 namespace XRE {
 
 	Library<Shader> ResourceManager::m_ShaderLib;
@@ -8,11 +9,29 @@ namespace XRE {
 	Library<Model> ResourceManager::m_ModelLib;
 	Library<Material> ResourceManager::m_MaterialLib;
 	Library<BluePrint> ResourceManager::m_BluePrintLib;
+	XRef<Project> ResourceManager::m_CurProj;
 	//Library<Prefab> ResourceManager::m_PrefabLib;
 
 	void ResourceManager::Init()
 	{
+		m_CurProj = nullptr;
+	}
+	void ResourceManager::BindProj(XRef<Project> proj)
+	{
+		m_CurProj = proj;
+	}
+	std::string ResourceManager::GetFullPath(std::string path)
+	{
+		if (m_CurProj == nullptr) return  "..\\Assets\\"+path;
+
+		else 
+		return m_CurProj->m_RootPath + "\\Assets\\" + path;
+	}
+	std::string ResourceManager::GetRelativePath(std::string path)
+	{
+		if (m_CurProj == nullptr) return path;
 		
+		return path.substr(m_CurProj->m_RootPath.length());
 	}
 	XRef<Model> ResourceManager::GetElementalModel(const Elemental_Model& em)
 	{

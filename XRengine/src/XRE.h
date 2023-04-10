@@ -46,3 +46,5 @@
 #include "xre\BluePrint\Nodes_IO.h"
 #include "xre\BluePrint\Nodes_Math.h"
 
+#include "xre\Project\project.h"
+

@@ -174,6 +174,13 @@ namespace XRE{
 		m_Context->SwapBuffers();
 	}
 
+	void WindowsWindow::SetTitle(std::string s)
+	{
+		glfwSetWindowTitle(m_Window, s.c_str());
+	}
+
+	
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		if (enabled)

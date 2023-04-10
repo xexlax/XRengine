@@ -1,0 +1,70 @@
+{
+    "value0": {
+        "value0": "",
+        "value1": [],
+        "value2": {
+            "value0": [],
+            "value1": [],
+            "value2": [],
+            "value3": []
+        },
+        "value3": [
+            {
+                "value0": 6,
+                "value1": 9.0,
+                "value2": 67.0
+            },
+            {
+                "value0": 59,
+                "value1": 255.0,
+                "value2": 65.0
+            },
+            {
+                "value0": 71,
+                "value1": 141.0,
+                "value2": 227.0
+            },
+            {
+                "value0": 1,
+                "value1": 450.0,
+                "value2": 296.0
+            }
+        ],
+        "value4": [
+            {
+                "value0": 1,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 2,
+                "value1": 1,
+                "value2": 0,
+                "value3": 0
+            },
+            {
+                "value0": 3,
+                "value1": 2,
+                "value2": 0,
+                "value3": 0
+            }
+        ],
+        "value5": [
+            {
+                "value0": 0,
+                "value1": 0,
+                "value2": "##",
+                "value3": 4,
+                "value4": "ball"
+            },
+            {
+                "value0": 0,
+                "value1": 2,
+                "value2": "##ExternVar",
+                "value3": 1,
+                "value4": 201
+            }
+        ]
+    }
+}

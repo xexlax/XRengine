@@ -54,7 +54,7 @@ namespace XRE{
 				bumpTex, displacementTex, alphaTex, ambientOcclusionTex);
 		}
 
-		void Save() { Save(m_FilePath); }
+		void Save();
 		void Save(const std::string& filepath);
 		void Load(const std::string& filepath);
 

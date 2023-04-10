@@ -20,19 +20,20 @@ EditorLayer::EditorLayer()
 
 void EditorLayer::OnAttach()
 {
-	
-	
+	auto io = ImGui::GetIO();
+	FontLarge = io.Fonts->AddFontFromFileTTF("../Assets/fonts/simhei.ttf", 36.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+
 	m_Scene = make_shared<Scene>();
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
 	Renderer3D::Init();
 	PanelsManager::Init();
 	PanelsManager::GetScenePanel()->AttachToScene(m_Scene);
 	PanelsManager::GetPropertiesPanel()->SetEC(&m_EditorCamera);
-	m_IconPlay = ResourceManager::GetTex2D(AssetsDirectory"textures/Play.png");
-	m_IconStop = ResourceManager::GetTex2D(AssetsDirectory"textures/Stop.png");
-	m_IconPause = ResourceManager::GetTex2D(AssetsDirectory"textures/Pause.png");
-	m_IconSimulate = ResourceManager::GetTex2D(AssetsDirectory"textures/Simulate.png");
-	
+	m_IconPlay = ResourceManager::GetEditorTex2D(AssetsDirectory"/textures/Play.png");
+	m_IconStop = ResourceManager::GetEditorTex2D(AssetsDirectory"/textures/Stop.png");
+	m_IconPause = ResourceManager::GetEditorTex2D(AssetsDirectory"/textures/Pause.png");
+	m_IconSimulate = ResourceManager::GetEditorTex2D(AssetsDirectory"/textures/Simulate.png");
+	m_ProjectIcon = ResourceManager::GetEditorTex2D(AssetsDirectory"/textures/prj_logo.png");
 	
 	
 }
@@ -185,96 +186,163 @@ void EditorLayer::OnImGuiRender(){
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 	}
+	
+
 
 	if (ImGui::BeginMenuBar())
 	{
-		if (ImGui::BeginMenu(u8"文件"))
-		{
-			if (ImGui::MenuItem(u8"新场景")) {
+		if (ImGui::BeginMenu(u8"项目")) {
 
-				m_Scene = XMakeRef<Scene>();
-				OnSceneReload();
+			if (ImGui::MenuItem(u8"新建项目")) {
+				auto path = FileDialogs::SaveFile(u8"XREProject (*.xreprj)\0*.xreprj\0");
+				filesystem::create_directory(path);
+				path += "\\"+ Utils::GetPureFileName(path) + ".xreprj";
+				m_Project = XMakeRef<Project>(path);
+				m_Project->m_Scenes.push_back("scene\\startscene.scene");
+				m_Project->Save();		
+				string assets = m_Project->m_RootPath + "\\Assets";
+				filesystem::create_directory(assets);
+				filesystem::copy (AssetsDirectory"\DefaultProjectAssets", assets, std::filesystem::copy_options::recursive);
+
+				OnProjectReload();
+
 			}
 
-			if (ImGui::MenuItem(u8"打开")) {
+			if (ImGui::MenuItem(u8"保存项目")) {
+				m_Project->Save();
+			}
 
-				if (m_Status == SceneStatus::Runtime || m_Status == SceneStatus::Paused) {
-					m_Status = SceneStatus::Editing;
-					m_Scene->OnRuntimeEnd();
-				}
-				m_Scene = make_shared<Scene>();
-				auto path = FileDialogs::OpenFile("Scene (*.scene)\0*.scene\0");
-				if (path != "") {
-					m_Scene->Deserialize(path);
+			if (ImGui::MenuItem(u8"打开项目")) {
+				auto path = FileDialogs::OpenFile("Project (*.xreprj)\0*.xreprj\0");
+				m_Project = XMakeRef<Project>(path);
+				m_Project->Load();
+				OnProjectReload();
+			}
+
+			if (ImGui::MenuItem(u8"关闭项目")) {
+				
+				m_Project = nullptr;
+				
+			}
+
+			if (ImGui::MenuItem(u8"导出")) {
+				ImGui::OpenPopup(u8"导出项目");
+			}
+			if (ImGui::MenuItem(u8"退出编辑器")) XRE::Application::GetApplication().Close();
+
+			ImGui::EndMenu();
+		}
+		if (m_Project != nullptr) {
+			if (ImGui::BeginMenu(u8"场景"))
+			{
+				if (ImGui::MenuItem(u8"新场景")) {
+
+					m_Scene = XMakeRef<Scene>();
 					OnSceneReload();
 				}
-				
-				
-			
-			}
 
-			if (ImGui::MenuItem(u8"保存")) {
-				if (m_Scene->GetFilePath() == "") {
+				if (ImGui::MenuItem(u8"打开场景")) {
+
+					if (m_Status == SceneStatus::Runtime || m_Status == SceneStatus::Paused) {
+						m_Status = SceneStatus::Editing;
+						m_Scene->OnRuntimeEnd();
+					}
+					m_Scene = make_shared<Scene>();
+					auto path = FileDialogs::OpenFile("Scene (*.scene)\0*.scene\0");
+					if (path != "") {
+						m_Scene->Deserialize(path);
+						OnSceneReload();
+					}
+
+
+
+				}
+
+				if (ImGui::MenuItem(u8"保存场景")) {
+					if (m_Scene->GetFilePath() == "") {
+						auto path = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
+						if (path.find(".scene") == string::npos) path += ".scene";
+						m_Scene->Serialize(path);
+					}
+					else
+						m_Scene->Save();
+				}
+
+
+
+				if (ImGui::MenuItem(u8"另存为")) {
+
 					auto path = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
+					if (path.find(".scene") == string::npos) path += ".scene";
 					m_Scene->Serialize(path);
 				}
-				else
-					m_Scene->Save();
-			}
-				
-				
-				
-			if (ImGui::MenuItem(u8"另存为")) {
-				
-				auto path = FileDialogs::SaveFile("Scene (*.scene)\0*.scene\0");
-				m_Scene->Serialize(path);
-			}
-				
-				
-			if (ImGui::MenuItem(u8"退出")) XRE::Application::GetApplication().Close();
-			
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu(u8"编辑"))
-		{
-			if (ImGui::MenuItem(u8"撤销")) {
-				CommandManager::Get().Undo();
-			}
 
-			if (ImGui::MenuItem(u8"重做")) {
-				CommandManager::Get().Redo();
+				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu(u8"编辑"))
+			{
+				if (ImGui::MenuItem(u8"撤销")) {
+					CommandManager::Get().Undo();
+				}
 
-			ImGui::EndMenu();
+				if (ImGui::MenuItem(u8"重做")) {
+					CommandManager::Get().Redo();
+				}
+
+				ImGui::EndMenu();
+			}
 		}
+		
 		ImGui::EndMenuBar();
 	}
+	
+	
 
-	ToolBar();
+	
 
-	ImGui::Begin(u8"设置");
+	
+	if (m_Project != nullptr) {
+
+		ToolBar();
+
+		ImGui::Begin(u8"设置");
 		ImGui::Text("FPS:%d", Application::GetFPS());
+
+		ImGui::Text((u8"当前项目:" + (m_Project ? m_Project->m_Name : "无")).c_str());
+		ImGui::Button(u8"启动场景");
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+			{
+				std::string path = *(std::string*)payload->Data;
+
+				if (path.find(".scene") != string::npos) {
+
+				}
+
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+
 		ImGui::Separator();
 
 		if (ImGui::Button("ReloadShader")) {
 			Renderer3D::Init();
 		}
-		
+
 		uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
 
 		ImGui::Separator();
 		ImGui::Text("DepthMap");
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 }) ;
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-	ImGui::End();
+		ImGui::End();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-	
-	
+		ImGui::Begin(u8"视窗");
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-
-	ImGui::Begin(u8"视窗");
-		
 
 		//ToolBar();
 
@@ -283,10 +351,10 @@ void EditorLayer::OnImGuiRender(){
 		auto viewportOffset = ImGui::GetWindowPos();
 		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
 		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
-		
-		
+
+
 		m_ViewportFocused = ImGui::IsWindowFocused();
-		
+
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		Application::GetApplication().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
@@ -319,7 +387,7 @@ void EditorLayer::OnImGuiRender(){
 					m_Scene = make_shared<Scene>();
 
 
-					m_Scene->Deserialize(path);
+					m_Scene->Deserialize(ResourceManager::GetFullPath(path));
 					OnSceneReload();
 				}
 
@@ -329,10 +397,10 @@ void EditorLayer::OnImGuiRender(){
 					size_t pos1 = path.find_last_of('\\');
 					size_t pos2 = path.find_last_of('.');
 					if (pos1 != std::string::npos) {
-						if(pos2!= string::npos)
-							name = path.substr( pos1+1,pos2 - pos1-1);
+						if (pos2 != string::npos)
+							name = path.substr(pos1 + 1, pos2 - pos1 - 1);
 						else
-						name = path.substr(pos1+1);
+							name = path.substr(pos1 + 1);
 					}
 
 					auto go = m_Scene->CreateGameObject(name);
@@ -341,11 +409,11 @@ void EditorLayer::OnImGuiRender(){
 
 				}
 
-				if (path.find(".go") != string::npos) {	
-					m_Scene->CreateFromFile(path);
+				if (path.find(".go") != string::npos) {
+					m_Scene->CreateFromFile(ResourceManager::GetFullPath(path));
 				}
 
-				
+
 				if (path.find(".mat") != string::npos) {
 
 					auto [mx, my] = ImGui::GetMousePos();
@@ -359,22 +427,22 @@ void EditorLayer::OnImGuiRender(){
 					if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 					{
 						int pixelData;
-						
+
 						Renderer3D::m_FrameBuffer->ReadPixel(1, mouseX, mouseY, &pixelData);
 						PanelsManager::GetScenePanel()->Select(pixelData);
 						if (PanelsManager::GetScenePanel()->GetSelected().HasComponent<MeshRendererComponent>()) {
-							PanelsManager::GetScenePanel()->GetSelected().GetComponent<MeshRendererComponent>().m_Materials[0]= ResourceManager::GetMaterial(path);
+							PanelsManager::GetScenePanel()->GetSelected().GetComponent<MeshRendererComponent>().m_Materials[0] = ResourceManager::GetMaterial(path);
 						}
-						
+
 
 					}
-						
+
 
 				}
 
-				
-				
-				
+
+
+
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -388,10 +456,10 @@ void EditorLayer::OnImGuiRender(){
 				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
 
-			
-				ImGuizmo::SetRect(m_ViewportBounds[0].x,m_ViewportBounds[0].y, 
-					m_ViewportBounds[1].x- m_ViewportBounds[0].x, m_ViewportBounds[1].y- m_ViewportBounds[0].y);
-				 
+
+				ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y,
+					m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
+
 				const glm::mat4& cameraProjection = m_EditorCamera.GetProjectionMatrix();
 				glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
@@ -425,26 +493,108 @@ void EditorLayer::OnImGuiRender(){
 					tc.SetGlobalScale(scale);
 
 					//selectedEntity.SetParent(*p);
-					
+
 				}
 			}
-		
+
 		}
+		ImGui::End();
+		ImGui::PopStyleVar();
+
+		PanelsManager::OnImGuiRender();
+
+
+
+		//ImGui::ShowDemoWindow();
+
+		
+	}
+	else {
+		ImGui::Begin(u8"项目列表");
+		static float padding = 20.0f;
+		static float thumbnailSize = 240.0f;
+		float cellSize = thumbnailSize + padding;
+
+		float panelWidth = ImGui::GetContentRegionAvail().x;
+		int columnCount = (int)(panelWidth / cellSize);
+		if (columnCount < 1)
+			columnCount = 1;
+
+		std::filesystem::path m_CurrentDirectory= "..\\Projects";
+		ImGui::Columns(columnCount, 0, false);
+		uint32_t iconid = m_ProjectIcon->GetRendererId();
+		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
+		{
+			const auto& path = directoryEntry.path();
+			std::string filenameString = path.filename().string();
+			
+			ImGui::PushID(filenameString.c_str());
+
+			ImGui::ImageButton(ImTextureID(iconid), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+
+
+
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				m_Project = XMakeRef<Project>(path.string() + "\\" + filenameString+ ".xreprj");
+				m_Project->Load();
+				OnProjectReload();
+				
+
+			}
+			ImGui::TextWrapped(filenameString.c_str());
+
+			ImGui::NextColumn();
+
+			ImGui::PopID();
+
+		}
+
+		ImGui::Columns(1);
+
+		
+
+		ImGui::End();
+		ImGui::Begin(u8"开始");
+		ImGui::PushFont(FontLarge);
+		if (ImGui::Button(u8"新建项目", ImVec2(500, 150))){
+			auto path = FileDialogs::SaveFile(u8"XREProject (*.xreprj)\0*.xreprj\0");
+			filesystem::create_directory(path);
+			path += "\\" + Utils::GetPureFileName(path) + ".xreprj";
+			m_Project = XMakeRef<Project>(path);
+			m_Project->m_Scenes.push_back("scene\\startscene.scene");
+			m_Project->Save();
+			string assets = m_Project->m_RootPath + "\\Assets";
+			filesystem::create_directory(assets);
+			filesystem::copy(AssetsDirectory"\\DefaultProjectAssets", assets, std::filesystem::copy_options::recursive);
+
+			OnProjectReload();
+		}
+
+		if (ImGui::Button(u8"打开现有项目", ImVec2(500, 150))) {
+			auto path = FileDialogs::OpenFile("Project (*.xreprj)\0*.xreprj\0");
+			m_Project = XMakeRef<Project>(path);
+			m_Project->Load();
+			OnProjectReload();
+		}
+
+		if (ImGui::Button(u8"帮助", ImVec2(500, 150))) {
+
+		}
+		ImGui::PopFont();
+
+		ImGui::End();
+	
+	}
+
+
 	ImGui::End();
-	ImGui::PopStyleVar();
 
-	PanelsManager::OnImGuiRender();
-
-
-
-	//ImGui::ShowDemoWindow();
-
-	ImGui::End();
-
-	if(PanelsManager::GetScenePanel()->GetSelected()&&m_GizmoType!=-1)
-	DetectCommand();
+	if (PanelsManager::GetScenePanel()->GetSelected() && m_GizmoType != -1)
+		DetectCommand();
 
 	CommandManager::Get().OnUpdate();
+	
 		
 
 }
@@ -483,6 +633,18 @@ void EditorLayer::OnEvent(XRE::Event& e)
 	dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyReleased));
 	dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	
+}
+
+void EditorLayer::OnProjectReload()
+{
+
+	ResourceManager::BindProj(m_Project);
+	PanelsManager::GetAssetsPanel()->SetRootDir(m_Project->m_RootPath + "\\Assets");
+	m_Scene = XMakeRef<Scene>();
+	m_Scene->Deserialize(m_Project->m_RootPath + "\\Assets\\" + m_Project->m_Scenes[0]);
+	
+	OnSceneReload();
+
 }
 
 void EditorLayer::OnSceneReload()

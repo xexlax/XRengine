@@ -9,11 +9,12 @@ namespace XRE {
 	{
 	public:
 		AssetsPanel();
-
+		void SetRootDir(std::string assetpath);
 		void OnImGuiRender();
 	private:
 		std::filesystem::path m_CurrentDirectory;
 		std::string m_DragSource;
+		std::string m_Assets;
 
 		XRef<Texture2D> 
 			m_DirectoryIcon, m_FileIcon, m_ModelIcon,m_BluePrintIcon, 

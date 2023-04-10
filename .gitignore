@@ -12,6 +12,7 @@ x64/
 PCH
 job/
 XRE-SANDBOX/
+Projects/
 
 *.sln
 *.vcxproj

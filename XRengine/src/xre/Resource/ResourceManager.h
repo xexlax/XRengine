@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Material.h"
 #include "Library.h"
+#include "xre/Project/project.h"
 //#include "Prefab.h"
 
 namespace XRE {
@@ -17,23 +18,26 @@ namespace XRE {
 
 	public:
 		static void Init();
+		static void BindProj(XRef<Project> proj);
+		static std::string GetFullPath(std::string path);
+		static std::string GetRelativePath(std::string path);
 
 		static XRef<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
-
-
-		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
+		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(GetFullPath(path)); }
+		static XRef<Texture2D> GetEditorTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
 		static XRef<Texture2D> GetNoTex2D() { return GetTex2D("../Assets/textures/No_Texture.png"); }
 
 
-		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(path); }
+		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(GetFullPath(path)); }
 		static XRef<Model> GetElementalModel(const Elemental_Model& em);
 
-		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(path); }
+		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(GetFullPath(path)); }
 		static XRef<Material> GetDefaultMaterial() { return GetMaterial("../Assets/materials/default.mat"); }
 
-		static XRef<BluePrint> GetBluePrint(const std::string& path) { return  m_BluePrintLib.Get(path); }
+		static XRef<BluePrint> GetBluePrint(const std::string& path) { return  m_BluePrintLib.Get(GetFullPath(path)); }
 
 
+		
 	private:
 
 		static Library<Shader> m_ShaderLib;
@@ -41,6 +45,7 @@ namespace XRE {
 		static Library<Model> m_ModelLib;
 		static Library<Material> m_MaterialLib;
 		static Library<BluePrint> m_BluePrintLib;
+		static XRef<Project> m_CurProj;
 		//static Library<Prefab> m_PrefabLib; // Ìí¼ÓPrefab¿â
 
 	};

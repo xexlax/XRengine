@@ -80,7 +80,7 @@ namespace XRE {
 
 	private:
 		uint32_t m_ViewportWidth, m_ViewportHeight;
-		std::string m_Name= "New Scene";
+		std::string m_Name = "New Scene";
 		std::string m_FilePath = "";
 
 		bool m_Runtime = false;

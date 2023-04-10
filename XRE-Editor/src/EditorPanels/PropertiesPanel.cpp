@@ -112,7 +112,7 @@ namespace XRE {
 		if (go.HasComponent<TransformComponent>())
 		{
 			auto& transform = go.GetComponent<TransformComponent>();
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, u8"变换"))
 			{
 				
 				DrawVec3Control(u8"位置", transform.m_Translation);
@@ -255,7 +255,7 @@ namespace XRE {
 		auto& model = component.m_Model;
 		XUI::CheckBox(u8"阴影映射", &component.m_ShadowCasting);
 		if (model) {
-			ImGui::Text(model->getPath().c_str());
+			ImGui::Text(component.m_ModelPath.c_str());
 			if (ImGui::TreeNodeEx(u8"材质", ImGuiTreeNodeFlags_None))
 			{
 				if (ImGui::Button(u8"全部保存")) {
@@ -289,7 +289,7 @@ namespace XRE {
 						}
 					}
 					else
-						if (ImGui::Button(mat->name.c_str())) {
+						if (ImGui::Button( mat->name.c_str() )) {
 							PanelsManager::GetMaterialPanel()->Select(mat,&component);
 						}
 						
@@ -319,7 +319,7 @@ namespace XRE {
 								XRef<Material> newMat = XMakeRef<Material>();
 								newMat->name = u8"新材质";
 								mat = newMat;
-								newMat->Save("../Assets/materials/newMaterial.mat");
+								newMat->Save(ResourceManager::GetFullPath("materials/newMaterial.mat"));
 							}		
 
 							if (ImGui::MenuItem(u8"保存")){

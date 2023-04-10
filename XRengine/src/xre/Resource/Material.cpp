@@ -35,6 +35,11 @@ namespace XRE {
 			ambientOcclusionTex.m_Tex = ResourceManager::GetTex2D(alphaTex);
 	}
 	
+	void Material::Save()
+	{
+		Save(m_FilePath); 
+	} 
+
 	void Material::Save(const std::string& filepath)
 	{
 		size_t pos = filepath.find_last_of('\\');

@@ -120,10 +120,10 @@ namespace XRE {
 		TransformComponent* parent=nullptr;
 		std::vector<entt::entity> children;
 
-		TransformComponent() :Component("Transform") {};
+		TransformComponent() :Component(u8"变换") {};
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(const glm::vec3& translation)
-			:Component("Transform") , m_Translation(translation) {}
+			:Component(u8"变换") , m_Translation(translation) {}
 
 		glm::mat4 GetGlobalTransform() const
 		{
@@ -222,10 +222,10 @@ namespace XRE {
 		std::vector<XRef<Material>> m_Materials;
 
 		
-		MeshRendererComponent() :Component("Mesh Renderer") {};
+		MeshRendererComponent() :Component(u8"模型渲染器") {};
 		MeshRendererComponent(const MeshRendererComponent&) = default;
 		MeshRendererComponent(XRef<Model> model)
-			:Component("Mesh Renderer"), m_Model(model), m_Materials(model->m_defaultMaterials) {
+			:Component(u8"模型渲染器"), m_Model(model), m_Materials(model->m_defaultMaterials) {
 			m_ModelPath = model->getPath();
 			if (m_Materials.empty())m_Materials.push_back(nullptr);
 		};
@@ -293,10 +293,10 @@ namespace XRE {
 		float m_Intensity=1.0f;
 		bool m_ShadowCasting = false;
 
-		PointLightComponent() :Component("Point Light") {};
+		PointLightComponent() :Component(u8"点光源") {};
 		PointLightComponent(const PointLightComponent&) = default;
 		PointLightComponent(const glm::vec3& color, const float& intensity=1.0f)
-			:Component("Point Light"),m_Color(color), m_Intensity(intensity) {}
+			:Component(u8"点光源"),m_Color(color), m_Intensity(intensity) {}
 
 		
 
@@ -316,10 +316,10 @@ namespace XRE {
 		glm::vec3 m_Color=glm::vec3(1.0f);
 		float m_Intensity=1.0f;
 		bool m_ShadowCasting = true;
-		DirectionalLightComponent() :Component("Directional Light") {};
+		DirectionalLightComponent() :Component(u8"平行光") {};
 		DirectionalLightComponent(const DirectionalLightComponent&) = default;
 		DirectionalLightComponent(const glm::vec3 & color, const float& intensity = 1.0f)
-			:Component("Directional Light") ,m_Color(color), m_Intensity(intensity) {}
+			:Component(u8"平行光") ,m_Color(color), m_Intensity(intensity) {}
 	
 
 		template <class Archive>
@@ -340,12 +340,12 @@ namespace XRE {
 		bool m_Primary = true;
 		
 
-		CameraComponent() :Component("Camera") {};
+		CameraComponent() :Component(u8"摄像机") {};
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(const glm::mat4& projection)
-			:Component("Camera"),m_Camera(XMakeRef<Camera>(projection)) {}
+			:Component(u8"摄像机"),m_Camera(XMakeRef<Camera>(projection)) {}
 		CameraComponent(const CameraType& type)
-			:Component("Camera"), m_Camera(XMakeRef<Camera>(type)) {}
+			:Component(u8"摄像机"), m_Camera(XMakeRef<Camera>(type)) {}
 
 
 		template <class Archive>
@@ -430,7 +430,7 @@ namespace XRE {
 			ar(m_Active, m_MotionType, m_Shape, m_PhysicsMaterial);
 		}
 
-		RigidBodyComponent() :Component("Rigid Body") {};
+		RigidBodyComponent() :Component(u8"刚体") {};
 		
 
 		
@@ -462,7 +462,7 @@ namespace XRE {
 			}
 		}
 
-		RayComponent() :Component("Ray") {};
+		RayComponent() :Component(u8"射线") {};
 	};
 
 	class BluePrintComponent :public Component{
@@ -474,7 +474,7 @@ namespace XRE {
 		void SetBP(XRef<BluePrint> bp) {
 			m_BluePrint = bp;
 			m_BluePrintProperties->Update(bp->GetDefaultProperties());
-			m_BluePrintPath = m_BluePrint->GetFileName();
+			m_BluePrintPath =  m_BluePrint->GetFileName();
 		}
 
 		template <class Archive>
@@ -492,7 +492,7 @@ namespace XRE {
 			ar(*m_BluePrintProperties);
 		}
 
-		BluePrintComponent() :Component("BluePrint") {
+		BluePrintComponent() :Component(u8"蓝图") {
 			m_BluePrintProperties = XMakeRef<BluePrintProperties>();
 		};
 	};

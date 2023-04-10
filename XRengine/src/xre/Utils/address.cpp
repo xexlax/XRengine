@@ -11,6 +11,20 @@ namespace XRE::Utils {
 		return name;
 	}
 
+	std::string GetPureFileName(const std::string& path) {
+		std::string name;
+		size_t pos = path.find_last_of('\\');
+		if (pos != std::string::npos) {
+			name = path.substr(pos + 1);
+		}
+
+		pos = name.find_last_of('.');
+		if (pos != std::string::npos) {
+			name = name.substr(0,pos);
+		}
+		return name;
+	}
+
 	std::string GetBasePath(const std::string& path) {
 		std::string basepath;
 		size_t pos = path.find_last_of('\\');
@@ -18,5 +32,9 @@ namespace XRE::Utils {
 			basepath = path.substr(0, pos);
 		}
 		return basepath;
+	}
+	std::string GetRidOfRoot(const std::string& path, const std::string& root)
+	{
+		return path.substr(root.length());
 	}
 }

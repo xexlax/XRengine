@@ -51,7 +51,10 @@ namespace XRE {
 
 	XRef<Model> Model::Create(const std::string& path)
 	{
+
 		return std::make_shared<Model>(path);
+
+		
 	}
 
 	

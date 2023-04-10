@@ -5,6 +5,7 @@ namespace XRE {
 	public:
 		ActionPanel();
 
+
 		void OnImGuiRender();
 		bool m_updated = false;
 	};
