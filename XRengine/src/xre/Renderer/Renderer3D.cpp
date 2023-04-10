@@ -176,7 +176,7 @@ namespace XRE {
 		postShader->Bind();
 		m_FrameBuffer->ActiveColor(0);
 		postShader->SetInt("screenTexture", 0);
-		RenderCommand::DrawIndexed(m_Quad);
+		RenderCommand::DrawIndexed(VertexArray::GetCubeVA());
 
 		
 

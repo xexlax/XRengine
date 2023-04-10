@@ -1,16 +1,19 @@
 #include <XRE.h>
 #include <xre/Core/entryPoint.h>
 #include <imgui.h>
+#include <Glad\glad.h>
+#include <GLFW\glfw3.h>
 using namespace XRE;
 class LauncherLayer : public XRE::Layer
 {
 
 	XRef<Project> m_Project;
 	XRef<Scene> m_Scene;
-
+	XRef<VertexArray> m_Quad;
+	XRef<Shader> shader;
 	glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 	glm::vec2 m_ViewportBounds[2];
-
+	unsigned int quadVAO, quadVBO;
 
 	uint32_t windowsSizeX= 1920, windowsSizeY= 1080;
 public:
@@ -22,6 +25,35 @@ public:
 		m_Project->Load();
 		ResourceManager::BindProj(m_Project);
 		Renderer3D::Init();
+		Renderer3D::m_FrameBuffer->Resize(windowsSizeX, windowsSizeY);
+		RenderCommand::SetViewport(0, 0, windowsSizeX, windowsSizeY);
+
+		shader = ResourceManager::GetShader("..\\Assets\\shaders\\texture.glsl");
+
+		float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+			// positions   // texCoords
+			-1.0f,  1.0f,  0.0f, 1.0f,
+			-1.0f, -1.0f,  0.0f, 0.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+
+			-1.0f,  1.0f,  0.0f, 1.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+			 1.0f,  1.0f,  1.0f, 1.0f
+		};
+
+
+		
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+
 		m_Scene = XMakeRef<Scene>();
 		m_Scene->Deserialize(m_Project->m_RootPath + "\\Assets\\" + m_Project->m_Scenes[0]);
 		m_Scene->OnViewportResize(windowsSizeX, windowsSizeY);
@@ -34,45 +66,33 @@ public:
 	};
 
 	void OnUpdate(TimeStep ts) override {
-		
+
+		 Application::GetApplication().GetWindow().SetTitle(m_Project->m_Name + " FPS:" + std::to_string(Application::GetFPS()));
+
+		// make sure we clear the framebuffer's content
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		m_Scene->OnUpdateRuntime(ts);
-	}
-
-
-	void LauncherLayer::OnImGuiRender() {
-
-
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-
-		ImGui::Begin(u8"ÊÓ´°");
-
-
-		//ToolBar();
-
-		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
-		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
-		auto viewportOffset = ImGui::GetWindowPos();
-		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 		
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
-		{
-			//XRE_CORE_TRACE("viewport: {0} x {1} ", viewportPanelSize.x, viewportPanelSize.y);
-			Renderer3D::m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		}
+		shader->Bind();
+		glBindVertexArray(quadVAO);
+		glBindTexture(GL_TEXTURE_2D, Renderer3D::m_FrameBuffer->GetColorAttachment(0));	// use the color attachment texture as the texture of the quad plane
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment(0);
-		ImGui::Image((ImTextureID)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-	
-		ImGui::End();
-		ImGui::PopStyleVar();
+		
+	}
+	bool OnWindowResize(WindowResizeEvent& e);
+	void OnEvent(XRE::Event& e) 
+	{
+		
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(LauncherLayer::OnWindowResize));
+		
+
 	}
 
-	
+
 
 
 };
@@ -99,4 +119,11 @@ LauncherApp::~LauncherApp()
 
 XRE::Application* XRE::CreateApplication() {
 	return new LauncherApp();
+}
+
+bool LauncherLayer::OnWindowResize(WindowResizeEvent& e)
+{
+	Renderer3D::m_FrameBuffer->Resize(e.GetWidth(), e.GetHeight());
+	return false;
+
 }
