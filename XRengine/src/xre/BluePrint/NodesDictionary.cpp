@@ -110,6 +110,12 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_GetBluePrintField>();
 		case 72:
 			return XMakeRef<Node_SetBluePrintField>();
+		case 73:
+			return XMakeRef<Node_SetMaterial>();
+		case 74:
+			return XMakeRef<Node_SetRigidBodyMotion>();
+		case 75:
+			return XMakeRef<Node_SetPointLight>();
 
 		//Input
 		case 81:

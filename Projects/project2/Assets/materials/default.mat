@@ -1,7 +1,7 @@
 {
     "value0": {
-        "value0": "../Assets/materials/newMaterial.mat",
-        "value1": "../Assets/materials/newMaterial.mat",
+        "value0": "materials/default.mat",
+        "value1": "materials/default.mat",
         "value2": 1.0,
         "value3": 1.0,
         "value4": 1.0,

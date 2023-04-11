@@ -4,6 +4,7 @@
 #include "xre\Renderer\Renderer.h"
 #include "xre\Resource\ResourceManager.h"
 #include "xre\ECS\Reflection.h"
+#include "xre\Audio\alManager.h"
 #include  "Input.h"
 #include <GLFW\glfw3.h>
 
@@ -23,6 +24,7 @@ namespace XRE {
 		Renderer::Init();
 		ResourceManager::Init();
 		Reflection::Init();
+		alManager::Init();
 
 
 		m_ImGuiLayer = new ImGuiLayer();
@@ -33,7 +35,7 @@ namespace XRE {
 	}
 
 	Application::~Application() {
-
+		alManager::End();
 	}
 	//通用回调函数，最终在glfwsetcallback中的lambda函数中被调用
 	void Application::OnEvent(Event &e)

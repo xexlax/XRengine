@@ -9,6 +9,7 @@ namespace XRE {
 	Library<Model> ResourceManager::m_ModelLib;
 	Library<Material> ResourceManager::m_MaterialLib;
 	Library<BluePrint> ResourceManager::m_BluePrintLib;
+	Library<AudioClip> ResourceManager::m_AudioClipLib;
 	XRef<Project> ResourceManager::m_CurProj;
 	//Library<Prefab> ResourceManager::m_PrefabLib;
 
@@ -18,7 +19,10 @@ namespace XRE {
 	}
 	void ResourceManager::BindProj(XRef<Project> proj)
 	{
+		
 		m_CurProj = proj;
+
+		if (proj == nullptr) UnloadAllResources();
 	}
 	std::string ResourceManager::GetFullPath(std::string path)
 	{
@@ -32,6 +36,14 @@ namespace XRE {
 		if (m_CurProj == nullptr) return path;
 		
 		return path.substr(m_CurProj->m_RootPath.length());
+	}
+	void ResourceManager::UnloadAllResources()
+	{
+		m_ModelLib.UnloadAll();
+		m_AudioClipLib.UnloadAll();
+		m_BluePrintLib.UnloadAll();
+		m_Texture2DLib.UnloadAll();
+		m_ShaderLib.UnloadAll();
 	}
 	XRef<Model> ResourceManager::GetElementalModel(const Elemental_Model& em)
 	{

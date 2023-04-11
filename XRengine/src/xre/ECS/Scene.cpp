@@ -9,7 +9,7 @@
 #include "xre\ECS\NativeScript.h"
 #include "xre\BluePrint\BluePrint.h"
 
-
+#include "xre\Audio\alManager.h"
 
 
 namespace XRE{
@@ -335,6 +335,21 @@ namespace XRE{
 
 	}
 
+	void Scene::UpdateAudio(TimeStep ts)
+	{
+		{
+			auto view = m_Registry.view<TransformComponent,AudioListenerComponent>();
+
+			for (auto entity : view) {
+				auto [transform, al] = view.get<TransformComponent, AudioListenerComponent>(entity);
+				if (al.m_Active) {
+					alManager::SetListenerPos(transform.GetGlobalTranslation());
+					break;
+				}
+			}
+		}
+	}
+
 	void Scene::UpdateRendering(XRef<Camera> c)
 	{
 		bool dirLightFound = false;
@@ -566,6 +581,8 @@ namespace XRE{
 			
 			}
 		}
+
+		
 	}
 
 	void Scene::OnRuntimeEnd()

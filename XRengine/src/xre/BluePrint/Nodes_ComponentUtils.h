@@ -377,15 +377,22 @@ namespace XRE {
 			}
 
 			if (m_Inputs[0]->m_Connection != nullptr) {
-				auto obj = m_BluePrint->m_sc->CreateFromFile(m_Inputs[0]->GetValue<string>());
+				auto obj = m_BluePrint->m_sc->CreateFromFile(ResourceManager::GetFullPath(m_Inputs[0]->GetValue<string>()));
+				if (obj.HasComponent<RigidBodyComponent>()) {
+					auto& rbc = obj.GetComponent<RigidBodyComponent>();
+					auto& tc = obj.GetComponent<TransformComponent>();
+					if (rbc.m_Active && rbc.m_MotionType != RigidBodyComponent::RigidBodyMotion::Trigger) {
+
+						rbc.m_PhysicObj = m_BluePrint->m_sc->m_PhysicsScene->CreateRigidBody(tc, rbc);
+						rbc.m_PhysicsMaterial.changed = false;
+					}
+				}
 				m_Outputs[0]->ValueInt = uint32_t(obj);
 			}
 			else {
 				auto obj = m_BluePrint->m_sc->CreateGameObject(name);
 				m_Outputs[0]->ValueInt = uint32_t(obj);
 			}
-
-			
 
 		}
 
@@ -540,5 +547,118 @@ namespace XRE {
 	};
 
 	
+	class Node_SetMaterial :public BluePrintNode {
+	public:
+		string m_Mat;
+
+		Node_SetMaterial() {
+			m_Title = u8"设置材质";
+			m_Color = Blue;
+			m_NodeTypeID = 73;
+
+		}
+		void Initialize() override {
+			AddInput(FieldType::Field_Int);
+			m_Inputs[0]->m_Name = u8"对象";
+
+			AddVar(FieldType::Field_String, &m_Mat);
+			m_Variants[0].m_Name = u8"材质";
+			CreateControlFlow();
+
+		}
+
+		void Process() override {
+			if (m_Inputs[0]->GetValue<int>() >= 0 && m_BluePrint->m_sc->GetObj(m_Inputs[0]->GetValue<int>())) {
+				auto ent = entt::entity(m_Inputs[0]->GetValue<int>());
+				GameObject go(ent, m_BluePrint->m_sc);
+				go.GetComponent<MeshRendererComponent>().m_Materials[0] = ResourceManager::GetMaterial(m_Mat);
+			}
+		}
+	};
+
+
+	class Node_SetRigidBodyMotion:public BluePrintNode {
+	public:
+		int rbStatus;
+
+		Node_SetRigidBodyMotion() {
+			m_Title = u8"设置刚体状态";
+			m_Color = Blue;
+			m_NodeTypeID = 74;
+
+		}
+		void Initialize() override {
+			AddInput(FieldType::Field_Int);
+			m_Inputs[0]->m_Name = u8"对象";
+
+			
+			AddVar(FieldType::Field_Int, &rbStatus);
+			m_Variants[0].m_Name = u8"运动形式";
+			CreateControlFlow();
+
+		}
+
+		void Process() override {
+			if (m_Inputs[0]->GetValue<int>() >= 0 && m_BluePrint->m_sc->GetObj(m_Inputs[0]->GetValue<int>())) {
+				auto ent = entt::entity(m_Inputs[0]->GetValue<int>());
+				GameObject go(ent, m_BluePrint->m_sc);
+				go.GetComponent<RigidBodyComponent>().m_MotionType = RigidBodyComponent::RigidBodyMotion(rbStatus);
+			}
+		}
+	};
+
+
+	class Node_SetPointLight :public BluePrintNode {
+	public:
+		int rbStatus;
+
+		Node_SetPointLight(){
+			m_Title = u8"设置点光源";
+			m_Color = Blue;
+			m_NodeTypeID = 75;
+
+		}
+		void Initialize() override {
+			AddInput(FieldType::Field_Int);
+			m_Inputs[0]->m_Name = u8"对象";
+
+			AddInput(FieldType::Field_Float);
+			m_Inputs[1]->m_Name = u8"强度";
+			m_Inputs[1]->m_Necessary = false;
+
+			AddInput(FieldType::Field_Float);
+			m_Inputs[2]->m_Name = u8"r";
+			m_Inputs[2]->m_Necessary = false;
+			AddInput(FieldType::Field_Float);
+			m_Inputs[3]->m_Name = u8"g";
+			m_Inputs[3]->m_Necessary = false;
+			AddInput(FieldType::Field_Float);
+			m_Inputs[4]->m_Name = u8"b";
+			m_Inputs[4]->m_Necessary = false;
+			
+
+			CreateControlFlow();
+
+		}
+
+		void Process() override {
+			if (m_Inputs[0]->GetValue<int>() >= 0 && m_BluePrint->m_sc->GetObj(m_Inputs[0]->GetValue<int>())) {
+				auto ent = entt::entity(m_Inputs[0]->GetValue<int>());
+				GameObject go(ent, m_BluePrint->m_sc);
+				if(m_Inputs[1]->m_Connection)
+				go.GetComponent<PointLightComponent>().m_Intensity = m_Inputs[1]->GetValue<float>();
+
+				if (m_Inputs[2]->m_Connection)
+					go.GetComponent<PointLightComponent>().m_Color.r = m_Inputs[2]->GetValue<float>();
+				if (m_Inputs[3]->m_Connection)
+					go.GetComponent<PointLightComponent>().m_Color.r = m_Inputs[3]->GetValue<float>();
+				if (m_Inputs[4]->m_Connection)
+					go.GetComponent<PointLightComponent>().m_Color.r = m_Inputs[4]->GetValue<float>();
+			}
+		}
+	};
+
+
+
 
 }

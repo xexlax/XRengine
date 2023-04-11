@@ -1,7 +1,7 @@
 {
     "value0": {
-        "value0": "Assets/materials/brick.mat",
-        "value1": "Assets/materials/brick.mat",
+        "value0": "materials/brick.mat",
+        "value1": "materials/brick.mat",
         "value2": 1.0,
         "value3": 1.0,
         "value4": 1.0,

@@ -9,6 +9,8 @@ namespace XRE {
 
         XRef<T> Get(const std::string& filepath);
 
+        void UnloadAll();
+
         
     private:
         std::unordered_map<std::string, XRef<T>> m_Storage;
@@ -29,6 +31,12 @@ namespace XRE {
             return t;
         }
 
+    }
+
+    template<typename T>
+    void Library<T>::UnloadAll()
+    {
+        m_Storage.clear();
     }
 
    

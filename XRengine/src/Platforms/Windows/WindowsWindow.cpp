@@ -48,7 +48,7 @@ namespace XRE{
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 		
-		XRE_CORE_INFO("正在打开窗口{0} ({1}, {2})", props.Title, props.Width, props.Height);
+		//XRE_CORE_INFO("正在打开窗口{0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{

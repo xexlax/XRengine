@@ -15,7 +15,7 @@ const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 EditorLayer::EditorLayer()
 	: Layer("EditorLayer")
 {
-	
+	XRE_CORE_WARN("XRE-Editor 已启动");
 }
 
 void EditorLayer::OnAttach()
@@ -222,6 +222,7 @@ void EditorLayer::OnImGuiRender(){
 			if (ImGui::MenuItem(u8"关闭项目")) {
 				
 				m_Project = nullptr;
+				ResourceManager::UnloadAllResources();
 				
 			}
 

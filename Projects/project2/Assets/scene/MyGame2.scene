@@ -78,7 +78,7 @@
         },
         "value3": {
             "value0": true,
-            "value1": 9.612541198730469,
+            "value1": 19.91391944885254,
             "value2": 1.2033066749572755,
             "value3": 0.2626674175262451,
             "value4": 0.0,
@@ -347,7 +347,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -382,7 +382,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 1
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -583,9 +588,9 @@
         },
         "value3": {
             "value0": true,
-            "value1": 3.7133231163024904,
-            "value2": 1.1021260023117066,
-            "value3": -3.1869401931762697,
+            "value1": 3.6642508506774904,
+            "value2": 1.184035062789917,
+            "value3": -3.1386921405792238,
             "value4": 0.0,
             "value5": 0.0,
             "value6": 0.0,
@@ -650,6 +655,10 @@
                     {
                         "key": 0,
                         "value": false
+                    },
+                    {
+                        "key": 1,
+                        "value": false
                     }
                 ],
                 "value2": [
@@ -695,7 +704,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -730,7 +739,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 0
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -770,7 +784,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -805,7 +819,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 0
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -845,7 +864,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -880,7 +899,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 0
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -920,7 +944,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -955,7 +979,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 0
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -995,7 +1024,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -1030,7 +1059,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 1
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -1070,7 +1104,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -1105,7 +1139,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 0
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []
@@ -1145,7 +1184,7 @@
             "value0": true,
             "value1": "models\\cube.obj",
             "value2": [
-                "../Assets/materials/newMaterial.mat"
+                "materials/default.mat"
             ]
         },
         "value6": {
@@ -1180,7 +1219,12 @@
         "value9": {
             "value0": "blueprint\\brick.bp",
             "value1": {
-                "value0": [],
+                "value0": [
+                    {
+                        "key": 0,
+                        "value": 0
+                    }
+                ],
                 "value1": [],
                 "value2": [],
                 "value3": []

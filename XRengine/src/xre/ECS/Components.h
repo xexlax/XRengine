@@ -8,6 +8,8 @@
 #include "xre\Physics\PhysicsMotion.h"
 #include "xre\Physics\Collision.h"
 
+#include "xre\Audio\Audio.h"
+
 #include "xre\BluePrint\BluePrint.h"
 #include <cereal/archives/json.hpp>
 #include <cereal/types/vector.hpp>
@@ -495,6 +497,39 @@ namespace XRE {
 		BluePrintComponent() :Component(u8"蓝图") {
 			m_BluePrintProperties = XMakeRef<BluePrintProperties>();
 		};
+	};
+
+	class AudioSourceComponent : public Component {
+	public:
+
+		 
+		std::vector<std::string> AudioClipPaths;
+		std::vector<XRef<AudioClip>> AudioClips;
+		
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active,AudioClipPaths);
+
+		}
+
+		AudioSourceComponent() :Component(u8"声源") {};
+		
+	};
+
+	class AudioListenerComponent : public Component {
+	public:
+
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active);
+
+		}
+
+		AudioListenerComponent() :Component(u8"声音接收器") {};
+
 	};
 }
 

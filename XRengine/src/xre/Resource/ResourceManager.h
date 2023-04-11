@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "Library.h"
 #include "xre/Project/project.h"
+#include "xre\Audio\Audio.h"
 //#include "Prefab.h"
 
 namespace XRE {
@@ -21,6 +22,14 @@ namespace XRE {
 		static void BindProj(XRef<Project> proj);
 		static std::string GetFullPath(std::string path);
 		static std::string GetRelativePath(std::string path);
+
+
+		static void UnloadAllResources();
+
+
+
+		static XRef<AudioClip> GetAudioClip(const std::string& path) { return m_AudioClipLib.Get(GetFullPath(path)); }
+		static XRef<AudioClip> GetEditorAudioClip(const std::string& path) { return m_AudioClipLib.Get(path); }
 
 		static XRef<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
 		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(GetFullPath(path)); }
@@ -45,6 +54,7 @@ namespace XRE {
 		static Library<Model> m_ModelLib;
 		static Library<Material> m_MaterialLib;
 		static Library<BluePrint> m_BluePrintLib;
+		static Library<AudioClip> m_AudioClipLib;
 		static XRef<Project> m_CurProj;
 		//static Library<Prefab> m_PrefabLib; // Ìí¼ÓPrefab¿â
 

@@ -91,6 +91,6 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_link_libraries(${PROJECT_NAME}
         # ${CMAKE_THREAD_LIBS_INIT}     # Needed for unix builds to link to pthread
         # LOGGING
-        Glad GLFW ImGui OpenGL32.Lib Jolt
+        Glad GLFW ImGui OpenGL32.Lib Jolt OpenAL
         )
 
