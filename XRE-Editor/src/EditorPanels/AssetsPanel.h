@@ -17,8 +17,8 @@ namespace XRE {
 		std::string m_Assets;
 
 		XRef<Texture2D> 
-			m_DirectoryIcon, m_FileIcon, m_ModelIcon,m_BluePrintIcon, 
-			m_SceneIcon,m_ShaderIcon ,m_TexIcon, m_MaterialIcon;
+			m_DirectoryIcon, m_FileIcon, m_ModelIcon,m_BluePrintIcon, m_GOIcon, 
+			m_AudioIcon, m_SceneIcon,m_ShaderIcon ,m_TexIcon, m_MaterialIcon;
 	};
 
 }

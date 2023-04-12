@@ -111,4 +111,38 @@ namespace XRE {
 		}
 
 	};
+
+
+	class Node_OnTrigger : public BluePrintNode {
+		bool last;
+	public:
+		Node_OnTrigger() {
+			m_NodeTypeID = 54;
+			m_Title = u8"´¥·¢Ê±";
+			m_Color = Yellow;
+		}
+
+		void Initialize() override {
+			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Bool));
+		
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Bool));
+
+
+		}
+
+		void Start() override {
+			last = false;
+		}
+
+		void Process() override {
+			if (last == false && m_Inputs[0]->GetValue<bool>() == true) {
+				m_Outputs[0]->ValueBool = true;
+			}
+			else
+				m_Outputs[0]->ValueBool = false;
+			
+			last = m_Inputs[0]->GetValue<bool>();
+
+		}
+	};
 }

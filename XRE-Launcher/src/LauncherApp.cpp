@@ -58,6 +58,8 @@ public:
 		m_Scene->Deserialize(m_Project->m_RootPath + "\\Assets\\" + m_Project->m_Scenes[0]);
 		m_Scene->OnViewportResize(windowsSizeX, windowsSizeY);
 		m_Scene->OnRuntimeBegin();
+
+
 		
 	};
 	virtual void OnDetach() override {

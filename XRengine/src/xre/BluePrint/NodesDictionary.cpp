@@ -15,6 +15,8 @@ namespace XRE::Nodes {
 		switch (id)
 		{
 			//Basic
+		case 0:
+			return XMakeRef<Node_Desc>();
 		case 1:
 			return XMakeRef<Node_Debug>();
 		case 2:
@@ -31,6 +33,10 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_GetField>();
 		case 12:
 			return XMakeRef<Node_SetField>();
+		case 13:
+			return XMakeRef<Node_TotalTime>();
+		case 14:
+			return XMakeRef<Node_Rand>();
 		case 21:
 			return XMakeRef<Node_Plus>();
 		case 22:
@@ -80,6 +86,10 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_OnSceneBegin>();
 		case 53:
 			return XMakeRef<Node_OnCollision>();
+
+		case 54:
+			return XMakeRef<Node_OnTrigger>();
+
 		case 59:
 			return XMakeRef<Node_GetByName>();
 		case 60:
@@ -90,13 +100,13 @@ namespace XRE::Nodes {
 		case 62:
 			return XMakeRef<Node_SetPosition>();
 		case 63:
-			return XMakeRef<Node_GetPosition>();
+			return XMakeRef<Node_GetRotation>();
 		case 64:
-			return XMakeRef<Node_SetPosition>();
+			return XMakeRef<Node_SetRotation>();
 		case 65:
-			return XMakeRef<Node_GetPosition>();
+			return XMakeRef<Node_GetScale>();
 		case 66:
-			return XMakeRef<Node_SetPosition>();
+			return XMakeRef<Node_SetScale>();
 		case 67:
 			return XMakeRef<Node_SetLinearVelocity>();
 		case 68:
@@ -122,6 +132,9 @@ namespace XRE::Nodes {
 			return XMakeRef<Node_OnKeyEvent>();
 		case 82:
 			return XMakeRef<Node_OnMouseEvent>();
+
+		case 85:
+			return XMakeRef<Node_PlayAudio>();
 		default:
 			return nullptr;
 		}

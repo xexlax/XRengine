@@ -201,7 +201,7 @@ namespace XRE {
 	public:
 
 		Node_GetScale() {
-			m_Title = u8"获取尺寸";
+			m_Title = u8"获取缩放";
 			m_Color = Blue;
 			m_NodeTypeID = 65;
 
@@ -234,7 +234,7 @@ namespace XRE {
 	public:
 
 		Node_SetScale() {
-			m_Title = u8"设置尺寸";
+			m_Title = u8"设置缩放";
 			m_Color = Blue;
 			m_NodeTypeID = 66;
 

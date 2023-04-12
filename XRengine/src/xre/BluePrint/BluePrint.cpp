@@ -170,6 +170,7 @@ namespace XRE {
 	XRef<BluePrint> BluePrint::Create(std::string m_FileName)
 	{
 		XRef<BluePrint> r = XMakeRef<BluePrint>();
+
 		r->LoadFromFile(m_FileName);
 		return r;
 	}

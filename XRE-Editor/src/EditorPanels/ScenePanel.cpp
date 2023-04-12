@@ -117,6 +117,7 @@ namespace XRE{
 				if (ImGui::MenuItem(u8"胶囊")) {
 					auto go = m_Scene->CreateGameObject(u8"胶囊");
 					go.AddComponent<MeshRendererComponent>(ResourceManager::GetElementalModel(Elemental_Model::Capsule));
+					
 					CommandManager::Get().Command_CreateObj(go);
 				}
 				ImGui::EndMenu();
@@ -127,9 +128,16 @@ namespace XRE{
 				go.AddComponent<PointLightComponent>();
 				CommandManager::Get().Command_CreateObj(go);
 			}
+
+			if (ImGui::MenuItem(u8"平行光")) {
+				auto go = m_Scene->CreateGameObject(u8"日光");
+				go.AddComponent<DirectionalLightComponent>();
+				CommandManager::Get().Command_CreateObj(go);
+			}
 			if (ImGui::MenuItem(u8"摄像机")) {
 				auto go = m_Scene->CreateGameObject(u8"摄像机");
 				go.AddComponent<CameraComponent>(CameraType::Perspective);
+				go.AddComponent<AudioListenerComponent>();
 				CommandManager::Get().Command_CreateObj(go);
 			}
 

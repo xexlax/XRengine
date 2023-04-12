@@ -60,7 +60,7 @@ namespace XRE {
 	void OpenGLRendererAPI::Init()
 	{
 		glEnable(GL_BLEND);
-		//glShadeModel(GL_SMOOTH);
+		glShadeModel(GL_SMOOTH);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);

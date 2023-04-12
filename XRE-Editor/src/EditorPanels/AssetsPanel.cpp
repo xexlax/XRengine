@@ -18,6 +18,8 @@ namespace XRE {
 		m_TexIcon = ResourceManager::GetEditorTex2D("../Assets/textures/tex_logo.png");
 		m_MaterialIcon = ResourceManager::GetEditorTex2D("../Assets/textures/mat_logo.png");
 		m_BluePrintIcon = ResourceManager::GetEditorTex2D("../Assets/textures/bp_logo.png");
+		m_GOIcon = ResourceManager::GetEditorTex2D("../Assets/textures/prefab_logo.png");
+		m_AudioIcon = ResourceManager::GetEditorTex2D("../Assets/textures/audio_logo.png");
 	}
 
 	void AssetsPanel::SetRootDir(std::string assetpath)
@@ -76,6 +78,8 @@ namespace XRE {
 			if (filenameString.find(".png") != string::npos || filenameString.find(".jpg") != string::npos) iconid = m_TexIcon->GetRendererId();
 			if (filenameString.find(".mat") != string::npos) iconid = m_MaterialIcon->GetRendererId();
 			if (filenameString.find(".bp") != string::npos) iconid = m_BluePrintIcon->GetRendererId();
+			if (filenameString.find(".go") != string::npos) iconid = m_GOIcon->GetRendererId();
+			if (filenameString.find(".wav") != string::npos) iconid = m_AudioIcon->GetRendererId();
 			ImGui::PushID(filenameString.c_str());
 			
 			ImGui::ImageButton(ImTextureID(iconid), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });

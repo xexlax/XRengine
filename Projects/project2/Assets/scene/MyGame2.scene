@@ -394,6 +394,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -474,6 +480,12 @@
             "value9": 45.0
         },
         "value6": {
+            "value0": "AudioListener"
+        },
+        "value7": {
+            "value0": true
+        },
+        "value8": {
             "value0": "EndObj"
         }
     },
@@ -751,6 +763,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -831,6 +849,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -911,6 +935,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -991,6 +1021,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -1007,9 +1043,9 @@
         },
         "value3": {
             "value0": true,
-            "value1": -4.050397872924805,
-            "value2": 1.0,
-            "value3": 2.0,
+            "value1": -4.088544845581055,
+            "value2": 1.0485230684280396,
+            "value3": 2.002380132675171,
             "value4": 0.0,
             "value5": 0.0,
             "value6": 0.0,
@@ -1071,6 +1107,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -1151,6 +1193,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },
@@ -1231,6 +1279,12 @@
             }
         },
         "value10": {
+            "value0": "AudioSource"
+        },
+        "value11": {
+            "value0": true
+        },
+        "value12": {
             "value0": "EndObj"
         }
     },

@@ -9,7 +9,27 @@
 //函数过程类节点：需要加上create controlflow 和 m_FlowProc->ValueBool = true;
 
 namespace XRE {
+	class Node_Desc : public BluePrintNode {
+		std::string text;
+	public:
 
+		Node_Desc() {
+			m_Title = u8"注释";
+			m_Color = Grey;
+			m_NodeTypeID = 0;
+		}
+
+		void Initialize() override {
+			AddVar(FieldType::Field_String ,&text);
+			m_Variants[0].m_Name = u8"##Desc";
+		}
+
+		void Process() override {
+
+			
+		}
+
+	};
 	class Node_Debug :public BluePrintNode {
 	public: 
 		
@@ -231,5 +251,49 @@ namespace XRE {
 		bool bvalue;
 		float fvalue;
 		std::string svalue;
+	};
+
+	class Node_TotalTime : public BluePrintNode {
+		float m_Time;
+	public:
+
+		Node_TotalTime(){
+			m_Title = u8"总时间";
+			m_Color = Grey;
+			m_NodeTypeID = 13;
+		}
+
+		void Initialize() override {
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+		}
+		void Start() override {
+			m_Time = 0;
+		}
+		void Process() override {
+			m_Time += m_BluePrint->m_ts;
+			m_Outputs[0]->ValueFloat = m_Time;
+		}
+
+	};
+
+	class Node_Rand : public BluePrintNode {
+	
+	public:
+
+		Node_Rand() {
+			m_Title = u8"随机小数";
+			m_Color = Grey;
+			m_NodeTypeID = 14;
+		}
+
+		void Initialize() override {
+			m_Outputs.push_back(m_BluePrint->MakeOutput(FieldType::Field_Float));
+		}
+		
+		void Process() override {
+			
+			m_Outputs[0]->ValueFloat = rand();
+		}
+
 	};
 }

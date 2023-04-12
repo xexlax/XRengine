@@ -35,7 +35,7 @@ namespace XRE {
 	{
 		if (m_CurProj == nullptr) return path;
 		
-		return path.substr(m_CurProj->m_RootPath.length());
+		return path.substr((m_CurProj->m_RootPath + "\\Assets\\").length() );
 	}
 	void ResourceManager::UnloadAllResources()
 	{
@@ -50,17 +50,17 @@ namespace XRE {
 		switch (em)
 		{
 		case Elemental_Model::Cube:
-			return m_ModelLib.Get("..\\Assets\\models\\cube.obj");
+			return m_ModelLib.Get(GetFullPath("models\\cube.obj"));
 		case Elemental_Model::Plane:
-			return m_ModelLib.Get("..\\Assets\\models\\plane.obj");
+			return m_ModelLib.Get(GetFullPath("models\\plane.obj"));
 		case Elemental_Model::Sphere:
-			return m_ModelLib.Get("..\\Assets\\models\\sphere.obj");
+			return m_ModelLib.Get(GetFullPath("models\\sphere.obj"));
 		case Elemental_Model::Cone:
-			return m_ModelLib.Get("..\\Assets\\models\\cone.obj");
+			return m_ModelLib.Get(GetFullPath("models\\cone.obj"));
 		case Elemental_Model::Cylinder:
-			return m_ModelLib.Get("..\\Assets\\models\\cylinder.obj");
+			return m_ModelLib.Get(GetFullPath("models\\cylinder.obj"));
 		case Elemental_Model::Capsule:
-			return m_ModelLib.Get("..\\Assets\\models\\capsule.obj");
+			return m_ModelLib.Get(GetFullPath("models\\capsule.obj"));
 		default:
 			XRE_ERROR(u8"不存在的基础模型");
 			break;

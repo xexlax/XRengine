@@ -228,7 +228,7 @@ namespace XRE {
 		MeshRendererComponent(const MeshRendererComponent&) = default;
 		MeshRendererComponent(XRef<Model> model)
 			:Component(u8"模型渲染器"), m_Model(model), m_Materials(model->m_defaultMaterials) {
-			m_ModelPath = model->getPath();
+			m_ModelPath = ResourceManager::GetRelativePath(model->getPath());
 			if (m_Materials.empty())m_Materials.push_back(nullptr);
 		};
 		MeshRendererComponent(const std::string& path)
@@ -476,7 +476,7 @@ namespace XRE {
 		void SetBP(XRef<BluePrint> bp) {
 			m_BluePrint = bp;
 			m_BluePrintProperties->Update(bp->GetDefaultProperties());
-			m_BluePrintPath =  m_BluePrint->GetFileName();
+			m_BluePrintPath =  ResourceManager::GetRelativePath(m_BluePrint->GetFileName());
 		}
 
 		template <class Archive>
@@ -502,14 +502,12 @@ namespace XRE {
 	class AudioSourceComponent : public Component {
 	public:
 
-		 
-		std::vector<std::string> AudioClipPaths;
-		std::vector<XRef<AudioClip>> AudioClips;
+		vector<XRef<AudioInstance>> auInstances;
 		
 		template <class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(m_Active,AudioClipPaths);
+			ar(m_Active);
 
 		}
 

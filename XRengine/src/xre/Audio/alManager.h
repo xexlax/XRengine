@@ -48,9 +48,13 @@ private:
     ALCcontext* context;//上下文指针
     ALCboolean bEAX;//环境音效扩展（声卡标准）
 
-    uint32_t bufferid = 0;
+    
     ALuint buffers[MAX_BUFFER_SIZE + 1];//用于储存音频数据的缓存ID
     ALuint sources[MAX_BUFFER_SIZE + 1];//用于储存音源ID
+
+    bool buffersAvail[MAX_BUFFER_SIZE];
+    bool sourcesAvail[MAX_BUFFER_SIZE];
+
     bool loadWavFile(const string filename, ALuint buffer, ALsizei* size, ALsizei* frequency, ALenum* format);//根据文件名载入wav文件到指定的bufferID当中。
     /*
     Copyright (c) 2018, yinan Miao;
@@ -63,10 +67,17 @@ private:
     */
 
     void loadWav2Buffer(ALuint bufferI, const char* fileName);//根据文件名载入指定wav文件，并且绑定到指定ID的buffer和音源。
-    void setListenerPos(glm::vec3 pos, glm::vec3 vel, glm::vec3 at, glm::vec3 up);//设置听者的位置、速度、脸朝向向量以及头顶朝向向量。
-    void setSourcePos(int sI, glm::vec3 pos, glm::vec3 vel, glm::vec3 at);//设置指定ID音源的位置、速度、朝向向量。
+    
+    
+    void setListenerPos(glm::vec3 pos);//设置听者的位置、速度、脸朝向向量以及头顶朝向向量。
+    void setListenerOrientation(glm::vec3 front, glm::vec3 up);
+    void setSourcePos(int sI, glm::vec3 pos);//设置指定ID音源的位置、速度、朝向向量。
     void setSourcePhy(int sI, float Gain, float maxDis, float halfDistance, float rollOff = 1.0);//设置指定ID音源的物理参数：缩放系数、最大传播距离、衰减参数以及半衰参数。实际信号= (GAIN-20*log10(1+ROLLOFF*(距离-半衰距离)/半衰距离))原始信号
+    void setSourceLoop(int sI, bool loop);
     void play(int sI);//播放指定ID的音源
+    void stop(int sI);//停止指定ID的音源
+    void pause(int sI);//停止指定ID的音源
+    bool isSrcEnd(int sI);
     int getSourceId(int sI);//得到指定ID的实际音源ID，懂openAL的朋友可以使用其进行自定义操作
     void init();//初始化openAL
     void end();//关闭openAL
@@ -82,24 +93,59 @@ public:
         s_ALManager->init(); 
     }
     static inline void End() { s_ALManager->end(); }
-    static int LoadWaveToBuffer(const char* fileName) {
-        int id = s_ALManager->bufferid;
-        if (s_ALManager->bufferid > MAX_BUFFER_SIZE + 1) {
-            s_ALManager->bufferid = 0;
-            id = 0;
+
+    //将一个声音文件载入到Buffer，返回BufferID
+    static uint32_t LoadWaveToBuffer(const char* fileName) {
+
+
+        for (int i = 0;i < MAX_BUFFER_SIZE;i++) {
+            if (s_ALManager->buffersAvail[i]) {
+                s_ALManager->loadWav2Buffer(i, fileName);
+                return i;
+            }
+                
         }
-        s_ALManager->loadWav2Buffer(s_ALManager->bufferid, fileName);
-        s_ALManager->bufferid++;
-
-        return id;
-        
+        return MAX_BUFFER_SIZE;
     }
-    static inline void SetListenerPos(glm::vec3 pos, glm::vec3 vel = glm::vec3(0.0f), glm::vec3 at = glm::vec3(0.0f), glm::vec3 up = glm::vec3(0,1.0f,0)) {
-        s_ALManager->setListenerPos(pos, vel, at, up);
+    //将一个Buffer中的声音绑定到一个Src
+    static uint32_t BindBufferToSrc(uint32_t bufferID) {
+        for (int i = 0;i < MAX_BUFFER_SIZE;i++) {
+            if (s_ALManager->sourcesAvail[i]) {
+                alSourcei(s_ALManager->sources[i], AL_BUFFER, s_ALManager->buffers[bufferID]);//绑定bufferID到音源ID。
+                s_ALManager->sourcesAvail[i] = false;
+                return i;
+            }
+        }
+        return MAX_BUFFER_SIZE;
     }
 
-    static inline void SetSourcePos(int sI, glm::vec3 pos, glm::vec3 vel = glm::vec3(0.0f), glm::vec3 at = glm::vec3(0.0f)) {
-        s_ALManager->setSourcePos(sI, pos, vel, at);
+    static bool IsSrcEnded(uint32_t sID) {
+        return s_ALManager->isSrcEnd(sID);
+       
+    }
+
+    static inline void ReleaseBuffer(uint32_t bufferID) {
+        s_ALManager-> buffersAvail[bufferID] = true;
+
+    }
+    static inline void ReleaseSrc(uint32_t SrcID) {
+        s_ALManager->buffersAvail[SrcID] = true;
+    }
+
+    static void SetSrcLoop(uint32_t SrcID, bool loop) {
+        s_ALManager->setSourceLoop(SrcID, loop);
+    }
+
+    static inline void SetListenerPos(glm::vec3 pos) {
+        s_ALManager->setListenerPos(pos);
+    }
+
+    static inline void SetListenerOrientation(glm::vec3 front, glm::vec3 up) {
+        s_ALManager->setListenerOrientation(front,up);
+    }
+
+    static inline void SetSourcePos(int sI, glm::vec3 pos) {
+        s_ALManager->setSourcePos(sI, pos);
     }
     static inline void SetSourcePhy(int sI, float Gain, float maxDis, float halfDistance, float rollOff = 1.0) {
         s_ALManager->setSourcePhy(sI, Gain, maxDis, halfDistance, rollOff);
@@ -107,7 +153,19 @@ public:
     static inline void Play(int sI) {
         s_ALManager->play(sI);
     }
+    static inline void Pause(int sI) {
+        s_ALManager->pause(sI);
+    }
+    static inline void Stop(int sI) {
+        s_ALManager->stop(sI);
+       
+    }
     static inline int GetSourceId(int sI) {
         return s_ALManager->getSourceId(sI);
+    }
+
+    static inline void StopAll() {
+        for (int i = 0;i < MAX_BUFFER_SIZE;i++)
+            s_ALManager->stop(i);
     }
 };

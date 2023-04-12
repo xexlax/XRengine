@@ -53,6 +53,7 @@ namespace XRE{
 
 
 		UpdateLogic(ts);
+		UpdateAudio(ts);
 		//UpdateNativeScripting(ts);
 		
 		XRef<Camera> mainCamera = nullptr;
@@ -339,12 +340,39 @@ namespace XRE{
 	{
 		{
 			auto view = m_Registry.view<TransformComponent,AudioListenerComponent>();
-
+			
 			for (auto entity : view) {
 				auto [transform, al] = view.get<TransformComponent, AudioListenerComponent>(entity);
 				if (al.m_Active) {
 					alManager::SetListenerPos(transform.GetGlobalTranslation());
+					GameObject go(entity, this);
+					if (go.HasComponent<CameraComponent>()) {
+						auto Cam = go.GetComponent<CameraComponent>().m_Camera;
+						alManager::SetListenerOrientation(
+							Cam->GetFront(), Cam->GetUp()
+						);
+					}
 					break;
+				}
+			}
+		}
+		
+		{
+			auto view = m_Registry.view<TransformComponent, AudioSourceComponent>();
+
+			for (auto entity : view) {
+				auto [transform, as] = view.get<TransformComponent, AudioSourceComponent>(entity);
+				if (as.m_Active) {
+					for (auto it = as.auInstances.begin();it!=as.auInstances.end();) {
+						auto& ai = *it;
+						ai->SetPos(transform.GetGlobalTranslation());
+						if (ai->TestEnded()) {
+							it=as.auInstances.erase(it);
+							
+						}
+						else it++;
+					}
+					
 				}
 			}
 		}
@@ -581,6 +609,17 @@ namespace XRE{
 			
 			}
 		}
+		//Audio
+		{
+			auto view = m_Registry.view<TransformComponent, AudioSourceComponent>();
+
+			for (auto entity : view) {
+				auto [transform, as] = view.get<TransformComponent, AudioSourceComponent>(entity);
+				as.auInstances.clear();
+			}
+		}
+		alManager::SetListenerPos(glm::vec3(100.0f, 0, 0));
+
 
 		
 	}
@@ -601,6 +640,18 @@ namespace XRE{
 
 			}
 		}
+		alManager::StopAll();
+
+		{
+			auto view = m_Registry.view<TransformComponent, AudioSourceComponent>();
+
+			for (auto entity : view) {
+				auto [transform, as] = view.get<TransformComponent, AudioSourceComponent>(entity);
+				as.auInstances.clear();
+			}
+		}
+
+
 		m_Runtime = false;
 		//Load();
 	}
@@ -668,5 +719,15 @@ namespace XRE{
 
 	}
 
+	template<>
+	void Scene::OnComponentAdded<AudioSourceComponent>(GameObject go, AudioSourceComponent& component)
+	{
 
+	}
+
+	template<>
+	void Scene::OnComponentAdded<AudioListenerComponent>(GameObject go, AudioListenerComponent& component)
+	{
+
+	}
 }

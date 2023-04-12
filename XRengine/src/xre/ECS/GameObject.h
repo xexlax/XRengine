@@ -77,6 +77,16 @@ namespace XRE {
 					archive(c);
 					archive(ngo.GetComponent<BluePrintComponent>());
 				}
+				if (ngo.HasComponent<AudioSourceComponent>()) {
+					ComponentType c("AudioSource");
+					archive(c);
+					archive(ngo.GetComponent<AudioSourceComponent>());
+				}
+				if (ngo.HasComponent<AudioListenerComponent>()) {
+					ComponentType c("AudioListener");
+					archive(c);
+					archive(ngo.GetComponent<AudioListenerComponent>());
+				}
 
 				if (ngo.HasComponent<TransformComponent>()) {
 					TransformComponent tc = ngo.GetComponent<TransformComponent>();
@@ -151,6 +161,14 @@ namespace XRE {
 				}
 				if (n.m_Name == "BluePrint") {
 					BluePrintComponent& tc = go.AddComponent<BluePrintComponent>();
+					archive(tc);
+				}
+				if (n.m_Name == "AudioSource") {
+					AudioSourceComponent& tc = go.AddComponent<AudioSourceComponent>();
+					archive(tc);
+				}
+				if (n.m_Name == "AudioListener") {
+					AudioListenerComponent& tc = go.AddComponent<AudioListenerComponent>();
 					archive(tc);
 				}
 

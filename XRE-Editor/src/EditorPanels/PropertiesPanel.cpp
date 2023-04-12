@@ -77,6 +77,20 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (ImGui::MenuItem(u8"…˘“Ù‘¥"))
+				{
+					if (!go.HasComponent<AudioSourceComponent>())
+						CommandManager::Get().Command_Create_Component<AudioSourceComponent>(go.AddComponent<AudioSourceComponent>(), go);
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem(u8"…˘“ÙΩ” ’∆˜"))
+				{
+					if (!go.HasComponent<AudioListenerComponent>())
+						CommandManager::Get().Command_Create_Component<AudioListenerComponent>(go.AddComponent<AudioListenerComponent>(), go);
+					ImGui::CloseCurrentPopup();
+				}
+
 
 
 				ImGui::EndPopup();
@@ -191,8 +205,16 @@ namespace XRE {
 		if (go.HasComponent<RayComponent>())
 			DrawComponent<RayComponent>(go);
 
+		if (go.HasComponent<AudioSourceComponent>())
+			DrawComponent<AudioSourceComponent>(go);
+
+		if (go.HasComponent<AudioListenerComponent>())
+			DrawComponent<AudioListenerComponent>(go);
+
 		if (go.HasComponent<BluePrintComponent>())
 			DrawComponent<BluePrintComponent>(go);
+
+		
 	}
 
 	template<typename T>
@@ -542,14 +564,14 @@ namespace XRE {
 	template<>
 	void PropertiesPanel::DrawComponentLayout<BluePrintComponent>(BluePrintComponent& component) {
 		if (component.m_BluePrint == nullptr) {
-			if (ImGui::Button(u8"New BluePrint")) {
+			if (ImGui::Button(u8"–¬¿∂Õº")) {
 				component.m_BluePrint = XMakeRef<BluePrint>();
 				auto path = FileDialogs::SaveFile("BluePrint (*.bp)\0*.bp\0");
 
 				if (path != "") {
 					if (path.find(".bp") == string::npos) path += ".bp";
 					component.m_BluePrint->Save(path);
-					component.SetBP(ResourceManager::GetBluePrint(path));
+					component.SetBP(component.m_BluePrint);
 				}
 
 			}
@@ -620,6 +642,20 @@ namespace XRE {
 		}
 
 		ImGui::EndChild();
+	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<AudioSourceComponent>(AudioSourceComponent& component) {
+
+		
+
+	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<AudioListenerComponent>(AudioListenerComponent& component) {
+
+		
+
 	}
 
 

@@ -15,6 +15,7 @@ XRE-SANDBOX/
 Projects/
 
 *.sln
+*.wav
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user

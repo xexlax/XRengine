@@ -51,15 +51,20 @@ bool alManager::loadWavFile(const std::string filename, ALuint buffer, ALsizei* 
         //Read in the the last byte of data before the sound file
         fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
         //check for data tag in memory
-        if (wave_data.subChunkID[0] != 'd' ||
+        /*if (wave_data.subChunkID[0] != 'd' ||
             wave_data.subChunkID[1] != 'a' ||
             wave_data.subChunkID[2] != 't' ||
             wave_data.subChunkID[3] != 'a')
+            if (wave_data.subChunkID[0] != 'L' ||
+                wave_data.subChunkID[1] != 'I' ||
+                wave_data.subChunkID[2] != 'S' ||
+                wave_data.subChunkID[3] != 'T')
         {
-            XRE_ERROR("{0},{1},{2}", wave_data.subChunkID[0],wave_data.subChunkID[1] , wave_data.subChunkID[2] ,wave_data.subChunkID[3]);
+
+            XRE_ERROR("{0},{1},{2},{3}", wave_data.subChunkID[0],wave_data.subChunkID[1] , wave_data.subChunkID[2] ,wave_data.subChunkID[3]);
             
             throw ("Invalid data header");
-        }
+        }*/
 
         //Allocate memory for data
         data = new unsigned char[wave_data.subChunk2Size];
@@ -117,34 +122,40 @@ void alManager::loadWav2Buffer(ALuint bufferI, const char* fileName)
     ALsizei freq;
     ALenum format;
     loadWavFile(fileName, buffers[bufferI], &size, &freq, &format);//读取到bufferID。
-    alSourcei(sources[bufferI], AL_BUFFER, buffers[bufferI]);//绑定bufferID到音源ID。
+    buffersAvail[bufferI] = false;
+    
 }
 
-void alManager::setListenerPos(glm::vec3 pos, glm::vec3 vel, glm::vec3 at, glm::vec3 up)
+void alManager::setListenerPos(glm::vec3 pos)
 {
 
-    //设置位置、速度、朝向向量以及头顶向量。
-    ALfloat listenerPos[] = { pos.x,pos.y,pos.z };
-    ALfloat listenerVel[] = { vel.x,vel.y,vel.z };
-    ALfloat listenerOri[] = { at.x,at.y,at.z, up.x,up.y,up.z };
-    alListenerfv(AL_POSITION, listenerPos);
-    alListenerfv(AL_VELOCITY, listenerVel);
-    alListenerfv(AL_ORIENTATION, listenerOri);
+   
+    
+  
+    alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+    
+    
+    
 }
 
-void alManager::setSourcePos(int sI, glm::vec3 pos, glm::vec3 vel, glm::vec3 at)
+void alManager::setListenerOrientation(glm::vec3 front, glm::vec3 up)
 {
-    //设置位置、速度以及朝向向量
-    ALfloat sPos[] = { pos.x,pos.y,pos.z };
-    ALfloat sVel[] = { vel.x,vel.y,vel.z };
-    ALfloat sOri[] = { at.x,at.y,at.z };
-    alSourcefv(sources[sI], AL_POSITION, sPos);
-    alSourcefv(sources[sI], AL_VELOCITY, sVel);
-    alSourcefv(sources[sI], AL_DIRECTION, sOri);
+    ALfloat o[6] = { front.x,front.y,front.z,up.x,up.y,up.z };
+    
+    alListenerfv(AL_ORIENTATION,o );
+}
+
+void alManager::setSourcePos(int sI, glm::vec3 pos)
+{
+    //设置位置
+    alSource3f(sources[sI], AL_POSITION, pos.x, pos.y, pos.z);
+   
+    
 }
 
 void alManager::setSourcePhy(int sI, float Gain, float maxDis, float halfDistance, float rollOff)
 {
+    
     //设置放大系数、最大距离、半衰距离以及衰减参数
     alSourcef(sources[sI], AL_GAIN, Gain);
     alSourcef(sources[sI], AL_MAX_DISTANCE, maxDis);
@@ -152,9 +163,35 @@ void alManager::setSourcePhy(int sI, float Gain, float maxDis, float halfDistanc
     alSourcef(sources[sI], AL_REFERENCE_DISTANCE, halfDistance);
 }
 
+void alManager::setSourceLoop(int sI, bool loop)
+{
+
+    alSourcei(sources[sI], AL_LOOPING,loop? AL_TRUE :AL_FALSE);
+}
+
 void alManager::play(int sI)
 {
+    
     alSourcePlay(sources[sI]);//播放指定音源
+    sourcesAvail[sI] = false;
+}
+
+void alManager::stop(int sI)
+{
+    alSourceStop(sources[sI]);
+    sourcesAvail[sI] = true;
+}
+
+void alManager::pause(int sI)
+{
+    alSourcePause(sources[sI]);
+}
+
+bool alManager::isSrcEnd(int sI)
+{
+    int state;
+    alGetSourcei(sources[sI], AL_SOURCE_STATE, &state);
+    return state == AL_STOPPED;
 }
 
 int alManager::getSourceId(int sI)
@@ -185,7 +222,10 @@ void alManager::init()
     alGetError();
     alGenBuffers(MAX_BUFFER_SIZE, buffers);//分配足够多的bufferID
     alGenSources(MAX_BUFFER_SIZE, sources);//分配足够多的音源ID
-
+    
+    for (auto b : buffersAvail) b = true;
+    for (auto b : sourcesAvail) b = true;
+    
     //设置默认的位置
     ALfloat listenerPos[] = { 0.0,0.0,0.0 };
     ALfloat listenerVel[] = { 0.0,0.0,0.0 };
@@ -193,7 +233,8 @@ void alManager::init()
     alListenerfv(AL_POSITION, listenerPos);
     alListenerfv(AL_VELOCITY, listenerVel);
     alListenerfv(AL_ORIENTATION, listenerOri);
-
+    alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+    
 
 }
 

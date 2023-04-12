@@ -205,7 +205,9 @@ namespace XRE {
 			
 			
 			if (ImGui::BeginMenu(u8"基础")) {
-				
+				if (ImGui::MenuItem(u8"注释")) {
+					AddNode<Node_Desc>();
+				}
 				if (ImGui::MenuItem(u8"整数")) {
 					AddNode<Node_ConstInt>();
 				}
@@ -227,6 +229,9 @@ namespace XRE {
 				if (ImGui::MenuItem(u8"时间差")) {
 					AddNode<Node_DeltaTime>();
 				}
+				if (ImGui::MenuItem(u8"总时间")) {
+					AddNode<Node_TotalTime>();
+				}
 				ImGui::EndMenu();
 			}
 			
@@ -237,6 +242,9 @@ namespace XRE {
 				}
 				if (ImGui::MenuItem(u8"开始时")) {
 					AddNode<Node_OnSceneBegin>();
+				}
+				if (ImGui::MenuItem(u8"触发时")) {
+					AddNode<Node_OnTrigger>();
 				}
 				if (ImGui::MenuItem(u8"碰撞")) {
 					AddNode<Node_OnCollision>();
@@ -259,8 +267,12 @@ namespace XRE {
 				}
 				if (ImGui::BeginMenu(u8"基础")) {
 					
-					if (ImGui::MenuItem(u8"Mod")) {
+					if (ImGui::MenuItem(u8"取余")) {
 						AddNode<Node_Mod>();
+					}
+
+					if (ImGui::MenuItem(u8"随机小数")) {
+						AddNode<Node_Rand>();
 					}
 					ImGui::EndMenu();
 				}
@@ -395,7 +407,12 @@ namespace XRE {
 					}
 					ImGui::EndMenu();
 				}
-				if (ImGui::BeginMenu(u8"摄像机")) {
+				if (ImGui::BeginMenu(u8"音频")) {
+					if (ImGui::MenuItem(u8"播放音频")) {
+
+						AddNode<Node_PlayAudio>();
+						
+					}
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu(u8"蓝图")) {
@@ -427,77 +444,7 @@ namespace XRE {
 			}
 			
 
-			if (ImGui::BeginMenu(u8"组件")) {
-				if (ImGui::BeginMenu(u8"变换")) {
-					if (ImGui::MenuItem(u8"获取位置")) {
-						AddNode<Node_GetPosition>();
-					}
-					if (ImGui::MenuItem(u8"设置位置")) {
-						AddNode<Node_SetPosition>();
-					}
-					if (ImGui::MenuItem(u8"获取旋转")) {
-						AddNode<Node_GetRotation>();
-					}
-					if (ImGui::MenuItem(u8"设置旋转")) {
-						AddNode<Node_SetRotation>();
-					}
-					if (ImGui::MenuItem(u8"获取缩放")) {
-						AddNode<Node_GetScale>();
-					}
-					if (ImGui::MenuItem(u8"设置缩放")) {
-						AddNode<Node_SetScale>();
-					}
-
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"几何渲染")) {
-					if (ImGui::MenuItem(u8"设置材质")) {
-
-						AddNode<Node_SetMaterial>();
-					}
-
-					if (ImGui::MenuItem(u8"设置着色器变量")) {
-					}
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"刚体与物理")) {
-					if (ImGui::MenuItem(u8"设置线速度")) {
-						AddNode<Node_SetLinearVelocity>();
-					}
-
-					if (ImGui::MenuItem(u8"设置角速度")) {
-						AddNode<Node_SetAngularVelocity>();
-					}
-
-					if (ImGui::MenuItem(u8"设置状态")) {
-						
-						AddNode<Node_SetRigidBodyMotion>();
-					}
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"光源")) {
-					if (ImGui::MenuItem(u8"设置点光源")) {
-						AddNode<Node_SetPointLight>();
-					}
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"摄像机")) {
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu(u8"蓝图")) {
-					if (ImGui::MenuItem(u8"获取外部变量")) {
-						AddNode<Node_GetBluePrintField>();
-					}
-
-					if (ImGui::MenuItem(u8"设置外部变量")) {
-						AddNode<Node_SetBluePrintField>();
-					}
-
-					ImGui::EndMenu();
-				}
-				ImGui::EndMenu();
-			}
-
+			
 			if (ImGui::BeginMenu(u8"XR应用")) {
 
 
@@ -599,7 +546,15 @@ namespace XRE {
 			switch (v.m_Type)
 			{
 			case FieldType::Field_String:
+				if (v.m_Name == u8"##Desc") {
+					ImGui::PushItemWidth(200);
+
+				}
 				XUI::InputText(v.m_Name, (std::string*)v.m_Handle);
+				if (v.m_Name == u8"##Desc") {
+					ImGui::PopItemWidth();
+
+				}
 				break;
 			case FieldType::Field_Bool:
 				XUI::CheckBox(v.m_Name, (bool*)v.m_Handle);
