@@ -19,6 +19,7 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 set(ENGINE_ROOT_DIR "${XRE_ROOT_DIR}/XRengine")
 set(EDITOR_ROOT_DIR "${XRE_ROOT_DIR}/XRE-Editor")
+set(XR_ROOT_DIR "${XRE_ROOT_DIR}/XRE-OpenXR")
 set(THIRD_PARTY_DIR "${ENGINE_ROOT_DIR}/3rdparty")
 set(ENGINE_SRC_DIR "${ENGINE_ROOT_DIR}/src")
 
@@ -28,11 +29,13 @@ add_subdirectory(${THIRD_PARTY_DIR}/GLFW)
 add_subdirectory(${THIRD_PARTY_DIR}/ImGui)
 add_subdirectory(${THIRD_PARTY_DIR}/JoltPhysics/Build)
 add_subdirectory(${THIRD_PARTY_DIR}/openal-soft)
+add_subdirectory(${THIRD_PARTY_DIR}/OpenXR)
 
 
 add_subdirectory(XRengine)
 add_subdirectory(XRE-Editor)
 add_subdirectory(XRE-SANDBOX)
 add_subdirectory(XRE-Launcher)
+add_subdirectory(XRE-OpenXR)
 
 set_property ( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT XRE-Editor )

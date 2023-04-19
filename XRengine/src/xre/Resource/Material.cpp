@@ -37,7 +37,7 @@ namespace XRE {
 	
 	void Material::Save()
 	{
-		Save(m_FilePath); 
+		Save(ResourceManager::GetFullPath(m_FilePath)); 
 	} 
 
 	void Material::Save(const std::string& filepath)
@@ -47,7 +47,7 @@ namespace XRE {
 			name = filepath.substr(pos+1);
 		}
 		//name = filepath;
-		m_FilePath = filepath;
+		//m_FilePath = filepath;
 		std::ofstream fs(filepath);
 		if (fs.is_open()) {
 			cereal::JSONOutputArchive ar(fs);

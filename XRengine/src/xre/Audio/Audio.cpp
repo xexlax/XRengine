@@ -39,7 +39,7 @@ namespace XRE {
 		
 		alManager::Play(m_SrcID);
 		alManager::SetSrcLoop(m_SrcID,m_Loop);
-		alManager::SetSourcePhy(m_SrcID, 1.0f, 100.0f, 5.0f);
+		alManager::SetSourcePhy(m_SrcID, 1.0f, 100.0f, 3.0f);
 		//alManager::SetSourcePos(m_ID, pos);
 		//alManager::SetListenerPos(glm::vec3(100.0f,0,0));
 		

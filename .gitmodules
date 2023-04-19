@@ -39,3 +39,6 @@
 [submodule ".\\XRengine\\3rdparty\\openal-soft"]
 	path = .\\XRengine\\3rdparty\\openal-soft
 	url = https://github.com/kcat/openal-soft.git
+[submodule ".\\XRengine\\3rdparty\\OpenXR"]
+	path = .\\XRengine\\3rdparty\\OpenXR
+	url = https://github.com/KhronosGroup/OpenXR-SDK.git

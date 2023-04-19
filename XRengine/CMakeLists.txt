@@ -35,6 +35,7 @@ ${THIRD_PARTY_DIR}/ImGuizmo
 ${THIRD_PARTY_DIR}/cereal/include
 ${THIRD_PARTY_DIR}/imnodes
 ${THIRD_PARTY_DIR}/openal-soft/include
+${THIRD_PARTY_DIR}/OpenXR/include
 )
 
 
