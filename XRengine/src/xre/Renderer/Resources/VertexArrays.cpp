@@ -160,6 +160,44 @@ namespace XRE {
 		return CapsuleVA;
 	}
 
+	XRef<VertexArray> VertexArray::GetSpriteVA(float w, float h)
+	{
+		float width = 1.0f;
+		float height = h / w;
+		float Vertices[] = {
+			 width,  height,  0, 1.0f, 1.0f,
+			-width,  height,  0, 0.0f, 1.0f,
+			-width, -height,  0, 0.0f, 0.0f,
+			 width, -height,  0, 1.0f, 0.0f
+		};
+		
+		
+
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float2, "a_TexCoord" },
+		};
+
+		auto SpriteVA = VertexArray::Create();
+
+
+		//2.1 setup VBO
+		XRef<VertexBuffer> vertexBuffer;;
+		vertexBuffer.reset(VertexBuffer::Create(Vertices, 4 * layout.GetStride()));
+		vertexBuffer->SetLayout(layout);
+		SpriteVA->AddVertexBuffer(vertexBuffer);
+
+		uint32_t indices[6] = {
+			0,1,2,0,2,3
+		};
+
+		XRef<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, 6));
+		SpriteVA->SetIndexBuffer(indexBuffer);
+
+		return SpriteVA;
+	}
+
 	XRef<VertexArray> VertexArray::GetLinesVA(std::vector<glm::vec3>& points)
 	{
 		int num = points.size();

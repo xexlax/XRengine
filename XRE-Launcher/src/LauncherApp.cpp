@@ -21,7 +21,7 @@ public:
 	virtual ~LauncherLayer() = default;
 
 	virtual void OnAttach() override {
-		m_Project = XMakeRef<Project>("..\\Projects\\project2\\project2.prj");
+		m_Project = XMakeRef<Project>("..\\Projects\\audiotest\\audiotest.prj");
 		m_Project->Load();
 		ResourceManager::BindProj(m_Project);
 		Renderer3D::Init();

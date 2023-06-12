@@ -288,6 +288,40 @@ namespace XRE {
 
 	};
 
+	class SpriteRendererComponent : public Component {
+	public:
+		bool m_Billboard = false;
+		string m_Path;
+		XRef<Texture2D> m_Sprite;
+		XRef<VertexArray> m_VA;
+
+		SpriteRendererComponent() :Component(u8"纸片渲染器") {};
+
+
+		void SetSprite(std::string path) {
+
+			m_Sprite = ResourceManager::GetTex2D(path);
+			m_VA = VertexArray::GetSpriteVA(m_Sprite->GetWidth(), m_Sprite->GetHeight());
+
+		}
+
+		template <class Archive>
+		void save(Archive& ar) const
+		{
+			ar(m_Active, m_Path, m_Billboard);
+		}
+
+		template <class Archive>
+		void load(Archive& ar) 
+		{
+			ar(m_Active, m_Path, m_Billboard);
+			SetSprite(m_Path);
+		}
+
+		
+		
+	};
+
 	class PointLightComponent : public Component {
 	public:
 		
@@ -527,6 +561,21 @@ namespace XRE {
 		}
 
 		AudioListenerComponent() :Component(u8"声音接收器") {};
+
+	};
+
+	class XRPlayerComponent : public Component {
+	public:
+
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(m_Active);
+
+		}
+
+		XRPlayerComponent() :Component(u8"混合现实玩家") {};
 
 	};
 }

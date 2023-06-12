@@ -7,7 +7,7 @@
 #include "geometry.h"
 #include "graphicsplugin.h"
 #include "options.h"
-#include "XRE.h"
+#include "XREContext\XREContext.h"
 
 #ifdef XR_USE_GRAPHICS_API_OPENGL
 
@@ -327,18 +327,25 @@ struct OpenGLGraphicsPlugin : public IGraphicsPlugin {
         // Set cube primitive data.
         glBindVertexArray(m_vao);
 
-        // Render each cube
-        for (const Cube& cube : cubes) {
-            // Compute the model-view-projection transform and set it..
-            XrMatrix4x4f model;
-            XrMatrix4x4f_CreateTranslationRotationScale(&model, &cube.Pose.position, &cube.Pose.orientation, &cube.Scale);
-            XrMatrix4x4f mvp;
-            XrMatrix4x4f_Multiply(&mvp, &vp, &model);
-            glUniformMatrix4fv(m_modelViewProjectionUniformLocation, 1, GL_FALSE, reinterpret_cast<const GLfloat*>(&mvp));
+        
 
-            // Draw the cube.
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(ArraySize(Geometry::c_cubeIndices)), GL_UNSIGNED_SHORT, nullptr);
-        }
+        // Render each cube
+        //for (const Cube& cube : cubes) {
+        //    // Compute the model-view-projection transform and set it..
+        //    XrMatrix4x4f model;
+        //    XrMatrix4x4f_CreateTranslationRotationScale(&model, &cube.Pose.position, &cube.Pose.orientation, &cube.Scale);
+        //    XrMatrix4x4f mvp;
+        //    XrMatrix4x4f_Multiply(&mvp, &vp, &model);
+        //    glUniformMatrix4fv(m_modelViewProjectionUniformLocation, 1, GL_FALSE, reinterpret_cast<const GLfloat*>(&mvp));
+
+        //    // Draw the cube.
+        //    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(ArraySize(Geometry::c_cubeIndices)), GL_UNSIGNED_SHORT, nullptr);
+        //}
+
+        
+
+
+        
 
         glBindVertexArray(0);
         glUseProgram(0);

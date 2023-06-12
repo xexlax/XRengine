@@ -10,6 +10,8 @@
 #include "graphicsplugin.h"
 #include "openxr_program.h"
 
+#include "XREContext\XREContext.h"
+
 #if defined(_WIN32)
 // Favor the high performance NVIDIA or AMD GPUs
 extern "C" {
@@ -24,14 +26,14 @@ namespace {
 
 void ShowHelp() {
     // TODO: Improve/update when things are more settled.
-    Log::Write(Log::Level::Info,
+   /* Log::Write(Log::Level::Info,
                "HelloXr --graphics|-g <Graphics API> [--formfactor|-ff <Form factor>] [--viewconfig|-vc <View config>] "
                "[--blendmode|-bm <Blend mode>] [--space|-s <Space>] [--verbose|-v]");
     Log::Write(Log::Level::Info, "Graphics APIs:            D3D11, D3D12, OpenGLES, OpenGL, Vulkan2, Vulkan");
     Log::Write(Log::Level::Info, "Form factors:             Hmd, Handheld");
     Log::Write(Log::Level::Info, "View configurations:      Mono, Stereo");
     Log::Write(Log::Level::Info, "Environment blend modes:  Opaque, Additive, AlphaBlend");
-    Log::Write(Log::Level::Info, "Spaces:                   View, Local, Stage");
+    Log::Write(Log::Level::Info, "Spaces:                   View, Local, Stage");*/
 }
 
 bool UpdateOptionsFromCommandLine(Options& options, int argc, char* argv[]) {
@@ -85,7 +87,7 @@ bool UpdateOptionsFromCommandLine(Options& options, int argc, char* argv[]) {
 }
 
 }  // namespace
-
+XREContext* XREContext::s_XREContext;
 
 int main(int argc, char* argv[]) {
     try {
@@ -96,7 +98,7 @@ int main(int argc, char* argv[]) {
         // Spawn a thread to wait for a keypress
         static bool quitKeyPressed = false;
         auto exitPollingThread = std::thread{[] {
-            Log::Write(Log::Level::Info, "Press any key to shutdown...");
+            //Log::Write(Log::Level::Info, "Press any key to shutdown...");
             (void)getchar();
             quitKeyPressed = true;
         }};
@@ -124,6 +126,8 @@ int main(int argc, char* argv[]) {
             program->InitializeDevice();
             program->InitializeSession();
             program->CreateSwapchains();
+
+            XREContext::Init();
 
             while (!quitKeyPressed) {
                 bool exitRenderLoop = false;

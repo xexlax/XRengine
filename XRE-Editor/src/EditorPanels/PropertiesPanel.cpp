@@ -42,6 +42,13 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (ImGui::MenuItem(u8"纸片渲染器"))
+				{
+					if (!go.HasComponent<SpriteRendererComponent>())
+						CommandManager::Get().Command_Create_Component<SpriteRendererComponent>(go.AddComponent<SpriteRendererComponent>(), go);
+					ImGui::CloseCurrentPopup();
+				}
+
 				if (ImGui::MenuItem(u8"点光源"))
 				{
 					if (!go.HasComponent<PointLightComponent>())
@@ -91,6 +98,12 @@ namespace XRE {
 					ImGui::CloseCurrentPopup();
 				}
 
+				if (ImGui::MenuItem(u8"混合现实玩家"))
+				{
+					if (!go.HasComponent<XRPlayerComponent>())
+						CommandManager::Get().Command_Create_Component<XRPlayerComponent>(go.AddComponent<XRPlayerComponent>(), go);
+					ImGui::CloseCurrentPopup();
+				}
 
 
 				ImGui::EndPopup();
@@ -187,6 +200,9 @@ namespace XRE {
 		if (go.HasComponent<MeshRendererComponent>()) 
 			DrawComponent<MeshRendererComponent>(go);
 
+		if (go.HasComponent<SpriteRendererComponent>())
+			DrawComponent<SpriteRendererComponent>(go);
+
 		if (go.HasComponent<AnimatorComponent>())
 			DrawComponent<AnimatorComponent>(go);
 
@@ -214,7 +230,8 @@ namespace XRE {
 		if (go.HasComponent<BluePrintComponent>())
 			DrawComponent<BluePrintComponent>(go);
 
-		
+		if (go.HasComponent<XRPlayerComponent>())
+			DrawComponent<XRPlayerComponent>(go);
 	}
 
 	template<typename T>
@@ -365,6 +382,15 @@ namespace XRE {
 			ImGui::Text(u8"未选择模型");
 
 
+
+	}
+
+	template<>
+	void PropertiesPanel::DrawComponentLayout<SpriteRendererComponent>(SpriteRendererComponent& component) {
+		
+		if (XUI::InputText(u8"贴图", &component.m_Path)) {
+			component.SetSprite(component.m_Path);
+		}
 
 	}
 
@@ -658,7 +684,12 @@ namespace XRE {
 
 	}
 
+	template<>
+	void PropertiesPanel::DrawComponentLayout<XRPlayerComponent>(XRPlayerComponent& component) {
 
+
+
+	}
 
 
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue , float columnWidth )

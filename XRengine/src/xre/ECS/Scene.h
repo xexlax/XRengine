@@ -93,6 +93,9 @@ namespace XRE {
 		XRef<BluePrintProperties> m_GlobalProperties;
 		
 
+		void ThreadRendering(TimeStep ts);
+		void ThreadLogic(TimeStep ts);
+
 		void UpdateNativeScripting(TimeStep ts);
 		void UpdatePhysics(TimeStep ts);
 		void UpdateAudio(TimeStep ts);

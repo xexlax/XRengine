@@ -107,6 +107,8 @@ namespace XRE {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
 			m_Inputs[3]->m_Necessary = false;
 			m_Inputs[3]->m_Name = "z";
+
+			CreateControlFlow();
 		}
 
 		void Process() override {
@@ -179,6 +181,8 @@ namespace XRE {
 			m_Inputs.push_back(m_BluePrint->MakeInput(FieldType::Field_Float));
 			m_Inputs[3]->m_Necessary = false;
 			m_Inputs[3]->m_Name = "z";
+
+			CreateControlFlow();
 		}
 
 		void Process() override {

@@ -1,5 +1,6 @@
 #include "alManager.h"
 #include "pch.h"
+#include "GLFW\glfw3.h"
 
 
 alManager* alManager::s_ALManager = nullptr;
@@ -11,6 +12,7 @@ bool alManager::loadWavFile(const std::string filename, ALuint buffer, ALsizei* 
     RIFF_Header riff_header;
     WAVE_Data wave_data;
     unsigned char* data;
+    float dt = glfwGetTime();
     XRE_INFO("reading wav:{0}", filename);
     try {
 
@@ -99,6 +101,8 @@ bool alManager::loadWavFile(const std::string filename, ALuint buffer, ALsizei* 
         //errorCheck();
         //clean up and return true if successful
         fclose(soundFile);
+
+        XRE_CORE_INFO("{0}:{1}", filename, glfwGetTime() - dt);
         return true;
     }
     catch (char* error)
@@ -109,6 +113,8 @@ bool alManager::loadWavFile(const std::string filename, ALuint buffer, ALsizei* 
         system("pause");
         return false;
     }
+
+
 }
 
 alManager::alManager()

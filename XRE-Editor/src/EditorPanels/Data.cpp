@@ -68,6 +68,7 @@ namespace XRE::XUI{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
 			{
 				*value = *(std::string*)payload->Data;
+				ans = true;
 
 			}
 			else {}

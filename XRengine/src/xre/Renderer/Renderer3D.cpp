@@ -218,6 +218,18 @@ namespace XRE {
 		}
 		//model->Draw(defaultObjShader, transform);
 	}
+	void Renderer3D::DrawSprite(const SpriteRendererComponent& src, const glm::mat4& transform)
+	{
+		
+		activeShader->Bind();
+		activeShader->SetMat4("u_Transform", transform);
+		
+		src.m_Sprite->Bind(1);
+		activeShader->SetBool("material.enable_diffuseTex", true);
+		activeShader->SetInt("material.diffuseTex", 1);
+		src.m_VA->Bind();
+		RenderCommand::DrawIndexed(src.m_VA);
+	}
 	void Renderer3D::DrawSkybox()
 	{
 		m_SkyBox->GetShader()->Bind();

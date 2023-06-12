@@ -22,7 +22,7 @@ namespace XRE{
 	public:
 		static void OnImGuiRender() {
 			instance->m_ScenePanel.OnImGuiRender();
-			//instance->m_ActionPanel.OnImGuiRender();
+			instance->m_ActionPanel.OnImGuiRender();
 			instance->m_AssetsPanel.OnImGuiRender();
 			instance->m_PropertiesPanel.OnImGuiRender();
 			instance->m_MaterialPanel.OnImGuiRender();

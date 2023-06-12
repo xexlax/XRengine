@@ -12,7 +12,24 @@
 #include "xre\Audio\alManager.h"
 
 
+
+
 namespace XRE{
+	/*void updatescript(Scene* sc) {
+		
+		auto &go = sc->GetObj(0).GetComponent<TransformComponent>();
+		glm::vec3 g = go.GetGlobalEuler();
+	
+
+		float tx = g.z + g.y;
+		float ty = g.x + g.z;
+
+		float tz = g.x + g.y;
+
+		go.SetGlobalRotation(glm::vec3(tx, ty, tz));
+
+	}*/
+
 	Scene::Scene()
 	{
 		m_PhysicsScene = PhysicsScene::Create();
@@ -46,8 +63,9 @@ namespace XRE{
 	void Scene::OnUpdateRuntime(TimeStep ts)
 	{
 		
+		//updatescript(this);
 
-		//Physics
+		//Physicss
 
 		UpdatePhysics(ts);
 
@@ -408,7 +426,7 @@ namespace XRE{
 
 		auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
 		//auto dl = m_Registry.view<DirectionalLightComponent>();
-
+		
 		Renderer3D::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		if (c)
 		{
@@ -448,6 +466,20 @@ namespace XRE{
 					}
 
 				}
+
+				{
+					auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+
+					for (auto entity : view) {
+						auto [transform, spr] = view.get<TransformComponent, SpriteRendererComponent>(entity);
+						if (spr.m_Active&&spr.m_Sprite) {
+							Renderer3D::activeShader->SetInt("ObjID", int(entity));
+							
+							Renderer3D::DrawSprite(spr, transform.GetGlobalTransform());
+						}
+					}
+				}
+				if (m_Runtime == false)
 				{
 					auto view = m_Registry.view<TransformComponent, RigidBodyComponent>();
 
@@ -727,6 +759,18 @@ namespace XRE{
 
 	template<>
 	void Scene::OnComponentAdded<AudioListenerComponent>(GameObject go, AudioListenerComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SpriteRendererComponent>(GameObject go, SpriteRendererComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<XRPlayerComponent>(GameObject go, XRPlayerComponent& component)
 	{
 
 	}

@@ -6,8 +6,8 @@
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
-
-//#define MODEL_DEBUG
+#include <GLFW\glfw3.h>
+#define MODEL_DEBUG
 
 namespace XRE {
 
@@ -62,6 +62,8 @@ namespace XRE {
 	void Model::LoadModel(string path,bool triangulate)
 	{
 		std::string basepath;
+
+		float ct = glfwGetTime();
 
 
 		size_t pos = path.find_last_of('\\');
@@ -142,19 +144,19 @@ namespace XRE {
 
 				if (tm.diffuse_texname!="") {
 					std::string  diffuse_path = basepath +'/' + tm.diffuse_texname;
-					m->diffuseTex = MaterialTex(true, tm.diffuse_texname, diffuse_path);
+					m->diffuseTex = MaterialTex(true, tm.diffuse_texname, ResourceManager::GetRelativePath(diffuse_path));
 					//XRE_CORE_INFO("diffuse_Tex {0}", diffuse_path);
 				}
 
 				if (tm.specular_texname != "") {
 					std::string  specular_path = basepath + '/' + tm.specular_texname;
-					m->specularTex = MaterialTex(true, tm.specular_texname, specular_path);
+					m->specularTex = MaterialTex(true, tm.specular_texname, ResourceManager::GetRelativePath(specular_path));
 					//XRE_CORE_INFO("specular_Tex {0}", specular_path);
 				}
 
 				if (tm.bump_texname != "") {
 					std::string  bump_path = basepath + '/' + tm.bump_texname;
-					m->bumpTex = MaterialTex(true, tm.bump_texname, bump_path);
+					m->bumpTex = MaterialTex(true, tm.bump_texname, ResourceManager::GetRelativePath(bump_path));
 					//XRE_CORE_INFO("specular_Tex {0}", specular_path);
 				}
 				m->LoadAllTex();
@@ -183,8 +185,8 @@ namespace XRE {
 #ifdef MODEL_DEBUG
 
 				
-				XRE_CORE_INFO("Shape{0} :{1}, Size:{2},Faces:{3}", i, shapes[i].name,
-					shapes[i].mesh.indices.size(), shapes[i].mesh.num_face_vertices.size());
+			//	XRE_CORE_INFO("Shape{0} :{1}, Size:{2},Faces:{3}", i, shapes[i].name,
+			//		shapes[i].mesh.indices.size(), shapes[i].mesh.num_face_vertices.size());
 			
 #endif // MODEL_DEBUG
 
@@ -277,12 +279,20 @@ namespace XRE {
 				if(m[0]==-1) cur_mesh.MatID = 0;
 				else
 				cur_mesh.MatID = m[0];
-				//XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes �Ѽ���",i, vertices.size(), indices.size());
+				//XRE_CORE_INFO("Mesh{0},{1}vertexes,{2}indexes ",i, vertices.size(), indices.size());
 				cur_mesh.m_AABB.HigherBorder = HigherBorder;
 				cur_mesh.m_AABB.LowerBorder = LowerBorder;
 				m_Meshes.push_back(cur_mesh);
 				
 			}
+
+
+#ifdef MODEL_DEBUG
+
+
+			XRE_CORE_INFO("Model{0} :Time{1}",path,glfwGetTime()-ct);
+
+#endif // MODEL_DEBUG
 			
 		}
 	}

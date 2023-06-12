@@ -39,6 +39,11 @@ namespace XRE {
 					archive(c);
 					archive(ngo.GetComponent<MeshRendererComponent>());
 				}
+				if (ngo.HasComponent<SpriteRendererComponent>()) {
+					ComponentType c("Sprite Renderer");
+					archive(c);
+					archive(ngo.GetComponent<SpriteRendererComponent>());
+				}
 
 				if (ngo.HasComponent<PointLightComponent>()) {
 					ComponentType c("Point Light");
@@ -86,6 +91,11 @@ namespace XRE {
 					ComponentType c("AudioListener");
 					archive(c);
 					archive(ngo.GetComponent<AudioListenerComponent>());
+				}
+				if (ngo.HasComponent<XRPlayerComponent>()) {
+					ComponentType c("XRPlayer");
+					archive(c);
+					archive(ngo.GetComponent<XRPlayerComponent>());
 				}
 
 				if (ngo.HasComponent<TransformComponent>()) {
@@ -135,6 +145,10 @@ namespace XRE {
 					MeshRendererComponent& tc = go.AddComponent<MeshRendererComponent>();
 					archive(tc);
 				}
+				if (n.m_Name == "Sprite Renderer") {
+					SpriteRendererComponent& tc = go.AddComponent<SpriteRendererComponent>();
+					archive(tc);
+				}
 				if (n.m_Name == "Point Light") {
 					PointLightComponent& tc = go.AddComponent<PointLightComponent>();
 					archive(tc);
@@ -169,6 +183,10 @@ namespace XRE {
 				}
 				if (n.m_Name == "AudioListener") {
 					AudioListenerComponent& tc = go.AddComponent<AudioListenerComponent>();
+					archive(tc);
+				}
+				if (n.m_Name == "XRPlayer") {
+					XRPlayerComponent& tc = go.AddComponent<XRPlayerComponent>();
 					archive(tc);
 				}
 
