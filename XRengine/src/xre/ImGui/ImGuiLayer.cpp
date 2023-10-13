@@ -4,6 +4,7 @@
 #include "xre\Core\application.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_vulkan.h"
 #include "imnodes.h"
 
 
@@ -58,8 +59,18 @@ namespace XRE {
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		// Setup Platform/Renderer bindings
+
+#ifdef XRE_RENDERER_OPENGL
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
+#endif // XRE_RENDERER_OPENGL
+
+#ifdef XRE_RENDERER_VULKAN
+		ImGui_ImplGlfw_InitForVulkan(window, true);
+		ImGui_ImplOpenGL3_Init("#version 410");
+#endif // XRE_RENDERER_VULKAN
+
+		
 		ImNodes::CreateContext();
 
 	}

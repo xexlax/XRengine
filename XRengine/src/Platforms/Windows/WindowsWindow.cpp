@@ -7,6 +7,8 @@
 
 #include "Platforms\OpenGL\OpenGLContext.h"
 
+#include "Platforms\Vulkan\VkContext.h"
+
 namespace XRE{
 
 	static bool s_GLFWInitialized = false;
@@ -59,11 +61,22 @@ namespace XRE{
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
+#ifdef XRE_RENDERER_VULKAN
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+#endif 
+		
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		
 		//Use OpenGL as Graphic API
+
+#ifdef XRE_RENDERER_OPENGL
 		m_Context = new OpenGLContext(m_Window);
+#endif
+#ifdef XRE_RENDERER_VULKAN
+		m_Context = new VkContext(m_Window);
+#endif 
+		
 		m_Context->Init();
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);

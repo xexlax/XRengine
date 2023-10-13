@@ -36,6 +36,8 @@ ${THIRD_PARTY_DIR}/cereal/include
 ${THIRD_PARTY_DIR}/imnodes
 ${THIRD_PARTY_DIR}/openal-soft/include
 ${THIRD_PARTY_DIR}/OpenXR/include
+${THIRD_PARTY_DIR}/VulkanSDK/include
+${THIRD_PARTY_DIR}/vma/include
 )
 
 
@@ -53,7 +55,8 @@ file(GLOB_RECURSE HEADER_FILES
 "${THIRD_PARTY_DIR}/imnodes/imnodes_internal.h"
 "${THIRD_PARTY_DIR}/imnodes/imnodes.h"
 "${THIRD_PARTY_DIR}/openal-soft/include/*.h"
-
+"${THIRD_PARTY_DIR}/VulkanSDK/include/vulkan/*.h"
+"${THIRD_PARTY_DIR}/vma/include/*.h"
 
 )
 file(GLOB_RECURSE SOURCE_FILES 
@@ -72,6 +75,14 @@ USE_MSVC_PCH(${PROJECT_NAME} ${STDAFX_PCH_H} ${STDAFX_PCH_C})
 target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_PLATFORM_WINDOWS)
 target_compile_definitions(${PROJECT_NAME} PUBLIC _CRT_SECURE_NO_WARNINGS)
 endif()
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_RENDERER_VULKAN)
+# target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_RENDERER_OPENGL)
+
+set(vulkan_lib "${THIRD_PARTY_DIR}/VulkanSDK/lib/Win32/vulkan-1.lib")
+set(glslangValidator_executable ${THIRD_PARTY_DIR}/VulkanSDK/bin/Win32/glslangValidator.exe)
+add_compile_definitions("VK_LAYER_PATH=${THIRD_PARTY_DIR}/VulkanSDK/bin/Win32")
+
 
 
 
@@ -92,6 +103,6 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_link_libraries(${PROJECT_NAME}
         # ${CMAKE_THREAD_LIBS_INIT}     # Needed for unix builds to link to pthread
         # LOGGING
-        Glad GLFW ImGui OpenGL32.Lib Jolt OpenAL
+        Glad GLFW ImGui OpenGL32.Lib Jolt OpenAL ${THIRD_PARTY_DIR}/VulkanSDK/lib/Win32/vulkan-1.lib
         )
 

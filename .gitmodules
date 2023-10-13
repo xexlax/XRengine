@@ -42,3 +42,6 @@
 [submodule ".\\XRengine\\3rdparty\\OpenXR"]
 	path = .\\XRengine\\3rdparty\\OpenXR
 	url = https://github.com/KhronosGroup/OpenXR-SDK.git
+[submodule ".\\XRengine\\3rdparty\\vma"]
+	path = .\\XRengine\\3rdparty\\vma
+	url = git@github.com:GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git

@@ -26,9 +26,10 @@ namespace XRE {
 		Reflection::Init();
 		alManager::Init();
 
-
+#ifdef XRE_RENDERER_OPENGL
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
+#endif
 		m_LastSecond = (float)glfwGetTime();
 		m_FPS = 0;
 
@@ -81,13 +82,14 @@ namespace XRE {
 				for (Layer* layer : m_layerStack)
 					layer->OnUpdate(timestep);
 			}
-
+#ifdef XRE_RENDERER_OPENGL
 			m_ImGuiLayer->Begin();
+
 			for (Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
-
+#endif XRE_RENDERER_OPENGL
 			//XRE_TRACE("{0},{1}", Input::GetMouseX(), Input::GetMouseY());
 
 			m_Window->OnUpdate();
