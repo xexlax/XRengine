@@ -17,6 +17,7 @@
 #include "xre\Renderer\Resources\Texture.h"
 #include "xre\Renderer\Resources\Shader.h"
 #include "xre\Renderer\FrameBuffer.h"
+#include "Platforms\Vulkan\VkContext.h"
 
 #include "xre\Renderer\Light.h"
 #include "xre\Renderer\Camera\Camera.h"

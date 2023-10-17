@@ -1,8 +1,13 @@
 #include "pch.h"
 #include "OpenGLTexture.h"
 
-#include "stb_image.h"
+#ifdef  XRE_RENDERER_OPENGL
+
+#endif //  XRE_RENDERER_OPENGL
+
+
 #include <glad/glad.h>
+#include "xre\Utils\image.h"
 
 namespace XRE {
 
@@ -11,9 +16,8 @@ namespace XRE {
 	{
 		m_name = path;
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		XRE_CORE_ASSERT(data, "Failed to load image!");
+		unsigned char* data= load_image( path, &width, &height, &channels, 0, true);
+		
 		m_Width = width;
 		m_Height = height;
 
@@ -39,7 +43,7 @@ namespace XRE {
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height,dataFormat , GL_UNSIGNED_BYTE, data);
 
-		stbi_image_free(data);
+		image_free(data);
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()

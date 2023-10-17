@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "VkRendererAPI.h"
 
-#include <glad/glad.h>
+
 
 namespace XRE {
 
