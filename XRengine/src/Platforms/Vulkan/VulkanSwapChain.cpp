@@ -5,7 +5,7 @@
 #include <vulkan\vulkan.h>
 #include "VulkanSwapChain.h"
 #include "VkContext.h"
-
+#include "VulkanRHI.h"
 
 
 XRE::VulkanSwapChain::VulkanSwapChain(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
@@ -16,7 +16,7 @@ XRE::VulkanSwapChain::VulkanSwapChain(const VkPhysicalDevice& physicalDevice, co
 
 void XRE::VulkanSwapChain::Init(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
 {
-    SwapChainSupportDetails swapChainSupport = VkContext::GetInstance()->querySwapChainSupport(physicalDevice);
+    SwapChainSupportDetails swapChainSupport = VulkanRHI::querySwapChainSupport(physicalDevice);
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
@@ -38,7 +38,7 @@ void XRE::VulkanSwapChain::Init(const VkPhysicalDevice& physicalDevice, const Vk
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    QueueFamilyIndices indices = VkContext::GetInstance()->findQueueFamilies(physicalDevice);
+    QueueFamilyIndices indices = VulkanRHI::findQueueFamilies(physicalDevice);
     uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
     if (indices.graphicsFamily != indices.presentFamily) {
@@ -133,7 +133,7 @@ void XRE::VulkanSwapChain::createImageViews() {
     swapChainImageViews.resize(swapChainImages.size());
 
     for (uint32_t i = 0; i < swapChainImages.size(); i++) {
-        swapChainImageViews[i] = VkContext::GetInstance()->createImageView(swapChainImages[i], swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT);
+        swapChainImageViews[i] = VulkanRHI::createImageView(swapChainImages[i], swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT);
     }
 }
 
@@ -147,7 +147,7 @@ VkSurfaceFormatKHR XRE::VulkanSwapChain::chooseSwapSurfaceFormat(const std::vect
     return availableFormats[0];
 }
 
-inline VkPresentModeKHR XRE::VulkanSwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
+VkPresentModeKHR XRE::VulkanSwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
     for (const auto& availablePresentMode : availablePresentModes) {
         if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
             return availablePresentMode;
@@ -157,7 +157,7 @@ inline VkPresentModeKHR XRE::VulkanSwapChain::chooseSwapPresentMode(const std::v
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-inline VkExtent2D XRE::VulkanSwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
+VkExtent2D XRE::VulkanSwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
         return capabilities.currentExtent;
     }
@@ -177,14 +177,14 @@ inline VkExtent2D XRE::VulkanSwapChain::chooseSwapExtent(const VkSurfaceCapabili
     }
 }
 
-inline void XRE::VulkanSwapChain::createDepthResources() {
-    VkFormat depthFormat = VkContext::GetInstance()->findDepthFormat();
+void XRE::VulkanSwapChain::createDepthResources() {
+    VkFormat depthFormat = VulkanRHI::findDepthFormat();
     DepthImage = XMakeRef<VulkanImage>();
     DepthImage->Create(swapChainExtent.width, swapChainExtent.height,
         
         depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-    DepthImage->ImageView = VkContext::GetInstance()->createImageView(DepthImage->Image, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+    DepthImage->ImageView = VulkanRHI::createImageView(DepthImage->Image, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
 }
 
 

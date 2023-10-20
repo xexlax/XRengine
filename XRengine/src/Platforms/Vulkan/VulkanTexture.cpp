@@ -2,7 +2,8 @@
 #include "VulkanTexture.h"
 #include "VkContext.h"
 #include "xre/Utils/image.h"
-#include "vk_mem_alloc.h"
+//#include "vk_mem_alloc.h"
+#include "VulkanRHI.h"
 
 
 XRE::VulkanTexture2D::VulkanTexture2D(const std::string& path)
@@ -40,7 +41,7 @@ void XRE::VulkanTexture2D::createTextureImage()
     VkDevice device = VkContext::GetInstance()->device;
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
-    VkContext::GetInstance()->createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+    VulkanRHI::createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 
 
@@ -72,11 +73,11 @@ void XRE::VulkanTexture2D::createTextureImage()
     vkFreeMemory(device, stagingBufferMemory, nullptr);
 }
 
-inline void XRE::VulkanTexture2D::createTextureImageView() {
-    m_Image->ImageView = VkContext::GetInstance()->createImageView(m_Image->Image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
+void XRE::VulkanTexture2D::createTextureImageView() {
+    m_Image->ImageView = VulkanRHI::createImageView(m_Image->Image, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
-inline void XRE::VulkanTexture2D::createTextureSampler() {
+void XRE::VulkanTexture2D::createTextureSampler() {
     VkPhysicalDeviceProperties properties{};
     vkGetPhysicalDeviceProperties(VkContext::GetInstance()->physicalDevice, &properties);
 

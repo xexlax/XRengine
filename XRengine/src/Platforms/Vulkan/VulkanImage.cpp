@@ -2,6 +2,7 @@
 #include "VulkanImage.h"
 #include "VkContext.h"
 
+
 void XRE::VulkanImage::Create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties) {
     VkImageCreateInfo imageInfo{};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -30,7 +31,7 @@ void XRE::VulkanImage::Create(uint32_t width, uint32_t height, VkFormat format, 
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = VkContext::GetInstance()->findMemoryType(memRequirements.memoryTypeBits, properties);
+    allocInfo.memoryTypeIndex = VulkanRHI::findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(device, &allocInfo, nullptr, &ImageMemory) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate image memory!");

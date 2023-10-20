@@ -1,6 +1,7 @@
 
 #include "VulkanRenderPass.h"
 #include "VkContext.h"
+#include "VulkanRHI.h"
 
 void XRE::VulkanRenderPass::Init(VkDevice device)
 {
@@ -15,7 +16,7 @@ void XRE::VulkanRenderPass::Init(VkDevice device)
     colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     VkAttachmentDescription depthAttachment{};
-    depthAttachment.format = VkContext::GetInstance()->findDepthFormat();
+    depthAttachment.format = VulkanRHI::findDepthFormat();
     depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
