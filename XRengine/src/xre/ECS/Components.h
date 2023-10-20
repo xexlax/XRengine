@@ -301,7 +301,7 @@ namespace XRE {
 		void SetSprite(std::string path) {
 
 			m_Sprite = ResourceManager::GetTex2D(path);
-			m_VA = VertexArray::GetSpriteVA(m_Sprite->GetWidth(), m_Sprite->GetHeight());
+			m_VA = VertexArray::GetSpriteVA( float(m_Sprite->GetWidth()), float(m_Sprite->GetHeight()));
 
 		}
 

@@ -31,7 +31,7 @@ void XRE::VulkanTexture2D::createTextureImage()
     m_Width = texWidth;
     m_Height = texHeight;
 
-    VkDeviceSize imageSize = texWidth * texHeight * 4;
+    VkDeviceSize imageSize = texWidth * texHeight* texChannels;
 
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");
@@ -46,17 +46,27 @@ void XRE::VulkanTexture2D::createTextureImage()
 
     void* data;
     vkMapMemory(device, stagingBufferMemory, 0, imageSize, 0, &data);
-    memcpy(data, pixels, static_cast<size_t>(imageSize));
+
+    
+        memcpy(data, pixels, static_cast<size_t>(imageSize));
+    
     vkUnmapMemory(device, stagingBufferMemory);
 
+    VkFormat format= VK_FORMAT_R8G8B8A8_SRGB;
+    /*if (texChannels == 3) {
+        format = VK_FORMAT_R8G8B8_SRGB;
+    }
+    else if (texChannels == 4) {
+        format = VK_FORMAT_R8G8B8A8_SRGB;
+    }*/
+    
     image_free(pixels);
-
     m_Image = XMakeRef<VulkanImage>();
-    m_Image->Create(texWidth, texHeight, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    m_Image->Create(texWidth, texHeight, format, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-    m_Image->transitionImageLayout( VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    m_Image->transitionImageLayout( format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     m_Image->copyBufferToImage(stagingBuffer, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
-    m_Image->transitionImageLayout(VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    m_Image->transitionImageLayout(format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     vkDestroyBuffer(device, stagingBuffer, nullptr);
     vkFreeMemory(device, stagingBufferMemory, nullptr);

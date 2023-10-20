@@ -1,6 +1,7 @@
 #pragma once
 #include "BluePrintNode.h"
 #include "BluePrint.h"
+#include <random>
 
 // 00 Debug：使用Log系统输出
 // 01~04 ConstInt~ConstString 常量
@@ -292,7 +293,7 @@ namespace XRE {
 		
 		void Process() override {
 			
-			m_Outputs[0]->ValueFloat = rand();
+			m_Outputs[0]->ValueFloat = float(rand() % 1000) / 1000;
 		}
 
 	};
