@@ -66,6 +66,10 @@ void XRE::VulkanSwapChain::Init(const VkPhysicalDevice& physicalDevice, const Vk
     swapChainImageFormat = surfaceFormat.format;
     swapChainExtent = extent;
 
+    createImageViews();
+    createRenderPass(swapChainImageFormat);
+
+
 }
 
 void XRE::VulkanSwapChain::CleanUp(const VkDevice& device)
@@ -82,6 +86,8 @@ void XRE::VulkanSwapChain::CleanUp(const VkDevice& device)
     }
 
     vkDestroySwapchainKHR(device, swapChain, nullptr);
+
+    renderPass->CleanUp(device);
 }
 
 void XRE::VulkanSwapChain::createFramebuffers() {
@@ -95,7 +101,7 @@ void XRE::VulkanSwapChain::createFramebuffers() {
 
         VkFramebufferCreateInfo framebufferInfo{};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = VkContext::GetInstance()->renderPass->renderPass;
+        framebufferInfo.renderPass = renderPass->renderPass;
         framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
         framebufferInfo.pAttachments = attachments.data();
         framebufferInfo.width = swapChainExtent.width;
@@ -111,7 +117,7 @@ void XRE::VulkanSwapChain::createFramebuffers() {
 void XRE::VulkanSwapChain::recreateSwapChain() {
     int width = 0, height = 0;
 
-    VkDevice device = VkContext::GetInstance()->device;
+    VkDevice device = VkContext::GetDevice();
 
     glfwGetFramebufferSize(VkContext::GetInstance()->window, &width, &height);
     while (width == 0 || height == 0) {
@@ -135,6 +141,11 @@ void XRE::VulkanSwapChain::createImageViews() {
     for (uint32_t i = 0; i < swapChainImages.size(); i++) {
         swapChainImageViews[i] = VulkanRHI::createImageView(swapChainImages[i], swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT);
     }
+}
+
+void XRE::VulkanSwapChain::createRenderPass(VkFormat swapChainImageFormat)
+{
+    renderPass = XMakeRef<VulkanRenderPass>(VkContext::GetDevice(),  swapChainImageFormat);
 }
 
 VkSurfaceFormatKHR XRE::VulkanSwapChain::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
@@ -185,6 +196,25 @@ void XRE::VulkanSwapChain::createDepthResources() {
         depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
     DepthImage->ImageView = VulkanRHI::createImageView(DepthImage->Image, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+}
+
+void XRE::VulkanSwapChain::BindRenderPass(VkCommandBuffer commandBuffer, uint32_t imageIndex)
+{
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass->renderPass;
+    renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent = swapChainExtent;
+
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[1].depthStencil = { 1.0f, 0 };
+
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
+
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
 

@@ -148,8 +148,8 @@ namespace XRE {
         
 
         XRef<VulkanSwapChain> swapChain;
-        XRef<VulkanRenderPass> renderPass;
-        VulkanPipeline pipeline;
+        
+        XRef<VulkanPipeline> pipeline;
 
         VkCommandPool commandPool;
 
@@ -192,13 +192,8 @@ namespace XRE {
             createLogicalDevice();
             
             swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
-            swapChain->createImageViews();          
-            
-            renderPass = XMakeRef<VulkanRenderPass>(device);
-            
-            pipeline.SetPass(renderPass);
-            pipeline.Init();
 
+            pipeline = XMakeRef<VulkanPipeline>("shaders/vert.spv", "shaders/frag.spv", swapChain->renderPass);
             createCommandPool();
 
             swapChain->createDepthResources();
@@ -228,8 +223,8 @@ namespace XRE {
         void cleanup() {
             swapChain->CleanUp(device);
 
-            pipeline.CleanUp(device);
-            renderPass->CleanUp(device);
+            pipeline->CleanUp(device);
+            
      
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
                 vkDestroyBuffer(device, uniformBuffers[i], nullptr);
@@ -355,7 +350,7 @@ namespace XRE {
         }
 
         void createDescriptorSets() {
-            std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, pipeline.descriptorSetLayout);
+            std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, pipeline->descriptorSetLayout);
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
             allocInfo.descriptorPool = descriptorPool;
@@ -459,23 +454,11 @@ namespace XRE {
                 throw std::runtime_error("failed to begin recording command buffer!");
             }
 
-            VkRenderPassBeginInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassInfo.renderPass = renderPass->renderPass;
-            renderPassInfo.framebuffer =swapChain->swapChainFramebuffers[imageIndex];
-            renderPassInfo.renderArea.offset = { 0, 0 };
-            renderPassInfo.renderArea.extent = swapChain->swapChainExtent;
+            swapChain->BindRenderPass(commandBuffer, imageIndex);
 
-            std::array<VkClearValue, 2> clearValues{};
-            clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-            clearValues[1].depthStencil = { 1.0f, 0 };
+            
 
-            renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-            renderPassInfo.pClearValues = clearValues.data();
-
-            vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
+            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->pipeline);
 
             VkViewport viewport{};
             viewport.x = 0.0f;
@@ -497,7 +480,7 @@ namespace XRE {
 
             vkCmdBindIndexBuffer(commandBuffer, IBO->m_indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
-            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
+            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
             vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 

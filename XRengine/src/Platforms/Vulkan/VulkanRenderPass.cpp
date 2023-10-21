@@ -3,10 +3,10 @@
 #include "VkContext.h"
 #include "VulkanRHI.h"
 
-void XRE::VulkanRenderPass::Init(VkDevice device)
+void XRE::VulkanRenderPass::Init(VkDevice device, VkFormat swapChainImageFormat)
 {
     VkAttachmentDescription colorAttachment{};
-    colorAttachment.format = VkContext::GetInstance()->swapChain->swapChainImageFormat;
+    colorAttachment.format = swapChainImageFormat;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;

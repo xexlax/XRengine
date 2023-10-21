@@ -1,6 +1,8 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include "VulkanImage.h"
+#include "VulkanFrameBuffer.h"
+#include "VulkanRenderPass.h"
 
 namespace XRE {
 
@@ -21,6 +23,7 @@ namespace XRE {
         std::vector<VkImageView> swapChainImageViews;
         std::vector<VkFramebuffer> swapChainFramebuffers;
         XRef<VulkanImage> DepthImage;
+        XRef<VulkanRenderPass> renderPass;
 
         void createFramebuffers();
 
@@ -28,8 +31,11 @@ namespace XRE {
 
         void createImageViews();
 
+        void createRenderPass(VkFormat swapChainImageFormat);
+
         void createDepthResources();
 
+        void BindRenderPass(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 
     private:
         VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);

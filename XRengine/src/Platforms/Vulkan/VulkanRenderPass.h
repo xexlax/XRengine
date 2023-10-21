@@ -6,13 +6,13 @@ namespace XRE {
 	class VulkanRenderPass {
 
 	public:
-		VulkanRenderPass(VkDevice device) {
-			Init(device);
+		VulkanRenderPass(VkDevice device, VkFormat swapChainImageFormat) {
+			Init(device, swapChainImageFormat);
 		}
 
 		VkRenderPass renderPass;
 
-		void Init(VkDevice device);
+		void Init(VkDevice device, VkFormat swapChainImageFormat);
 		void CleanUp(VkDevice device);
 	};
 

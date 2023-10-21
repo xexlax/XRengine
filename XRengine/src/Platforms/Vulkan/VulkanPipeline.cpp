@@ -1,7 +1,9 @@
 #include "VulkanPipeline.h"
 #include "VkContext.h"
 
-void XRE::VulkanPipeline::Init()
+
+
+XRE::VulkanPipeline::VulkanPipeline(const std::string& vert, const std::string& frag, XRef<VulkanRenderPass> renderPass)
 {
     VkDevice device = VkContext::GetInstance()->device;
 
@@ -29,7 +31,7 @@ void XRE::VulkanPipeline::Init()
         throw std::runtime_error("failed to create descriptor set layout!");
     }
 
-    XRef<VulkanShader> vulkanShader = XMakeRef<VulkanShader>("default", "shaders/vert.spv", "shaders/frag.spv");
+    XRef<VulkanShader> vulkanShader = XMakeRef<VulkanShader>("default", vert , frag);
 
     VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
     vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -135,13 +137,18 @@ void XRE::VulkanPipeline::Init()
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = &dynamicState;
     pipelineInfo.layout = pipelineLayout;
-    pipelineInfo.renderPass = RenderPass->renderPass;
+    pipelineInfo.renderPass = renderPass->renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS) {
         throw std::runtime_error("failed to create graphics pipeline!");
     }
+}
+
+void XRE::VulkanPipeline::Init()
+{
+    
 
 }
 
