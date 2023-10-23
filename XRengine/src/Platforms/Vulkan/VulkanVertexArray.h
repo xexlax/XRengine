@@ -1,7 +1,7 @@
 #pragma once
 
 #include "xre/Renderer/Resources/VertexArrays.h"
-
+#include "vulkan\vulkan.h"
 namespace XRE{
 
 	//Vulkan doesn't really have concept of VAO
@@ -20,10 +20,28 @@ namespace XRE{
 
 		virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; }
 		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; }
+
+		void Bind(VkCommandBuffer commandBuffer);
+
+		void Draw(VkCommandBuffer commandBuffer);
+
+		void loadModel(std::string path);
+
 	private:
-		
+		uint32_t indexCount;
 		std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+	};
+
+	struct VkVertex {
+		glm::vec3 pos;
+		glm::vec3 color;
+		glm::vec2 texCoord;
+
+
+		bool operator==(const VkVertex& other) const {
+			return pos == other.pos && color == other.color && texCoord == other.texCoord;
+		}
 	};
 
 }

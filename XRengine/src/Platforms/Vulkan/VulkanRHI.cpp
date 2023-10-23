@@ -2,6 +2,21 @@
 #include "VulkanRHI.h"
 #include "VkContext.h"
 
+std::vector<const char*> XRE::VulkanRHI::getRequiredExtensions()
+{
+	uint32_t glfwExtensionCount = 0;
+	const char** glfwExtensions;
+	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+	std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+	if (enableValidationLayers) {
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+	}
+
+	return extensions;
+}
+
 bool XRE::VulkanRHI::isDeviceSuitable(VkPhysicalDevice device) {
 	QueueFamilyIndices indices = findQueueFamilies(device);
 
@@ -172,13 +187,13 @@ void XRE::VulkanRHI::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, V
 }
 
 void XRE::VulkanRHI::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) {
-	VkCommandBuffer commandBuffer = VkContext::GetInstance()->beginSingleTimeCommands();
+	VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
 	VkBufferCopy copyRegion{};
 	copyRegion.size = size;
 	vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
-	VkContext::GetInstance()->endSingleTimeCommands(commandBuffer);
+	endSingleTimeCommands(commandBuffer);
 }
 
 uint32_t XRE::VulkanRHI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -192,4 +207,37 @@ uint32_t XRE::VulkanRHI::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFla
 	}
 
 	throw std::runtime_error("failed to find suitable memory type!");
+}
+//For Ò»´ÎÐÔ Command Buffer
+VkCommandBuffer XRE::VulkanRHI::beginSingleTimeCommands() {
+	VkCommandBufferAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	allocInfo.commandPool = XRE_VK_INSTANCE->commandPool;
+	allocInfo.commandBufferCount = 1;
+
+	VkCommandBuffer commandBuffer;
+	vkAllocateCommandBuffers(XRE_VK_INSTANCE->device, &allocInfo, &commandBuffer);
+
+	VkCommandBufferBeginInfo beginInfo{};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	vkBeginCommandBuffer(commandBuffer, &beginInfo);
+
+	return commandBuffer;
+}
+
+void XRE::VulkanRHI::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+	vkEndCommandBuffer(commandBuffer);
+
+	VkSubmitInfo submitInfo{};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &commandBuffer;
+
+	vkQueueSubmit(XRE_VK_INSTANCE->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+	vkQueueWaitIdle(XRE_VK_INSTANCE->graphicsQueue);
+
+	vkFreeCommandBuffers(XRE_VK_INSTANCE->device, XRE_VK_INSTANCE->commandPool, 1, &commandBuffer);
 }

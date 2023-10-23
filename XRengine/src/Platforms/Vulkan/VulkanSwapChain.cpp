@@ -88,6 +88,13 @@ void XRE::VulkanSwapChain::CleanUp(const VkDevice& device)
     vkDestroySwapchainKHR(device, swapChain, nullptr);
 
     renderPass->CleanUp(device);
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(device, inFlightFences[i], nullptr);
+    }
+
 }
 
 void XRE::VulkanSwapChain::createFramebuffers() {
@@ -119,9 +126,9 @@ void XRE::VulkanSwapChain::recreateSwapChain() {
 
     VkDevice device = VkContext::GetDevice();
 
-    glfwGetFramebufferSize(VkContext::GetInstance()->window, &width, &height);
+    glfwGetFramebufferSize(VkContext::GetWindow(), &width, &height);
     while (width == 0 || height == 0) {
-        glfwGetFramebufferSize(VkContext::GetInstance()->window, &width, &height);
+        glfwGetFramebufferSize(VkContext::GetWindow(), &width, &height);
         glfwWaitEvents();
     }
 
@@ -174,7 +181,7 @@ VkExtent2D XRE::VulkanSwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR
     }
     else {
         int width, height;
-        glfwGetFramebufferSize(VkContext::GetInstance()->window, &width, &height);
+        glfwGetFramebufferSize(VkContext::GetWindow(), &width, &height);
 
         VkExtent2D actualExtent = {
             static_cast<uint32_t>(width),
@@ -198,6 +205,31 @@ void XRE::VulkanSwapChain::createDepthResources() {
     DepthImage->ImageView = VulkanRHI::createImageView(DepthImage->Image, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
 }
 
+void XRE::VulkanSwapChain::createSyncObjects()
+{
+
+    VkDevice device = VkContext::GetDevice();
+
+    imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+
+    VkSemaphoreCreateInfo semaphoreInfo{};
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    VkFenceCreateInfo fenceInfo{};
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create synchronization objects for a frame!");
+        }
+    }
+}
+
 void XRE::VulkanSwapChain::BindRenderPass(VkCommandBuffer commandBuffer, uint32_t imageIndex)
 {
     VkRenderPassBeginInfo renderPassInfo{};
@@ -217,4 +249,65 @@ void XRE::VulkanSwapChain::BindRenderPass(VkCommandBuffer commandBuffer, uint32_
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
 
+uint32_t XRE::VulkanSwapChain::acquireNextImage()
+{
+    VkDevice device = VkContext::GetDevice();
+
+    vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+
+    uint32_t imageIndex;
+    VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+        recreateSwapChain();
+        return -1;
+    }
+    else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+        throw std::runtime_error("failed to acquire swap chain image!");
+    }
+
+    
+
+    vkResetFences(device, 1, &inFlightFences[currentFrame]);
+    return imageIndex;
+}
+
+VkResult XRE::VulkanSwapChain::submitCommandBuffer(const std::vector<VkCommandBuffer>& commandBuffers, uint32_t* imageIndex)
+{
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+    VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
+    VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStages;
+
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
+
+    VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
+
+    if (vkQueueSubmit(VkContext::GetInstance()->graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
+        throw std::runtime_error("failed to submit draw command buffer!");
+    }
+
+    VkPresentInfoKHR presentInfo{};
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = signalSemaphores;
+
+    VkSwapchainKHR swapChains[] = { swapChain };
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = swapChains;
+
+    presentInfo.pImageIndices = imageIndex;
+
+    auto result = vkQueuePresentKHR(VkContext::GetInstance()->presentQueue, &presentInfo);
+
+    return result;
+}
 

@@ -159,3 +159,8 @@ void XRE::VulkanPipeline::CleanUp(VkDevice device)
     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
     vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 }
+
+void XRE::VulkanPipeline::Bind(VkCommandBuffer commandBuffer)
+{
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+}

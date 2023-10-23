@@ -24,6 +24,8 @@ namespace XRE {
     class VulkanRHI
     {
     public:
+
+        static std::vector<const char*> getRequiredExtensions();
         
         static bool isDeviceSuitable(VkPhysicalDevice device);
 		
@@ -46,6 +48,10 @@ namespace XRE {
         static void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
         static uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
+        static VkCommandBuffer beginSingleTimeCommands();
+
+        static void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 
     };
 }

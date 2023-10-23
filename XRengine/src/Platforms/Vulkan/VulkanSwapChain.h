@@ -24,6 +24,7 @@ namespace XRE {
         std::vector<VkFramebuffer> swapChainFramebuffers;
         XRef<VulkanImage> DepthImage;
         XRef<VulkanRenderPass> renderPass;
+        uint32_t currentFrame = 0;
 
         void createFramebuffers();
 
@@ -35,7 +36,13 @@ namespace XRE {
 
         void createDepthResources();
 
+        void createSyncObjects();
+
         void BindRenderPass(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+
+        uint32_t acquireNextImage();
+
+        VkResult submitCommandBuffer(const std::vector<VkCommandBuffer>& buffers, uint32_t* imageIndex);
 
     private:
         VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
@@ -43,6 +50,13 @@ namespace XRE {
         VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+
+        std::vector<VkSemaphore> imageAvailableSemaphores;
+        std::vector<VkSemaphore> renderFinishedSemaphores;
+        std::vector<VkFence> inFlightFences;
+
+
+        
 
         
 

@@ -52,7 +52,7 @@ void XRE::VulkanImage::CleanUp()
 }
 
 void XRE::VulkanImage::transitionImageLayout(VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) {
-    VkCommandBuffer commandBuffer = VkContext::GetInstance()->beginSingleTimeCommands();
+    VkCommandBuffer commandBuffer = VulkanRHI::beginSingleTimeCommands();
 
     VkImageMemoryBarrier barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -97,11 +97,11 @@ void XRE::VulkanImage::transitionImageLayout(VkFormat format, VkImageLayout oldL
         1, &barrier
     );
 
-    VkContext::GetInstance()->endSingleTimeCommands(commandBuffer);
+    VulkanRHI::endSingleTimeCommands(commandBuffer);
 }
 
 void XRE::VulkanImage::copyBufferToImage(VkBuffer buffer, uint32_t width, uint32_t height) {
-    VkCommandBuffer commandBuffer = VkContext::GetInstance()->beginSingleTimeCommands();
+    VkCommandBuffer commandBuffer = VulkanRHI::beginSingleTimeCommands();
 
     VkBufferImageCopy region{};
     region.bufferOffset = 0;
@@ -120,6 +120,6 @@ void XRE::VulkanImage::copyBufferToImage(VkBuffer buffer, uint32_t width, uint32
 
     vkCmdCopyBufferToImage(commandBuffer, buffer, Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-    VkContext::GetInstance()->endSingleTimeCommands(commandBuffer);
+    VulkanRHI::endSingleTimeCommands(commandBuffer);
 }
 

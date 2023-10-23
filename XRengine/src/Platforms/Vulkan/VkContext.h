@@ -15,7 +15,6 @@
 #include <glm/gtx/hash.hpp>
 
 
-#include <tiny_obj_loader.h>
 #include <vulkan\vulkan.h>
 
 #include "VulkanSwapChain.h"
@@ -24,10 +23,12 @@
 #include "VulkanPipeline.h"
 #include "VulkanRenderPass.h"
 #include "VulkanBuffers.h"
+#include "VulkanVertexArray.h"
 #include "xre\Resource\Model.h"
 #include "VulkanRHI.h"
+#include "VulkanUtils.h"
 
-
+#define XRE_VK_INSTANCE VkContext::GetInstance()
 
 
 const std::string MODEL_PATH = "models/viking_room.obj";
@@ -35,41 +36,14 @@ const std::string TEXTURE_PATH = "textures/viking_room.png";
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-const std::vector<const char*> validationLayers = {
-    "VK_LAYER_KHRONOS_validation"
-};
-
-const std::vector<const char*> deviceExtensions = {
-    VK_KHR_SWAPCHAIN_EXTENSION_NAME
-};
-
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
-const bool enableValidationLayers = true;
-#endif
-
-VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger); 
-
-void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 
 
 
-struct VkVertex {
-    glm::vec3 pos;
-    glm::vec3 color;
-    glm::vec2 texCoord;
-
-    
-    bool operator==(const VkVertex& other) const {
-        return pos == other.pos && color == other.color && texCoord == other.texCoord;
-    }
-};
 
 static VkVertexInputBindingDescription getBindingDescription() {
     VkVertexInputBindingDescription bindingDescription{};
     bindingDescription.binding = 0;
-    bindingDescription.stride = sizeof(VkVertex);
+    bindingDescription.stride = sizeof(XRE::VkVertex);
     bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
     return bindingDescription;
@@ -81,29 +55,22 @@ static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions
     attributeDescriptions[0].binding = 0;
     attributeDescriptions[0].location = 0;
     attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[0].offset = offsetof(VkVertex, pos);
+    attributeDescriptions[0].offset = offsetof(XRE::VkVertex, pos);
 
     attributeDescriptions[1].binding = 0;
     attributeDescriptions[1].location = 1;
     attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[1].offset = offsetof(VkVertex, color);
+    attributeDescriptions[1].offset = offsetof(XRE::VkVertex, color);
 
     attributeDescriptions[2].binding = 0;
     attributeDescriptions[2].location = 2;
     attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-    attributeDescriptions[2].offset = offsetof(VkVertex, texCoord);
+    attributeDescriptions[2].offset = offsetof(XRE::VkVertex, texCoord);
 
     return attributeDescriptions;
 }
 
 
-namespace std {
-    template<> struct hash<VkVertex> {
-        size_t operator()(VkVertex const& vertex) const {
-            return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
-        }
-    };
-}
 
 struct UniformBufferObject {
     alignas(16) glm::mat4 model;
@@ -132,8 +99,9 @@ namespace XRE {
             return GetInstance()->device;
         }
         
-
-        GLFWwindow* window;
+        static GLFWwindow* GetWindow() {
+            return GetInstance()->m_WindowHandle;
+        }
 
         VkInstance instance;
         VkDebugUtilsMessengerEXT debugMessenger;
@@ -156,11 +124,9 @@ namespace XRE {
         XRef<VulkanTexture2D> Texture;
         XRef<Model> VikingModel;
 
-        std::vector<VkVertex> vertices;
-        std::vector<uint32_t> indices;
+        
+        XRef<VulkanVertexArray> model;
 
-        XRef<VulkanVertexBuffer> VBO;
-        XRef<VulkanIndexBuffer> IBO;
         
 
         std::vector<VkBuffer> uniformBuffers;
@@ -172,10 +138,6 @@ namespace XRE {
 
         std::vector<VkCommandBuffer> commandBuffers;
 
-        std::vector<VkSemaphore> imageAvailableSemaphores;
-        std::vector<VkSemaphore> renderFinishedSemaphores;
-        std::vector<VkFence> inFlightFences;
-        uint32_t currentFrame = 0;
 
         bool framebufferResized = false;
 
@@ -201,7 +163,7 @@ namespace XRE {
             //requires renderPass
             swapChain->createFramebuffers();
             createCommandBuffers();
-            createSyncObjects();
+            swapChain->createSyncObjects();
         }
 
         void LoadResource() {
@@ -209,10 +171,13 @@ namespace XRE {
             Texture = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
             //VikingModel = XMakeRef<Model>(MODEL_PATH);
 
-            loadModel();
+            
 
-            VBO = XMakeRef<VulkanVertexBuffer>((float*)&vertices[0], sizeof(VkVertex) * vertices.size());
-            IBO = XMakeRef<VulkanIndexBuffer>((uint32_t*)&indices[0], indices.size());
+            model = XMakeRef<VulkanVertexArray>();
+
+            model->loadModel(MODEL_PATH);
+            
+            
 
             createUniformBuffers();
             createDescriptorPool();
@@ -237,31 +202,18 @@ namespace XRE {
             Texture->m_Image->CleanUp();
 
             //destroy descriptor layout
-
             
-            VBO->~VulkanVertexBuffer();
-            IBO->~VulkanIndexBuffer();
-
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
-                vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
-                vkDestroyFence(device, inFlightFences[i], nullptr);
-            }
-
             vkDestroyCommandPool(device, commandPool, nullptr);
 
             vkDestroyDevice(device, nullptr);
 
             if (enableValidationLayers) {
-                DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+                VulkanDebugUtils::DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
             }
 
             vkDestroySurfaceKHR(instance, surface, nullptr);
             vkDestroyInstance(instance, nullptr);
-
-            glfwDestroyWindow(window);
-
-            glfwTerminate();
+            //glfwTerminate();
         }
 
         void createInstance();
@@ -278,44 +230,6 @@ namespace XRE {
 
         void createCommandPool();
 
-        void loadModel() {
-            tinyobj::attrib_t attrib;
-            std::vector<tinyobj::shape_t> shapes;
-            std::vector<tinyobj::material_t> materials;
-            std::string warn, err;
-
-            if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str())) {
-                throw std::runtime_error(warn + err);
-            }
-
-            std::unordered_map<VkVertex, uint32_t> uniqueVertices{};
-
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    VkVertex vertex{};
-
-                    vertex.pos = {
-                        attrib.vertices[3 * index.vertex_index + 0],
-                        attrib.vertices[3 * index.vertex_index + 1],
-                        attrib.vertices[3 * index.vertex_index + 2]
-                    };
-
-                    vertex.texCoord = {
-                        attrib.texcoords[2 * index.texcoord_index + 0],
-                        1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
-                    };
-
-                    vertex.color = { 1.0f, 1.0f, 1.0f };
-
-                    if (uniqueVertices.count(vertex) == 0) {
-                        uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
-                        vertices.push_back(vertex);
-                    }
-
-                    indices.push_back(uniqueVertices[vertex]);
-                }
-            }
-        }
 
         void createUniformBuffers() {
             VkDeviceSize bufferSize = sizeof(UniformBufferObject);
@@ -394,44 +308,7 @@ namespace XRE {
                 vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
             }
         }
-
-
-
-        VkCommandBuffer beginSingleTimeCommands() {
-            VkCommandBufferAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-            allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            allocInfo.commandPool = commandPool;
-            allocInfo.commandBufferCount = 1;
-
-            VkCommandBuffer commandBuffer;
-            vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
-
-            VkCommandBufferBeginInfo beginInfo{};
-            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-            vkBeginCommandBuffer(commandBuffer, &beginInfo);
-
-            return commandBuffer;
-        }
-
-        void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
-            vkEndCommandBuffer(commandBuffer);
-
-            VkSubmitInfo submitInfo{};
-            submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &commandBuffer;
-
-            vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-            vkQueueWaitIdle(graphicsQueue);
-
-            vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
-        }
-
         
-
         void createCommandBuffers() {
             commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
@@ -455,10 +332,12 @@ namespace XRE {
             }
 
             swapChain->BindRenderPass(commandBuffer, imageIndex);
+            pipeline->Bind(commandBuffer);
 
             
 
-            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->pipeline);
+            /*swapChain->BindViewPort(commandBuffer);
+            swapChain->BindScissor(commandBuffer);*/
 
             VkViewport viewport{};
             viewport.x = 0.0f;
@@ -474,16 +353,14 @@ namespace XRE {
             scissor.extent = swapChain->swapChainExtent;
             vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-            VkBuffer vertexBuffers[] = { VBO->m_vertexBuffer };
-            VkDeviceSize offsets[] = { 0 };
-            vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+            model->Bind(commandBuffer);
 
-            vkCmdBindIndexBuffer(commandBuffer, IBO->m_indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+            uint32_t currentFrame = swapChain->currentFrame;
 
             vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
-            vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
-
+            model->Draw(commandBuffer);
+            
             vkCmdEndRenderPass(commandBuffer);
 
             if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -491,26 +368,7 @@ namespace XRE {
             }
         }
 
-        void createSyncObjects() {
-            imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-            renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-            inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-
-            VkSemaphoreCreateInfo semaphoreInfo{};
-            semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-            VkFenceCreateInfo fenceInfo{};
-            fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-            fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-                    vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-                    vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
-                    throw std::runtime_error("failed to create synchronization objects for a frame!");
-                }
-            }
-        }
+        
 
         void updateUniformBuffer(uint32_t currentImage) {
             static auto startTime = std::chrono::high_resolution_clock::now();
@@ -528,59 +386,19 @@ namespace XRE {
         }
 
         void drawFrame() {
-            vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+            
 
-            uint32_t imageIndex;
-            VkResult result = vkAcquireNextImageKHR(device, swapChain->swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+            uint32_t imageIndex = swapChain->acquireNextImage();
 
-            if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-                swapChain->recreateSwapChain();
-                return;
-            }
-            else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-                throw std::runtime_error("failed to acquire swap chain image!");
-            }
-
+            uint32_t currentFrame = swapChain->currentFrame;
             updateUniformBuffer(currentFrame);
-
-            vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
             vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
             recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
 
-            VkSubmitInfo submitInfo{};
-            submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+            auto result = swapChain->submitCommandBuffer(commandBuffers, &imageIndex);
 
-            VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
-            VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-            submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pWaitSemaphores = waitSemaphores;
-            submitInfo.pWaitDstStageMask = waitStages;
-
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
-
-            VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
-            submitInfo.signalSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores = signalSemaphores;
-
-            if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
-                throw std::runtime_error("failed to submit draw command buffer!");
-            }
-
-            VkPresentInfoKHR presentInfo{};
-            presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
-            presentInfo.waitSemaphoreCount = 1;
-            presentInfo.pWaitSemaphores = signalSemaphores;
-
-            VkSwapchainKHR swapChains[] = { swapChain->swapChain };
-            presentInfo.swapchainCount = 1;
-            presentInfo.pSwapchains = swapChains;
-
-            presentInfo.pImageIndices = &imageIndex;
-
-            result = vkQueuePresentKHR(presentQueue, &presentInfo);
+            
 
             if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
                 framebufferResized = false;
@@ -593,12 +411,10 @@ namespace XRE {
             currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
         }
 
-        std::vector<const char*> getRequiredExtensions();
+        
 
-        bool checkValidationLayerSupport();
 
-        static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
-
+        
 	};
 
 	

@@ -40,6 +40,8 @@ namespace XRE {
 		void Init();
 		void CleanUp(VkDevice device);
 
+		void Bind(VkCommandBuffer commandBuffer);
+
 		
 
 		VkPipeline pipeline;
