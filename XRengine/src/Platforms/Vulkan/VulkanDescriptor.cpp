@@ -54,121 +54,69 @@ void XRE::VulkanDescriptorPool::resetPool()
 
 }
 
-XRE::VulkanDescriptorWriter::VulkanDescriptorWriter(VulkanDescriptorSetLayout& setLayout, VulkanDescriptorPool& pool)
-	: setLayout{ setLayout }, pool{ pool }
+XRE::VulkanDescriptorWriter::VulkanDescriptorWriter()
 {
+    createDescriptorSets();
+}
+
+void XRE::VulkanDescriptorWriter::createDescriptorSets() {
+
+
+    std::vector<VkDescriptorSetLayout> layouts(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, VkContext::GetInstance()->pipeline->descriptorSetLayout);
+
+    VkDescriptorSetAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool = VkContext::GetInstance()->descriptorPool->descriptorPool;
+    allocInfo.descriptorSetCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+    allocInfo.pSetLayouts = layouts.data();
+
+
+
+    descriptorSets.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+    if (vkAllocateDescriptorSets(VkContext::GetDevice(), &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate descriptor sets!");
+    }
+
+    writes =  vector<VkWriteDescriptorSet>(2);
+   
 
 }
 
-void XRE::VulkanDescriptorWriter::writeBuffer(uint32_t binding, VkDescriptorBufferInfo* bufferInfo)
+void XRE::VulkanDescriptorWriter::writeBuffer(XRef<VulkanUniformBuffer> buffer)
 {
-	assert(setLayout.bindings.count(binding) == 1 && "Layout does not contain specified binding");
+  
 
-	auto& bindingDescription = setLayout.bindings[binding];
+        writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writes[0].dstBinding = 0;
+        writes[0].dstArrayElement = 0;
+        writes[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        writes[0].descriptorCount = 1;
+        writes[0].pBufferInfo = buffer->GetBufferInfo();
 
-	assert(
-		bindingDescription.descriptorCount == 1 &&
-		"Binding single descriptor info, but binding expects multiple");
-
-	VkWriteDescriptorSet write{};
-	write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-	write.descriptorType = bindingDescription.descriptorType;
-	write.dstBinding = binding;
-	write.pBufferInfo = bufferInfo;
-	write.descriptorCount = 1;
-
-	writes.push_back(write);
+    
 }
 
-void XRE::VulkanDescriptorWriter::writeImage(uint32_t binding, VkDescriptorImageInfo* imageInfo)
+void XRE::VulkanDescriptorWriter::writeImage(XRef<VulkanImage> image, uint32_t offset)
 {
-	assert(setLayout.bindings.count(binding) == 1 && "Layout does not contain specified binding");
+   
 
-	auto& bindingDescription = setLayout.bindings[binding];
+        
 
-	assert(
-		bindingDescription.descriptorCount == 1 &&
-		"Binding single descriptor info, but binding expects multiple");
+        writes[offset].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        writes[offset].dstBinding = offset;
+        writes[offset].dstArrayElement = 0;
+        writes[offset].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        writes[offset].descriptorCount = 1;
+        writes[offset].pImageInfo = image->GetImageInfo();
 
-	VkWriteDescriptorSet write{};
-	write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-	write.descriptorType = bindingDescription.descriptorType;
-	write.dstBinding = binding;
-	write.pImageInfo = imageInfo;
-	write.descriptorCount = 1;
-
-	writes.push_back(write);
-	
+        
 }
 
-bool XRE::VulkanDescriptorWriter::build(VkDescriptorSet& set)
+void XRE::VulkanDescriptorWriter::overwrite(int i)
 {
-	bool success = pool.allocateDescriptor(setLayout.getDescriptorSetLayout(), set);
-	if (!success) {
-		return false;
-	}
-	overwrite(set);
-	return true;
-}
+    for (auto &x : writes) {
+        x.dstSet = descriptorSets[i];
+    }
+    vkUpdateDescriptorSets(VkContext::GetDevice(), writes.size(), writes.data(), 0, nullptr);
 
-void XRE::VulkanDescriptorWriter::overwrite(VkDescriptorSet& set)
-{
-	for (auto& write : writes) {
-		write.dstSet = set;
-	}
-	vkUpdateDescriptorSets(VkContext::GetDevice(), writes.size(), writes.data(), 0, nullptr);
-
-}
-
-
-
-
-XRE::VulkanDescriptorSetLayout::VulkanDescriptorSetLayout(std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
-	:bindings{bindings}
-{
-
-
-
-
-	std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings{};
-	for (auto kv : bindings) {
-		setLayoutBindings.push_back(kv.second);
-	}
-
-	VkDescriptorSetLayoutCreateInfo descriptorSetLayoutInfo{};
-	descriptorSetLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	descriptorSetLayoutInfo.bindingCount = static_cast<uint32_t>(setLayoutBindings.size());
-	descriptorSetLayoutInfo.pBindings = setLayoutBindings.data();
-
-	if (vkCreateDescriptorSetLayout(
-		VkContext::GetDevice(),
-		&descriptorSetLayoutInfo,
-		nullptr,
-		&descriptorSetLayout) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create descriptor set layout!");
-	}
-}
-
-
-
-XRE::VulkanDescriptorSetLayout::~VulkanDescriptorSetLayout()
-{
-	vkDestroyDescriptorSetLayout(VkContext::GetDevice(), descriptorSetLayout, nullptr);
-}
-
-XRE::VulkanDescriptorSetLayout::Builder& XRE::VulkanDescriptorSetLayout::Builder::addBinding(uint32_t binding, VkDescriptorType descriptorType, VkShaderStageFlags stageFlags, uint32_t count)
-{
-	assert(bindings.count(binding) == 0 && "Binding already in use");
-	VkDescriptorSetLayoutBinding layoutBinding{};
-	layoutBinding.binding = binding;
-	layoutBinding.descriptorType = descriptorType;
-	layoutBinding.descriptorCount = count;
-	layoutBinding.stageFlags = stageFlags;
-	bindings[binding] = layoutBinding;
-	return *this;
-}
-
-std::unique_ptr<XRE::VulkanDescriptorSetLayout> XRE::VulkanDescriptorSetLayout::Builder::build() const
-{
-	return std::make_unique<VulkanDescriptorSetLayout>( bindings);
 }

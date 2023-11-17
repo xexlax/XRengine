@@ -87,6 +87,9 @@ XRE::VulkanUniformBuffer::VulkanUniformBuffer(VkDevice device, VkDeviceSize buff
     VulkanRHI::createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_uniformBuffer, m_bufferMemory);
     vkMapMemory(device, m_bufferMemory, 0, bufferSize, 0, &m_bufferMapped);
 
+    bufferInfo.buffer = GetBuffer();
+    bufferInfo.offset = 0;
+    bufferInfo.range = sizeof(UniformBufferObject);
 }
 
 XRE::VulkanUniformBuffer::~VulkanUniformBuffer()

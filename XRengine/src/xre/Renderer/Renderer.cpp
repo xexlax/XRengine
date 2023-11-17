@@ -38,13 +38,22 @@ namespace XRE {
 
 	}
 
-	void Renderer::DrawModel(const XRef<Model>& model)
+	void Renderer::DrawModel(const MeshRendererComponent& mrc, const glm::mat4& transform)
 	{
-		for (auto mesh : model->m_Meshes) {
+
+#ifdef XRE_RENDERER_VULKAN
+		PushData push{};
+		push.ModelMatrix = transform;
+		XRE::VkContext::GetInstance()->PushConstant(&push, sizeof(PushData));
+		for (auto mesh : mrc.m_Model->m_Meshes) {
+			mesh.BindMaterial(mrc.GetMaterial(mesh.MatID));
+			
 			RenderCommand::DrawIndexed(
 				mesh.GetVAO()
 			);
 		}
+
+#endif
 	}
 
 

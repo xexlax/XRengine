@@ -3,6 +3,7 @@
 
 #include "xre/Renderer/Renderer.h"
 #include "Platforms\OpenGL\OpenGLShader.h"
+#include "Platforms\Vulkan\VulkanVertexArray.h"
 #include "xre\Resource\ResourceManager.h"
 
 namespace XRE {
@@ -33,12 +34,14 @@ namespace XRE {
 	
 	void Mesh::BindMaterial(XRef<Material> mat, XRef<Shader> shader)
 	{
+
+#ifdef XRE_RENDERER_OPENGL
 		if (mat == nullptr) {
-			BindMaterial(ResourceManager::GetDefaultMaterial(),shader);
+			BindMaterial(ResourceManager::GetDefaultMaterial(), shader);
 			return;
-		}
-			
-	
+	}
+
+
 		shader->Bind();
 
 		shader->SetFloat3("material.baseColor", mat->baseColor);
@@ -65,7 +68,23 @@ namespace XRE {
 			mat->bumpTex.m_Tex->Bind(textureID);
 			shader->SetInt("material.bumpTex", textureID++);
 		}
+#endif // XRE_RENDERER_OPENGL
 
+
+
+
+	}
+	void Mesh::BindMaterial(XRef<Material> mat)
+	{
+#ifdef XRE_RENDERER_VULKAN
+		std::vector < XRef<Texture2D>> texs;
+		texs.push_back(mat->diffuseTex.m_Tex);
+		texs.push_back(mat->specularTex.m_Tex);
+		texs.push_back(mat->bumpTex.m_Tex);
+		std::dynamic_pointer_cast<VulkanVertexArray>(GetVAO())->UpdateDescriptorSets(texs);
+
+
+#endif // XRE_RENDERER_VULKAN
 	}
 	void Mesh::UnBindMatarial(XRef<Shader> shader)
 	{

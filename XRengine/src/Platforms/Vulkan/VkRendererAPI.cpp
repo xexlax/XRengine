@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "VkRendererAPI.h"
 #include "VkContext.h"
+#include "VulkanVertexArray.h"
 
 
 namespace XRE {
@@ -30,13 +31,16 @@ namespace XRE {
 
 	void VkRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
 	{
-
+		auto vva = std::dynamic_pointer_cast<VulkanVertexArray>(vertexArray);
 		int currentFrame = VkContext::GetInstance()->swapChain->currentFrame;
 		VkCommandBuffer commandBuffer = VkContext::GetInstance()->commandBuffers[currentFrame];
 		std::dynamic_pointer_cast<VulkanVertexArray>(vertexArray)->Bind(commandBuffer);
-		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, 
-			VkContext::GetInstance()->pipeline->pipelineLayout, 0, 1, 
-			&VkContext::GetInstance()->descriptorSets[currentFrame], 0, nullptr);
+		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+			VkContext::GetInstance()->pipeline->pipelineLayout, 0, 1,
+			
+			VkContext::GetInstance()->globalDW->GetDescriptorSet(currentFrame),
+			//vva->GetDescriptorSet(currentFrame),
+			0, nullptr);
 		std::dynamic_pointer_cast<VulkanVertexArray>(vertexArray)->Draw(commandBuffer);
 	}
 

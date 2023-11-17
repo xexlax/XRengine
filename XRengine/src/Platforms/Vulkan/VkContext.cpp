@@ -11,37 +11,6 @@ namespace XRE {
 	{
 		XRE_CORE_ASSERT(windowHandle, "Window Handle is Null");
 	}
-	void VkContext::Init()
-	{
-		
-		ContextInstance = this;
-		createInstance();
-		setupDebugMessenger();
-		createSurface();
-		pickPhysicalDevice();
-		createLogicalDevice();
-
-		swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
-
-		pipeline = XMakeRef<VulkanPipeline>(VERT_PATH, FRAG_PATH, swapChain->renderPass);
-		createCommandPool();
-
-		swapChain->createDepthResources();
-
-		//requires renderPass
-		swapChain->createFramebuffers();
-		createCommandBuffers();
-		swapChain->createSyncObjects();
-
-
-		//创建描述符池
-		createDescriptorPool();
-
-		//根据UBO结构 创建UniformBuffer
-		createUniformBuffers();
-
-		
-	}
 	void VkContext::SwapBuffers()
 	{
 
@@ -189,6 +158,17 @@ namespace XRE {
 		if (vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create graphics command pool!");
 		}
+	}
+
+	inline void VkContext::createDescriptorPool() {
+		std::vector<VkDescriptorPoolSize> poolSizes(2);
+		poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		poolSizes[0].descriptorCount = static_cast<uint32_t>(32* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+
+		poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		poolSizes[1].descriptorCount = static_cast<uint32_t>(32* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+
+		descriptorPool = XMakeRef<VulkanDescriptorPool>(128 * VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, poolSizes);
 	}
 
 

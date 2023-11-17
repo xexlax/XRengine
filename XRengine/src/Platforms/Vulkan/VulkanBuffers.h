@@ -51,11 +51,17 @@ namespace XRE {
 		VkBuffer GetBuffer() { return m_uniformBuffer; }
 		void WriteToBuffer(void* data);
 
+		VkDescriptorBufferInfo* GetBufferInfo() { return &bufferInfo; }
+
+
 	private:
 		VkDevice m_device;
 		VkDeviceSize m_bufferSize;
 		VkBuffer m_uniformBuffer;
 		VkDeviceMemory m_bufferMemory;
 		void* m_bufferMapped;
+
+		VkDescriptorBufferInfo bufferInfo{};
+		
 	};
 }

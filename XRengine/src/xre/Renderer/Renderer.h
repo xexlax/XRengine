@@ -5,6 +5,7 @@
 #include "Resources/Shader.h"
 #include "Resources/Texture.h"
 #include "Light.h"
+#include "xre\ECS\Components.h"
 namespace XRE{
 
 	
@@ -17,7 +18,7 @@ namespace XRE{
 		static void BeginScene(const XRef<Camera>& camera);
 		static void EndScene();
 
-		static void DrawModel(const XRef<Model>& model);
+		static void DrawModel(const MeshRendererComponent& mrc, const glm::mat4& transform = glm::mat4(1.0f));
 
 		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray
 			, const glm::mat4& transform = glm::mat4(1.0f));
@@ -32,6 +33,14 @@ namespace XRE{
 			glm::mat4 ProjectionMatrix;
 
 			XRef<LightSystem> lightSystem;
+		};
+
+		//Push Constant
+		struct PushData
+		{
+			glm::mat4 ModelMatrix;
+			uint32_t id;
+
 		};
 	private:
 		static SceneData* m_SceneData;

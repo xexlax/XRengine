@@ -13,42 +13,27 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/hash.hpp>
-
-
 #include <vulkan\vulkan.h>
 
 #include "VulkanSwapChain.h"
-#include "VulkanTexture.h"
-#include "VulkanShader.h"
 #include "VulkanPipeline.h"
 #include "VulkanRenderPass.h"
-#include "xre\Resource\Model.h"
 #include "VulkanRHI.h"
 #include "VulkanUtils.h"
-#include "VulkanVertexArray.h"
-#include "VulkanDescriptor.h"
-#include "xre\Renderer\Camera\EditorCamera.h"
 #include "VulkanBuffers.h"
+#include "VulkanDescriptor.h"
 #include "xre\Renderer\Renderer.h"
+#include "VulkanTexture.h"
 #define XRE_VK_INSTANCE VkContext::GetInstance()
 
 
 
-const std::string TEXTURE_PATH = "textures/viking_room.png";
 const std::string VERT_PATH = "shaders/default_vert.spv";
 const std::string FRAG_PATH = "shaders/default_frag.spv";
-
-
-
-
-
-
-
-
+const std::string TEXTURE_PATH = "textures/viking_room.png";
 
 
 struct UniformBufferObject {
-    alignas(16) glm::mat4 model;
     alignas(16) glm::mat4 view;
     alignas(16) glm::mat4 proj;
 };
@@ -59,24 +44,18 @@ namespace XRE {
 	public:
 		VkContext(GLFWwindow* windowHandle);
 
-		virtual void Init() override;
+        
 		virtual void SwapBuffers() override;
 	private:
 		GLFWwindow* m_WindowHandle;
         static VkContext* ContextInstance;
 
 	public:
-        static VkContext* GetInstance() {
-            return ContextInstance;
-        }
+        static VkContext* GetInstance() { return ContextInstance; }
 
-        static VkDevice GetDevice() {
-            return GetInstance()->device;
-        }
+        static VkDevice GetDevice() { return GetInstance()->device; }
         
-        static GLFWwindow* GetWindow() {
-            return GetInstance()->m_WindowHandle;
-        }
+        static GLFWwindow* GetWindow() { return GetInstance()->m_WindowHandle; }
 
         VkInstance instance;
         VkDebugUtilsMessengerEXT debugMessenger;
@@ -92,16 +71,15 @@ namespace XRE {
         XRef<VulkanPipeline> pipeline;
 
         VkCommandPool commandPool;
-
-        XRef<VulkanTexture2D> Texture;
         
         std::vector <XRef<VulkanUniformBuffer>> uniformBuffers;
         
         XRef<VulkanDescriptorPool> descriptorPool;
-        XRef<VulkanDescriptorWriter> descriptorWriter;
-
-        std::vector<VkDescriptorSet> descriptorSets;
         std::vector<VkCommandBuffer> commandBuffers;
+
+        XRef<VulkanDescriptorWriter> globalDW;
+
+        XRef<VulkanTexture2D> tex;
 
         //current
         uint32_t imageIndex;
@@ -113,24 +91,49 @@ namespace XRE {
             app->framebufferResized = true;
         }
 
+        virtual void Init() override
+        {
 
-        void LoadResource() {
-            
-            Texture = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
-            
-            
+            ContextInstance = this;
+            createInstance();
+            setupDebugMessenger();
+            createSurface();
+            pickPhysicalDevice();
+            createLogicalDevice();
 
-            //创建描述符集（类似Uniform）
-            createDescriptorSets();
+
+            swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
+            pipeline = XMakeRef<VulkanPipeline>(VERT_PATH, FRAG_PATH, swapChain->renderPass);
+            createCommandPool();
+            swapChain->createDepthResources();
+            swapChain->createFramebuffers();
+            createCommandBuffers();
+            swapChain->createSyncObjects();
+            //创建描述符池
+            createDescriptorPool();
+            //根据UBO结构 创建UniformBuffer
+            createUniformBuffers();
+
+            //对每个VAO，单独创建ds
+            //createDescriptorSets();
+            tex = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
+            globalDW = XMakeRef<VulkanDescriptorWriter>();
+            for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
+                globalDW->writeBuffer(VkContext::GetInstance()->uniformBuffers[i]);
+                globalDW->writeImage(tex->m_Image, 1);
+                globalDW->overwrite(i);
+            }
+
+
         }
+
+
 
 
         void cleanup() {
             swapChain->CleanUp(device);
 
             pipeline->CleanUp(device);
-
-            Texture->m_Image->CleanUp();
 
             //destroy descriptor layout
             
@@ -148,19 +151,12 @@ namespace XRE {
         }
 
         void createInstance();
-
         void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-
         void setupDebugMessenger();
-
         void createSurface();
-
         void pickPhysicalDevice();
-
         void createLogicalDevice();
-
         void createCommandPool();
-
 
         void createUniformBuffers() {
             VkDeviceSize bufferSize = sizeof(UniformBufferObject);
@@ -170,68 +166,8 @@ namespace XRE {
             }
         }
 
-        void createDescriptorPool() {
-            std::vector<VkDescriptorPoolSize> poolSizes(2);
-            poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            poolSizes[0].descriptorCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+        void createDescriptorPool();
 
-            poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            poolSizes[1].descriptorCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
-
-            descriptorPool = XMakeRef<VulkanDescriptorPool>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, poolSizes);
-        }
-
-        void createDescriptorSets() {
-
-
-            std::vector<VkDescriptorSetLayout> layouts(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, pipeline->descriptorSetLayout);
-            
-            VkDescriptorSetAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-            allocInfo.descriptorPool =  descriptorPool->descriptorPool;
-            allocInfo.descriptorSetCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
-            allocInfo.pSetLayouts = layouts.data();
-
-           
-
-            descriptorSets.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
-            if (vkAllocateDescriptorSets(device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
-                throw std::runtime_error("failed to allocate descriptor sets!");
-            }
-
-            for (size_t i = 0; i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT; i++) {
-                VkDescriptorBufferInfo bufferInfo{};
-                bufferInfo.buffer = uniformBuffers[i]->GetBuffer();
-                bufferInfo.offset = 0;
-                bufferInfo.range = sizeof(UniformBufferObject);
-
-                VkDescriptorImageInfo imageInfo{};
-                imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                imageInfo.imageView = Texture->m_Image->ImageView;
-                imageInfo.sampler = Texture->m_Image->Sampler;
-
-                std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
-
-                descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrites[0].dstSet = descriptorSets[i];
-                descriptorWrites[0].dstBinding = 0;
-                descriptorWrites[0].dstArrayElement = 0;
-                descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                descriptorWrites[0].descriptorCount = 1;
-                descriptorWrites[0].pBufferInfo = &bufferInfo;
-
-                descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrites[1].dstSet = descriptorSets[i];
-                descriptorWrites[1].dstBinding = 1;
-                descriptorWrites[1].dstArrayElement = 0;
-                descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                descriptorWrites[1].descriptorCount = 1;
-                descriptorWrites[1].pImageInfo = &imageInfo;
-
-                vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
-            }
-        }
-        
         void createCommandBuffers() {
             commandBuffers.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
@@ -245,6 +181,8 @@ namespace XRE {
                 throw std::runtime_error("failed to allocate command buffers!");
             }
         }
+
+        
 
         void beginPass(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
             VkCommandBufferBeginInfo beginInfo{};
@@ -292,7 +230,7 @@ namespace XRE {
 
 
             UniformBufferObject ubo{};
-            ubo.model = glm::mat4(1.0f);
+        
             ubo.view = scenedata->ViewMatrix;
             ubo.proj = scenedata->ProjectionMatrix;
             ubo.proj[1][1] *= -1;
@@ -322,8 +260,16 @@ namespace XRE {
             currentFrame = (currentFrame + 1) % VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;
         }
 
+        void PushConstant(void* data, uint32_t size) {
+            vkCmdPushConstants(
+                commandBuffers[swapChain->currentFrame],
+                pipeline->pipelineLayout,
+                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                0,
+                size,
+                data);
+        }
+
 
 	};
-
-	
 }

@@ -30,7 +30,6 @@ namespace XRE {
 		void createTextureSampler();
 
 
-
 	};
 
 }

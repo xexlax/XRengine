@@ -1,7 +1,7 @@
 #include "VulkanPipeline.h"
 #include "VkContext.h"
 #include "VulkanUtils.h"
-
+#include "xre\Renderer\Renderer.h"
 
 XRE::VulkanPipeline::VulkanPipeline(const std::string& vert, const std::string& frag, XRef<VulkanRenderPass> renderPass)
 {
@@ -21,6 +21,8 @@ XRE::VulkanPipeline::VulkanPipeline(const std::string& vert, const std::string& 
     samplerLayoutBinding.pImmutableSamplers = nullptr;
     samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
+
+
     std::array<VkDescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
     VkDescriptorSetLayoutCreateInfo layoutInfo{};
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -30,6 +32,14 @@ XRE::VulkanPipeline::VulkanPipeline(const std::string& vert, const std::string& 
     if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
         throw std::runtime_error("failed to create descriptor set layout!");
     }
+
+    VkPushConstantRange pushConstantRange{};
+    pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+    pushConstantRange.offset = 0;
+    pushConstantRange.size = sizeof(Renderer::PushData);
+
+    
+    
 
     XRef<VulkanShader> vulkanShader = XMakeRef<VulkanShader>("default", vert , frag);
 
@@ -120,6 +130,9 @@ XRE::VulkanPipeline::VulkanPipeline(const std::string& vert, const std::string& 
     pipelineLayoutInfo.setLayoutCount = 1;
     pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 
+    pipelineLayoutInfo.pushConstantRangeCount = 1;
+    pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+ 
     if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
         throw std::runtime_error("failed to create pipeline layout!");
     }

@@ -9,6 +9,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/hash.hpp>
+
+#include "VulkanSwapChain.h"
+#include "VkContext.h"
 namespace std {
     template<> struct hash<XRE::VkVertex> {
         size_t operator()(XRE::VkVertex const& vertex) const {
@@ -65,4 +68,28 @@ void XRE::VulkanVertexArray::Draw(VkCommandBuffer commandBuffer)
 {
     vkCmdDrawIndexed(commandBuffer, indexCount, 1, 0, 0, 0);
 }
+
+void XRE::VulkanVertexArray::UpdateDescriptorSets(const std::vector<XRef<Texture2D>>& textures)
+{
+    if (descriptorWriter == nullptr) createDescriptorSets(textures);
+    else
+    for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
+        descriptorWriter->writeImage(std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image, 1);
+        descriptorWriter->overwrite(i);
+    }
+
+   
+
+}
+
+void XRE::VulkanVertexArray::createDescriptorSets(const std::vector<XRef<Texture2D>>& textures)
+{
+    descriptorWriter = XMakeRef<VulkanDescriptorWriter>();
+    for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
+        descriptorWriter->writeBuffer(VkContext::GetInstance()->uniformBuffers[i]);
+        descriptorWriter->writeImage( std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image, 1);
+        descriptorWriter->overwrite(i);
+    }
+}
+
 
