@@ -21,6 +21,10 @@ namespace XRE {
 		m_SceneData->ViewProjectionMatrix = camera->GetViewProjectionMatrix();
 		m_SceneData->ViewMatrix = camera->GetViewMatrix();
 		m_SceneData->ProjectionMatrix = camera->GetProjectionMatrix();
+
+#ifdef XRE_RENDERER_VULKAN
+		XRE::VkContext::GetInstance()->beginFrame(m_SceneData);
+#endif // XRE_RENDERER_VULKAN
 	}
 
 	
@@ -28,10 +32,23 @@ namespace XRE {
 	void Renderer::EndScene()
 	{
 #ifdef XRE_RENDERER_VULKAN
-		XRE::VkContext::GetInstance()->drawFrame(m_SceneData);
+
+		XRE::VkContext::GetInstance()->endFrame();
 #endif // XRE_RENDERER_VULKAN
 
 	}
+
+	void Renderer::DrawModel(const XRef<Model>& model)
+	{
+		for (auto mesh : model->m_Meshes) {
+			RenderCommand::DrawIndexed(
+				mesh.GetVAO()
+			);
+		}
+	}
+
+
+	
 
 	
 

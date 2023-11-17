@@ -20,7 +20,7 @@ namespace XRE {
 	XRef<Framebuffer> Renderer3D::m_PostFrameBuffer;
 	XRef<VertexArray> Renderer3D::m_Quad;
 
-	Light Renderer3D::m_Light;
+	LightSystem Renderer3D::m_Light;
 
 	glm::mat4  Renderer3D::m_VP, Renderer3D::m_LVP;
 	void Renderer3D::Init()

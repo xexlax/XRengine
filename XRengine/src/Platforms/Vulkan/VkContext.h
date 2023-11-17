@@ -33,7 +33,7 @@
 #define XRE_VK_INSTANCE VkContext::GetInstance()
 
 
-const std::string MODEL_PATH = "models/viking_room.obj";
+
 const std::string TEXTURE_PATH = "textures/viking_room.png";
 const std::string VERT_PATH = "shaders/default_vert.spv";
 const std::string FRAG_PATH = "shaders/default_frag.spv";
@@ -94,15 +94,17 @@ namespace XRE {
         VkCommandPool commandPool;
 
         XRef<VulkanTexture2D> Texture;
-        XRef<Model> VikingModel;
         
         std::vector <XRef<VulkanUniformBuffer>> uniformBuffers;
         
         XRef<VulkanDescriptorPool> descriptorPool;
         XRef<VulkanDescriptorWriter> descriptorWriter;
-        //VkDescriptorPool descriptorPool;
+
         std::vector<VkDescriptorSet> descriptorSets;
         std::vector<VkCommandBuffer> commandBuffers;
+
+        //current
+        uint32_t imageIndex;
 
         bool framebufferResized = false;
 
@@ -116,7 +118,7 @@ namespace XRE {
             
             Texture = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
             
-            VikingModel = XMakeRef<Model>(MODEL_PATH);
+            
 
             //创建描述符集（类似Uniform）
             createDescriptorSets();
@@ -244,7 +246,7 @@ namespace XRE {
             }
         }
 
-        void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+        void beginPass(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
             VkCommandBufferBeginInfo beginInfo{};
             beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -255,7 +257,7 @@ namespace XRE {
             swapChain->BindRenderPass(commandBuffer, imageIndex);
             pipeline->Bind(commandBuffer);
 
-            
+
             VkViewport viewport{};
             viewport.x = 0.0f;
             viewport.y = 0.0f;
@@ -270,18 +272,10 @@ namespace XRE {
             scissor.extent = swapChain->swapChainExtent;
             vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-            //model->Bind(commandBuffer);
+        }
 
-            XRef<VulkanVertexArray> vao = std::dynamic_pointer_cast<VulkanVertexArray>(VikingModel->m_Meshes[0].GetVAO());
-            vao->Bind(commandBuffer);
 
-            uint32_t currentFrame = swapChain->currentFrame;
-
-            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
-
-            vao->Draw(commandBuffer);
-            //model->Draw(commandBuffer);
-            
+        void endPass(VkCommandBuffer commandBuffer){
             vkCmdEndRenderPass(commandBuffer);
 
             if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -290,10 +284,10 @@ namespace XRE {
         }
 
 
-        void drawFrame(Renderer::SceneData *scenedata) {
-            
+        void beginFrame(Renderer::SceneData* scenedata) {
 
-            uint32_t imageIndex = swapChain->acquireNextImage();
+
+            imageIndex = swapChain->acquireNextImage();
             uint32_t currentFrame = swapChain->currentFrame;
 
 
@@ -306,7 +300,15 @@ namespace XRE {
             uniformBuffers[currentFrame]->WriteToBuffer(&ubo);
 
             vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
-            recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+            beginPass(commandBuffers[currentFrame], imageIndex);
+
+            
+        }
+           
+            
+        void endFrame(){
+            uint32_t currentFrame = swapChain->currentFrame;
+            endPass(commandBuffers[currentFrame]);
             
             auto result = swapChain->submitCommandBuffer(commandBuffers, &imageIndex);
             if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {

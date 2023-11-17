@@ -7,8 +7,8 @@ namespace XRE {
 		RenderPass() {};
 		~RenderPass() {};
 
-		virtual void Forward()=0;
-	 
+	/*	virtual void Begin()=0;
+		virtual void End() = 0;*/
 	
 	};
 

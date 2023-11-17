@@ -16,9 +16,13 @@ namespace XRE {
 		void Init(VkDevice device, VkFormat swapChainImageFormat);
 		void CleanUp(VkDevice device);
 
-		virtual void Forward()	override;
-		
+	
 	};
 
+
+	class VulkanRenderPassForward : public VulkanRenderPass {
+
+
+	};
 
 }

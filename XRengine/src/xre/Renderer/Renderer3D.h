@@ -59,7 +59,7 @@ namespace XRE {
 		static XRef<Shader> flatColorShader;
 		static XRef<Shader> postShader;
 
-		static Light m_Light;
+		static LightSystem m_Light;
 	
 		
 		static XRef<Framebuffer> m_FrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;

@@ -43,12 +43,12 @@ namespace XRE {
 	};
 	//Light System
 	//整个当前场景的灯光布局
-	class Light {
+	class LightSystem {
 
 
 	public:
-		Light();
-		~Light() {};
+		LightSystem();
+		~LightSystem() {};
 		void Draw(XRef<Shader> shader);
 		void SetDirLight(TransformComponent t, DirectionalLightComponent l);
 		void ClearPLights();

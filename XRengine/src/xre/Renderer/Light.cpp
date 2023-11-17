@@ -7,12 +7,12 @@
 
 
 namespace XRE {
-	Light::Light()
+	LightSystem::LightSystem()
 		:m_DirectionalLight(glm::vec3(-0.2f, -1.0f, 0.3f)),m_PointLights(2)
 	{
 		
 	}
-	void Light::Draw(XRef<Shader> shader)
+	void LightSystem::Draw(XRef<Shader> shader)
 	{
 		if (Renderer::GetAPI() == RendererAPI::API::OpenGL) {
 
@@ -35,24 +35,24 @@ namespace XRE {
 		}
 	}
 	
-	void Light::SetDirLight(TransformComponent t, DirectionalLightComponent l)
+	void LightSystem::SetDirLight(TransformComponent t, DirectionalLightComponent l)
 	{		
 		m_DirectionalLight = { t.GetGlobalDirection() ,l.m_Color,l.m_Intensity };
 		m_DirectionalLight.m_Rotation = t.m_Rotation;
 	}
-	void Light::ClearPLights()
+	void LightSystem::ClearPLights()
 	{
 		m_PointLights.clear();
 	}
 
-	void Light::AddPLight(TransformComponent t, PointLightComponent l)
+	void LightSystem::AddPLight(TransformComponent t, PointLightComponent l)
 	{
 		if(m_PointLights.size()<9)
 		m_PointLights.push_back({ t.m_Translation,l.m_Color,l.m_Intensity });
 	}
 
 
-	void Light::RemovePLight(GameObject& go)
+	void LightSystem::RemovePLight(GameObject& go)
 	{
 	}
 	
