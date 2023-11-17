@@ -25,7 +25,6 @@ namespace XRE{
 
 		void Draw(VkCommandBuffer commandBuffer);
 
-		void loadModel(std::string path);
 
 	private:
 		uint32_t indexCount;

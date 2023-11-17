@@ -100,6 +100,8 @@ namespace XRE {
 		void UpdatePhysics(TimeStep ts);
 		void UpdateAudio(TimeStep ts);
 		void UpdateRendering(XRef<Camera> c);
+
+
 		void UpdateLogic(TimeStep ts);
 
 		

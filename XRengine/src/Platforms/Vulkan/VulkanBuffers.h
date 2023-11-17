@@ -42,4 +42,20 @@ namespace XRE {
 		uint32_t m_Count;
 	};
 
+
+	class VulkanUniformBuffer
+	{
+	public:
+		VulkanUniformBuffer(VkDevice device, VkDeviceSize bufferSize);
+		~VulkanUniformBuffer();
+		VkBuffer GetBuffer() { return m_uniformBuffer; }
+		void WriteToBuffer(void* data);
+
+	private:
+		VkDevice m_device;
+		VkDeviceSize m_bufferSize;
+		VkBuffer m_uniformBuffer;
+		VkDeviceMemory m_bufferMemory;
+		void* m_bufferMapped;
+	};
 }

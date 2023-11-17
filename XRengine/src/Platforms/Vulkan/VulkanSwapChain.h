@@ -11,6 +11,8 @@ namespace XRE {
 	class VulkanSwapChain {
 
     public:
+        const static int MAX_FRAMES_IN_FLIGHT = 2;
+
 
         VulkanSwapChain(const VkPhysicalDevice& physicalDevice, const VkDevice& device);
         void Init(const VkPhysicalDevice& physicalDevice, const VkDevice& device);

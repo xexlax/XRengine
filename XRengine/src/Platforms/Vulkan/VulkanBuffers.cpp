@@ -79,3 +79,23 @@ void XRE::VulkanIndexBuffer::Bind() const
 void XRE::VulkanIndexBuffer::Unbind() const
 {
 }
+
+XRE::VulkanUniformBuffer::VulkanUniformBuffer(VkDevice device, VkDeviceSize bufferSize)
+{
+    m_device = device;
+    m_bufferSize = bufferSize;
+    VulkanRHI::createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_uniformBuffer, m_bufferMemory);
+    vkMapMemory(device, m_bufferMemory, 0, bufferSize, 0, &m_bufferMapped);
+
+}
+
+XRE::VulkanUniformBuffer::~VulkanUniformBuffer()
+{
+    vkDestroyBuffer(m_device, m_uniformBuffer, nullptr);
+    vkFreeMemory(m_device,m_bufferMemory, nullptr);
+}
+
+void XRE::VulkanUniformBuffer::WriteToBuffer(void* data)
+{
+    memcpy(m_bufferMapped, data, m_bufferSize);
+}

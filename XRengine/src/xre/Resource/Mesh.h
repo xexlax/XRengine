@@ -6,17 +6,11 @@
 #include <xre\Renderer\Resources\VertexArrays.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
-
+#include <xre\Utils\Vertex.h>
 
 namespace XRE {
 
-	struct Vertex {
-		glm::vec3 Position;
-		glm::vec3 Normal;
-		glm::vec3 Tangent;
-		glm::vec2 TexCoords;
-	};
-
+	
 	struct AABB {
 		glm::vec3 LowerBorder, HigherBorder;
 	};

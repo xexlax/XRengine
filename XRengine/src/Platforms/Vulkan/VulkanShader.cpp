@@ -4,8 +4,8 @@
 XRE::VulkanShader::VulkanShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath)
 {
 
-    auto vertShaderCode = readFile("shaders/vert.spv");
-    auto fragShaderCode = readFile("shaders/frag.spv");
+    auto vertShaderCode = readFile(vertexPath);
+    auto fragShaderCode = readFile(fragmentPath);
 
     vert  = createShaderModule(vertShaderCode);
     frag  = createShaderModule(fragShaderCode);

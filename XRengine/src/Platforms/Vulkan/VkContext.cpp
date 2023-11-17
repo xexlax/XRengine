@@ -15,10 +15,31 @@ namespace XRE {
 	{
 		
 		ContextInstance = this;
-		initVulkan();
+		createInstance();
+		setupDebugMessenger();
+		createSurface();
+		pickPhysicalDevice();
+		createLogicalDevice();
 
-		//todo : remove this
-		LoadResource();
+		swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
+
+		pipeline = XMakeRef<VulkanPipeline>(VERT_PATH, FRAG_PATH, swapChain->renderPass);
+		createCommandPool();
+
+		swapChain->createDepthResources();
+
+		//requires renderPass
+		swapChain->createFramebuffers();
+		createCommandBuffers();
+		swapChain->createSyncObjects();
+
+
+		//创建描述符池
+		createDescriptorPool();
+
+		//根据UBO结构 创建UniformBuffer
+		createUniformBuffers();
+
 		
 	}
 	void VkContext::SwapBuffers()
@@ -132,7 +153,7 @@ namespace XRE {
 
 		VkDeviceCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-
+		
 		createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
 		createInfo.pQueueCreateInfos = queueCreateInfos.data();
 

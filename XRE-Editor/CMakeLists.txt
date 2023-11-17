@@ -4,6 +4,7 @@ project(XRE-Editor)
 file(GLOB_RECURSE HEADER_FILES "*.h")
 file(GLOB_RECURSE SOURCE_FILES "*.cpp")
 
+add_compile_definitions(XRE_RENDERER_OPENGL)
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 
 target_include_directories(

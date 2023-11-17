@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "VkRendererAPI.h"
-
+#include "VkContext.h"
 
 
 namespace XRE {
@@ -46,6 +46,9 @@ namespace XRE {
 
 	void VkRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
+		VkContext::GetInstance()->swapChain->swapChainExtent.width = width;
+		VkContext::GetInstance()->swapChain->swapChainExtent.height = height;
+		VkContext::GetInstance()->swapChain->recreateSwapChain();
 	}
 
 }

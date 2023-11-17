@@ -1,6 +1,6 @@
 #include "VulkanPipeline.h"
 #include "VkContext.h"
-
+#include "VulkanUtils.h"
 
 
 XRE::VulkanPipeline::VulkanPipeline(const std::string& vert, const std::string& frag, XRef<VulkanRenderPass> renderPass)

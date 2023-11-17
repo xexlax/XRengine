@@ -22,53 +22,28 @@
 #include "VulkanShader.h"
 #include "VulkanPipeline.h"
 #include "VulkanRenderPass.h"
-#include "VulkanBuffers.h"
-#include "VulkanVertexArray.h"
 #include "xre\Resource\Model.h"
 #include "VulkanRHI.h"
 #include "VulkanUtils.h"
-
+#include "VulkanVertexArray.h"
+#include "VulkanDescriptor.h"
+#include "xre\Renderer\Camera\EditorCamera.h"
+#include "VulkanBuffers.h"
+#include "xre\Renderer\Renderer.h"
 #define XRE_VK_INSTANCE VkContext::GetInstance()
 
 
 const std::string MODEL_PATH = "models/viking_room.obj";
 const std::string TEXTURE_PATH = "textures/viking_room.png";
-
-const int MAX_FRAMES_IN_FLIGHT = 2;
-
-
+const std::string VERT_PATH = "shaders/default_vert.spv";
+const std::string FRAG_PATH = "shaders/default_frag.spv";
 
 
 
-static VkVertexInputBindingDescription getBindingDescription() {
-    VkVertexInputBindingDescription bindingDescription{};
-    bindingDescription.binding = 0;
-    bindingDescription.stride = sizeof(XRE::VkVertex);
-    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-    return bindingDescription;
-}
 
-static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-    std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
 
-    attributeDescriptions[0].binding = 0;
-    attributeDescriptions[0].location = 0;
-    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[0].offset = offsetof(XRE::VkVertex, pos);
 
-    attributeDescriptions[1].binding = 0;
-    attributeDescriptions[1].location = 1;
-    attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[1].offset = offsetof(XRE::VkVertex, color);
-
-    attributeDescriptions[2].binding = 0;
-    attributeDescriptions[2].location = 2;
-    attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-    attributeDescriptions[2].offset = offsetof(XRE::VkVertex, texCoord);
-
-    return attributeDescriptions;
-}
 
 
 
@@ -113,31 +88,21 @@ namespace XRE {
         VkQueue graphicsQueue;
         VkQueue presentQueue;
 
-        
-
         XRef<VulkanSwapChain> swapChain;
-        
         XRef<VulkanPipeline> pipeline;
 
         VkCommandPool commandPool;
 
         XRef<VulkanTexture2D> Texture;
         XRef<Model> VikingModel;
-
         
-        XRef<VulkanVertexArray> model;
-
+        std::vector <XRef<VulkanUniformBuffer>> uniformBuffers;
         
-
-        std::vector<VkBuffer> uniformBuffers;
-        std::vector<VkDeviceMemory> uniformBuffersMemory;
-        std::vector<void*> uniformBuffersMapped;
-
-        VkDescriptorPool descriptorPool;
+        XRef<VulkanDescriptorPool> descriptorPool;
+        XRef<VulkanDescriptorWriter> descriptorWriter;
+        //VkDescriptorPool descriptorPool;
         std::vector<VkDescriptorSet> descriptorSets;
-
         std::vector<VkCommandBuffer> commandBuffers;
-
 
         bool framebufferResized = false;
 
@@ -146,41 +111,14 @@ namespace XRE {
             app->framebufferResized = true;
         }
 
-        void initVulkan() {
-            createInstance();
-            setupDebugMessenger();
-            createSurface();
-            pickPhysicalDevice();
-            createLogicalDevice();
-            
-            swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
-
-            pipeline = XMakeRef<VulkanPipeline>("shaders/vert.spv", "shaders/frag.spv", swapChain->renderPass);
-            createCommandPool();
-
-            swapChain->createDepthResources();
-
-            //requires renderPass
-            swapChain->createFramebuffers();
-            createCommandBuffers();
-            swapChain->createSyncObjects();
-        }
 
         void LoadResource() {
             
             Texture = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
-            //VikingModel = XMakeRef<Model>(MODEL_PATH);
-
             
+            VikingModel = XMakeRef<Model>(MODEL_PATH);
 
-            model = XMakeRef<VulkanVertexArray>();
-
-            model->loadModel(MODEL_PATH);
-            
-            
-
-            createUniformBuffers();
-            createDescriptorPool();
+            //创建描述符集（类似Uniform）
             createDescriptorSets();
         }
 
@@ -189,15 +127,6 @@ namespace XRE {
             swapChain->CleanUp(device);
 
             pipeline->CleanUp(device);
-            
-     
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                vkDestroyBuffer(device, uniformBuffers[i], nullptr);
-                vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
-            }
-
-            vkDestroyDescriptorPool(device, descriptorPool, nullptr);
-
 
             Texture->m_Image->CleanUp();
 
@@ -233,52 +162,44 @@ namespace XRE {
 
         void createUniformBuffers() {
             VkDeviceSize bufferSize = sizeof(UniformBufferObject);
-
-            uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
-            uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-            uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
-
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                VulkanRHI::createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
-
-                vkMapMemory(device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
+            uniformBuffers.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+            for (size_t i = 0; i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT; i++) {
+                uniformBuffers[i] = XMakeRef<VulkanUniformBuffer>(GetDevice(), bufferSize);
             }
         }
 
         void createDescriptorPool() {
-            std::array<VkDescriptorPoolSize, 2> poolSizes{};
+            std::vector<VkDescriptorPoolSize> poolSizes(2);
             poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+            poolSizes[0].descriptorCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+
             poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+            poolSizes[1].descriptorCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
-            VkDescriptorPoolCreateInfo poolInfo{};
-            poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-            poolInfo.pPoolSizes = poolSizes.data();
-            poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-
-            if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
-                throw std::runtime_error("failed to create descriptor pool!");
-            }
+            descriptorPool = XMakeRef<VulkanDescriptorPool>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, poolSizes);
         }
 
         void createDescriptorSets() {
-            std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, pipeline->descriptorSetLayout);
+
+
+            std::vector<VkDescriptorSetLayout> layouts(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, pipeline->descriptorSetLayout);
+            
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-            allocInfo.descriptorPool = descriptorPool;
-            allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+            allocInfo.descriptorPool =  descriptorPool->descriptorPool;
+            allocInfo.descriptorSetCount = static_cast<uint32_t>(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
             allocInfo.pSetLayouts = layouts.data();
 
-            descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+           
+
+            descriptorSets.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
             if (vkAllocateDescriptorSets(device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
                 throw std::runtime_error("failed to allocate descriptor sets!");
             }
 
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+            for (size_t i = 0; i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT; i++) {
                 VkDescriptorBufferInfo bufferInfo{};
-                bufferInfo.buffer = uniformBuffers[i];
+                bufferInfo.buffer = uniformBuffers[i]->GetBuffer();
                 bufferInfo.offset = 0;
                 bufferInfo.range = sizeof(UniformBufferObject);
 
@@ -310,7 +231,7 @@ namespace XRE {
         }
         
         void createCommandBuffers() {
-            commandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+            commandBuffers.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
             VkCommandBufferAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -335,10 +256,6 @@ namespace XRE {
             pipeline->Bind(commandBuffer);
 
             
-
-            /*swapChain->BindViewPort(commandBuffer);
-            swapChain->BindScissor(commandBuffer);*/
-
             VkViewport viewport{};
             viewport.x = 0.0f;
             viewport.y = 0.0f;
@@ -353,13 +270,17 @@ namespace XRE {
             scissor.extent = swapChain->swapChainExtent;
             vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-            model->Bind(commandBuffer);
+            //model->Bind(commandBuffer);
+
+            XRef<VulkanVertexArray> vao = std::dynamic_pointer_cast<VulkanVertexArray>(VikingModel->m_Meshes[0].GetVAO());
+            vao->Bind(commandBuffer);
 
             uint32_t currentFrame = swapChain->currentFrame;
 
             vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
-            model->Draw(commandBuffer);
+            vao->Draw(commandBuffer);
+            //model->Draw(commandBuffer);
             
             vkCmdEndRenderPass(commandBuffer);
 
@@ -368,38 +289,26 @@ namespace XRE {
             }
         }
 
-        
 
-        void updateUniformBuffer(uint32_t currentImage) {
-            static auto startTime = std::chrono::high_resolution_clock::now();
-
-            auto currentTime = std::chrono::high_resolution_clock::now();
-            float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
-            UniformBufferObject ubo{};
-            ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-            ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-            ubo.proj = glm::perspective(glm::radians(45.0f), swapChain->swapChainExtent.width / (float)swapChain->swapChainExtent.height, 0.1f, 10.0f);
-            ubo.proj[1][1] *= -1;
-
-            memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
-        }
-
-        void drawFrame() {
+        void drawFrame(Renderer::SceneData *scenedata) {
             
 
             uint32_t imageIndex = swapChain->acquireNextImage();
-
             uint32_t currentFrame = swapChain->currentFrame;
-            updateUniformBuffer(currentFrame);
+
+
+            UniformBufferObject ubo{};
+            ubo.model = glm::mat4(1.0f);
+            ubo.view = scenedata->ViewMatrix;
+            ubo.proj = scenedata->ProjectionMatrix;
+            ubo.proj[1][1] *= -1;
+
+            uniformBuffers[currentFrame]->WriteToBuffer(&ubo);
 
             vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
             recordCommandBuffer(commandBuffers[currentFrame], imageIndex);
-
-            auto result = swapChain->submitCommandBuffer(commandBuffers, &imageIndex);
-
             
-
+            auto result = swapChain->submitCommandBuffer(commandBuffers, &imageIndex);
             if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
                 framebufferResized = false;
                 swapChain->recreateSwapChain();
@@ -408,13 +317,10 @@ namespace XRE {
                 throw std::runtime_error("failed to present swap chain image!");
             }
 
-            currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+            currentFrame = (currentFrame + 1) % VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;
         }
 
-        
 
-
-        
 	};
 
 	

@@ -66,3 +66,7 @@ void XRE::VulkanRenderPass::CleanUp(VkDevice device)
 {
 	vkDestroyRenderPass(device, renderPass, nullptr);
 }
+
+void XRE::VulkanRenderPass::Forward()
+{
+}

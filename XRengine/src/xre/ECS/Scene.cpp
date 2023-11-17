@@ -398,6 +398,9 @@ namespace XRE{
 
 	void Scene::UpdateRendering(XRef<Camera> c)
 	{
+#ifdef XRE_RENDERER_OPENGL
+
+
 		bool dirLightFound = false;
 		//Lighting
 		{
@@ -542,6 +545,14 @@ namespace XRE{
 			Renderer3D::EndScene();
 			Renderer3D::m_FrameBuffer->Unbind();
 		}
+
+#endif // XRE_RENDERER_OPENGL
+
+
+#ifdef XRE_RENDERER_VULKAN
+
+#endif // XRE_RENDERER_VULKAN
+
 	}
 
 	void Scene::UpdateLogic(TimeStep ts)

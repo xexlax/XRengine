@@ -1,9 +1,10 @@
 #pragma once
 
+#include "xre\Renderer\Resources\RenderPass.h"
 #include <vulkan/vulkan.h>
 
 namespace XRE {
-	class VulkanRenderPass {
+	class VulkanRenderPass:public RenderPass {
 
 	public:
 		VulkanRenderPass(VkDevice device, VkFormat swapChainImageFormat) {
@@ -14,6 +15,9 @@ namespace XRE {
 
 		void Init(VkDevice device, VkFormat swapChainImageFormat);
 		void CleanUp(VkDevice device);
+
+		virtual void Forward()	override;
+		
 	};
 
 

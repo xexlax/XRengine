@@ -13,7 +13,7 @@ namespace XRE{
 	public:
 		static void Init();
 		static void OnWindowResize(uint32_t width, uint32_t height);
-		static void BeginScene(const std::shared_ptr<Camera>& camera);
+		static void BeginScene(const XRef<Camera>& camera);
 		static void EndScene();
 
 		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray
@@ -21,12 +21,14 @@ namespace XRE{
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 		
-	private:
+	
 		struct SceneData
 		{
 			glm::mat4 ViewProjectionMatrix;
+			glm::mat4 ViewMatrix;
+			glm::mat4 ProjectionMatrix;
 		};
-
+	private:
 		static SceneData* m_SceneData;
 		
 	};

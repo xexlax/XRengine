@@ -27,18 +27,18 @@ void XRE::VulkanTexture2D::createTextureImage()
 {
     int texWidth, texHeight, texChannels;
 
-    unsigned char* pixels= load_image( m_Path.c_str(), &texWidth, &texHeight, &texChannels, 4, false);
+    unsigned char* pixels= load_image( m_Path.c_str(), &texWidth, &texHeight, &texChannels, 4, true);
 
     m_Width = texWidth;
     m_Height = texHeight;
 
-    VkDeviceSize imageSize = texWidth * texHeight* texChannels;
+    VkDeviceSize imageSize = texWidth * texHeight* 4;
 
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");
     }
 
-    VkDevice device = VkContext::GetInstance()->device;
+    VkDevice device = VkContext::GetDevice();
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
     VulkanRHI::createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
@@ -60,7 +60,6 @@ void XRE::VulkanTexture2D::createTextureImage()
     else if (texChannels == 4) {
         format = VK_FORMAT_R8G8B8A8_SRGB;
     }*/
-    
     image_free(pixels);
     m_Image = XMakeRef<VulkanImage>();
     m_Image->Create(texWidth, texHeight, format, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);

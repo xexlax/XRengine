@@ -80,6 +80,7 @@ namespace XRE{
 		m_Context->Init();
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
+		glfwSetFramebufferSizeCallback(m_Window, VkContext::framebufferResizeCallback);
 		SetVSync(true);
 
 		//Hide cursor
