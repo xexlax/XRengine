@@ -4,7 +4,7 @@
 #include "3rdparty\VulkanInitializor.h"
 #include "xre\Renderer\Renderer.h"
 
-
+#include "VulkanStructs.h"
 
 void XRE::VulkanPipeline::Init()
 {
@@ -32,23 +32,18 @@ XRE::ModelPipeline::ModelPipeline(XRef<VulkanRenderPass> renderPass)
 
 
     //Create DescriptorSet Layout
-    VkDescriptorSetLayoutBinding uboLayoutBinding{};
-    uboLayoutBinding.binding = 0;
-    uboLayoutBinding.descriptorCount = 1;
-    uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    uboLayoutBinding.pImmutableSamplers = nullptr;
-    uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-    VkDescriptorSetLayoutBinding samplerLayoutBinding{};
-    samplerLayoutBinding.binding = 1;
-    samplerLayoutBinding.descriptorCount = 1;
-    samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    samplerLayoutBinding.pImmutableSamplers = nullptr;
-    samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    std::array<VkDescriptorSetLayoutBinding, 5> bindings = { 
+        vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,VK_SHADER_STAGE_VERTEX_BIT| VK_SHADER_STAGE_FRAGMENT_BIT,0),
+        vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,VK_SHADER_STAGE_FRAGMENT_BIT,1),
+        vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT,2),
+        vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT,3),
+        vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT,4),
+        //vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,0),
+
+    };
 
 
-
-    std::array<VkDescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
     VkDescriptorSetLayoutCreateInfo layoutInfo{};
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
@@ -139,4 +134,16 @@ XRE::ModelPipeline::ModelPipeline(XRef<VulkanRenderPass> renderPass)
         throw std::runtime_error("failed to create graphics pipeline!");
     }
     
+}
+
+void XRE::ModelPipeline::CreateUBOs()
+{
+    
+    GlobalUBOs.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+    LightingUBOs.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+    for (size_t i = 0; i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT; i++) {
+        GlobalUBOs[i] = XMakeRef<VulkanUniformBuffer>(VkContext::GetDevice(), sizeof(UniformBufferObject));
+        LightingUBOs[i] = XMakeRef<VulkanUniformBuffer>(VkContext::GetDevice(), sizeof(LightingUBO));
+    }
+
 }

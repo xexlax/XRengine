@@ -38,8 +38,8 @@ namespace XRE {
 		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
 			VkContext::GetInstance()->modelPipeline ->pipelineLayout, 0, 1,
 			
-			VkContext::GetInstance()->globalDW->GetDescriptorSet(currentFrame),
-			//vva->GetDescriptorSet(currentFrame),
+			//VkContext::GetInstance()->globalDW->GetDescriptorSet(currentFrame),
+			vva->GetDescriptorSet(currentFrame),
 			0, nullptr);
 		std::dynamic_pointer_cast<VulkanVertexArray>(vertexArray)->Draw(commandBuffer);
 	}

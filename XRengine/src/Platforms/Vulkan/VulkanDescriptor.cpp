@@ -79,7 +79,7 @@ void XRE::VulkanDescriptorWriter::createDescriptorSets(XRef<VulkanPipeline> pipe
         throw std::runtime_error("failed to allocate descriptor sets!");
     }
 
-    writes =  vector<VkWriteDescriptorSet>(2);
+    writes =  vector<VkWriteDescriptorSet>();
    
 
 }
@@ -87,30 +87,30 @@ void XRE::VulkanDescriptorWriter::createDescriptorSets(XRef<VulkanPipeline> pipe
 void XRE::VulkanDescriptorWriter::writeBuffer(XRef<VulkanUniformBuffer> buffer)
 {
   
+    VkWriteDescriptorSet write{};
+    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    write.dstBinding = writes.size();
+    write.dstArrayElement = 0;
+    write.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    write.descriptorCount = 1;
+    write.pBufferInfo = buffer->GetBufferInfo();
 
-        writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writes[0].dstBinding = 0;
-        writes[0].dstArrayElement = 0;
-        writes[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        writes[0].descriptorCount = 1;
-        writes[0].pBufferInfo = buffer->GetBufferInfo();
-
+    writes.push_back(write);
     
 }
 
-void XRE::VulkanDescriptorWriter::writeImage(XRef<VulkanImage> image, uint32_t offset)
+void XRE::VulkanDescriptorWriter::writeImage(XRef<VulkanImage> image)
 {
-   
-
-        
-
-        writes[offset].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writes[offset].dstBinding = offset;
-        writes[offset].dstArrayElement = 0;
-        writes[offset].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        writes[offset].descriptorCount = 1;
-        writes[offset].pImageInfo = image->GetImageInfo();
-
+  
+    
+    VkWriteDescriptorSet write{};
+    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    write.dstBinding = writes.size();
+    write.dstArrayElement = 0;
+    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    write.descriptorCount = 1;
+    write.pImageInfo = image->GetImageInfo();
+    writes.push_back(write);
         
 }
 
@@ -120,5 +120,5 @@ void XRE::VulkanDescriptorWriter::overwrite(int i)
         x.dstSet = descriptorSets[i];
     }
     vkUpdateDescriptorSets(VkContext::GetDevice(), writes.size(), writes.data(), 0, nullptr);
-
+    writes.clear();
 }

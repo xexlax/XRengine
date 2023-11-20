@@ -53,10 +53,13 @@ namespace XRE {
 		void SetDirLight(TransformComponent t, DirectionalLightComponent l);
 		void ClearPLights();
 		void AddPLight(TransformComponent t, PointLightComponent l);
-
+		size_t getPLightCount() {
+			return m_PointLights.size();
+		}
 		void RemovePLight(GameObject& go);
 		DirectionalLight getDirLight() { return m_DirectionalLight; };
-		PointLight getPointLight(int idx = 0) { return m_PointLights[idx]; };
+		PointLight getPointLight(int idx = 0) { 
+			return m_PointLights[idx]; };
 	private:
 
 		DirectionalLight m_DirectionalLight;

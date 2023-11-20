@@ -163,10 +163,10 @@ namespace XRE {
 	inline void VkContext::createDescriptorPool() {
 		std::vector<VkDescriptorPoolSize> poolSizes(2);
 		poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		poolSizes[0].descriptorCount = static_cast<uint32_t>(32* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+		poolSizes[0].descriptorCount = static_cast<uint32_t>(128* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
 		poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		poolSizes[1].descriptorCount = static_cast<uint32_t>(32* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
+		poolSizes[1].descriptorCount = static_cast<uint32_t>(128* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
 		descriptorPool = XMakeRef<VulkanDescriptorPool>(128 * VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, poolSizes);
 	}

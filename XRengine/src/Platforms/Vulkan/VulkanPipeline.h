@@ -3,7 +3,7 @@
 #include <vulkan\vulkan.h>
 #include "VulkanRenderPass.h"
 #include "VulkanShader.h"
-
+#include "VulkanBuffers.h"
 
 
 namespace XRE {
@@ -44,7 +44,7 @@ namespace XRE {
 
 		void Bind(VkCommandBuffer commandBuffer);
 
-		
+		virtual void CreateUBOs()=0;
 
 		VkPipeline pipeline;
 		VkDescriptorSetLayout descriptorSetLayout;
@@ -57,6 +57,11 @@ namespace XRE {
 	public:
 		ModelPipeline(
 			XRef<VulkanRenderPass> renderPass);
+
+		std::vector <XRef<VulkanUniformBuffer>> GlobalUBOs;
+		std::vector <XRef<VulkanUniformBuffer>> LightingUBOs;
+
+		void CreateUBOs() override;
 	};
 
 	class SkyBoxPipeline :public VulkanPipeline {

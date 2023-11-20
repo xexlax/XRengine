@@ -5,6 +5,7 @@
 
 #include "xre\ECS\Components.h"
 #include "xre\ECS\GameObject.h"
+#include "xre\Renderer\Renderer.h"
 #include "xre\Renderer\Renderer3D.h"
 #include "xre\ECS\NativeScript.h"
 #include "xre\BluePrint\BluePrint.h"
@@ -550,6 +551,47 @@ namespace XRE{
 
 
 #ifdef XRE_RENDERER_VULKAN
+
+		bool dirLightFound = false;
+		//Lighting
+		{
+			auto view = m_Registry.view<TransformComponent, DirectionalLightComponent>();
+
+			for (auto entity : view) {
+				auto [transform, dl] = view.get<TransformComponent, DirectionalLightComponent>(entity);
+				if (dl.m_Active) {
+					dirLightFound = true;
+					Renderer::m_LightSystem->SetDirLight(transform, dl);
+					break;
+				}
+			}
+		}
+
+		{
+			auto view = m_Registry.view<TransformComponent, PointLightComponent>();
+			Renderer::m_LightSystem->ClearPLights();
+			for (auto entity : view) {
+				auto [transform, l] = view.get<TransformComponent, PointLightComponent>(entity);
+				if (l.m_Active) {
+					Renderer::m_LightSystem->AddPLight(transform, l);
+				}
+			}
+		}
+		
+
+		Renderer::BeginScene(c);
+
+		auto group = m_Registry.group<TransformComponent>(entt::get<MeshRendererComponent>);
+		for (auto entity : group)
+		{
+			auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(entity);
+
+			Renderer::DrawModel(meshrenderer, transform.GetGlobalTransform());
+		}
+
+
+
+		Renderer::EndScene();
 
 #endif // XRE_RENDERER_VULKAN
 

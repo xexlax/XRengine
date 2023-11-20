@@ -72,11 +72,11 @@ void XRE::VulkanVertexArray::Draw(VkCommandBuffer commandBuffer)
 void XRE::VulkanVertexArray::UpdateDescriptorSets(const std::vector<XRef<Texture2D>>& textures)
 {
     if (descriptorWriter == nullptr) createDescriptorSets(textures);
-    else
+    /*else
     for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
         descriptorWriter->writeImage(std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image, 1);
         descriptorWriter->overwrite(i);
-    }
+    }*/
 
    
 
@@ -86,8 +86,11 @@ void XRE::VulkanVertexArray::createDescriptorSets(const std::vector<XRef<Texture
 {
     descriptorWriter = XMakeRef<VulkanDescriptorWriter>(VkContext::GetInstance()->modelPipeline);
     for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
-        descriptorWriter->writeBuffer(VkContext::GetInstance()->uniformBuffers[i]);
-        descriptorWriter->writeImage( std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image, 1);
+        descriptorWriter->writeBuffer(VkContext::GetInstance()->modelPipeline->GlobalUBOs[i]);
+        descriptorWriter->writeBuffer(VkContext::GetInstance()->modelPipeline->LightingUBOs[i]);
+        descriptorWriter->writeImage( std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image);
+        descriptorWriter->writeImage(std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image);
+        descriptorWriter->writeImage(std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image);
         descriptorWriter->overwrite(i);
     }
 }

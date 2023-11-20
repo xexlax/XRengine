@@ -20,21 +20,10 @@
 #include "VulkanRenderPass.h"
 #include "VulkanRHI.h"
 #include "VulkanUtils.h"
-#include "VulkanBuffers.h"
 #include "VulkanDescriptor.h"
 #include "xre\Renderer\Renderer.h"
-#include "VulkanTexture.h"
+#include "VulkanStructs.h"
 #define XRE_VK_INSTANCE VkContext::GetInstance()
-
-
-
-const std::string TEXTURE_PATH = "textures/viking_room.png";
-
-
-struct UniformBufferObject {
-    alignas(16) glm::mat4 view;
-    alignas(16) glm::mat4 proj;
-};
 
 namespace XRE {
 	class VkContext: public GraphicsContext
@@ -66,18 +55,15 @@ namespace XRE {
         VkQueue presentQueue;
 
         XRef<VulkanSwapChain> swapChain;
-        XRef<VulkanPipeline> modelPipeline,skyboxPipeline;
+        XRef<ModelPipeline> modelPipeline;
+        XRef<SkyBoxPipeline> skyboxPipeline;
 
         VkCommandPool commandPool;
         
-        std::vector <XRef<VulkanUniformBuffer>> uniformBuffers;
+        std::vector <XRef<VulkanUniformBuffer>> GlobalUBOs;
         
         XRef<VulkanDescriptorPool> descriptorPool;
         std::vector<VkCommandBuffer> commandBuffers;
-
-        XRef<VulkanDescriptorWriter> globalDW;
-
-        XRef<VulkanTexture2D> tex;
 
         //current
         uint32_t imageIndex;
@@ -109,19 +95,8 @@ namespace XRE {
             swapChain->createSyncObjects();
             //创建描述符池
             createDescriptorPool();
-            //根据UBO结构 创建UniformBuffer
-            createUniformBuffers();
-
-            //对每个VAO，单独创建ds
-            //createDescriptorSets();
-            tex = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
-            globalDW = XMakeRef<VulkanDescriptorWriter>(modelPipeline);
-            for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
-                globalDW->writeBuffer(VkContext::GetInstance()->uniformBuffers[i]);
-                globalDW->writeImage(tex->m_Image, 1);
-                globalDW->overwrite(i);
-            }
-
+            modelPipeline->CreateUBOs();
+           
 
         }
 
@@ -156,13 +131,7 @@ namespace XRE {
         void createLogicalDevice();
         void createCommandPool();
 
-        void createUniformBuffers() {
-            VkDeviceSize bufferSize = sizeof(UniformBufferObject);
-            uniformBuffers.resize(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
-            for (size_t i = 0; i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT; i++) {
-                uniformBuffers[i] = XMakeRef<VulkanUniformBuffer>(GetDevice(), bufferSize);
-            }
-        }
+        
 
         void createDescriptorPool();
 
@@ -233,7 +202,26 @@ namespace XRE {
             ubo.proj = scenedata->ProjectionMatrix;
             ubo.proj[1][1] *= -1;
 
-            uniformBuffers[currentFrame]->WriteToBuffer(&ubo);
+            LightingUBO lubo{};
+
+            auto dlight = scenedata->lightSystem->getDirLight();
+            lubo.d.dir =  glm::vec4(dlight.m_Direction,1.0f);
+            lubo.d.color = dlight.m_Color;
+            lubo.d.intensity = dlight.m_Intensity;
+
+            lubo.plightCount = scenedata->lightSystem->getPLightCount();
+            if (lubo.plightCount > 4) lubo.plightCount = 4;
+
+            for (int i = 0;i < lubo.plightCount;i++) {
+                auto plight = scenedata->lightSystem->getPointLight(i);
+                lubo.p[i].pos = glm::vec4(plight.m_Position, 0.0f);
+                lubo.p[i].color = plight.m_Color;
+                lubo.p[i].intensity = plight.m_Intensity;
+            }
+
+            modelPipeline->GlobalUBOs[currentFrame]->WriteToBuffer(&ubo);
+            modelPipeline->LightingUBOs[currentFrame]->WriteToBuffer(&lubo);
+            
 
             vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
             beginPass(commandBuffers[currentFrame], imageIndex);

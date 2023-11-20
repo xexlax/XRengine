@@ -35,7 +35,7 @@ namespace XRE {
 		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(GetFullPath(path)); }
 		static XRef<Texture2D> GetEditorTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
 		static XRef<Texture2D> GetNoTex2D() { return GetTex2D("../Assets/textures/No_Texture.png"); }
-
+		static XRef<Texture2D> GetDefaultTex2D() { return GetTex2D("../Assets/textures/albedo.png"); }
 
 		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(GetFullPath(path)); }
 		static XRef<Model> GetElementalModel(const Elemental_Model& em);

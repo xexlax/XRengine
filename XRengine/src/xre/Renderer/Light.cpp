@@ -16,6 +16,7 @@ namespace XRE {
 	{
 		if (Renderer::GetAPI() == RendererAPI::API::OpenGL) {
 
+
 			shader->Bind();
 			shader->SetFloat3("d_light.direction", m_DirectionalLight.m_Direction);
 			shader->SetFloat("d_light.intensity", m_DirectionalLight.m_Intensity);
@@ -33,6 +34,12 @@ namespace XRE {
 			}
 			shader->SetInt("p_light_amount", index);
 		}
+
+		else if (Renderer::GetAPI() == RendererAPI::API::Vulkan) {
+
+		}
+
+		
 	}
 	
 	void LightSystem::SetDirLight(TransformComponent t, DirectionalLightComponent l)

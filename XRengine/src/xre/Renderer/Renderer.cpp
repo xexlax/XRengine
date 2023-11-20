@@ -6,10 +6,13 @@
 
 namespace XRE {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
-
+	XRef<LightSystem> Renderer::m_LightSystem;
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		
+		m_LightSystem = XMakeRef<LightSystem>();
+		m_SceneData->lightSystem = m_LightSystem;
 	}
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{
@@ -21,6 +24,7 @@ namespace XRE {
 		m_SceneData->ViewProjectionMatrix = camera->GetViewProjectionMatrix();
 		m_SceneData->ViewMatrix = camera->GetViewMatrix();
 		m_SceneData->ProjectionMatrix = camera->GetProjectionMatrix();
+		
 
 #ifdef XRE_RENDERER_VULKAN
 		XRE::VkContext::GetInstance()->beginFrame(m_SceneData);

@@ -89,7 +89,7 @@ XRE::VulkanUniformBuffer::VulkanUniformBuffer(VkDevice device, VkDeviceSize buff
 
     bufferInfo.buffer = GetBuffer();
     bufferInfo.offset = 0;
-    bufferInfo.range = sizeof(UniformBufferObject);
+    bufferInfo.range = bufferSize;
 }
 
 XRE::VulkanUniformBuffer::~VulkanUniformBuffer()

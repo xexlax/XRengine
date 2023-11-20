@@ -35,7 +35,7 @@ namespace XRE {
         void createDescriptorSets(XRef<VulkanPipeline> pipeline);
 
         void writeBuffer(XRef<VulkanUniformBuffer> buffer);
-        void writeImage(XRef<VulkanImage> image, uint32_t offset);
+        void writeImage(XRef<VulkanImage> image);
         void overwrite(int i);
 
         VkDescriptorSet* GetDescriptorSet(int offset) { return &descriptorSets[offset]; }

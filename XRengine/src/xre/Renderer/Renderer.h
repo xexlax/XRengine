@@ -35,6 +35,9 @@ namespace XRE{
 			XRef<LightSystem> lightSystem;
 		};
 
+
+
+
 		//Push Constant
 		struct PushData
 		{
@@ -42,6 +45,8 @@ namespace XRE{
 			uint32_t id;
 
 		};
+
+		static XRef<LightSystem> m_LightSystem;
 	private:
 		static SceneData* m_SceneData;
 		
