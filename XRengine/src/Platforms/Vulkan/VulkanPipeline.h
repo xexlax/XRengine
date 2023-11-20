@@ -4,7 +4,12 @@
 #include "VulkanRenderPass.h"
 #include "VulkanShader.h"
 
+
+
 namespace XRE {
+
+	const std::string VERT_PATH = "shaders/default_vert.spv";
+	const std::string FRAG_PATH = "shaders/default_frag.spv";
 
 	struct PipelineConfigInfo {
 		PipelineConfigInfo() = default;
@@ -29,11 +34,8 @@ namespace XRE {
 
 	class VulkanPipeline {
 	public:
-		VulkanPipeline(
-
-			const std::string &vertPath,
-			const std::string &frag,
-			XRef<VulkanRenderPass> renderPass);
+		VulkanPipeline(){}
+		
 		~VulkanPipeline() {
 
 		}
@@ -48,6 +50,19 @@ namespace XRE {
 		VkDescriptorSetLayout descriptorSetLayout;
 		VkPipelineLayout pipelineLayout;
 
+		
+	};
+
+	class ModelPipeline :public VulkanPipeline {
+	public:
+		ModelPipeline(
+			XRef<VulkanRenderPass> renderPass);
+	};
+
+	class SkyBoxPipeline :public VulkanPipeline {
+	public:
+		SkyBoxPipeline(
+			XRef<VulkanRenderPass> renderPass);
 		
 	};
 }

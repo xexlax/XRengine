@@ -2,6 +2,7 @@
 
 #include "VulkanBuffers.h"
 #include "VulkanImage.h"
+#include "VulkanPipeline.h"
 namespace XRE {
 
     class VulkanDescriptorPool {
@@ -29,9 +30,9 @@ namespace XRE {
     class VulkanDescriptorWriter {
 
     public:
-
-        VulkanDescriptorWriter();
-        void createDescriptorSets();
+        
+        VulkanDescriptorWriter(XRef<VulkanPipeline> pipeline);
+        void createDescriptorSets(XRef<VulkanPipeline> pipeline);
 
         void writeBuffer(XRef<VulkanUniformBuffer> buffer);
         void writeImage(XRef<VulkanImage> image, uint32_t offset);

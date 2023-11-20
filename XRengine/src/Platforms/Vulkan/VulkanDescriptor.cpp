@@ -54,15 +54,17 @@ void XRE::VulkanDescriptorPool::resetPool()
 
 }
 
-XRE::VulkanDescriptorWriter::VulkanDescriptorWriter()
+
+XRE::VulkanDescriptorWriter::VulkanDescriptorWriter(XRef<VulkanPipeline> pipeline)
 {
-    createDescriptorSets();
+    createDescriptorSets(pipeline);
+    
 }
 
-void XRE::VulkanDescriptorWriter::createDescriptorSets() {
+void XRE::VulkanDescriptorWriter::createDescriptorSets(XRef<VulkanPipeline> pipeline) {
 
 
-    std::vector<VkDescriptorSetLayout> layouts(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, VkContext::GetInstance()->pipeline->descriptorSetLayout);
+    std::vector<VkDescriptorSetLayout> layouts(VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, pipeline->descriptorSetLayout);
 
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;

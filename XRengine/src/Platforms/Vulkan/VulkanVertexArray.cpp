@@ -84,7 +84,7 @@ void XRE::VulkanVertexArray::UpdateDescriptorSets(const std::vector<XRef<Texture
 
 void XRE::VulkanVertexArray::createDescriptorSets(const std::vector<XRef<Texture2D>>& textures)
 {
-    descriptorWriter = XMakeRef<VulkanDescriptorWriter>();
+    descriptorWriter = XMakeRef<VulkanDescriptorWriter>(VkContext::GetInstance()->modelPipeline);
     for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
         descriptorWriter->writeBuffer(VkContext::GetInstance()->uniformBuffers[i]);
         descriptorWriter->writeImage( std::dynamic_pointer_cast<VulkanTexture2D>(textures[0])->m_Image, 1);

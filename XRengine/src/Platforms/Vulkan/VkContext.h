@@ -28,8 +28,6 @@
 
 
 
-const std::string VERT_PATH = "shaders/default_vert.spv";
-const std::string FRAG_PATH = "shaders/default_frag.spv";
 const std::string TEXTURE_PATH = "textures/viking_room.png";
 
 
@@ -68,7 +66,7 @@ namespace XRE {
         VkQueue presentQueue;
 
         XRef<VulkanSwapChain> swapChain;
-        XRef<VulkanPipeline> pipeline;
+        XRef<VulkanPipeline> modelPipeline,skyboxPipeline;
 
         VkCommandPool commandPool;
         
@@ -103,7 +101,7 @@ namespace XRE {
 
 
             swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
-            pipeline = XMakeRef<VulkanPipeline>(VERT_PATH, FRAG_PATH, swapChain->renderPass);
+            modelPipeline = XMakeRef<ModelPipeline>(swapChain->renderPass);
             createCommandPool();
             swapChain->createDepthResources();
             swapChain->createFramebuffers();
@@ -117,7 +115,7 @@ namespace XRE {
             //对每个VAO，单独创建ds
             //createDescriptorSets();
             tex = XMakeRef<VulkanTexture2D>(TEXTURE_PATH);
-            globalDW = XMakeRef<VulkanDescriptorWriter>();
+            globalDW = XMakeRef<VulkanDescriptorWriter>(modelPipeline);
             for (int i = 0;i < VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;i++) {
                 globalDW->writeBuffer(VkContext::GetInstance()->uniformBuffers[i]);
                 globalDW->writeImage(tex->m_Image, 1);
@@ -133,7 +131,7 @@ namespace XRE {
         void cleanup() {
             swapChain->CleanUp(device);
 
-            pipeline->CleanUp(device);
+            modelPipeline->CleanUp(device);
 
             //destroy descriptor layout
             
@@ -193,7 +191,7 @@ namespace XRE {
             }
 
             swapChain->BindRenderPass(commandBuffer, imageIndex);
-            pipeline->Bind(commandBuffer);
+            modelPipeline->Bind(commandBuffer);
 
 
             VkViewport viewport{};
@@ -263,7 +261,7 @@ namespace XRE {
         void PushConstant(void* data, uint32_t size) {
             vkCmdPushConstants(
                 commandBuffers[swapChain->currentFrame],
-                pipeline->pipelineLayout,
+                modelPipeline->pipelineLayout,
                 VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
                 0,
                 size,
