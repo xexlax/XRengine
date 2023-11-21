@@ -27,7 +27,7 @@ namespace XRE {
 		
 
 #ifdef XRE_RENDERER_VULKAN
-		XRE::VkContext::GetInstance()->beginFrame(m_SceneData);
+		XRE::VkContext::GetInstance()->beginScene(m_SceneData);
 #endif // XRE_RENDERER_VULKAN
 	}
 
@@ -37,7 +37,7 @@ namespace XRE {
 	{
 #ifdef XRE_RENDERER_VULKAN
 
-		XRE::VkContext::GetInstance()->endFrame();
+		XRE::VkContext::GetInstance()->endScene();
 #endif // XRE_RENDERER_VULKAN
 
 	}

@@ -25,7 +25,11 @@ void EditorLayer::OnAttach()
 
 	m_Scene = make_shared<Scene>();
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
+#ifdef XRE_RENDERER_OPENGL
 	Renderer3D::Init();
+#endif // XRE_RENDERER_OPENGL
+
+	
 	PanelsManager::Init();
 	PanelsManager::GetScenePanel()->AttachToScene(m_Scene);
 	PanelsManager::GetPropertiesPanel()->SetEC(&m_EditorCamera);

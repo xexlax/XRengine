@@ -7,6 +7,7 @@
 #include "xre\Audio\alManager.h"
 #include  "Input.h"
 #include <GLFW\glfw3.h>
+#include "Platforms\Vulkan\VkContext.h"
 
 //Todo : 实现所有的RendererAPI，避免对glad在/platform外的引用 
 namespace XRE {
@@ -26,10 +27,10 @@ namespace XRE {
 		Reflection::Init();
 		alManager::Init();
 
-#ifdef XRE_RENDERER_OPENGL
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
-#endif
+
 		m_LastSecond = (float)glfwGetTime();
 		m_FPS = 0;
 
@@ -75,24 +76,32 @@ namespace XRE {
 			}
 			m_FrameCount++;
 
+#ifdef XRE_RENDERER_VULKAN
 
+			VkContext::GetInstance()->beginFrame();
+#endif
 			//layers 自下而上更新
 			if (!m_Minimized)
 			{
 				for (Layer* layer : m_layerStack)
 					layer->OnUpdate(timestep);
 			}
-#ifdef XRE_RENDERER_OPENGL
+
 			m_ImGuiLayer->Begin();
 
 			for (Layer* layer : m_layerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
-#endif XRE_RENDERER_OPENGL
+#ifdef XRE_RENDERER_VULKAN
+
+			VkContext::GetInstance()->endFrame();
+#endif
 			//XRE_TRACE("{0},{1}", Input::GetMouseX(), Input::GetMouseY());
 
 			m_Window->OnUpdate();
+
+
 		}
 	}
 	void Application::Close() {

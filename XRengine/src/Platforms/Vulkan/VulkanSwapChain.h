@@ -26,7 +26,12 @@ namespace XRE {
         std::vector<VkFramebuffer> swapChainFramebuffers;
         XRef<VulkanImage> DepthImage;
         XRef<VulkanRenderPass> renderPass;
+        XRef<VulkanRenderPass> UIPass;
         uint32_t currentFrame = 0;
+
+        void NextFrame() {
+            currentFrame = (currentFrame + 1) % VulkanSwapChain::MAX_FRAMES_IN_FLIGHT;
+        }
 
         void createFramebuffers();
 
@@ -41,6 +46,7 @@ namespace XRE {
         void createSyncObjects();
 
         void BindRenderPass(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+        void BindUIPass(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 
         uint32_t acquireNextImage();
 

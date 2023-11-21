@@ -3,16 +3,21 @@
 
 #include "xre\Core\application.h"
 #include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_vulkan.h"
+
+#ifdef XRE_RENDERER_OPENGL
+	#include "backends/imgui_impl_opengl3.h"
+#endif
+
+#ifdef XRE_RENDERER_VULKAN
+	#include "backends/imgui_impl_vulkan.h"
+#include "Platforms\Vulkan\VkImGuiContext.h"
+#endif
 #include "imnodes.h"
 
 
 #include "ImGuizmo.h"
 
-// TEMPORARY
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
 
 
 namespace XRE {
@@ -66,8 +71,11 @@ namespace XRE {
 #endif // XRE_RENDERER_OPENGL
 
 #ifdef XRE_RENDERER_VULKAN
-		ImGui_ImplGlfw_InitForVulkan(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		//ImGui_ImplGlfw_InitForVulkan(window, true);
+		
+		VkImGUIContext::init_imgui();
+		VkImGUIContext::uploadFonts();
+		
 #endif // XRE_RENDERER_VULKAN
 
 		
@@ -76,7 +84,16 @@ namespace XRE {
 	}
 	void ImGuiLayer::OnDetach()
 	{
+#ifdef XRE_RENDERER_OPENGL
 		ImGui_ImplOpenGL3_Shutdown();
+#endif // XRE_RENDERER_OPENGL
+
+#ifdef XRE_RENDERER_VULKAN
+		ImGui_ImplVulkan_Shutdown();
+
+#endif // XRE_RENDERER_VULKAN
+
+		
 		ImGui_ImplGlfw_Shutdown();
 		ImNodes::DestroyContext();
 		ImGui::DestroyContext();
@@ -94,10 +111,21 @@ namespace XRE {
 
 	void ImGuiLayer::Begin()
 	{
+
+#ifdef XRE_RENDERER_OPENGL
 		ImGui_ImplOpenGL3_NewFrame();
+#endif // XRE_RENDERER_OPENGL
+
+#ifdef XRE_RENDERER_VULKAN
+		ImGui_ImplVulkan_NewFrame();
+		
+
+#endif // XRE_RENDERER_VULKAN
+
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
+
 	}
 
 	void ImGuiLayer::End()
@@ -108,7 +136,17 @@ namespace XRE {
 
 		// Rendering
 		ImGui::Render();
+
+#ifdef XRE_RENDERER_OPENGL
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif // XRE_RENDERER_OPENGL
+
+#ifdef XRE_RENDERER_VULKAN
+		
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(),VkContext::GetCommandBuffer());
+
+#endif // XRE_RENDERER_VULKAN
+		
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{

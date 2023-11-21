@@ -13,6 +13,8 @@
 	}																									\
 }
 
+void check_vk_result(VkResult err);
+
 
 namespace XRE {
     const std::vector<const char*> validationLayers = {
