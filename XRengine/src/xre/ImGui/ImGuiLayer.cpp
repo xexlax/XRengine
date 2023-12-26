@@ -3,6 +3,7 @@
 
 #include "xre\Core\application.h"
 #include "backends/imgui_impl_glfw.h"
+#include "GLFW\glfw3.h"
 
 #ifdef XRE_RENDERER_OPENGL
 	#include "backends/imgui_impl_opengl3.h"

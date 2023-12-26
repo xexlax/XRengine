@@ -1,14 +1,14 @@
 #include "VkContext.h"
 #include "VulkanDescriptor.h"
 
+#include <xutility>
 
-
-XRE::VulkanDescriptorPool::VulkanDescriptorPool(uint32_t maxSets, const std::vector<VkDescriptorPoolSize>& poolSizes)
+XRE::VulkanDescriptorPool::VulkanDescriptorPool(uint32_t maxSets, VkDescriptorPoolSize* pool_sizes)
 {
 	VkDescriptorPoolCreateInfo descriptorPoolInfo{};
 	descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	descriptorPoolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-	descriptorPoolInfo.pPoolSizes = poolSizes.data();
+	descriptorPoolInfo.poolSizeCount = 11;
+	descriptorPoolInfo.pPoolSizes = pool_sizes;
 	descriptorPoolInfo.maxSets = maxSets;
 	//descriptorPoolInfo.flags = poolFlags;
 
@@ -80,7 +80,7 @@ void XRE::VulkanDescriptorWriter::createDescriptorSets(XRef<VulkanPipeline> pipe
     }
 
     writes =  vector<VkWriteDescriptorSet>();
-   
+    
 
 }
 
@@ -109,7 +109,8 @@ void XRE::VulkanDescriptorWriter::writeImage(XRef<VulkanImage> image)
     write.dstArrayElement = 0;
     write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     write.descriptorCount = 1;
-    write.pImageInfo = image->GetImageInfo();
+    if(image)
+        write.pImageInfo = image->GetImageInfo();
     writes.push_back(write);
         
 }

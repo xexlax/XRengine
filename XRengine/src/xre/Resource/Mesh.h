@@ -26,7 +26,7 @@ namespace XRE {
 
 		void BindMaterial(XRef<Material> mat, XRef<Shader> shader);
 
-		void BindMaterial(XRef<Material> mat);
+		
 		void UnBindMatarial(XRef<Shader> shader);
 
 		XRef<VertexArray> GetVAO()const { return m_VertexArray; }

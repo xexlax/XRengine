@@ -1,8 +1,12 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "Platforms/OpenGL/OpenGLShader.h"
+#ifdef XRE_RENDERER_VULKAN
 #include "Platforms\Vulkan\VkContext.h"
+#include "Platforms\Vulkan\VkRendererAPI.h"
+#endif
+
+#include "Platforms/OpenGL/OpenGLShader.h"
 
 namespace XRE {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
@@ -50,11 +54,9 @@ namespace XRE {
 		push.ModelMatrix = transform;
 		XRE::VkContext::GetInstance()->PushConstant(&push, sizeof(PushData));
 		for (auto mesh : mrc.m_Model->m_Meshes) {
-			mesh.BindMaterial(mrc.GetMaterial(mesh.MatID));
-			
-			RenderCommand::DrawIndexed(
-				mesh.GetVAO()
-			);
+			auto mat = mrc.GetMaterial(mesh.MatID);
+			mat->Bind();
+			VkRendererAPI::DrawModelVA(mesh.GetVAO(), mat);
 		}
 
 #endif

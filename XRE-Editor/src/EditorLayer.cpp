@@ -21,7 +21,7 @@ EditorLayer::EditorLayer()
 void EditorLayer::OnAttach()
 {
 	auto io = ImGui::GetIO();
-	FontLarge = io.Fonts->AddFontFromFileTTF("../Assets/fonts/simhei.ttf", 36.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
+	//FontLarge = io.Fonts->AddFontFromFileTTF("../Assets/fonts/simhei.ttf", 36.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
 
 	m_Scene = make_shared<Scene>();
 	m_EditorCamera.SetPosition(glm::vec3(0.0f, 9.0f, 12.0f));
@@ -333,6 +333,9 @@ void EditorLayer::OnImGuiRender(){
 
 		ImGui::Separator();
 
+		
+
+#ifdef XRE_RENDERER_OPENGL
 		if (ImGui::Button("ReloadShader")) {
 			Renderer3D::Init();
 		}
@@ -342,6 +345,9 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::Separator();
 		ImGui::Text("DepthMap");
 		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+#endif // XRE_RENDERER_OPENGL
+
+		
 
 		ImGui::End();
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -365,18 +371,36 @@ void EditorLayer::OnImGuiRender(){
 
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+
 		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
 		{
 			//XRE_CORE_TRACE("viewport: {0} x {1} ", viewportPanelSize.x, viewportPanelSize.y);
+			
+#ifdef  XRE_RENDERER_OPENGL
 			Renderer3D::m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+
+#endif //  XRE_RENDERER_OPENGL
+
+			
+			
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 			m_EditorCamera.SetViewPortSize(m_ViewportSize.x, m_ViewportSize.y);
 			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
-
+#ifdef  XRE_RENDERER_OPENGL
 		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment(0);
 		ImGui::Image((ImTextureID)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
+#endif //  XRE_RENDERER_OPENGL
+
+#ifdef XRE_RENDERER_VULKAN
+
+		
+
+#endif // XRE_RENDERER_VULKAN
+
+		
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
@@ -561,7 +585,7 @@ void EditorLayer::OnImGuiRender(){
 
 		ImGui::End();
 		ImGui::Begin(u8"开始");
-		ImGui::PushFont(FontLarge);
+		//ImGui::PushFont(FontLarge);
 		if (ImGui::Button(u8"新建项目", ImVec2(500, 150))){
 			auto path = FileDialogs::SaveFile(u8"XREProject (*.xreprj)\0*.xreprj\0");
 			filesystem::create_directory(path);
@@ -586,7 +610,7 @@ void EditorLayer::OnImGuiRender(){
 		if (ImGui::Button(u8"帮助", ImVec2(500, 150))) {
 
 		}
-		ImGui::PopFont();
+		//ImGui::PopFont();
 
 		ImGui::End();
 	

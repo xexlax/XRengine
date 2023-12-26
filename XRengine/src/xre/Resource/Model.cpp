@@ -105,7 +105,10 @@ namespace XRE {
 
 		{
 			for (int i = 0; i < materials.size(); i++) {
-				XRef<Material> m = make_shared<Material>();
+
+
+				XRef<Material> m = Material::Create("");
+
 			
 				tinyobj::material_t tm = materials[i];
 				

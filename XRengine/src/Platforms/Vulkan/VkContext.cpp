@@ -162,14 +162,23 @@ namespace XRE {
 	}
 
 	void VkContext::createDescriptorPool() {
-		std::vector<VkDescriptorPoolSize> poolSizes(2);
-		poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		poolSizes[0].descriptorCount = static_cast<uint32_t>(128* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
 
-		poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-		poolSizes[1].descriptorCount = static_cast<uint32_t>(128* VulkanSwapChain::MAX_FRAMES_IN_FLIGHT);
-
-		descriptorPool = XMakeRef<VulkanDescriptorPool>(128 * VulkanSwapChain::MAX_FRAMES_IN_FLIGHT, poolSizes);
+		VkDescriptorPoolSize pool_sizes[] =
+		{
+			{ VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+			{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+			{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+			{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+			{ VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+			{ VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+			{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+			{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+			{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+			{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+			{ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+		};
+		
+		descriptorPool = XMakeRef<VulkanDescriptorPool>(1000, pool_sizes);
 	}
 
 	void VkContext::createCommandBuffers() {
@@ -262,7 +271,7 @@ namespace XRE {
 	}
 
 	void VkContext::beginFrame() {
-
+		
 
 		imageIndex = swapChain->acquireNextImage();
 		uint32_t currentFrame = swapChain->currentFrame;
@@ -286,6 +295,8 @@ namespace XRE {
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
 			framebufferResized = false;
 			swapChain->recreateSwapChain();
+			offscreenFrameBuffer->Recreate(swapChain->swapChainExtent.width, swapChain->swapChainExtent.height);
+
 		}
 		else if (result != VK_SUCCESS) {
 			throw std::runtime_error("failed to present swap chain image!");

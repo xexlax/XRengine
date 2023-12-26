@@ -19,12 +19,20 @@ namespace XRE {
         void CleanUp(const VkDevice& device);
 
         VkSwapchainKHR swapChain;
+
+       
         std::vector<VkImage> swapChainImages;
         VkFormat swapChainImageFormat;
         VkExtent2D swapChainExtent;
         std::vector<VkImageView> swapChainImageViews;
+
+        // FrameBuffer
+        
         std::vector<VkFramebuffer> swapChainFramebuffers;
+        std::vector < XRef<VulkanImage>> ColorImage;
         XRef<VulkanImage> DepthImage;
+
+
         XRef<VulkanRenderPass> renderPass;
         XRef<VulkanRenderPass> UIPass;
         uint32_t currentFrame = 0;

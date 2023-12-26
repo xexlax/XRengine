@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Material.h"
 #include "ResourceManager.h"
-
+#include "Platforms\Vulkan\VulkanMaterial.h"
 namespace XRE {
 	Material::Material()
 	{
@@ -66,6 +66,11 @@ namespace XRE {
 	}
 	XRef<Material> Material::Create(const std::string& filepath)
 	{
+#ifdef  XRE_RENDERER_VULKAN
+		return XMakeRef<VulkanMaterial>(filepath);
+#else
+
 		return XMakeRef<Material>(filepath);
+#endif //  XRE_RENDERER_VULKAN
 	}
 }

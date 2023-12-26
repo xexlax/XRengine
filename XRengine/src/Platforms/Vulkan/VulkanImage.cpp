@@ -1,11 +1,15 @@
+#include "backends\imgui_impl_vulkan.h"
+
 
 #include "VulkanImage.h"
 #include "VkContext.h"
+#include "3rdparty\VulkanInitializor.h"
+#include "VulkanUtils.h"
 
-
-void XRE::VulkanImage::Create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties) {
+void XRE::VulkanImage::Create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageLayout layout) {
     
-    
+    Layout = layout;
+    Format = format;
     
     VkImageCreateInfo imageInfo{};
     imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -25,7 +29,7 @@ void XRE::VulkanImage::Create(uint32_t width, uint32_t height, VkFormat format, 
     
 
 
-    VkDevice device = VkContext::GetInstance()->device;
+    VkDevice device = VkContext::GetDevice();
     if (vkCreateImage( device, &imageInfo, nullptr, &Image) != VK_SUCCESS) {
         throw std::runtime_error("failed to create image!");
     }
@@ -127,4 +131,90 @@ void XRE::VulkanImage::copyBufferToImage(VkBuffer buffer, uint32_t width, uint32
 
     VulkanRHI::endSingleTimeCommands(commandBuffer);
 }
+
+void* XRE::VulkanImage::GetDescriptorSet()
+{
+
+#ifdef XRE_RENDERER_VULKAN
+    if (registered)
+        return ds;
+    else {
+
+        ds = ImGui_ImplVulkan_AddTexture(
+            Sampler, ImageView, Layout);
+        registered = true;
+
+        return ds;
+
+    }
+#else
+    return nullptr;
+#endif // XRE_RENDERER_VULKAN
+
+    
+
+    
+}
+
+void XRE::VulkanImage::createAttachment(VkFormat format, VkImageUsageFlagBits usage, int32_t width, int32_t height)
+{
+    VkImageAspectFlags aspectMask = 0;
+    VkImageLayout imageLayout;
+
+    Format = format;
+
+    if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
+    {
+        aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    }
+    if (usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+    {
+        aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        if (format >= VK_FORMAT_D16_UNORM_S8_UINT)
+            aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    }
+
+    assert(aspectMask > 0);
+
+    VkImageCreateInfo image = vks::initializers::imageCreateInfo();
+    image.imageType = VK_IMAGE_TYPE_2D;
+    image.format = format;
+    image.extent.width = width;
+    image.extent.height = height;
+    image.extent.depth = 1;
+    image.mipLevels = 1;
+    image.arrayLayers = 1;
+    image.samples = VK_SAMPLE_COUNT_1_BIT;
+    image.tiling = VK_IMAGE_TILING_OPTIMAL;
+    image.usage = usage | VK_IMAGE_USAGE_SAMPLED_BIT;
+
+    VkMemoryAllocateInfo memAlloc = vks::initializers::memoryAllocateInfo();
+    VkMemoryRequirements memReqs;
+
+    VkDevice device = VkContext::GetDevice();
+    check_vk_result(vkCreateImage(device, &image, nullptr, &Image));
+    vkGetImageMemoryRequirements(device, Image, &memReqs);
+    memAlloc.allocationSize = memReqs.size;
+    memAlloc.memoryTypeIndex = VulkanRHI::findMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+    
+    check_vk_result(vkAllocateMemory(device, &memAlloc, nullptr, &ImageMemory));
+    check_vk_result(vkBindImageMemory(device, Image, ImageMemory, 0));
+
+    VkImageViewCreateInfo imageView = vks::initializers::imageViewCreateInfo();
+    imageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    imageView.format = format;
+    imageView.subresourceRange = {};
+    imageView.subresourceRange.aspectMask = aspectMask;
+    imageView.subresourceRange.baseMipLevel = 0;
+    imageView.subresourceRange.levelCount = 1;
+    imageView.subresourceRange.baseArrayLayer = 0;
+    imageView.subresourceRange.layerCount = 1;
+    imageView.image = Image;
+    check_vk_result(vkCreateImageView(device, &imageView, nullptr, &ImageView));
+}
+
+
 

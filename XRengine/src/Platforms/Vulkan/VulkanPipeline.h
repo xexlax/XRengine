@@ -6,10 +6,10 @@
 #include "VulkanBuffers.h"
 
 
+
 namespace XRE {
 
-	const std::string VERT_PATH = "shaders/default_vert.spv";
-	const std::string FRAG_PATH = "shaders/default_frag.spv";
+	
 
 	struct PipelineConfigInfo {
 		PipelineConfigInfo() = default;
@@ -60,14 +60,34 @@ namespace XRE {
 
 		std::vector <XRef<VulkanUniformBuffer>> GlobalUBOs;
 		std::vector <XRef<VulkanUniformBuffer>> LightingUBOs;
+		
 
 		void CreateUBOs() override;
 	};
+
+
+	class DeferredPipeline :public VulkanPipeline {
+	public:
+		DeferredPipeline(
+			XRef<VulkanRenderPass> renderPass);
+
+		std::vector <XRef<VulkanUniformBuffer>> GlobalUBOs;
+		std::vector <XRef<VulkanUniformBuffer>> LightingUBOs;
+
+
+		void CreateUBOs() override;
+	};
+
 
 	class SkyBoxPipeline :public VulkanPipeline {
 	public:
 		SkyBoxPipeline(
 			XRef<VulkanRenderPass> renderPass);
+
+		std::vector <XRef<VulkanUniformBuffer>> GlobalUBOs;
+
+
+		void CreateUBOs() override;
 		
 	};
 }

@@ -15,7 +15,8 @@ namespace XRE {
 
 		virtual void Bind(uint32_t slot = 0) const = 0;
 		std::string GetName() const { return m_name; };
-		virtual uint32_t GetRendererId() const =0;
+		virtual uint32_t GetRendererId() =0;
+		virtual void* GetDescriptor() = 0;
 	protected:
 		std::string m_name="default";
 		std::string m_Path;

@@ -24,4 +24,12 @@ namespace XRE {
         p_light p[4];
         size_t plightCount;
     };
+
+    struct MaterialUBO {
+        int useAlbedo;
+        int useSpecMap;
+        int useNormalMap;
+        float metallic;
+        float roughness;
+    };
 }

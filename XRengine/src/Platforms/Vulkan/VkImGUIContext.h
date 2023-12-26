@@ -49,7 +49,7 @@ namespace XRE {
 			init_info.DescriptorPool = imguiPool;
 			init_info.MinImageCount = 2;
 			init_info.ImageCount = 2;
-			ImGui_ImplVulkan_Init(&init_info, VkContext::GetInstance()->swapChain->renderPass->renderPass);
+			ImGui_ImplVulkan_Init(&init_info, VkContext::GetInstance()->swapChain->UIPass->renderPass);
 			
 		}
 

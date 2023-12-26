@@ -7,7 +7,12 @@
 #include "xre\Audio\alManager.h"
 #include  "Input.h"
 #include <GLFW\glfw3.h>
-#include "Platforms\Vulkan\VkContext.h"
+
+#ifdef XRE_RENDERER_VULKAN
+	#include "Platforms\Vulkan\VkContext.h"
+#endif
+
+#include <thread>
 
 //Todo : 实现所有的RendererAPI，避免对glad在/platform外的引用 
 namespace XRE {
@@ -37,6 +42,7 @@ namespace XRE {
 	}
 
 	Application::~Application() {
+		ResourceManager::UnloadAllResources();
 		alManager::End();
 	}
 	//通用回调函数，最终在glfwsetcallback中的lambda函数中被调用
@@ -75,36 +81,39 @@ namespace XRE {
 				m_FrameCount = 0;
 			}
 			m_FrameCount++;
-
+			if (!m_Minimized) {
 #ifdef XRE_RENDERER_VULKAN
 
-			VkContext::GetInstance()->beginFrame();
+				VkContext::GetInstance()->beginFrame();
 #endif
-			//layers 自下而上更新
-			if (!m_Minimized)
-			{
+
+
+				//layers 自下而上更新
+
+				{
+					for (Layer* layer : m_layerStack)
+						layer->OnUpdate(timestep);
+				}
+
+				m_ImGuiLayer->Begin();
+
 				for (Layer* layer : m_layerStack)
-					layer->OnUpdate(timestep);
-			}
-
-			m_ImGuiLayer->Begin();
-
-			for (Layer* layer : m_layerStack)
-				layer->OnImGuiRender();
-			m_ImGuiLayer->End();
+					layer->OnImGuiRender();
+				m_ImGuiLayer->End();
 
 #ifdef XRE_RENDERER_VULKAN
 
-			VkContext::GetInstance()->endFrame();
+				VkContext::GetInstance()->endFrame();
 #endif
-			//XRE_TRACE("{0},{1}", Input::GetMouseX(), Input::GetMouseY());
-
+				//XRE_TRACE("{0},{1}", Input::GetMouseX(), Input::GetMouseY());
+			}
 			m_Window->OnUpdate();
 
 
 		}
 	}
 	void Application::Close() {
+		
 		m_running = false;
 	}
 	void Application::PushLayer(Layer* layer)

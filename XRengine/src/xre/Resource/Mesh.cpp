@@ -74,18 +74,7 @@ namespace XRE {
 
 
 	}
-	void Mesh::BindMaterial(XRef<Material> mat)
-	{
-#ifdef XRE_RENDERER_VULKAN
-		std::vector < XRef<Texture2D>> texs;
-		texs.push_back(mat->diffuseTex.m_Tex);
-		texs.push_back(mat->specularTex.m_Tex);
-		texs.push_back(mat->bumpTex.m_Tex);
-		std::dynamic_pointer_cast<VulkanVertexArray>(GetVAO())->UpdateDescriptorSets(texs);
-
-
-#endif // XRE_RENDERER_VULKAN
-	}
+	
 	void Mesh::UnBindMatarial(XRef<Shader> shader)
 	{
 	}

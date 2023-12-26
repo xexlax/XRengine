@@ -1,41 +1,49 @@
 
 #pragma once
+#include "VulkanImage.h"
 #include "xre\Renderer\FrameBuffer.h"
+
 namespace XRE {
-	class OpenGLFramebuffer : public Framebuffer {
+
+	
+	class VulkanFramebuffer {
 	public:
-		OpenGLFramebuffer(const FramebufferSpecification& spec);
-		virtual ~OpenGLFramebuffer();
 
-		void Activate();
+		class VulkanFramebufferBuilder {
 
-		virtual void Bind() override;
-		virtual void Unbind() override;
-		virtual void Resize(uint32_t width, uint32_t height) override;
-		virtual void ReadPixel(uint32_t attachmentIndex, int x, int y, void* p) override;
-		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
-		virtual uint32_t GetColorAttachment(uint32_t index = 0) const override
-		{
-			XRE_CORE_ASSERT(index < m_ColorAttachments.size());
-			return m_ColorAttachments[index];
-		}
-		virtual uint32_t GetDepthAttachment()const { return m_DepthAttachment; };
-		virtual uint32_t GetWidth()const { return m_Specification.Width; };
-		virtual uint32_t GetHeight()const { return m_Specification.Height; };
+			
 
-		virtual void ActiveColor(int slot, int id);
-		virtual void ActiveDepth(int slot);
+		public:
+			std::vector<std::pair<VkFormat,VkImageUsageFlagBits>> color_attachments;
+			VkImageUsageFlagBits depth_usage;
 
-		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
+
+		} builder;
+
+
+		VulkanFramebuffer() {};
+
+		
+		void Recreate(int32_t w,int32_t h);
+
+		void AddColor(VkFormat format, VkImageUsageFlagBits usage);
+		void AddDepth(VkImageUsageFlagBits usage);
+		
+
+		std::vector<VkAttachmentDescription> GetAttachmentDescriptions();
+
 	private:
-		FramebufferSpecification m_Specification;
 
-		bool m_UseDepth = false;
-		std::vector<FramebufferTextureFormat> m_ColorAttachmentSpec;
+		int32_t width, height;
 
-		uint32_t m_RendererID = 0;
-		std::vector<uint32_t> m_ColorAttachments;
-		uint32_t m_DepthAttachment = 0;
+		
+		std::vector<XRef<VulkanImage>> ColorAttachments;
+		XRef<VulkanImage> DepthAttachment;
+
+		VkFramebuffer m_framebuffer;
+
+		void CreateColorAttachment(VkFormat format, VkImageUsageFlagBits usage);
+		void CreateDepthAttachment(VkImageUsageFlagBits usage);
 
 	};
 }

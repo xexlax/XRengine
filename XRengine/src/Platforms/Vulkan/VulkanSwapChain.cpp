@@ -11,6 +11,9 @@
 XRE::VulkanSwapChain::VulkanSwapChain(const VkPhysicalDevice& physicalDevice, const VkDevice& device)
 {
     Init(physicalDevice, device);
+    createDepthResources();
+    createFramebuffers();
+    createSyncObjects();
     
 }
 
@@ -87,7 +90,6 @@ void XRE::VulkanSwapChain::CleanUp(const VkDevice& device)
 
     vkDestroySwapchainKHR(device, swapChain, nullptr);
 
-    renderPass->CleanUp(device);
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
@@ -101,8 +103,11 @@ void XRE::VulkanSwapChain::createFramebuffers() {
     swapChainFramebuffers.resize(swapChainImageViews.size());
 
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+
+        
         std::array<VkImageView, 2> attachments = {
             swapChainImageViews[i],
+           
             DepthImage->ImageView
         };
 
@@ -140,6 +145,7 @@ void XRE::VulkanSwapChain::recreateSwapChain() {
     createImageViews();
     createDepthResources();
     createFramebuffers();
+    createSyncObjects();
 }
 
 void XRE::VulkanSwapChain::createImageViews() {
@@ -201,9 +207,15 @@ void XRE::VulkanSwapChain::createDepthResources() {
     DepthImage = XMakeRef<VulkanImage>();
     DepthImage->Create(swapChainExtent.width, swapChainExtent.height,
         
-        depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
+        VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL );
 
     DepthImage->ImageView = VulkanRHI::createImageView(DepthImage->Image, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+
+    VkSamplerCreateInfo samplerInfo{};
+    if (vkCreateSampler(VkContext::GetInstance()->device, &samplerInfo, nullptr, &DepthImage->Sampler) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create texture sampler!");
+    }
 }
 
 void XRE::VulkanSwapChain::createSyncObjects()
@@ -273,7 +285,7 @@ uint32_t XRE::VulkanSwapChain::acquireNextImage()
 {
     VkDevice device = VkContext::GetDevice();
 
-    VkResult result0 = vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+    check_vk_result( vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX));
 
     uint32_t imageIndex;
     VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);

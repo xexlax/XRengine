@@ -34,14 +34,14 @@ namespace XRE {
 		static XRef<Shader> GetShader(const std::string& path) { return m_ShaderLib.Get(path); }
 		static XRef<Texture2D> GetTex2D(const std::string& path) { return m_Texture2DLib.Get(GetFullPath(path)); }
 		static XRef<Texture2D> GetEditorTex2D(const std::string& path) { return m_Texture2DLib.Get(path); }
-		static XRef<Texture2D> GetNoTex2D() { return GetTex2D("../Assets/textures/No_Texture.png"); }
-		static XRef<Texture2D> GetDefaultTex2D() { return GetTex2D("../Assets/textures/albedo.png"); }
+		static XRef<Texture2D> GetNoTex2D();
+		static XRef<Texture2D> GetDefaultTex2D();
 
 		static XRef<Model> GetModel(const std::string& path) { return m_ModelLib.Get(GetFullPath(path)); }
 		static XRef<Model> GetElementalModel(const Elemental_Model& em);
 
 		static XRef<Material> GetMaterial(const std::string& path) { return m_MaterialLib.Get(GetFullPath(path)); }
-		static XRef<Material> GetDefaultMaterial() { return GetMaterial("../Assets/materials/default.mat"); }
+		static XRef<Material> GetDefaultMaterial();
 
 		static XRef<BluePrint> GetBluePrint(const std::string& path) { return  m_BluePrintLib.Get(GetFullPath(path)); }
 

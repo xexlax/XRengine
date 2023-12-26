@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW\glfw3.h>
 
@@ -50,6 +52,7 @@ namespace XRE {
 
         static VkCommandBuffer GetImGuiCommandBuffer() { return GetInstance()->imguicommandBuffers[GetInstance()->swapChain->currentFrame]; }
 
+        static uint32_t GetCurrentFrame() { return GetInstance()->swapChain->currentFrame; }
         
         VkInstance instance;
         VkDebugUtilsMessengerEXT debugMessenger;
@@ -61,9 +64,17 @@ namespace XRE {
         VkQueue graphicsQueue;
         VkQueue presentQueue;
 
+        
+
+
+        VkPipelineCache pipelineCache;
+
         XRef<VulkanSwapChain> swapChain;
         XRef<ModelPipeline> modelPipeline;
         XRef<SkyBoxPipeline> skyboxPipeline;
+
+        XRef<DeferredPipeline> deferreredPipeline;
+        XRef<VulkanFramebuffer> offscreenFrameBuffer;
 
         VkCommandPool commandPool;
         
@@ -80,8 +91,8 @@ namespace XRE {
         bool framebufferResized = false;
 
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-            auto app = reinterpret_cast<VkContext*>(glfwGetWindowUserPointer(window));
-            app->framebufferResized = true;
+            //auto app = reinterpret_cast<VkContext*>(glfwGetWindowUserPointer(window));
+            VkContext::GetInstance()->framebufferResized = true;
         }
 
         virtual void Init() override
@@ -97,20 +108,27 @@ namespace XRE {
 
             swapChain = XMakeRef<VulkanSwapChain>(physicalDevice, device);
             modelPipeline = XMakeRef<ModelPipeline>(swapChain->renderPass);
+
+            
             createCommandPool();
-            swapChain->createDepthResources();
-            swapChain->createFramebuffers();
+            
             createCommandBuffers();
-            swapChain->createSyncObjects();
+            
             //´´½¨ÃèÊö·û³Ø
             createDescriptorPool();
             modelPipeline->CreateUBOs();
-           
+            
+           /* offscreenFrameBuffer->AddColor(VK_FORMAT_R16G16B16A16_SFLOAT,VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+            offscreenFrameBuffer->AddColor(VK_FORMAT_R16G16B16A16_SFLOAT,VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+            offscreenFrameBuffer->AddColor(VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+            offscreenFrameBuffer->AddDepth(VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+            
+            offscreenFrameBuffer->Recreate(swapChain->swapChainExtent.width, swapChain->swapChainExtent.height);*/
 
         }
 
 
-
+        
 
         void cleanup() {
             swapChain->CleanUp(device);
@@ -130,6 +148,16 @@ namespace XRE {
             vkDestroySurfaceKHR(instance, surface, nullptr);
             vkDestroyInstance(instance, nullptr);
             //glfwTerminate();
+        }
+
+        void createPipelineCache() {
+            //VkPipelineCacheCreateInfo create_info{ VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO };
+            //create_info.initialDataSize = pipeline_data.size();
+            //create_info.pInitialData = pipeline_data.data();
+
+            ///* Create Vulkan pipeline cache */
+            //check_vk_result(vkCreatePipelineCache(device, &create_info, nullptr, &pipelineCache));
+
         }
 
         void createInstance();
@@ -167,3 +195,5 @@ namespace XRE {
 
 	};
 }
+
+

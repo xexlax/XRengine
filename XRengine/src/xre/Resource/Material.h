@@ -25,7 +25,7 @@ namespace XRE{
 		glm::vec3 transmittance = glm::vec3(0.0f);
 		glm::vec3 emission = glm::vec3(0.0f);
 		float shininess, ior, dissolve, pad0;
-		float metallic, roughness;
+		float metallic=0, roughness=0;
 		int illum;
 
 		MaterialTex	ambientTex;
@@ -38,9 +38,6 @@ namespace XRE{
 		MaterialTex	ambientOcclusionTex;
 		
 		void LoadAllTex();
-
-
-		
 
 		static XRef<Material> Create(const std::string& filepath);
 
@@ -57,6 +54,8 @@ namespace XRE{
 		void Save();
 		void Save(const std::string& filepath);
 		void Load(const std::string& filepath);
+
+		virtual void Bind() {};
 
 		std::string& GetPath() { return m_FilePath; }
 		std::string m_FilePath = "";

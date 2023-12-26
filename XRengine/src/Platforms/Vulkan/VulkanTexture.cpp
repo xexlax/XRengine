@@ -16,6 +16,23 @@ XRE::VulkanTexture2D::VulkanTexture2D(const std::string& path)
 
 XRE::VulkanTexture2D::~VulkanTexture2D()
 {
+    
+    //ImGui_ImplVulkan_RemoveTexture(ds);
+
+    
+}
+
+uint32_t XRE::VulkanTexture2D::GetRendererId() { 
+    
+    return uint32_t(GetDescriptor());
+
+}
+
+void* XRE::VulkanTexture2D::GetDescriptor()
+{
+
+    return m_Image->GetDescriptorSet();
+    
 }
 
 void XRE::VulkanTexture2D::Bind(uint32_t slot) const
@@ -99,3 +116,4 @@ void XRE::VulkanTexture2D::createTextureSampler() {
         throw std::runtime_error("failed to create texture sampler!");
     }
 }
+

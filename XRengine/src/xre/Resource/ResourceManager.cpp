@@ -45,6 +45,8 @@ namespace XRE {
 		m_Texture2DLib.UnloadAll();
 		m_ShaderLib.UnloadAll();
 	}
+	XRef<Texture2D> ResourceManager::GetNoTex2D() { return GetTex2D("textures\\No_Texture.png"); }
+	XRef<Texture2D> ResourceManager::GetDefaultTex2D() { return GetTex2D("textures\\albedo.jpg"); }
 	XRef<Model> ResourceManager::GetElementalModel(const Elemental_Model& em)
 	{
 		switch (em)
@@ -66,4 +68,5 @@ namespace XRE {
 			break;
 		}
 	}
+	XRef<Material> ResourceManager::GetDefaultMaterial() { return GetMaterial("..\\Assets\\materials\\default.mat"); }
 }

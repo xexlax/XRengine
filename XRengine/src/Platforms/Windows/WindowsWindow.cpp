@@ -7,6 +7,7 @@
 
 #include "Platforms\OpenGL\OpenGLContext.h"
 
+
 #include "Platforms\Vulkan\VkContext.h"
 
 namespace XRE{
@@ -68,9 +69,10 @@ namespace XRE{
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		
-		//Use OpenGL as Graphic API
+		
 
 #ifdef XRE_RENDERER_OPENGL
+		//Use OpenGL as Graphic API
 		m_Context = new OpenGLContext(m_Window);
 #endif
 #ifdef XRE_RENDERER_VULKAN

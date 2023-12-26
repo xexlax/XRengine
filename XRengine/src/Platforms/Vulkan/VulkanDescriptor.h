@@ -10,7 +10,7 @@ namespace XRE {
 
     public:
         VulkanDescriptorPool(uint32_t maxSets,
-            const std::vector<VkDescriptorPoolSize>& poolSizes);
+             VkDescriptorPoolSize* poolSizes);
 
 
         ~VulkanDescriptorPool();

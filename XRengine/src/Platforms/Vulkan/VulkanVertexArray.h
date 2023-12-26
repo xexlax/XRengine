@@ -29,20 +29,13 @@ namespace XRE{
 
 		void Draw(VkCommandBuffer commandBuffer);
 
-		VkDescriptorSet* GetDescriptorSet(int offset) {
-			return descriptorWriter->GetDescriptorSet(offset);
-		}
-
-		void UpdateDescriptorSets(const std::vector<XRef<Texture2D>>& textures);
-
-		void createDescriptorSets(const std::vector<XRef<Texture2D>>& textures);
-
+		
+		
 
 	private:
 		uint32_t indexCount;
 		std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-		XRef<VulkanDescriptorWriter> descriptorWriter = nullptr;
 		
 
 	};
