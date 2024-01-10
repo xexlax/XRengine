@@ -444,9 +444,10 @@ namespace XRE{
 				}
 				Renderer3D::EndShadowPass();
 			}
+			
+			
 
-
-
+			
 			// Coloring Pass
 			Renderer3D::m_FrameBuffer->Bind();
 			Renderer3D::Clear();
@@ -544,7 +545,88 @@ namespace XRE{
 				Renderer3D::DrawSkybox();
 			}
 			Renderer3D::EndScene();
+
 			Renderer3D::m_FrameBuffer->Unbind();
+
+
+			//GBuffer Pass
+
+			if (m_PostProcessing) {
+				//Renderer3D::activeShader = Renderer3D::DeferredShader;
+
+				//Renderer3D::m_DeferredFrameBuffer->Bind();
+				//Renderer3D::Clear();
+				//Renderer3D::m_DeferredFrameBuffer->ClearAttachment(3, -1);
+
+
+				//Renderer3D::StartScene(c);
+				//{
+				//	Renderer3D::activeShader->Bind();
+
+
+				//	for (auto obj : group)
+				//	{
+				//		auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(obj);
+				//		if (meshrenderer.m_Active) {
+				//			//Renderer3D::activeShader->Bind();
+				//			Renderer3D::activeShader->SetInt("ObjID", int(obj));
+				//			Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
+				//		}
+
+				//	}
+
+
+
+				//}
+				//Renderer3D::EndScene();
+
+				//Renderer3D::m_DeferredFrameBuffer->Unbind();
+
+
+
+				////out Position
+				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(0, 0);
+				////out Normal
+				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(1, 1);
+				////out Albedo
+				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(2, 2);
+				////out Specular
+				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(3, 3);
+
+
+				//Renderer3D::m_ShadowFrameBuffer->ActiveDepth(4);
+				//Renderer3D::SetShadowMapOfActive(0);
+
+				Renderer3D::m_PostFrameBuffer->Bind();
+
+
+				Renderer3D::Clear();
+				Renderer3D::m_PostFrameBuffer->ClearAttachment(0, -1);
+
+				Renderer3D::activeShader = Renderer3D::postShader;
+				Renderer3D::StartScene(c);
+				{
+					Renderer3D::activeShader->SetBool("Shadow_On", dirLightFound);
+					Renderer3D::postShader->Bind();
+
+					Renderer3D::postShader->SetInt("inPos", 0);
+					Renderer3D::postShader->SetInt("inNormal", 1);
+					Renderer3D::postShader->SetInt("inAlbedo", 2);
+					Renderer3D::postShader->SetInt("inSpecular", 3);
+					Renderer3D::postShader->SetInt("shadowMap", 4);
+					Renderer3D::DrawLight();
+					Renderer3D::DrawScreenQuad();
+				}
+				Renderer3D::EndScene();
+
+
+
+				Renderer3D::m_PostFrameBuffer->Unbind();
+			}
+
+			
+			
+
 		}
 
 #endif // XRE_RENDERER_OPENGL

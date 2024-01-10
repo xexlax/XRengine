@@ -11,6 +11,10 @@ out vec3 Tangent;
 out vec2 TexCoords;
 out vec4 FragPosLightSpace;
 
+out vec3 VSPos;
+out vec3 VSNorm;
+
+uniform mat4 u_View;
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
 uniform mat4 lightSpaceMatrix;
@@ -24,6 +28,11 @@ void main()
     Tangent = aTangent;
     gl_Position = u_ViewProjection * vec4(FragPos, 1.0);
     FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
+
+    VSPos = vec3(u_View*u_Transform * vec4(aPos, 1.0));
+    VSNorm = mat3(transpose(inverse(u_View* u_Transform))) * aNormal;
+
+
 }
 
 
@@ -32,11 +41,17 @@ void main()
 layout(location = 0) out vec4 FragColor;
 layout(location = 1) out int color1;
 
+layout(location = 2) out vec4 ViewSpacePos;
+layout(location = 3) out vec4 ViewSpaceNormal;
+
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoords;
 in vec3 Tangent;
 in vec4 FragPosLightSpace;
+
+in vec3 VSPos;
+in vec3 VSNorm;
 
 uniform vec3 viewPos;
 
@@ -87,6 +102,8 @@ float light_ambient=0.3;
 float light_diffuse=0.6;
 float light_specular=1.0;
 const float PI = 3.14159265359;
+
+
 vec3 GetAlbedo()
 {
     vec3 albedo;
@@ -231,4 +248,7 @@ void main()
     
     FragColor = vec4(color, 1.0);
     color1 = ObjID;
+
+    ViewSpacePos = VSPos;
+    ViewSpaceNormal = vec4(normalize(VSNormal) * 0.5 + 0.5, 1.0);
 }

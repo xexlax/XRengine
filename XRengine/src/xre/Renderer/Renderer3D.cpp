@@ -12,13 +12,19 @@ namespace XRE {
 	XRef<Shader> Renderer3D::flatColorShader;
 	XRef<Shader> Renderer3D::postShader;
 	XRef<Shader> Renderer3D::activeShader;
+	XRef<Shader> Renderer3D::DeferredShader;
+
+
 	XRef<Texture2D> Renderer3D::defaultAlbedo;
 
 	XRef<SkyBox> Renderer3D::m_SkyBox;
-	XRef<Framebuffer> Renderer3D::m_FrameBuffer;
+	XRef<Framebuffer> Renderer3D::m_FrameBuffer,Renderer3D::m_DeferredFrameBuffer;
+
 	XRef<Framebuffer> Renderer3D::m_ShadowFrameBuffer;
 	XRef<Framebuffer> Renderer3D::m_PostFrameBuffer;
 	XRef<VertexArray> Renderer3D::m_Quad;
+
+	//unsigned int Renderer3D::quadVAO, Renderer3D::quadVBO;
 
 	LightSystem Renderer3D::m_Light;
 
@@ -34,11 +40,14 @@ namespace XRE {
 
 		flatColorShader = ResourceManager::GetShader("../Assets/shaders/flatColor.glsl");
 
-		postShader = ResourceManager::GetShader("../Assets/shaders/postprocessing.glsl");
+		postShader = ResourceManager::GetShader("../Assets/shaders/post.glsl");
+
+		DeferredShader= ResourceManager::GetShader("../Assets/shaders/gbuffer.glsl");
 
 		defaultAlbedo = ResourceManager::GetTex2D("../Assets/textures/albedo.jpg");
 
-		activeShader = defaultObjShader;
+		activeShader = DeferredShader;
+		//activeShader = defaultObjShader;
 			//Texture2D::Create("assets/textures/albedo.jpg");
 
 		FramebufferSpecification fb ;
@@ -48,7 +57,22 @@ namespace XRE {
 		{ 
 			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RED_INTEGER, 
+			FramebufferTextureFormat::RGBA8,
+			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::Depth 
+		};
+
+		FramebufferSpecification deferredfb;
+		deferredfb.Width = 1024;
+		deferredfb.Height = 768;
+		deferredfb.Attachments =
+		{
+			FramebufferTextureFormat::RGBA8,
+			FramebufferTextureFormat::RGBA8,
+			FramebufferTextureFormat::RGBA8,
+			FramebufferTextureFormat::RGBA8,
+			
+			FramebufferTextureFormat::Depth
 		};
 
 		FramebufferSpecification sfb;
@@ -61,6 +85,7 @@ namespace XRE {
 		m_FrameBuffer = Framebuffer::Create(fb);
 		m_PostFrameBuffer = Framebuffer::Create(fb);
 		m_ShadowFrameBuffer = Framebuffer::Create(sfb);
+		m_DeferredFrameBuffer = Framebuffer::Create(deferredfb);
 
 		m_SkyBox = make_shared<SkyBox>();
 
@@ -108,6 +133,8 @@ namespace XRE {
 		activeShader->Bind();
 		m_VP = camera->GetProjectionMatrix() * glm::mat4(glm::mat3(camera->GetViewMatrix())) ;
 		activeShader->SetMat4("u_ViewProjection", camera->GetViewProjectionMatrix());
+		activeShader->SetMat4("u_View", camera->GetViewMatrix());
+		activeShader->SetMat4("u_Projection", camera->GetProjectionMatrix());
 		activeShader->SetFloat3("viewPos", camera->GetPosition());
 
 		flatColorShader->Bind();
@@ -157,7 +184,7 @@ namespace XRE {
 	{
 		CullFace(false);
 		EndScene();
-		activeShader = defaultObjShader;
+		activeShader = DeferredShader;
 		m_ShadowFrameBuffer->Unbind();
 	}
 
@@ -202,6 +229,13 @@ namespace XRE {
 			}
 		//model->Draw(defaultObjShader, transform);
 	}
+	void Renderer3D::DrawScreenQuad()
+	{
+		m_Quad->Bind();
+		postShader->Bind();
+		RenderCommand::DrawIndexed(m_Quad);
+
+	}
 	void Renderer3D::DrawModel(const MeshRendererComponent& mrc, const glm::mat4& transform)
 	{
 		auto model = mrc.m_Model;
@@ -218,6 +252,8 @@ namespace XRE {
 		}
 		//model->Draw(defaultObjShader, transform);
 	}
+
+
 	void Renderer3D::DrawSprite(const SpriteRendererComponent& src, const glm::mat4& transform)
 	{
 		

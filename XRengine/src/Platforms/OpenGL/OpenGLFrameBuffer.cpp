@@ -68,6 +68,7 @@ namespace XRE {
 			switch (format)
 			{
 			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FramebufferTextureFormat::RGB8:       return GL_RGB8;
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			}
 
@@ -134,6 +135,10 @@ namespace XRE {
 				case FramebufferTextureFormat::RGBA8:
 					
 					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
+					break;
+				case FramebufferTextureFormat::RGB8:
+
+					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGB8, GL_RGB, m_Specification.Width, m_Specification.Height, i);
 					break;
 				case FramebufferTextureFormat::RED_INTEGER:
 					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
@@ -211,13 +216,14 @@ namespace XRE {
 	}
 	void OpenGLFramebuffer::ActiveDepth(int slot)
 	{
-		glActiveTexture(slot);
+		glActiveTexture(slot + GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
 
 	}
 	void OpenGLFramebuffer::ActiveColor(int slot,int id)
 	{
-		glActiveTexture(slot);
+		
+		glActiveTexture(slot+ GL_TEXTURE0 );
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachments[id]);
 
 	}

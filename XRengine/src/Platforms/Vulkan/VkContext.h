@@ -92,7 +92,11 @@ namespace XRE {
 
         static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
             //auto app = reinterpret_cast<VkContext*>(glfwGetWindowUserPointer(window));
+#ifdef  XRE_RENDERER_VULKAN
             VkContext::GetInstance()->framebufferResized = true;
+#endif //  XRE_RENDERER_VULKAN
+
+            
         }
 
         virtual void Init() override

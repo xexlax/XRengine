@@ -71,7 +71,7 @@ namespace XRE {
 		vector<GameObject> FindGOByName(std::string str);
 		GameObject GetObj(uint32_t eid);
 
-
+		bool m_PostProcessing = true;
 
 		XRef<BluePrint> GetGlobalBluePrint() { return m_GlobalBluePrint; }
 		XRef<BluePrintProperties> GetGlobalProperties() { return m_GlobalProperties; }
@@ -87,7 +87,7 @@ namespace XRE {
 
 		bool m_Runtime = false;
 
-
+		
 		
 		XRef<BluePrint> m_GlobalBluePrint;
 		XRef<BluePrintProperties> m_GlobalProperties;

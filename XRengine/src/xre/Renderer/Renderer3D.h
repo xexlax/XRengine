@@ -44,6 +44,9 @@ namespace XRE {
 
 		static void DrawMesh(const XRef<Model> model, const glm::mat4& transform);
 
+		//static unsigned int quadVAO, quadVBO;
+		static void DrawScreenQuad();
+
 		static void DrawModel(const MeshRendererComponent& mrc, const glm::mat4& transform = glm::mat4(1.0f));
 		static void DrawSprite(const SpriteRendererComponent& mrc, const glm::mat4& transform = glm::mat4(1.0f));
 
@@ -59,10 +62,12 @@ namespace XRE {
 		static XRef<Shader> flatColorShader;
 		static XRef<Shader> postShader;
 
+		static XRef<Shader> DeferredShader;
+
 		static LightSystem m_Light;
 	
 		
-		static XRef<Framebuffer> m_FrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;
+		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;
 		static XRef<SkyBox> m_SkyBox;
 
 		static XRef<Shader> activeShader;
