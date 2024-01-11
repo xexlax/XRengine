@@ -26,6 +26,8 @@ namespace XRE {
 
 	bool Renderer3D::SSAO_ON, Renderer3D::SSR_ON;
 
+	Renderer3D::PostEffects Renderer3D::postEffects;
+
 	//unsigned int Renderer3D::quadVAO, Renderer3D::quadVBO;
 
 	LightSystem Renderer3D::m_Light;
@@ -57,12 +59,13 @@ namespace XRE {
 			//Texture2D::Create("assets/textures/albedo.jpg");
 
 		FramebufferSpecification fb ;
-		fb.Width = 768;
-		fb.Height = 1024;
+		fb.Width = 1600;
+		fb.Height = 1200;
 		fb.Attachments = 
 		{ 
 			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RED_INTEGER, 
+			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RGBA8,

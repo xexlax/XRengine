@@ -76,7 +76,7 @@ void main()
 		       
 	}
 	
-	occlusion = 1.0 - 10*(occlusion / float(SSAO_KERNEL_SIZE));
+	occlusion = 1.0 - 5*(occlusion / float(SSAO_KERNEL_SIZE));
 	outFragColor =vec4(occlusion,occlusion,occlusion,1); 
 	
 }

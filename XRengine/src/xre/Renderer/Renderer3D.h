@@ -71,6 +71,14 @@ namespace XRE {
 		static LightSystem m_Light;
 
 		static bool SSAO_ON,SSR_ON;
+
+		static struct PostEffects{
+			float Brightness;
+			float Saturation;
+			float Contrast;
+			float Vignette;
+
+		} postEffects;
 	
 		
 		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer , m_SSAOBuffer, m_SSRBuffer;

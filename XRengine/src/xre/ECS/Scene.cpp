@@ -456,7 +456,7 @@ namespace XRE{
 			// Coloring Pass
 			Renderer3D::m_FrameBuffer->Bind();
 			Renderer3D::Clear();
-			Renderer3D::m_FrameBuffer->ClearAttachment(3, -1);
+			Renderer3D::m_FrameBuffer->ClearAttachment(5, -1);
 
 			//切shader一定要在startscene前
 			Renderer3D::StartScene(c);
@@ -630,13 +630,22 @@ namespace XRE{
 				Renderer3D::m_FrameBuffer->ActiveDepth(1);
 				//normal
 				Renderer3D::m_FrameBuffer->ActiveColor(2, 4);
+
+				Renderer3D::m_FrameBuffer->ActiveColor(3, 5);
 				
 				Renderer3D::SSR_Shader->Bind();
 
 				Renderer3D::SSR_Shader->SetInt("samplerColoring", 0);
-				Renderer3D::SSR_Shader->SetInt("samplerDepth", 0);
-				Renderer3D::SSR_Shader->SetInt("samplerNorm", 0);
+				Renderer3D::SSR_Shader->SetInt("samplerDepth", 1);
+				Renderer3D::SSR_Shader->SetInt("samplerNorm", 2);
+				Renderer3D::SSR_Shader->SetInt("samplerMat", 3);
 
+				Renderer3D::SSR_Shader->SetMat4("u_Projection", c->GetProjectionMatrix());
+				Renderer3D::SSR_Shader->SetMat4("u_View", c->GetViewMatrix());
+
+				Renderer3D::DrawScreenQuad();
+
+				Renderer3D::m_SSRBuffer->Unbind();
 
 				//Post Pass
 
@@ -649,13 +658,16 @@ namespace XRE{
 				Renderer3D::postShader->Bind();
 
 				Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+				Renderer3D::m_FrameBuffer->ActiveColor(3, 5);
 				Renderer3D::m_SSAOBuffer->ActiveColor(1, 0);
+				Renderer3D::m_SSRBuffer->ActiveColor(2, 0);
 
 				Renderer3D::postShader->SetInt("inColoring", 0);
 				Renderer3D::postShader->SetInt("inSSAO", 1);
 				Renderer3D::postShader->SetInt("inSSR", 2);
-				Renderer3D::postShader->SetInt("inID", 3);
+				Renderer3D::postShader->SetInt("inMat", 3);
 				Renderer3D::postShader->SetBool("SSAO_ON", Renderer3D::SSAO_ON);
+				Renderer3D::postShader->SetBool("SSR_ON", Renderer3D::SSR_ON);
 				Renderer3D::DrawScreenQuad();
 
 				Renderer3D::m_PostFrameBuffer->Unbind();

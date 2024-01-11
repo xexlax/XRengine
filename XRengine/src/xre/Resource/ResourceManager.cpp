@@ -26,6 +26,7 @@ namespace XRE {
 	}
 	std::string ResourceManager::GetFullPath(std::string path)
 	{
+		if (path[0] == '.') return path;
 		if (m_CurProj == nullptr) return  "..\\Assets\\"+path;
 
 		else 

@@ -13,6 +13,7 @@ out vec4 FragPosLightSpace;
 
 out vec3 VSPos;
 out vec3 VSNorm;
+out vec3 ONorm;
 
 
 uniform mat4 u_View;
@@ -32,7 +33,7 @@ void main()
 
     VSPos = vec3(u_View*u_Transform * vec4(aPos, 1.0));
     VSNorm = mat3(transpose(inverse(u_View* u_Transform))) * aNormal;
-   
+    ONorm = mat3(u_Transform) * aNormal;
 
 }
 
@@ -45,7 +46,7 @@ layout(location = 1) out int color1;
 layout(location = 2) out vec4 ViewSpacePos;
 layout(location = 3) out vec4 ViewSpaceNormal;
 layout(location = 4) out vec4 OutNormal;
-
+layout(location = 5) out vec4 OutMaterial;
 
 in vec3 Normal;
 in vec3 FragPos;
@@ -55,6 +56,7 @@ in vec4 FragPosLightSpace;
 
 in vec3 VSPos;
 in vec3 VSNorm;
+in vec3 ONorm;
 
 uniform vec3 viewPos;
 
@@ -149,6 +151,48 @@ vec3 GetNormal(){
 
     
 }
+
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+}  
+
+float DistributionGGX(vec3 N, vec3 H, float roughness)
+{
+    float a      = roughness*roughness;
+    float a2     = a*a;
+    float NdotH  = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH*NdotH;
+
+    float nom   = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+
+    return nom / denom;
+}
+
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float nom   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+
+    return nom / denom;
+}
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+
+
 // BlinnPhong
 vec3 CalcDirLight(DirectionalLight light, vec3 normal, vec3 viewDir, float shadow)
 {
@@ -228,7 +272,7 @@ float ShadowCalculation(vec4 fragPosLightSpace ,float bias)
 
 
 
-
+bool pbr= true;
 
 
 void main()
@@ -244,15 +288,91 @@ void main()
     float bias = 0.005;
     float shadow = ShadowCalculation(FragPosLightSpace,bias);  
 
+    vec3 color;
+    if(pbr){
+        vec3 Lo = vec3(0.0);
+        vec3 albedo = GetAlbedo();
+        vec3 F0 = vec3(0.04); 
+        F0 = mix(F0, albedo, material.metallic);
 
+        //vec3 result = CalcDirLight(d_light,N,V);
+        {
+                vec3 L = normalize(-d_light.direction);
+                vec3 H = normalize(V + L);
 
-    vec3 color = CalcDirLight(d_light,N,V,shadow);
+            
+                vec3 radiance     = d_light.color * d_light.intensity ; 
+        
+                
+                vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
 
-    for(int i=0;i<p_light_amount;i++){
-        if(p_light[i].enable==1){
-            color+=CalcPointLight(p_light[i],N,FragPos,V,0);
+                float NDF = DistributionGGX(N, H, material.roughness);       
+                float G   = GeometrySmith(N, V, L, material.roughness); 
+
+                vec3 nominator    = NDF * G * F;
+                float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001; 
+                vec3 specular     = nominator / denominator; 
+
+                vec3 kS = F;
+                vec3 kD = vec3(1.0) - kS;
+
+                kD *= 1.0 - material.metallic;     
+
+                float NdotL = max(dot(N, L), 0.0);        
+                Lo += (kD * albedo / PI + specular) * radiance * NdotL;   
         }
+        
+        vec3 ambient = vec3(0.04) * albedo + vec3(0,0,0.01);
+        color = ambient + (1-shadow)*Lo;
+
+
+        vec3 Lp = vec3(0.0);
+        for(int i=0;i<p_light_amount;i++){
+            if(p_light[i].enable==1){
+                
+                vec3 L = normalize(p_light[i].position - FragPos);
+                vec3 H = normalize(V + L);
+
+                float distance    = length(p_light[i].position - FragPos);
+                float attenuation = 1.0 / (distance * distance);
+                vec3 radiance     = p_light[i].color * attenuation *p_light[i].intensity; 
+        
+                vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
+
+                float NDF = DistributionGGX(N, H, material.roughness);       
+                float G   = GeometrySmith(N, V, L, material.roughness); 
+
+                vec3 nominator    = NDF * G * F;
+                float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001; 
+                vec3 specular     = nominator / denominator; 
+
+                vec3 kS = F;
+                vec3 kD = vec3(1.0) - kS;
+
+                kD *= 1.0 - material.metallic;     
+
+
+                float NdotL = max(dot(N, L), 0.0);        
+                Lp += (kD * albedo / PI + specular) * radiance * NdotL;     
+
+            }
+        }
+        color = color + (1-shadow*0.3f)*Lp;
+
+        color = color / (color + vec3(1.0));
+        color = pow(color, vec3(1.0/2.2));  
     }
+    else{
+        color = CalcDirLight(d_light,N,V,shadow);
+
+            for(int i=0;i<p_light_amount;i++){
+                if(p_light[i].enable==1){
+                    color+=CalcPointLight(p_light[i],N,FragPos,V,0);
+                }
+            }
+    }
+
+    
     
     
     FragColor = vec4(color, 1.0);
@@ -260,5 +380,6 @@ void main()
 
     ViewSpacePos = vec4(VSPos,LinearizeDepth(gl_FragCoord.z));
     ViewSpaceNormal = vec4(normalize(VSNorm) * 0.5 + 0.5, 1.0);
-    OutNormal  = vec4(N,material.metallic);
+    OutNormal  = vec4(N,0.9);
+    OutMaterial = vec4(material.metallic, material.roughness, (ObjID>0?1.0f:0f),1.0f);
 }

@@ -150,7 +150,7 @@ namespace XRE {
 	{
 		m_Selected = s;
 		comp = c;
-		Switch();
+		m_Switch = true;
 	}
 	void MaterialPanel::Switch()
 	{

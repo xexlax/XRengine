@@ -7,7 +7,7 @@ namespace XRE {
 	{
 		name = "material";
 		shininess = 64.0f;
-		metallic = 0.5f, roughness = 0.5f;
+		metallic = 0.0f, roughness = 0.5f;
 		LoadAllTex();
 	}
 	Material::Material(std::string s)

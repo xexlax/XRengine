@@ -350,7 +350,7 @@ void EditorLayer::OnImGuiRender(){
 		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(2);
 		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		ImGui::Text("Normal");
+		ImGui::Text("ViewSpaceNormal");
 		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(3);
 		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
@@ -359,6 +359,19 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
 		ImGui::Checkbox("SSAO_ON", &Renderer3D::SSAO_ON);
+
+		ImGui::Text("SSR");
+		mapID = Renderer3D::m_SSRBuffer->GetColorAttachment(0);
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		ImGui::Checkbox("SSR_ON", &Renderer3D::SSR_ON);
+
+		ImGui::Text("Normal");
+		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(4);
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		ImGui::Text("Mat");
+		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(5);
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		
 #endif // XRE_RENDERER_OPENGL
 
