@@ -77,8 +77,8 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC _CRT_SECURE_NO_WARNINGS)
 endif()
 
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_RENDERER_OPENGL)
-#target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_RENDERER_VULKAN)
+#target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_RENDERER_OPENGL)
+target_compile_definitions(${PROJECT_NAME} PUBLIC XRE_RENDERER_VULKAN)
 
 set(vulkan_lib "${THIRD_PARTY_DIR}/VulkanSDK/lib/Win32/vulkan-1.lib")
 set(glslangValidator_executable ${THIRD_PARTY_DIR}/VulkanSDK/bin/Win32/glslangValidator.exe)

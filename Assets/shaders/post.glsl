@@ -79,7 +79,18 @@ void main()
 
         }
 
-        color *= min(1,(2-abs(TexCoords.x)+abs(TexCoords.y))) *Vignette;
+        
+        float luminance = 0.2125* color.r +0.7154* color.g +0.0721* color.b;
+        vec3 lumCol= vec3(luminance,luminance,luminance);
+        vec3 avgCol = vec3(0.5,0.5,0.5);
+        color*= Brightness;
+
+        color = lumCol*(1-Saturation) + color* Saturation;
+
+        color = avgCol*(1-Contrast) + color* Contrast;
+
+
+        color *= min(1,(2-abs(TexCoords.x-0.5f)-abs(TexCoords.y-0.5f))*(1-Vignette)) ;
     }
 
         

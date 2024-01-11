@@ -4,7 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "EditorPanels\PanelsManager.h"
-
+#include "EditorPanels\Data.h"
 //temperory
 
 
@@ -339,6 +339,13 @@ void EditorLayer::OnImGuiRender(){
 		if (ImGui::Button("ReloadShader")) {
 			Renderer3D::Init();
 		}
+
+		ImGui::Text("Post Processing is All You Need");
+		XUI::DragFloat(u8"亮度", &Renderer3D::postEffects.Brightness, 0.05f, 0.0f, 2.0f);
+		XUI::DragFloat(u8"饱和度", &Renderer3D::postEffects.Saturation, 0.05f, 0.0f, 2.0f);
+		XUI::DragFloat(u8"对比度", &Renderer3D::postEffects.Contrast, 0.05f, 0.0f, 2.0f);
+		XUI::DragFloat(u8"暗角", &Renderer3D::postEffects.Vignette, 0.05f, 0.0f, 1.0f);
+		
 
 		uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
 

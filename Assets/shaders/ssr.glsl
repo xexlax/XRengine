@@ -120,7 +120,7 @@ void main(){
 	vec4 normal = u_View * vec4(texture(samplerNorm, UV).xyz, 0.0);
 	float metallic = texture(samplerMat, UV).x;
 
-    
+    samplingCoefficient = texture(samplerMat, UV).y;
 	
 	vec3 reflectionDirection = normalize(reflect(position, normalize(normal.xyz)));
     if(metallic<0.1f){
@@ -128,6 +128,7 @@ void main(){
     }
     else{
         if (isSamplingEnabled) {
+            
 			vec3 firstBasis = normalize(cross(vec3(0.f, 0.f, 1.f), reflectionDirection));
 			vec3 secondBasis = normalize(cross(reflectionDirection, firstBasis));
 			vec4 resultingColor = vec4(0.f);

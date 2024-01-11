@@ -14,6 +14,7 @@
 #include <random>
 #include "Platforms\OpenGL\OpenGLTexture.h"
 
+
 float lerp(float a, float b, float f)
 {
 	return a + f * (b - a);
@@ -666,6 +667,12 @@ namespace XRE{
 				Renderer3D::postShader->SetInt("inSSAO", 1);
 				Renderer3D::postShader->SetInt("inSSR", 2);
 				Renderer3D::postShader->SetInt("inMat", 3);
+
+				Renderer3D::postShader->SetFloat("Brightness", Renderer3D::postEffects.Brightness);
+				Renderer3D::postShader->SetFloat("Saturation", Renderer3D::postEffects.Saturation);
+				Renderer3D::postShader->SetFloat("Contrast", Renderer3D::postEffects.Contrast);
+				Renderer3D::postShader->SetFloat("Vignette", Renderer3D::postEffects.Vignette);
+
 				Renderer3D::postShader->SetBool("SSAO_ON", Renderer3D::SSAO_ON);
 				Renderer3D::postShader->SetBool("SSR_ON", Renderer3D::SSR_ON);
 				Renderer3D::DrawScreenQuad();

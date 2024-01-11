@@ -23,7 +23,7 @@ uniform sampler2D samplerNormal;
 uniform sampler2D ssaoNoise;
 
 const int SSAO_KERNEL_SIZE = 64;
-const float SSAO_RADIUS = 2;
+const float SSAO_RADIUS = 1.5;
 
 uniform vec4 UBOSSAOKernel[SSAO_KERNEL_SIZE];
 

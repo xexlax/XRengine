@@ -73,9 +73,9 @@ namespace XRE {
 		static bool SSAO_ON,SSR_ON;
 
 		static struct PostEffects{
-			float Brightness;
-			float Saturation;
-			float Contrast;
+			float Brightness=1;
+			float Saturation=1;
+			float Contrast=1;
 			float Vignette;
 
 		} postEffects;
