@@ -11,8 +11,13 @@
 #include "xre\BluePrint\BluePrint.h"
 
 #include "xre\Audio\alManager.h"
+#include <random>
+#include "Platforms\OpenGL\OpenGLTexture.h"
 
-
+float lerp(float a, float b, float f)
+{
+	return a + f * (b - a);
+}
 
 
 namespace XRE{
@@ -451,7 +456,7 @@ namespace XRE{
 			// Coloring Pass
 			Renderer3D::m_FrameBuffer->Bind();
 			Renderer3D::Clear();
-			Renderer3D::m_FrameBuffer->ClearAttachment(1, -1);
+			Renderer3D::m_FrameBuffer->ClearAttachment(3, -1);
 
 			//切shader一定要在startscene前
 			Renderer3D::StartScene(c);
@@ -552,76 +557,110 @@ namespace XRE{
 			//GBuffer Pass
 
 			if (m_PostProcessing) {
-				//Renderer3D::activeShader = Renderer3D::DeferredShader;
 
-				//Renderer3D::m_DeferredFrameBuffer->Bind();
-				//Renderer3D::Clear();
-				//Renderer3D::m_DeferredFrameBuffer->ClearAttachment(3, -1);
+				
+				//SSAO Pass
+				Renderer3D::m_SSAOBuffer->Bind();
+				Renderer3D::Clear();
+				Renderer3D::m_SSAOBuffer->ClearAttachment(0, -1);
+
+				Renderer3D::SSAO_Shader->Bind();
+
+				Renderer3D::m_FrameBuffer->ActiveColor(0, 2);
+
+				Renderer3D::m_FrameBuffer->ActiveColor(1, 3);
+
+				
+
+				std::default_random_engine generator;
+				uniform_real_distribution<float> u1(-1, 1),u2(0,1);
+				vector<glm::vec4> ssao_kernel;
+
+				for (int i = 0;i < 64;i++) {
+					glm::vec3 sample(
+						u1(generator), u1(generator), u2(generator)
+					);
+					sample = glm::normalize(sample)* u2(generator) ;
+					float scale = float(i) / 64.0f;
+					scale = lerp(0.1f,1.0f,scale*scale);
+					sample *= scale;
+					glm::vec4 sample4 = glm::vec4(sample, 0);
+					ssao_kernel.push_back(sample4);
+
+					Renderer3D::SSAO_Shader->SetFloat4( "UBOSSAOKernel[" + std::to_string(i) + "]" , sample4);
+				}
+
+				vector<glm::vec4> noise;
+				for (int i = 0;i < 16;i++) {
+					
+					noise.push_back(glm::vec4(u1(generator), u1(generator), 0.0f, 0.0f));
+
+				}
+				Renderer3D::ssaoNoise = XMakeRef<OpenGLTexture2D>((char*)(noise.data()), 4, 4);
+				Renderer3D::ssaoNoise->Bind(2);
+					
 
 
-				//Renderer3D::StartScene(c);
-				//{
-				//	Renderer3D::activeShader->Bind();
+
+				Renderer3D::SSAO_Shader->SetInt("samplerPositionDepth", 0);
+				Renderer3D::SSAO_Shader->SetInt("samplerNormal", 1);
+				Renderer3D::SSAO_Shader->SetInt("ssaoNoise", 2);
+
+				Renderer3D::SSAO_Shader->SetMat4("u_Projection", c->GetProjectionMatrix());
+
+				
+				
+
+				Renderer3D::DrawScreenQuad();
+
+				Renderer3D::m_SSAOBuffer->Unbind();
 
 
-				//	for (auto obj : group)
-				//	{
-				//		auto& [transform, meshrenderer] = group.get<TransformComponent, MeshRendererComponent>(obj);
-				//		if (meshrenderer.m_Active) {
-				//			//Renderer3D::activeShader->Bind();
-				//			Renderer3D::activeShader->SetInt("ObjID", int(obj));
-				//			Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
-				//		}
+				//SSR Pass, TODO
 
-				//	}
+				Renderer3D::m_SSRBuffer->Bind();
+				Renderer3D::Clear();
+				Renderer3D::m_SSRBuffer->ClearAttachment(0, -1);
 
+				
 
+				//color
+				Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+				//depth
+				Renderer3D::m_FrameBuffer->ActiveDepth(1);
+				//normal
+				Renderer3D::m_FrameBuffer->ActiveColor(2, 4);
+				
+				Renderer3D::SSR_Shader->Bind();
 
-				//}
-				//Renderer3D::EndScene();
-
-				//Renderer3D::m_DeferredFrameBuffer->Unbind();
-
-
-
-				////out Position
-				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(0, 0);
-				////out Normal
-				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(1, 1);
-				////out Albedo
-				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(2, 2);
-				////out Specular
-				//Renderer3D::m_DeferredFrameBuffer->ActiveColor(3, 3);
+				Renderer3D::SSR_Shader->SetInt("samplerColoring", 0);
+				Renderer3D::SSR_Shader->SetInt("samplerDepth", 0);
+				Renderer3D::SSR_Shader->SetInt("samplerNorm", 0);
 
 
-				//Renderer3D::m_ShadowFrameBuffer->ActiveDepth(4);
-				//Renderer3D::SetShadowMapOfActive(0);
+				//Post Pass
+
+
 
 				Renderer3D::m_PostFrameBuffer->Bind();
-
-
 				Renderer3D::Clear();
 				Renderer3D::m_PostFrameBuffer->ClearAttachment(0, -1);
 
-				Renderer3D::activeShader = Renderer3D::postShader;
-				Renderer3D::StartScene(c);
-				{
-					Renderer3D::activeShader->SetBool("Shadow_On", dirLightFound);
-					Renderer3D::postShader->Bind();
+				Renderer3D::postShader->Bind();
 
-					Renderer3D::postShader->SetInt("inPos", 0);
-					Renderer3D::postShader->SetInt("inNormal", 1);
-					Renderer3D::postShader->SetInt("inAlbedo", 2);
-					Renderer3D::postShader->SetInt("inSpecular", 3);
-					Renderer3D::postShader->SetInt("shadowMap", 4);
-					Renderer3D::DrawLight();
-					Renderer3D::DrawScreenQuad();
-				}
-				Renderer3D::EndScene();
+				Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+				Renderer3D::m_SSAOBuffer->ActiveColor(1, 0);
 
-
+				Renderer3D::postShader->SetInt("inColoring", 0);
+				Renderer3D::postShader->SetInt("inSSAO", 1);
+				Renderer3D::postShader->SetInt("inSSR", 2);
+				Renderer3D::postShader->SetInt("inID", 3);
+				Renderer3D::postShader->SetBool("SSAO_ON", Renderer3D::SSAO_ON);
+				Renderer3D::DrawScreenQuad();
 
 				Renderer3D::m_PostFrameBuffer->Unbind();
+
+			
 			}
 
 			

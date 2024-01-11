@@ -60,19 +60,25 @@ namespace XRE {
 		static XRef<Shader> defaultPBRShader;
 		static XRef<Shader> simpleDepthShader;
 		static XRef<Shader> flatColorShader;
+
+
+		static XRef<Shader> SSAO_Shader;
+		static XRef<Shader> SSR_Shader;
 		static XRef<Shader> postShader;
 
 		static XRef<Shader> DeferredShader;
 
 		static LightSystem m_Light;
+
+		static bool SSAO_ON,SSR_ON;
 	
 		
-		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer;
+		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer , m_SSAOBuffer, m_SSRBuffer;
 		static XRef<SkyBox> m_SkyBox;
 
 		static XRef<Shader> activeShader;
 
-		static XRef<Texture2D> defaultAlbedo;
+		static XRef<Texture2D> defaultAlbedo,ssaoNoise;
 
 		//ÔÝÊ±ÐÔ´¢´æ
 		static glm::mat4 m_VP,m_LVP;

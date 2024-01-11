@@ -345,6 +345,21 @@ void EditorLayer::OnImGuiRender(){
 		ImGui::Separator();
 		ImGui::Text("DepthMap");
 		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		ImGui::Text("Pos");
+		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(2);
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		ImGui::Text("Normal");
+		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(3);
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		ImGui::Text("SSAO");
+		mapID = Renderer3D::m_SSAOBuffer->GetColorAttachment(0);
+		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		ImGui::Checkbox("SSAO_ON", &Renderer3D::SSAO_ON);
+		
 #endif // XRE_RENDERER_OPENGL
 
 		
@@ -389,7 +404,7 @@ void EditorLayer::OnImGuiRender(){
 			m_Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 #ifdef  XRE_RENDERER_OPENGL
-		uint32_t textureID = Renderer3D::m_FrameBuffer->GetColorAttachment(0);
+		uint32_t textureID = Renderer3D::m_PostFrameBuffer->GetColorAttachment(0);
 		ImGui::Image((ImTextureID)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
 #endif //  XRE_RENDERER_OPENGL

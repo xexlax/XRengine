@@ -1,63 +1,83 @@
+
+#type vertex
 #version 450
 
-layout (binding = 0) uniform sampler2D samplerPositionDepth;
-layout (binding = 1) uniform sampler2D samplerNormal;
-layout (binding = 2) uniform sampler2D ssaoNoise;
+layout (location = 0) in vec2 aPos;
+layout (location = 1) in vec2 aTexCoords;
 
-layout (constant_id = 0) const int SSAO_KERNEL_SIZE = 64;
-layout (constant_id = 1) const float SSAO_RADIUS = 0.5;
+out vec2 inUV;
 
-layout (binding = 3) uniform UBOSSAOKernel
+void main()
 {
-	vec4 samples[SSAO_KERNEL_SIZE];
-} uboSSAOKernel;
+    inUV = aTexCoords;
+    gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0); 
+}  
 
-layout (binding = 4) uniform mat4 u_Projection;
+
+#type fragment
+
+#version 450
+
+uniform sampler2D samplerPositionDepth;
+uniform sampler2D samplerNormal;
+uniform sampler2D ssaoNoise;
+
+const int SSAO_KERNEL_SIZE = 64;
+const float SSAO_RADIUS = 2;
+
+uniform vec4 UBOSSAOKernel[SSAO_KERNEL_SIZE];
 
 
-layout (location = 0) in vec2 inUV;
+uniform mat4 u_Projection;
 
-layout (location = 0) out float outFragColor;
+in vec2 inUV;
+
+layout(location = 0) out vec4 outFragColor;
 
 void main() 
 {
-	// Get G-Buffer values
+	//读取MRT
 	vec3 fragPos = texture(samplerPositionDepth, inUV).rgb;
 	vec3 normal = normalize(texture(samplerNormal, inUV).rgb * 2.0 - 1.0);
 
-	// Get a random vector using a noise lookup
+	//查找噪声图，获取随机方向
 	ivec2 texDim = textureSize(samplerPositionDepth, 0); 
 	ivec2 noiseDim = textureSize(ssaoNoise, 0);
 	const vec2 noiseUV = vec2(float(texDim.x)/float(noiseDim.x), float(texDim.y)/(noiseDim.y)) * inUV;  
 	vec3 randomVec = texture(ssaoNoise, noiseUV).xyz * 2.0 - 1.0;
 	
-	// Create TBN matrix
+	//施密特正交化
 	vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
 	vec3 bitangent = cross(tangent, normal);
 	mat3 TBN = mat3(tangent, bitangent, normal);
 
-	// Calculate occlusion value
+
 	float occlusion = 0.0f;
-	// remove banding
 	const float bias = 0.025f;
+	
 	for(int i = 0; i < SSAO_KERNEL_SIZE; i++)
-	{		
-		vec3 samplePos = TBN * uboSSAOKernel.samples[i].xyz; 
+	{	
+		//计算kernel+noise得到采样向量
+		vec3 samplePos = TBN * UBOSSAOKernel[i].xyz; 
 		samplePos = fragPos + samplePos * SSAO_RADIUS; 
 		
-		// project
+		//透视除法获取屏幕空间点
 		vec4 offset = vec4(samplePos, 1.0f);
-		offset = ubo.projection * offset; 
+		offset = u_Projection * offset; 
 		offset.xyz /= offset.w; 
 		offset.xyz = offset.xyz * 0.5f + 0.5f; 
 		
 		float sampleDepth = -texture(samplerPositionDepth, offset.xy).w; 
 
+		//平滑插值
 		float rangeCheck = smoothstep(0.0f, 1.0f, SSAO_RADIUS / abs(fragPos.z - sampleDepth));
-		occlusion += (sampleDepth >= samplePos.z + bias ? 1.0f : 0.0f) * rangeCheck;           
+		occlusion += (sampleDepth >= samplePos.z + bias ? 1.0f : 0.0f) * rangeCheck;  
+		
+		       
 	}
-	occlusion = 1.0 - (occlusion / float(SSAO_KERNEL_SIZE));
 	
-	outFragColor = occlusion;
+	occlusion = 1.0 - 10*(occlusion / float(SSAO_KERNEL_SIZE));
+	outFragColor =vec4(occlusion,occlusion,occlusion,1); 
+	
 }
 

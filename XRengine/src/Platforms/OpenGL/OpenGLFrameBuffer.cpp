@@ -70,6 +70,7 @@ namespace XRE {
 			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
 			case FramebufferTextureFormat::RGB8:       return GL_RGB8;
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			case FramebufferTextureFormat::RED_ONLY: return GL_R8;
 			}
 
 			XRE_CORE_ASSERT(false);
@@ -143,6 +144,9 @@ namespace XRE {
 				case FramebufferTextureFormat::RED_INTEGER:
 					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
 					break;
+				case FramebufferTextureFormat::RED_ONLY:
+					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R8, GL_RED, m_Specification.Width, m_Specification.Height, i);
+					break;
 				}
 				
 					
@@ -158,8 +162,8 @@ namespace XRE {
 		}
 		if (m_ColorAttachments.size() > 1)
 		{
-			XRE_CORE_ASSERT(m_ColorAttachments.size() <= 4);
-			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			XRE_CORE_ASSERT(m_ColorAttachments.size() <= 5);
+			GLenum buffers[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,GL_COLOR_ATTACHMENT4};
 			glDrawBuffers(m_ColorAttachments.size(), buffers);
 		}
 		else if (m_ColorAttachments.empty())

@@ -14,6 +14,7 @@ out vec4 FragPosLightSpace;
 out vec3 VSPos;
 out vec3 VSNorm;
 
+
 uniform mat4 u_View;
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
@@ -31,7 +32,7 @@ void main()
 
     VSPos = vec3(u_View*u_Transform * vec4(aPos, 1.0));
     VSNorm = mat3(transpose(inverse(u_View* u_Transform))) * aNormal;
-
+   
 
 }
 
@@ -43,6 +44,8 @@ layout(location = 1) out int color1;
 
 layout(location = 2) out vec4 ViewSpacePos;
 layout(location = 3) out vec4 ViewSpaceNormal;
+layout(location = 4) out vec4 OutNormal;
+
 
 in vec3 Normal;
 in vec3 FragPos;
@@ -54,6 +57,8 @@ in vec3 VSPos;
 in vec3 VSNorm;
 
 uniform vec3 viewPos;
+
+
 
 struct DirectionalLight {
     vec3 direction;
@@ -96,7 +101,7 @@ uniform sampler2D shadowMap;
 uniform bool Shadow_On;
 uniform int ObjID;
 
-float near_plane=0.1;
+float near_plane=1;
 float far_plane=100;
 float light_ambient=0.3;
 float light_diffuse=0.6;
@@ -222,6 +227,10 @@ float ShadowCalculation(vec4 fragPosLightSpace ,float bias)
 }
 
 
+
+
+
+
 void main()
 {
     
@@ -249,6 +258,7 @@ void main()
     FragColor = vec4(color, 1.0);
     color1 = ObjID;
 
-    ViewSpacePos = VSPos;
-    ViewSpaceNormal = vec4(normalize(VSNormal) * 0.5 + 0.5, 1.0);
+    ViewSpacePos = vec4(VSPos,LinearizeDepth(gl_FragCoord.z));
+    ViewSpaceNormal = vec4(normalize(VSNorm) * 0.5 + 0.5, 1.0);
+    OutNormal  = vec4(N,material.metallic);
 }
