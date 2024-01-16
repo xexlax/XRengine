@@ -21,6 +21,7 @@ namespace XRE {
 			shader->SetFloat3("d_light.direction", m_DirectionalLight.m_Direction);
 			shader->SetFloat("d_light.intensity", m_DirectionalLight.m_Intensity);
 			shader->SetFloat3("d_light.color", m_DirectionalLight.m_Color);
+			shader->SetBool("d_light.shadowCasting", m_DirectionalLight.m_ShadowCasting);
 
 			int index = 0;
 			for (auto p : m_PointLights) {
@@ -29,6 +30,7 @@ namespace XRE {
 				shader->SetFloat3("p_light[" + std::to_string(index) + "].color", p.m_Color);
 				shader->SetFloat("p_light[" + std::to_string(index) + "].intensity", p.m_Intensity);
 				shader->SetInt("p_light[" + std::to_string(index) + "].enable", 1);
+				shader->SetBool("p_light[" + std::to_string(index) + "].shadowCasting", p.m_ShadowCasting);
 				index++;
 
 			}
@@ -46,6 +48,7 @@ namespace XRE {
 	{		
 		m_DirectionalLight = { t.GetGlobalDirection() ,l.m_Color,l.m_Intensity };
 		m_DirectionalLight.m_Rotation = t.m_Rotation;
+		m_DirectionalLight.m_ShadowCasting = l.m_ShadowCasting;
 	}
 	void LightSystem::ClearPLights()
 	{

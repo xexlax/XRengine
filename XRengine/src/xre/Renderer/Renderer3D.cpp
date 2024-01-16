@@ -9,6 +9,7 @@ namespace XRE {
 	XRef<Shader> Renderer3D::defaultObjShader;
 	XRef<Shader> Renderer3D::defaultPBRShader;
 	XRef<Shader> Renderer3D::simpleDepthShader;
+	XRef<Shader> Renderer3D::cubeDepthShader;
 	XRef<Shader> Renderer3D::flatColorShader;
 	XRef<Shader> Renderer3D::postShader;
 	XRef<Shader> Renderer3D::activeShader;
@@ -20,7 +21,7 @@ namespace XRE {
 	XRef<SkyBox> Renderer3D::m_SkyBox;
 	XRef<Framebuffer> Renderer3D::m_FrameBuffer,Renderer3D::m_DeferredFrameBuffer;
 	XRef<Framebuffer> Renderer3D::m_SSAOBuffer, Renderer3D::m_SSRBuffer;
-	XRef<Framebuffer> Renderer3D::m_ShadowFrameBuffer;
+	XRef<Framebuffer> Renderer3D::m_ShadowFrameBuffer, Renderer3D::m_PointShadowBuffer;
 	XRef<Framebuffer> Renderer3D::m_PostFrameBuffer;
 	XRef<VertexArray> Renderer3D::m_Quad;
 
@@ -41,6 +42,8 @@ namespace XRE {
 		defaultPBRShader = ResourceManager::GetShader("../Assets/shaders/pbr_object.glsl");
 		//	Shader::Create("assets/shaders/default.glsl");
 		simpleDepthShader = ResourceManager::GetShader("../Assets/shaders/depth.glsl");
+
+		cubeDepthShader = Shader::Create("../Assets/shaders/pointshadow.glsl");
 
 		flatColorShader = ResourceManager::GetShader("../Assets/shaders/flatColor.glsl");
 

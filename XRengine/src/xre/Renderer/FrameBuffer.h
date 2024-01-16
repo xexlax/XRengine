@@ -22,8 +22,11 @@ namespace XRE {
 		// Defaults
 		Depth = DEPTH24STENCIL8,
 
+
 		RGB8,
-		RED_ONLY
+		RED_ONLY,
+		CubicDepth,
+		
 	};
 
 	struct FramebufferSpecification

@@ -12,6 +12,9 @@ static GLenum ShaderTypeFromString(const std::string& type)
     if (type == "fragment" || type == "pixel")
         return GL_FRAGMENT_SHADER;
 
+    if (type == "geometry")
+        return GL_GEOMETRY_SHADER;
+
     XRE_CORE_ASSERT(false, "Unknown shader type!");
     return 0;
 }
@@ -23,6 +26,7 @@ XRE::OpenGLShader::OpenGLShader(const std::string& name , const std::string& ver
     // 1. retrieve the vertex/fragment source code from filePath 
     std::string vertexCode;
     std::string fragmentCode;
+    std::string geometryCode="";
     std::ifstream vShaderFile;
     std::ifstream fShaderFile;
     // ensure ifstream objects can throw exceptions:
@@ -49,7 +53,7 @@ XRE::OpenGLShader::OpenGLShader(const std::string& name , const std::string& ver
         XRE_CORE_ERROR("SHADER_FILE_NOT_SUCCESSFULLY_READ:{0}", e.what());
     }
 
-    Compile(vertexCode, fragmentCode);
+    Compile(vertexCode, fragmentCode,geometryCode);
     
 }
 
@@ -59,9 +63,9 @@ XRE::OpenGLShader::OpenGLShader(const std::string& filepath):
 {
     std::string source = ReadFile(filepath);
     
-    std::string vertex_code, fragment_code;
-    PreProcess(source,vertex_code,fragment_code);
-    Compile(vertex_code, fragment_code);
+    std::string vertex_code, fragment_code, geometry_code;
+    PreProcess(source,vertex_code,fragment_code, geometry_code);
+    Compile(vertex_code, fragment_code, geometry_code);
 
     // Extract name from filepath
     auto lastSlash = filepath.find_last_of("/\\");
@@ -152,7 +156,7 @@ std::string XRE::OpenGLShader::ReadFile(const std::string& filepath)
     return result;
 }
 //查找文件中的#type标签，分开储存在map中
-void XRE::OpenGLShader::PreProcess(const std::string& source, std::string& vc, std::string& fc)
+void XRE::OpenGLShader::PreProcess(const std::string& source, std::string& vc, std::string& fc, std::string& gc)
 {
     
 
@@ -173,17 +177,19 @@ void XRE::OpenGLShader::PreProcess(const std::string& source, std::string& vc, s
         
         if (ShaderTypeFromString(type) == GL_VERTEX_SHADER)vc = code;
         else if (ShaderTypeFromString(type) == GL_FRAGMENT_SHADER)fc = code;
+        else if (ShaderTypeFromString(type) == GL_GEOMETRY_SHADER)gc = code;
     
     }
     
 }
 
-void XRE::OpenGLShader::Compile(const std::string& vc, const std::string& fc)
+void XRE::OpenGLShader::Compile(const std::string& vc, const std::string& fc, const std::string& gc)
 {
     const char* vShaderCode = vc.c_str();
     const char* fShaderCode = fc.c_str();
+    const char* gShaderCode = gc.c_str();
     // 2. compile shaders
-    unsigned int vertex, fragment;
+    unsigned int vertex, fragment,geometry;
     // vertex shader
     vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vShaderCode, NULL);
@@ -194,15 +200,37 @@ void XRE::OpenGLShader::Compile(const std::string& vc, const std::string& fc)
     glShaderSource(fragment, 1, &fShaderCode, NULL);
     glCompileShader(fragment);
     checkCompileErrors(fragment, "FRAGMENT");
+    //geometry Shader
+
+    if (gc != "") {
+        geometry = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geometry, 1, &gShaderCode, NULL);
+        glCompileShader(geometry);
+        checkCompileErrors(geometry, "GEOMETRY");
+    }
+
+
+
     // shader Program
     m_RendererID = glCreateProgram();
     glAttachShader(m_RendererID, vertex);
+    
+
+    if (gc != "") {
+        glAttachShader(m_RendererID, geometry);
+    }
+
     glAttachShader(m_RendererID, fragment);
+
     glLinkProgram(m_RendererID);
     checkCompileErrors(m_RendererID, "PROGRAM");
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex);
+    if (gc != "") {
+        glDeleteShader(geometry);
+    }
     glDeleteShader(fragment);
+
 }
 
 void XRE::OpenGLShader::checkCompileErrors(unsigned int shader, std::string type)
@@ -218,6 +246,7 @@ void XRE::OpenGLShader::checkCompileErrors(unsigned int shader, std::string type
             std::string errFile;
             if (type == "VERTEX") errFile = m_VertexPath;
             else if (type == "FRAGMENT") errFile = m_FragmentPath;
+            else if (type == "GEOMETRY") errFile = m_FragmentPath;
             XRE_CORE_ERROR("SHADER_COMPILATION_ERROR of {0} in {1}", type, errFile);
 
             XRE_CORE_ERROR("{0}", infoLog);

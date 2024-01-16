@@ -8,6 +8,7 @@ namespace XRE {
 	struct PointLight {
 		glm::vec3 m_Position;
 		glm::vec3 m_Color;
+		bool m_ShadowCasting= false;
 		float m_Intensity;
 
 		PointLight(glm::vec3 pos= glm::vec3(0.0f), glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float intensity = 4.0f) {
@@ -22,6 +23,7 @@ namespace XRE {
 		glm::vec3 m_Direction;
 		glm::vec3 m_Rotation;
 		glm::vec3 m_Color;
+		bool m_ShadowCasting= true;
 		float m_Intensity;
 
 

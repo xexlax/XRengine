@@ -22,8 +22,8 @@ namespace XRE {
 
 	private:
 		std::string ReadFile(const std::string& filepath);
-		void PreProcess(const std::string& source, std::string& vc, std::string& fc);
-		void Compile(const std::string& vc, const std::string& fc );
+		void PreProcess(const std::string& source, std::string& vc, std::string& fc,std::string& gc);
+		void Compile(const std::string& vc, const std::string& fc, const std::string& gc);
 
 	private:
 		uint32_t m_RendererID;

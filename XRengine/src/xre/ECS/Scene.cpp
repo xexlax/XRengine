@@ -559,94 +559,98 @@ namespace XRE{
 
 			if (m_PostProcessing) {
 
-				
-				//SSAO Pass
-				Renderer3D::m_SSAOBuffer->Bind();
-				Renderer3D::Clear();
-				Renderer3D::m_SSAOBuffer->ClearAttachment(0, -1);
+				if (Renderer3D::SSAO_ON) {
+					//SSAO Pass
+					Renderer3D::m_SSAOBuffer->Bind();
+					Renderer3D::Clear();
+					Renderer3D::m_SSAOBuffer->ClearAttachment(0, -1);
 
-				Renderer3D::SSAO_Shader->Bind();
+					Renderer3D::SSAO_Shader->Bind();
 
-				Renderer3D::m_FrameBuffer->ActiveColor(0, 2);
+					Renderer3D::m_FrameBuffer->ActiveColor(0, 2);
 
-				Renderer3D::m_FrameBuffer->ActiveColor(1, 3);
+					Renderer3D::m_FrameBuffer->ActiveColor(1, 3);
 
-				
 
-				std::default_random_engine generator;
-				uniform_real_distribution<float> u1(-1, 1),u2(0,1);
-				vector<glm::vec4> ssao_kernel;
 
-				for (int i = 0;i < 64;i++) {
-					glm::vec3 sample(
-						u1(generator), u1(generator), u2(generator)
-					);
-					sample = glm::normalize(sample)* u2(generator) ;
-					float scale = float(i) / 64.0f;
-					scale = lerp(0.1f,1.0f,scale*scale);
-					sample *= scale;
-					glm::vec4 sample4 = glm::vec4(sample, 0);
-					ssao_kernel.push_back(sample4);
+					std::default_random_engine generator;
+					uniform_real_distribution<float> u1(-1, 1), u2(0, 1);
+					vector<glm::vec4> ssao_kernel;
 
-					Renderer3D::SSAO_Shader->SetFloat4( "UBOSSAOKernel[" + std::to_string(i) + "]" , sample4);
+					for (int i = 0;i < 64;i++) {
+						glm::vec3 sample(
+							u1(generator), u1(generator), u2(generator)
+						);
+						sample = glm::normalize(sample) * u2(generator);
+						float scale = float(i) / 64.0f;
+						scale = lerp(0.1f, 1.0f, scale * scale);
+						sample *= scale;
+						glm::vec4 sample4 = glm::vec4(sample, 0);
+						ssao_kernel.push_back(sample4);
+
+						Renderer3D::SSAO_Shader->SetFloat4("UBOSSAOKernel[" + std::to_string(i) + "]", sample4);
+					}
+
+					vector<glm::vec4> noise;
+					for (int i = 0;i < 16;i++) {
+
+						noise.push_back(glm::vec4(u1(generator), u1(generator), 0.0f, 0.0f));
+
+					}
+					Renderer3D::ssaoNoise = XMakeRef<OpenGLTexture2D>((char*)(noise.data()), 4, 4);
+					Renderer3D::ssaoNoise->Bind(2);
+
+
+
+
+					Renderer3D::SSAO_Shader->SetInt("samplerPositionDepth", 0);
+					Renderer3D::SSAO_Shader->SetInt("samplerNormal", 1);
+					Renderer3D::SSAO_Shader->SetInt("ssaoNoise", 2);
+
+					Renderer3D::SSAO_Shader->SetMat4("u_Projection", c->GetProjectionMatrix());
+
+
+
+
+					Renderer3D::DrawScreenQuad();
+
+					Renderer3D::m_SSAOBuffer->Unbind();
 				}
+				
 
-				vector<glm::vec4> noise;
-				for (int i = 0;i < 16;i++) {
-					
-					noise.push_back(glm::vec4(u1(generator), u1(generator), 0.0f, 0.0f));
+				if (Renderer3D::SSR_ON) {
+					//SSR Pass, TODO
 
+					Renderer3D::m_SSRBuffer->Bind();
+					Renderer3D::Clear();
+					Renderer3D::m_SSRBuffer->ClearAttachment(0, -1);
+
+
+
+					//color
+					Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+					//depth
+					Renderer3D::m_FrameBuffer->ActiveDepth(1);
+					//normal
+					Renderer3D::m_FrameBuffer->ActiveColor(2, 4);
+
+					Renderer3D::m_FrameBuffer->ActiveColor(3, 5);
+
+					Renderer3D::SSR_Shader->Bind();
+
+					Renderer3D::SSR_Shader->SetInt("samplerColoring", 0);
+					Renderer3D::SSR_Shader->SetInt("samplerDepth", 1);
+					Renderer3D::SSR_Shader->SetInt("samplerNorm", 2);
+					Renderer3D::SSR_Shader->SetInt("samplerMat", 3);
+
+					Renderer3D::SSR_Shader->SetMat4("u_Projection", c->GetProjectionMatrix());
+					Renderer3D::SSR_Shader->SetMat4("u_View", c->GetViewMatrix());
+
+					Renderer3D::DrawScreenQuad();
+
+					Renderer3D::m_SSRBuffer->Unbind();
 				}
-				Renderer3D::ssaoNoise = XMakeRef<OpenGLTexture2D>((char*)(noise.data()), 4, 4);
-				Renderer3D::ssaoNoise->Bind(2);
-					
-
-
-
-				Renderer3D::SSAO_Shader->SetInt("samplerPositionDepth", 0);
-				Renderer3D::SSAO_Shader->SetInt("samplerNormal", 1);
-				Renderer3D::SSAO_Shader->SetInt("ssaoNoise", 2);
-
-				Renderer3D::SSAO_Shader->SetMat4("u_Projection", c->GetProjectionMatrix());
-
 				
-				
-
-				Renderer3D::DrawScreenQuad();
-
-				Renderer3D::m_SSAOBuffer->Unbind();
-
-
-				//SSR Pass, TODO
-
-				Renderer3D::m_SSRBuffer->Bind();
-				Renderer3D::Clear();
-				Renderer3D::m_SSRBuffer->ClearAttachment(0, -1);
-
-				
-
-				//color
-				Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
-				//depth
-				Renderer3D::m_FrameBuffer->ActiveDepth(1);
-				//normal
-				Renderer3D::m_FrameBuffer->ActiveColor(2, 4);
-
-				Renderer3D::m_FrameBuffer->ActiveColor(3, 5);
-				
-				Renderer3D::SSR_Shader->Bind();
-
-				Renderer3D::SSR_Shader->SetInt("samplerColoring", 0);
-				Renderer3D::SSR_Shader->SetInt("samplerDepth", 1);
-				Renderer3D::SSR_Shader->SetInt("samplerNorm", 2);
-				Renderer3D::SSR_Shader->SetInt("samplerMat", 3);
-
-				Renderer3D::SSR_Shader->SetMat4("u_Projection", c->GetProjectionMatrix());
-				Renderer3D::SSR_Shader->SetMat4("u_View", c->GetViewMatrix());
-
-				Renderer3D::DrawScreenQuad();
-
-				Renderer3D::m_SSRBuffer->Unbind();
 
 				//Post Pass
 
@@ -660,8 +664,10 @@ namespace XRE{
 
 				Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
 				Renderer3D::m_FrameBuffer->ActiveColor(3, 5);
-				Renderer3D::m_SSAOBuffer->ActiveColor(1, 0);
-				Renderer3D::m_SSRBuffer->ActiveColor(2, 0);
+				if(Renderer3D::SSAO_ON)
+					Renderer3D::m_SSAOBuffer->ActiveColor(1, 0);
+				if (Renderer3D::SSR_ON)
+					Renderer3D::m_SSRBuffer->ActiveColor(2, 0);
 
 				Renderer3D::postShader->SetInt("inColoring", 0);
 				Renderer3D::postShader->SetInt("inSSAO", 1);

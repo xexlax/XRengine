@@ -61,11 +61,34 @@ in vec3 ONorm;
 uniform vec3 viewPos;
 
 
+#define N_SAMPLE 16
+const vec2 poissonDisk[16] = {
+    vec2( -0.94201624, -0.39906216 ),
+    vec2( 0.94558609, -0.76890725 ),
+    vec2( -0.094184101, -0.92938870 ),
+    vec2( 0.34495938, 0.29387760 ),
+    vec2( -0.91588581, 0.45771432 ),
+    vec2( -0.81544232, -0.87912464 ),
+    vec2( -0.38277543, 0.27676845 ),
+    vec2( 0.97484398, 0.75648379 ),
+    vec2( 0.44323325, -0.97511554 ),
+    vec2( 0.53742981, -0.47373420 ),
+    vec2( -0.26496911, -0.41893023 ),
+    vec2( 0.79197514, 0.19090188 ),
+    vec2( -0.24188840, 0.99706507 ),
+    vec2( -0.81409955, 0.91437590 ),
+    vec2( 0.19984126, 0.78641367 ),
+    vec2( 0.14383161, -0.14100790 )
+};
+
+
+
 
 struct DirectionalLight {
     vec3 direction;
     float intensity;
     vec3 color;
+    bool shadowCasting;
 };
 
 struct PointLight {
@@ -74,6 +97,7 @@ struct PointLight {
     float intensity;
     vec3 color;
     int enable;
+    bool shadowCasting;
 
 };
 
@@ -104,7 +128,7 @@ uniform bool Shadow_On;
 uniform int ObjID;
 
 float near_plane=1;
-float far_plane=100;
+float far_plane=1000;
 float light_ambient=0.3;
 float light_diffuse=0.6;
 float light_specular=1.0;
@@ -252,16 +276,27 @@ float ShadowCalculation(vec4 fragPosLightSpace ,float bias)
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
 
     float shadow = 0.0;
-    for(int x = -1; x <= 1; ++x)
-    {
-        for(int y = -1; y <= 1; ++y)
-        {
-            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-           
-            shadow += (currentDepth - bias > pcfDepth ? 1.0 : 0.0)*4/(1<<(abs(x)+abs(y)));        
-        }    
+
+
+
+    float pcf_range = 3;
+
+    for(int i=0;i<N_SAMPLE;i++){
+        float pcfDepth = texture(shadowMap, projCoords.xy + poissonDisk[i]*pcf_range * texelSize).r; 
+        shadow += (currentDepth - bias > pcfDepth ? 1.0 : 0.0);     
     }
-    shadow /= 16.0;
+    shadow /=(N_SAMPLE);
+
+    // for(int x = -pcf_range; x <= pcf_range; ++x)
+    // {
+    //     for(int y = -pcf_range; y <= pcf_range; ++y)
+    //     {
+    //         float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+           
+    //         shadow += (currentDepth - bias > pcfDepth ? 1.0 : 0.0);        
+    //     }    
+    // }
+    
     // 检查当前片段是否在阴影中
      
    // float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
@@ -286,7 +321,7 @@ void main()
     vec3 R = reflect(-V, N);
     vec3 D = normalize(d_light.direction);
     float bias = 0.005;
-    float shadow = ShadowCalculation(FragPosLightSpace,bias);  
+    float shadow = d_light.shadowCasting== true? ShadowCalculation(FragPosLightSpace,bias): 0;  
 
     vec3 color;
     if(pbr){

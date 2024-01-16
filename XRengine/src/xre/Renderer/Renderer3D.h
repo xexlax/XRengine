@@ -59,6 +59,7 @@ namespace XRE {
 		static XRef<Shader> defaultObjShader;
 		static XRef<Shader> defaultPBRShader;
 		static XRef<Shader> simpleDepthShader;
+		static XRef<Shader> cubeDepthShader;
 		static XRef<Shader> flatColorShader;
 
 
@@ -75,13 +76,15 @@ namespace XRE {
 		static struct PostEffects{
 			float Brightness=1;
 			float Saturation=1;
-			float Contrast=1;
+			float Contrast=1.2;
 			float Vignette;
 
 		} postEffects;
 	
 		
-		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,m_ShadowFrameBuffer, m_PostFrameBuffer , m_SSAOBuffer, m_SSRBuffer;
+		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,
+			m_ShadowFrameBuffer, m_PostFrameBuffer , 
+			m_SSAOBuffer, m_SSRBuffer, m_PointShadowBuffer;
 		static XRef<SkyBox> m_SkyBox;
 
 		static XRef<Shader> activeShader;
