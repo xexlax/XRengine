@@ -84,6 +84,8 @@ namespace XRE {
 
 			float BloomStrength = 0;
 			float BloomThreshold = 0;
+			float BloomRange = 2;
+			glm::vec3 BloomColor;
 
 			float MotionBlur = 0;
 

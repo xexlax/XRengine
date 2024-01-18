@@ -26,6 +26,7 @@ in vec2 TexCoords;
 uniform sampler2D inColoring;
 uniform sampler2D inSSAO;
 uniform sampler2D inSSR;
+uniform sampler2D inBloom;
 uniform sampler2D inMat;
 
 uniform bool SSAO_ON;
@@ -37,8 +38,12 @@ uniform float Contrast;
 
 uniform float MotionBlur;
 uniform float DepthOfField;
+
+
 uniform float Blooming_Strength;
+uniform float Blooming_ColorGrading;
 uniform float Blooming_Threshold;
+uniform float Blooming_Range;
 
 uniform float Vignette=0;
 
@@ -80,6 +85,28 @@ void main()
 
         if(sky>0.5f){
 
+            if(Blooming_Strength>0 ){
+                float bloom = 0;
+                const float blurRange = Blooming_Range;
+                    
+                    vec2 texelSize = 1.0 / vec2(textureSize(inBloom, 0));
+                    float c=0;
+                    for (int i=0;i<N_SAMPLE;i++) 
+                    {
+                            vec2 offset = poissonDisk[i]*blurRange * texelSize;
+                            float tb = texture(inBloom, TexCoords + offset).r;
+                            
+                            bloom += tb;
+                            
+                            
+                            
+                    }
+                    bloom/= N_SAMPLE;
+                    
+                
+                color *= 1+bloom*Blooming_Strength;
+            }
+
             if(SSR_ON){
                 
                 vec4 ssr = vec4(0,0,0,0);
@@ -87,7 +114,7 @@ void main()
 
                     const float blurRange = 1;
                     
-                    vec2 texelSize = 1.0 / vec2(textureSize(inSSAO, 0));
+                    vec2 texelSize = 1.0 / vec2(textureSize(inSSR, 0));
                     
 
 

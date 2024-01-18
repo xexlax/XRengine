@@ -79,6 +79,7 @@ namespace XRE {
 			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::RGBA8,
+			FramebufferTextureFormat::RGBA8,
 			FramebufferTextureFormat::Depth 
 		};
 

@@ -318,8 +318,15 @@ void EditorLayer::OnImGuiRender(){
 			XUI::DragFloat(u8"对比度", &Renderer3D::postEffects.Contrast, 0.05f, 0.0f, 2.0f);
 			XUI::DragFloat(u8"暗角", &Renderer3D::postEffects.Vignette, 0.05f, 0.0f, 1.0f);
 			XUI::DragFloat(u8"动态模糊", &Renderer3D::postEffects.MotionBlur, 0.05f, 0.0f, 1.0f);
-			XUI::DragFloat(u8"辉光", &Renderer3D::postEffects.BloomStrength, 0.05f, 0.0f, 1.0f);
+
+			ImGui::Separator();
+
+			XUI::DragFloat(u8"辉光", &Renderer3D::postEffects.BloomStrength, 0.1f, 0.0f, 3.0f);
+			XUI::DragFloat(u8"辉光阈值", &Renderer3D::postEffects.BloomThreshold, 0.05f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"辉光范围", &Renderer3D::postEffects.BloomRange, 0.5f, 0.0f, 10.0f);
 			uint32_t mapID;
+
+			ImGui::Separator();
 
 			ImGui::Checkbox(u8"时域抗锯齿(TAA)", &Renderer3D::TAA_ON);
 
@@ -384,6 +391,10 @@ void EditorLayer::OnImGuiRender(){
 
 			ImGui::Separator();
 			ImGui::Text("DepthMap");
+			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+			ImGui::Text("Bloom");
+			mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(6);
 			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
 			ImGui::Text("Pos");

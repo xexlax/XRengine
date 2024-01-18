@@ -162,14 +162,18 @@ namespace XRE {
 		}
 		if (m_ColorAttachments.size() > 1)
 		{
-			XRE_CORE_ASSERT(m_ColorAttachments.size() <= 6);
-			GLenum buffers[6] = {
+			XRE_CORE_ASSERT(m_ColorAttachments.size() <= 10);
+			GLenum buffers[10] = {
 				GL_COLOR_ATTACHMENT0, 
 				GL_COLOR_ATTACHMENT1, 
 				GL_COLOR_ATTACHMENT2, 
 				GL_COLOR_ATTACHMENT3,
 				GL_COLOR_ATTACHMENT4,
-				GL_COLOR_ATTACHMENT5
+				GL_COLOR_ATTACHMENT5,
+				GL_COLOR_ATTACHMENT6,
+				GL_COLOR_ATTACHMENT7,
+				GL_COLOR_ATTACHMENT8,
+				GL_COLOR_ATTACHMENT9,
 			
 			};
 			glDrawBuffers(m_ColorAttachments.size(), buffers);

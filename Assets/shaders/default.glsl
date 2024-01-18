@@ -26,6 +26,8 @@ uniform mat4 u_MVPLastFrame;
 uniform mat4 u_Transform;
 uniform mat4 lightSpaceMatrix;
 
+
+
 const vec2 Halton_2_3[8] =
 {
     vec2(0.0f, -1.0f / 3.0f),
@@ -83,6 +85,7 @@ layout(location = 2) out vec4 ViewSpacePos;
 layout(location = 3) out vec4 ViewSpaceNormal;
 layout(location = 4) out vec4 OutNormal;
 layout(location = 5) out vec4 OutMaterial;
+layout(location = 6) out vec4 OutBloom;
 
 in vec3 Normal;
 in vec3 FragPos;
@@ -163,7 +166,10 @@ uniform Material material;
 uniform sampler2D shadowMap;
 
 uniform bool Shadow_On;
+
 uniform int ObjID;
+uniform float Blooming_Threshold;
+
 
 float near_plane=1;
 float far_plane=1000;
@@ -461,4 +467,7 @@ void main()
 
 
     OutMaterial = vec4(material.metallic, material.roughness,deltaPos, (ObjID>=0?1.0f:0f));
+
+    float lightness = (color.r+color.g+color.b)/3;
+    OutBloom = vec4(lightness>Blooming_Threshold? 1.0:0 ,0,0,1);
 }

@@ -457,7 +457,7 @@ namespace XRE{
 			// Coloring Pass
 			Renderer3D::m_FrameBuffer->Bind();
 			Renderer3D::Clear();
-			Renderer3D::m_FrameBuffer->ClearAttachment(5, -1);
+			Renderer3D::m_FrameBuffer->ClearAttachment(6, -1);
 
 			//切shader一定要在startscene前
 			Renderer3D::StartScene(c);
@@ -477,7 +477,7 @@ namespace XRE{
 
 				Renderer3D::activeShader->SetFloat("u_ScreenWidth", Renderer3D::m_FrameBuffer->GetWidth());
 				Renderer3D::activeShader->SetFloat("u_ScreenHeight", Renderer3D::m_FrameBuffer->GetHeight());
-				
+				Renderer3D::activeShader->SetFloat("Blooming_Threshold", Renderer3D::postEffects.BloomThreshold);
 
 				for (auto obj : group)
 				{
@@ -709,15 +709,22 @@ namespace XRE{
 				if (Renderer3D::SSR_ON)
 					Renderer3D::m_SSRBuffer->ActiveColor(2, 0);
 
+				Renderer3D::m_FrameBuffer->ActiveColor(4, 6);
+
 				Renderer3D::postShader->SetInt("inColoring", 0);
 				Renderer3D::postShader->SetInt("inSSAO", 1);
 				Renderer3D::postShader->SetInt("inSSR", 2);
 				Renderer3D::postShader->SetInt("inMat", 3);
+				Renderer3D::postShader->SetInt("inBloom", 4);
 
 				Renderer3D::postShader->SetFloat("Brightness", Renderer3D::postEffects.Brightness);
 				Renderer3D::postShader->SetFloat("Saturation", Renderer3D::postEffects.Saturation);
 				Renderer3D::postShader->SetFloat("Contrast", Renderer3D::postEffects.Contrast);
 				Renderer3D::postShader->SetFloat("Vignette", Renderer3D::postEffects.Vignette);
+
+				Renderer3D::postShader->SetFloat("Blooming_Strength", Renderer3D::postEffects.BloomStrength);
+				
+				Renderer3D::postShader->SetFloat("Blooming_Range", Renderer3D::postEffects.BloomRange);
 
 				Renderer3D::postShader->SetBool("SSAO_ON", Renderer3D::SSAO_ON);
 				Renderer3D::postShader->SetBool("SSR_ON", Renderer3D::SSR_ON);
