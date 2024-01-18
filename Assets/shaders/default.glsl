@@ -11,24 +11,60 @@ out vec3 Tangent;
 out vec2 TexCoords;
 out vec4 FragPosLightSpace;
 
+out vec4 LastFramePos;
+
 out vec3 VSPos;
 out vec3 VSNorm;
 out vec3 ONorm;
 
-
+uniform int u_Frame;
+uniform bool u_TAA;
+uniform float u_ScreenWidth,u_ScreenHeight;
 uniform mat4 u_View;
-uniform mat4 u_ViewProjection;
+uniform mat4 u_Projection;
+uniform mat4 u_MVPLastFrame;
 uniform mat4 u_Transform;
 uniform mat4 lightSpaceMatrix;
+
+const vec2 Halton_2_3[8] =
+{
+    vec2(0.0f, -1.0f / 3.0f),
+    vec2(-1.0f / 2.0f, 1.0f / 3.0f),
+    vec2(1.0f / 2.0f, -7.0f / 9.0f),
+    vec2(-3.0f / 4.0f, -1.0f / 9.0f),
+    vec2(1.0f / 4.0f, 5.0f / 9.0f),
+    vec2(-1.0f / 4.0f, -5.0f / 9.0f),
+    vec2(3.0f / 4.0f, 1.0f / 9.0f),
+    vec2(-7.0f / 8.0f, 7.0f / 9.0f)
+};
 
 
 void main()
 {
+    int offsetIdx = u_Frame;
+    float deltaWidth = 1.0f/u_ScreenWidth;
+    float deltaHeight = 1.0f/u_ScreenHeight;
+
+    vec2 jitter =  vec2(0,0);
+    if(u_Frame >=0 && u_TAA)
+    jitter= vec2(
+        Halton_2_3[offsetIdx].x * deltaWidth,
+        Halton_2_3[offsetIdx].y * deltaHeight
+    );
+    mat4 jitterMat = u_Projection;
+    jitterMat[2][0] += jitter.x;
+    jitterMat[2][1] += jitter.y;
+
     FragPos = vec3(u_Transform * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(u_Transform))) * aNormal;
     TexCoords = aTexCoords;
     Tangent = aTangent;
-    gl_Position = u_ViewProjection * vec4(FragPos, 1.0);
+
+    
+    gl_Position = jitterMat *u_View* vec4(FragPos, 1.0);
+
+    LastFramePos = u_MVPLastFrame* vec4(aPos, 1.0) - gl_Position;
+
     FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
 
     VSPos = vec3(u_View*u_Transform * vec4(aPos, 1.0));
@@ -53,6 +89,7 @@ in vec3 FragPos;
 in vec2 TexCoords;
 in vec3 Tangent;
 in vec4 FragPosLightSpace;
+in vec4 LastFramePos;
 
 in vec3 VSPos;
 in vec3 VSNorm;
@@ -124,6 +161,7 @@ uniform int p_light_amount;
 
 uniform Material material;
 uniform sampler2D shadowMap;
+
 uniform bool Shadow_On;
 uniform int ObjID;
 
@@ -313,6 +351,10 @@ bool pbr= true;
 void main()
 {
     
+    float deltaPos = length(LastFramePos.xyz);
+
+    
+
     
     // diffuse 
     
@@ -415,6 +457,8 @@ void main()
 
     ViewSpacePos = vec4(VSPos,LinearizeDepth(gl_FragCoord.z));
     ViewSpaceNormal = vec4(normalize(VSNorm) * 0.5 + 0.5, 1.0);
-    OutNormal  = vec4(N,0.9);
-    OutMaterial = vec4(material.metallic, material.roughness, (ObjID>0?1.0f:0f),1.0f);
+    OutNormal  = vec4(N,1);
+
+
+    OutMaterial = vec4(material.metallic, material.roughness,deltaPos, (ObjID>=0?1.0f:0f));
 }

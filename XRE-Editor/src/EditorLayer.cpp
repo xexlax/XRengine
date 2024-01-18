@@ -310,80 +310,103 @@ void EditorLayer::OnImGuiRender(){
 
 		ToolBar();
 
-		ImGui::Begin(u8"设置");
-		ImGui::Text("FPS:%d", Application::GetFPS());
-
-		ImGui::Text((u8"当前项目:" + (m_Project ? m_Project->m_Name : "无")).c_str());
-		ImGui::Button(u8"启动场景");
-
-		if (ImGui::BeginDragDropTarget())
+		ImGui::Begin(u8"渲染");
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
-			{
-				std::string path = *(std::string*)payload->Data;
+			ImGui::Text("Post Processing is All You Need");
+			XUI::DragFloat(u8"亮度", &Renderer3D::postEffects.Brightness, 0.05f, 0.0f, 2.0f);
+			XUI::DragFloat(u8"饱和度", &Renderer3D::postEffects.Saturation, 0.05f, 0.0f, 2.0f);
+			XUI::DragFloat(u8"对比度", &Renderer3D::postEffects.Contrast, 0.05f, 0.0f, 2.0f);
+			XUI::DragFloat(u8"暗角", &Renderer3D::postEffects.Vignette, 0.05f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"动态模糊", &Renderer3D::postEffects.MotionBlur, 0.05f, 0.0f, 1.0f);
+			XUI::DragFloat(u8"辉光", &Renderer3D::postEffects.BloomStrength, 0.05f, 0.0f, 1.0f);
+			uint32_t mapID;
 
-				if (path.find(".scene") != string::npos) {
+			ImGui::Checkbox(u8"时域抗锯齿(TAA)", &Renderer3D::TAA_ON);
 
-				}
+
+			ImGui::Checkbox(u8"屏幕空间环境光遮蔽(SSAO)", &Renderer3D::SSAO_ON);
+			if (Renderer3D::SSAO_ON) {
+
+				ImGui::Text("SSAO");
+				mapID = Renderer3D::m_SSAOBuffer->GetColorAttachment(0);
+				ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			}
+
+
+
+			ImGui::Checkbox(u8"屏幕空间反射(SSR)", &Renderer3D::SSR_ON);
+
+			if (Renderer3D::SSR_ON) {
+				ImGui::Text("SSR");
+				mapID = Renderer3D::m_SSRBuffer->GetColorAttachment(0);
+				ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
 			}
-			ImGui::EndDragDropTarget();
 		}
+	
+		ImGui::End();
+
+		ImGui::Begin(u8"设置");
+		{
+			ImGui::Text("FPS:%d", Application::GetFPS());
+
+			ImGui::Text((u8"当前项目:" + (m_Project ? m_Project->m_Name : "无")).c_str());
+			ImGui::Button(u8"启动场景");
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetItem"))
+				{
+					std::string path = *(std::string*)payload->Data;
+
+					if (path.find(".scene") != string::npos) {
+
+					}
+
+				}
+				ImGui::EndDragDropTarget();
+			}
 
 
-		ImGui::Separator();
+			ImGui::Separator();
 
-		
+
 
 #ifdef XRE_RENDERER_OPENGL
-		if (ImGui::Button("ReloadShader")) {
-			Renderer3D::Init();
-		}
+			if (ImGui::Button("ReloadShader")) {
+				Renderer3D::Init();
+			}
 
-		ImGui::Text("Post Processing is All You Need");
-		XUI::DragFloat(u8"亮度", &Renderer3D::postEffects.Brightness, 0.05f, 0.0f, 2.0f);
-		XUI::DragFloat(u8"饱和度", &Renderer3D::postEffects.Saturation, 0.05f, 0.0f, 2.0f);
-		XUI::DragFloat(u8"对比度", &Renderer3D::postEffects.Contrast, 0.05f, 0.0f, 2.0f);
-		XUI::DragFloat(u8"暗角", &Renderer3D::postEffects.Vignette, 0.05f, 0.0f, 1.0f);
-		
 
-		uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
 
-		ImGui::Separator();
-		ImGui::Text("DepthMap");
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		ImGui::Text("Pos");
-		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(2);
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			uint32_t mapID = Renderer3D::m_ShadowFrameBuffer->GetDepthAttachment();
 
-		ImGui::Text("ViewSpaceNormal");
-		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(3);
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			ImGui::Separator();
+			ImGui::Text("DepthMap");
+			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		ImGui::Text("SSAO");
-		mapID = Renderer3D::m_SSAOBuffer->GetColorAttachment(0);
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			ImGui::Text("Pos");
+			mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(2);
+			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		ImGui::Checkbox("SSAO_ON", &Renderer3D::SSAO_ON);
+			ImGui::Text("ViewSpaceNormal");
+			mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(3);
+			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		ImGui::Text("SSR");
-		mapID = Renderer3D::m_SSRBuffer->GetColorAttachment(0);
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-		ImGui::Checkbox("SSR_ON", &Renderer3D::SSR_ON);
 
-		ImGui::Text("Normal");
-		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(4);
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-		ImGui::Text("Mat");
-		mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(5);
-		ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-		
+			ImGui::Text("Normal");
+			mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(4);
+			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			ImGui::Text("Mat");
+			mapID = Renderer3D::m_FrameBuffer->GetColorAttachment(5);
+			ImGui::Image((void*)mapID, ImVec2{ 300, 300 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
 #endif // XRE_RENDERER_OPENGL
 
-		
 
+		}
 		ImGui::End();
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 

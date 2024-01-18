@@ -53,7 +53,7 @@ void main()
 
 
 	float occlusion = 0.0f;
-	const float bias = 0.025f;
+	const float bias = 0.1f;
 	
 	for(int i = 0; i < SSAO_KERNEL_SIZE; i++)
 	{	
@@ -71,12 +71,12 @@ void main()
 
 		//平滑插值
 		float rangeCheck = smoothstep(0.0f, 1.0f, SSAO_RADIUS / abs(fragPos.z - sampleDepth));
-		occlusion += (sampleDepth >= samplePos.z + bias ? 1.0f : 0.0f) * rangeCheck;  
+		occlusion += 5*(sampleDepth >= samplePos.z + bias ? 1.0f : 0.0f) * rangeCheck;  
 		
 		       
 	}
 	
-	occlusion = 1.0 - 10*(occlusion / float(SSAO_KERNEL_SIZE));
+	occlusion = 1.0 - (occlusion / float(SSAO_KERNEL_SIZE));
 	outFragColor =vec4(occlusion,occlusion,occlusion,1); 
 	
 }

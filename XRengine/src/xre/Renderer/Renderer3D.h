@@ -62,7 +62,10 @@ namespace XRE {
 		static XRef<Shader> cubeDepthShader;
 		static XRef<Shader> flatColorShader;
 
-
+		static XRef<Shader> TAA_Shader;
+		static XRef<Shader> Bloom_Shader;
+		static XRef<Shader> DepthOfField_Shader;
+		static XRef<Shader> MotionBlur_Shader;
 		static XRef<Shader> SSAO_Shader;
 		static XRef<Shader> SSR_Shader;
 		static XRef<Shader> postShader;
@@ -71,7 +74,7 @@ namespace XRE {
 
 		static LightSystem m_Light;
 
-		static bool SSAO_ON,SSR_ON;
+		static bool SSAO_ON,SSR_ON,TAA_ON;
 
 		static struct PostEffects{
 			float Brightness=1;
@@ -79,12 +82,21 @@ namespace XRE {
 			float Contrast=1.2;
 			float Vignette;
 
+			float BloomStrength = 0;
+			float BloomThreshold = 0;
+
+			float MotionBlur = 0;
+
+
 		} postEffects;
 	
 		
 		static XRef<Framebuffer> m_FrameBuffer,m_DeferredFrameBuffer,
 			m_ShadowFrameBuffer, m_PostFrameBuffer , 
 			m_SSAOBuffer, m_SSRBuffer, m_PointShadowBuffer;
+
+		static vector<XRef<Framebuffer>> m_UndefinedFrameBuffers;
+
 		static XRef<SkyBox> m_SkyBox;
 
 		static XRef<Shader> activeShader;

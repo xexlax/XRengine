@@ -17,6 +17,7 @@ void main()
 #version 450
 out vec4 FragColor;
 
+
 in vec2 TexCoords;
 
 
@@ -33,6 +34,11 @@ uniform bool SSR_ON;
 uniform float Brightness;
 uniform float Saturation;
 uniform float Contrast;
+
+uniform float MotionBlur;
+uniform float DepthOfField;
+uniform float Blooming_Strength;
+uniform float Blooming_Threshold;
 
 uniform float Vignette=0;
 
@@ -62,43 +68,75 @@ const vec2 poissonDisk[16] = {
 void main()
 {
     
-    float sky = texture(inMat,TexCoords).b;
+    
+
+    float sky = texture(inMat,TexCoords).a;
+    float speed = texture(inMat,TexCoords).b;
     vec3 color = texture(inColoring,TexCoords).rgb;
     float metallic = texture(inMat,TexCoords).r;
+    float roughness = texture(inMat,TexCoords).g;
     
     if(true){
 
-        
+        if(sky>0.5f){
 
-        if(SSR_ON){
-            vec4 ssr = texture(inSSR,TexCoords);
-            if(metallic>0.1f)
-               color =  metallic * ssr.rgb  + (1-metallic) *color ;
-        }
-        if(SSAO_ON){
-
-                //对SSAO进行模糊
-                const float blurRange = 7;
+            if(SSR_ON){
                 
-                vec2 texelSize = 1.0 / vec2(textureSize(inSSAO, 0));
-                float result = 0.0;
+                vec4 ssr = vec4(0,0,0,0);
+                if(roughness>0){
+
+                    const float blurRange = 1;
+                    
+                    vec2 texelSize = 1.0 / vec2(textureSize(inSSAO, 0));
+                    
 
 
 
-                
-                for (int i=0;i<N_SAMPLE;i++) 
-                {
-                        vec2 offset = poissonDisk[i]*blurRange * texelSize;
-                        
-                        result += texture(inSSAO, TexCoords + offset).r ;
-                        
+                    
+                    for (int i=0;i<N_SAMPLE;i++) 
+                    {
+                            vec2 offset = poissonDisk[i]*blurRange * texelSize;
+                            
+                            ssr += texture(inSSR, TexCoords + offset);
+                            
+                    }
+                    ssr/= N_SAMPLE;
+
                 }
+                else ssr = texture(inSSR,TexCoords);
+
+
+                if(metallic>0.1f)
+                color =  metallic * ssr.rgb * ssr.a  + (1-metallic) *color ;
+
                 
+            }
+            if(SSAO_ON){
 
-                color *= result/float(N_SAMPLE);
+                    //对SSAO进行模糊
+                    const float blurRange = 5;
+                    
+                    vec2 texelSize = 1.0 / vec2(textureSize(inSSAO, 0));
+                    float result = 0.0;
 
 
+
+                    
+                    for (int i=0;i<N_SAMPLE;i++) 
+                    {
+                            vec2 offset = poissonDisk[i]*blurRange * texelSize;
+                            
+                            result += texture(inSSAO, TexCoords + offset).r ;
+                            
+                    }
+                    
+
+                    color *= result/float(N_SAMPLE);
+
+
+            }
         }
+
 
         
         float luminance = 0.2125* color.r +0.7154* color.g +0.0721* color.b;

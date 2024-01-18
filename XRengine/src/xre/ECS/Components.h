@@ -223,6 +223,8 @@ namespace XRE {
 
 		std::vector<XRef<Material>> m_Materials;
 
+		glm::mat4 m_MVP_prevframe;
+
 		
 		MeshRendererComponent() :Component(u8"模型渲染器") {};
 		MeshRendererComponent(const MeshRendererComponent&) = default;

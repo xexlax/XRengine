@@ -33,7 +33,7 @@ uniform mat4 u_View;
 
 
 float rayStep = 0.2f;
-int iterationCount = 100;
+int iterationCount = 50;
 float distanceBias = 0.05f;
 int sampleCount = 4;
 bool isSamplingEnabled = true;
@@ -60,7 +60,7 @@ vec2 generateProjectedPosition(vec3 pos){
 	return samplePosition.xy;
 }
 
-vec3 SSR(vec3 position, vec3 reflection) {
+vec4 SSR(vec3 position, vec3 reflection) {
 	vec3 step = rayStep * reflection;
 	vec3 marchingPosition = position + step;
 	float delta;
@@ -76,7 +76,7 @@ vec3 SSR(vec3 position, vec3 reflection) {
 			vec3 color = vec3(1);
 			if(debugDraw)
 				color = vec3( 0.5+ sign(delta)/2,0.3,0.5- sign(delta)/2);
-			return texture(samplerColoring, screenPosition).xyz * color;
+			return vec4(texture(samplerColoring, screenPosition).xyz * color,1.0f-(float(i)/iterationCount));
 		}
 		if (isBinarySearchEnabled && delta > 0) {
 			break;
@@ -107,12 +107,12 @@ vec3 SSR(vec3 position, vec3 reflection) {
                 vec3 color = vec3(1);
                 if(debugDraw)
                     color = vec3( 0.5+ sign(delta)/2,0.3,0.5- sign(delta)/2);
-				return texture(samplerColoring, screenPosition).xyz * color;
+				return vec4(texture(samplerColoring, screenPosition).xyz * color ,1f-float(i)/iterationCount);
 			}
 		}
 	}
 	
-    return vec3(0.0);
+    return vec4(0.0);
 }
 
 void main(){
@@ -132,24 +132,25 @@ void main(){
 			vec3 firstBasis = normalize(cross(vec3(0.f, 0.f, 1.f), reflectionDirection));
 			vec3 secondBasis = normalize(cross(reflectionDirection, firstBasis));
 			vec4 resultingColor = vec4(0.f);
+			int count =0;
 			for (int i = 0; i < sampleCount; i++) {
 				vec2 coeffs = vec2(random(UV + vec2(0, i)) + random(UV + vec2(i, 0))) * samplingCoefficient;
 				vec3 reflectionDirectionRandomized = reflectionDirection + firstBasis * coeffs.x + secondBasis * coeffs.y;
-				vec3 tempColor = SSR(position, normalize(reflectionDirectionRandomized));
-				if (tempColor != vec3(0.f)) {
-					resultingColor += vec4(tempColor, 1.f);
-				}
+				vec4 tempColor = SSR(position, normalize(reflectionDirectionRandomized));
+				if(tempColor.rgb!= vec3(0))
+				resultingColor += tempColor;
+				count++;
                 
 			}
 			if (resultingColor.w == 0){
 				outColor = vec4(0,0,0,0);
 			} else {
-				resultingColor /= resultingColor.w;
-				outColor = vec4(resultingColor.xyz, 1.f);
+				resultingColor.rgb /= count;
+				outColor = resultingColor;
 			}
 	    }
 	    else {
-			outColor = vec4(SSR(position, normalize(reflectionDirection)), 1.f);
+			outColor = SSR(position, normalize(reflectionDirection));
 			if (outColor.xyz == vec3(0.f)){
 				outColor.w = 0;
 			}

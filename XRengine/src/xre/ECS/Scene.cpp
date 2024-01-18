@@ -406,7 +406,7 @@ namespace XRE{
 	void Scene::UpdateRendering(XRef<Camera> c)
 	{
 #ifdef XRE_RENDERER_OPENGL
-
+		static int renderFrame = -1;
 
 		bool dirLightFound = false;
 		//Lighting
@@ -462,10 +462,22 @@ namespace XRE{
 			//切shader一定要在startscene前
 			Renderer3D::StartScene(c);
 			{
+				
 				Renderer3D::activeShader->Bind();
 				Renderer3D::activeShader->SetBool("Shadow_On", dirLightFound);
 				Renderer3D::SetShadowMapOfActive(0);
 				Renderer3D::DrawLight();
+				Renderer3D::activeShader->SetInt("u_Frame", renderFrame++);
+				if (renderFrame >= 8) renderFrame = 0;
+
+				Renderer3D::activeShader->SetBool("u_TAA", Renderer3D::TAA_ON);
+
+				//Renderer3D::m_PostFrameBuffer->ActiveColor(10, 1);
+				//Renderer3D::activeShader->SetInt("LastFrame", 10);
+
+				Renderer3D::activeShader->SetFloat("u_ScreenWidth", Renderer3D::m_FrameBuffer->GetWidth());
+				Renderer3D::activeShader->SetFloat("u_ScreenHeight", Renderer3D::m_FrameBuffer->GetHeight());
+				
 
 				for (auto obj : group)
 				{
@@ -473,7 +485,9 @@ namespace XRE{
 					if (meshrenderer.m_Active) {
 						//Renderer3D::activeShader->Bind();
 						Renderer3D::activeShader->SetInt("ObjID", int(obj));
+						Renderer3D::activeShader->SetMat4("u_MVPLastFrame", meshrenderer.m_MVP_prevframe);
 						Renderer3D::DrawModel(meshrenderer, transform.GetGlobalTransform());
+						meshrenderer.m_MVP_prevframe = c->GetViewProjectionMatrix() * transform.GetGlobalTransform();
 					}
 
 				}
@@ -554,8 +568,26 @@ namespace XRE{
 
 			Renderer3D::m_FrameBuffer->Unbind();
 
+			int curTAA = (renderFrame + 1) % 2;
+			int lastTAA = 1 - curTAA;
+			if (Renderer3D::TAA_ON && Renderer3D::m_UndefinedFrameBuffers.size() > 0) {
 
-			//GBuffer Pass
+				Renderer3D::m_UndefinedFrameBuffers[curTAA]->Bind();
+				Renderer3D::Clear();
+				Renderer3D::m_UndefinedFrameBuffers[curTAA]->ClearAttachment(0, -1);
+
+				Renderer3D::m_FrameBuffer->ActiveColor(1, 0);
+				Renderer3D::m_FrameBuffer->ActiveColor(2, 5);
+				Renderer3D::m_UndefinedFrameBuffers[lastTAA]->ActiveColor(0, 0);
+				Renderer3D::TAA_Shader->Bind();
+				Renderer3D::TAA_Shader->SetInt("LastFrame", 0);
+				Renderer3D::TAA_Shader->SetInt("ThisFrame", 1);
+				Renderer3D::TAA_Shader->SetInt("Speed", 2);
+				Renderer3D::DrawScreenQuad();
+
+				Renderer3D::m_UndefinedFrameBuffers[curTAA]->Unbind();
+				
+			}
 
 			if (m_PostProcessing) {
 
@@ -617,6 +649,7 @@ namespace XRE{
 					Renderer3D::m_SSAOBuffer->Unbind();
 				}
 				
+				
 
 				if (Renderer3D::SSR_ON) {
 					//SSR Pass, TODO
@@ -625,10 +658,14 @@ namespace XRE{
 					Renderer3D::Clear();
 					Renderer3D::m_SSRBuffer->ClearAttachment(0, -1);
 
-
-
 					//color
-					Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+
+					if (Renderer3D::TAA_ON) {
+						Renderer3D::m_UndefinedFrameBuffers[curTAA]->ActiveColor(0, 0);
+					}
+					else Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+					
+					
 					//depth
 					Renderer3D::m_FrameBuffer->ActiveDepth(1);
 					//normal
@@ -662,7 +699,10 @@ namespace XRE{
 
 				Renderer3D::postShader->Bind();
 
-				Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
+				if (Renderer3D::TAA_ON) {
+					Renderer3D::m_UndefinedFrameBuffers[curTAA]->ActiveColor(0, 0);
+				}
+				else Renderer3D::m_FrameBuffer->ActiveColor(0, 0);
 				Renderer3D::m_FrameBuffer->ActiveColor(3, 5);
 				if(Renderer3D::SSAO_ON)
 					Renderer3D::m_SSAOBuffer->ActiveColor(1, 0);

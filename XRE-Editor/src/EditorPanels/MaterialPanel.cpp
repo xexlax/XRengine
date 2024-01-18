@@ -26,8 +26,8 @@ namespace XRE {
 
 			ImGui::ColorEdit3(u8"»ù´¡É«", glm::value_ptr(m_Selected->baseColor));
 			XUI::DragFloat("Shininess", &m_Selected->shininess);
-			XUI::DragFloat("Metallic", &m_Selected->metallic);
-			XUI::DragFloat("Roughness", &m_Selected->roughness);
+			XUI::DragFloat("Metallic", &m_Selected->metallic,0.05f,0.0f,1.0f);
+			XUI::DragFloat("Roughness", &m_Selected->roughness, 0.05f, 0.0f, 1.0f);
 			
 			ImGui::Text("Albedo");
 			DrawTextureSlot(&m_Selected->diffuseTex);

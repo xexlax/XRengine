@@ -14,7 +14,9 @@ namespace XRE {
 	XRef<Shader> Renderer3D::postShader;
 	XRef<Shader> Renderer3D::activeShader;
 	XRef<Shader> Renderer3D::DeferredShader;
-	XRef<Shader> Renderer3D::SSAO_Shader, Renderer3D::SSR_Shader;
+	XRef<Shader> Renderer3D::SSAO_Shader, Renderer3D::SSR_Shader, 
+		Renderer3D::Bloom_Shader, Renderer3D::TAA_Shader, 
+		Renderer3D::DepthOfField_Shader,Renderer3D::MotionBlur_Shader;
 
 	XRef<Texture2D> Renderer3D::defaultAlbedo,Renderer3D::ssaoNoise;
 
@@ -25,7 +27,10 @@ namespace XRE {
 	XRef<Framebuffer> Renderer3D::m_PostFrameBuffer;
 	XRef<VertexArray> Renderer3D::m_Quad;
 
-	bool Renderer3D::SSAO_ON, Renderer3D::SSR_ON;
+	vector<XRef<Framebuffer>> Renderer3D::m_UndefinedFrameBuffers;
+
+
+	bool Renderer3D::SSAO_ON, Renderer3D::SSR_ON, Renderer3D::TAA_ON;
 
 	Renderer3D::PostEffects Renderer3D::postEffects;
 
@@ -50,6 +55,8 @@ namespace XRE {
 		postShader = Shader::Create("../Assets/shaders/post.glsl");
 
 		//DeferredShader= ResourceManager::GetShader("../Assets/shaders/gbuffer.glsl");
+
+		TAA_Shader = Shader::Create("../Assets/shaders/taa.glsl");
 
 		SSAO_Shader = Shader::Create("../Assets/shaders/ssao.glsl");
 
@@ -92,13 +99,26 @@ namespace XRE {
 
 
 		m_FrameBuffer = Framebuffer::Create(fb);
+
+		
 		
 		m_ShadowFrameBuffer = Framebuffer::Create(sfb);
 
+		m_UndefinedFrameBuffers = vector<XRef<Framebuffer>>();
+		//m_UndefinedFrameBuffers.clear();
+		XRef<Framebuffer> taaBuffer = Framebuffer::Create(postfb);
+		XRef<Framebuffer> taaBuffer2 = Framebuffer::Create(postfb);
+		m_UndefinedFrameBuffers.push_back(taaBuffer);
+		m_UndefinedFrameBuffers.push_back(taaBuffer2);
+
 		m_SSRBuffer = Framebuffer::Create(postfb);
-		m_PostFrameBuffer = Framebuffer::Create(postfb);
+
+		
 
 		m_SSAOBuffer  = Framebuffer::Create(postfb);
+
+		
+		m_PostFrameBuffer = Framebuffer::Create(postfb);
 		
 		SSAO_ON = true;
 		SSR_ON = true;
